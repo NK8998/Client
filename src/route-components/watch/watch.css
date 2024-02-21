@@ -1,0 +1,14 @@
+.watch-flexy{
+    width: 100%;    
+    background-color: red;
+    height: calc(100dvh - 40px);
+}
+.watch-flexy.hidden{
+    display: none;
+}
+.player-expanded-container{
+    width: 100%;
+}
+.columns{
+    display: flex;
+}

@@ -1,37 +1,67 @@
-import { useState } from "react";
-import reactLogo from "./assets/react.svg";
-import viteLogo from "/vite.svg";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import "./App.css";
+import MastHead from "./high-level-components/masthead/masthead";
+import Watch from "./route-components/watch/watch";
+import Home from "./route-components/home/home";
+import { Route, Routes } from "react-router-dom";
+import BareHome from "./bare-routes/bare-home";
+import BareWatch from "./bare-routes/bare-watch";
+import { useDispatch } from "react-redux";
+import { handleNavigation, updateLocation, updateRefs, updateWindowWidth } from "./store/Slices/app-slice";
+import GuideWrapper from "./high-level-components/guide-wrapper/guide-wrapper";
 
 function App() {
-  const [count, setCount] = useState(0);
+  const dispatch = useDispatch();
+  const homeRef = useRef();
+  const watchRef = useRef();
+  // all refs should be here to enure they are all called when app loads
 
-  const SignIn = () => {
-    window.location.href = `http://localhost:5174?WAA=Client`;
-  };
+  useLayoutEffect(() => {
+    const refArray = [
+      { route: "/", ref: homeRef.current.id },
+      { route: "/watch", ref: watchRef.current.id },
+    ];
+
+    dispatch(updateRefs(refArray));
+
+    const currentRoute = window.location.pathname.split("?")[0];
+    // console.log(currentRoute);
+    dispatch(handleNavigation(currentRoute));
+
+    window.addEventListener("popstate", () => {
+      const currentRoute = window.location.pathname.split("?")[0];
+      // check if data is being fetched before navigating
+      dispatch(updateLocation(currentRoute));
+      dispatch(handleNavigation(currentRoute));
+    });
+
+    window.addEventListener("resize", () => {
+      const windowWidth = window.innerWidth;
+      const leftNavMain = document.querySelector(".leftnav-wrapper");
+
+      if (windowWidth >= 1024) {
+        leftNavMain.classList.remove("show-not-watch");
+      } else if (windowWidth < 1024) {
+        leftNavMain.classList.toggle("hide");
+      }
+      dispatch(updateWindowWidth(windowWidth));
+    });
+  }, []);
+
   return (
     <>
-      <button onClick={SignIn}></button>
-      <div>
-        <a href='https://vitejs.dev' target='_blank'>
-          <img src={viteLogo} className='logo' alt='Vite logo' />
-        </a>
-        <a href='https://react.dev' target='_blank'>
-          <img src={reactLogo} className='logo react' alt='React logo' />
-        </a>
+      <MastHead />
+      <div className='flex-content'>
+        <GuideWrapper />
+        <div className='page-manager'>
+          <Home homeRef={homeRef} />
+          <Watch watchRef={watchRef} />
+        </div>
       </div>
-      <h1>Vite + React</h1>
-      <div className='card'>
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className='read-the-docs'>
-        Click on the Vite and React logos to learn more
-      </p>
+      <Routes>
+        <Route path='/' element={<BareHome />} />
+        <Route path='/watch' element={<BareWatch />} />
+      </Routes>
     </>
   );
 }

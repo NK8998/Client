@@ -1,0 +1,9 @@
+.home{
+    width: calc(100% - 24px);
+    /* background-color: blue; */
+    height: calc(100dvh - 40px);
+    padding-left: 24px;
+}
+.home.hidden{
+    display: none;
+}
