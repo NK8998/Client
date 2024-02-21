@@ -17,7 +17,7 @@ export default function Home({ homeRef }) {
       <div className='header'>
         <div className='filter-chip-bar'></div>
       </div>
-      <div className='grid-rendrers'>
+      <div className='grid-renderers'>
         <div className='pseudo-link'>
           <Link to={"/watch?v=I938buiYN"} onClick={() => dispatch(handleSelectedVideo("/watch?v=I938buiYN"))}>
             <div className='press me'>press me</div>
