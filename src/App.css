@@ -4,6 +4,7 @@
 .flex-content{
     display: flex;
     width: 100%;
+    position: relative;
     /* gap: 24px; */
     min-width: 0;
 

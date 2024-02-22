@@ -8,9 +8,12 @@ export default function GuideWrapper() {
 
   const isWatchPage = location.includes("watch");
 
-  return (
+  return location.length === 0 ? (
+    <div className='guid-wrapper'></div>
+  ) : (
     <div className={`guide-wrapper`}>
       <LeftNavWrapper />
+
       {!isWatchPage && <MiniLeftNav />}
     </div>
   );

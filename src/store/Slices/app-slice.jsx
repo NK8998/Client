@@ -7,6 +7,7 @@ const appSlice = createSlice({
     refs: [],
     location: "",
     windowWidth: window.innerWidth,
+    prefersMini: false,
   },
   reducers: {
     updateRefs: (state, action) => {
@@ -22,10 +23,13 @@ const appSlice = createSlice({
     updateWindowWidth: (state, action) => {
       state.windowWidth = action.payload;
     },
+    updatePreference: (state, action) => {
+      state.prefersMini = !state.prefersMini;
+    },
   },
 });
 
-export const { updateRefs, updateIsFetching, updateLocation, updateWindowWidth } = appSlice.actions;
+export const { updateRefs, updateIsFetching, updateLocation, updateWindowWidth, updatePreference } = appSlice.actions;
 export default appSlice.reducer;
 
 export const handleNavigation = (targetRoute) => {
@@ -54,17 +58,27 @@ export const handleNavResize = () => {
     const isWatchPage = location.includes("watch");
 
     const leftNavMain = document.querySelector(".leftnav-wrapper");
-
+    if (!leftNavMain) return;
     if (!isWatchPage) {
       if (windowWidth >= 1024) {
-        leftNavMain.classList.toggle("hide");
-        leftNavMain.classList.remove("show-not-watch");
+        leftNavMain.classList.toggle("hide-home");
+        dispatch(updatePreference());
       } else if (windowWidth < 1024) {
         leftNavMain.classList.toggle("show-not-watch");
-        leftNavMain.classList.remove("hide");
       }
     } else if (isWatchPage) {
       leftNavMain.classList.toggle("show");
     }
+  };
+};
+
+export const handlePopState = () => {
+  return async (dispatch, getState) => {
+    const isFetching = getState().app.isFetching;
+    if (isFetching) return;
+    const currentRoute = window.location.pathname.split("?")[0];
+
+    dispatch(updateLocation(currentRoute));
+    dispatch(handleNavigation(currentRoute));
   };
 };

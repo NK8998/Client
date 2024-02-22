@@ -1,25 +1,20 @@
-import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
-import { handleSelectedVideo } from "../../store/Slices/home-slice";
 import "./home.css";
-import { useEffect } from "react";
-import { updateLocation } from "../../store/Slices/app-slice";
+import { useSelector } from "react-redux";
 
 export default function Home({ homeRef }) {
-  const dispatch = useDispatch();
+  const recommendedVideos = useSelector((state) => state.home.recommendedVideos);
 
-  useEffect(() => {
-    const currentRoute = window.location.pathname.split("?")[0];
-    dispatch(updateLocation(currentRoute));
-  }, []);
+  console.log(recommendedVideos);
+
   return (
-    <div className='home' ref={homeRef} id='home'>
+    <div className='home hidden' ref={homeRef} id='home'>
       <div className='header'>
         <div className='filter-chip-bar'></div>
       </div>
       <div className='grid-renderers'>
         <div className='pseudo-link'>
-          <Link to={"/watch?v=I938buiYN"} onClick={() => dispatch(handleSelectedVideo("/watch?v=I938buiYN"))}>
+          <Link to={"/watch?v=I938buiYN"}>
             <div className='press me'>press me</div>
           </Link>
         </div>

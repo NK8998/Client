@@ -1,7 +1,7 @@
 .guide-wrapper{
     height: calc(100dvh - 0px);
     position: sticky;
-    top: 0;
+    top: 0px;
     z-index: 21;
     margin-top: -56px;
     min-width: fit-content;
@@ -16,6 +16,10 @@
     transition: transform 150ms ease;
     position: fixed;
     margin-left: -240px;
+}
+.leftnav-wrapper.hide-home{
+    margin-left: -240px;
+    position: fixed;
 }
 
 
@@ -85,6 +89,10 @@
     background-color: green;
     pointer-events: all;
     
+}
+
+.mini-leftnav.hide{
+    margin-left: -80px;
 }
 
 .leftnav-wrapper.show{

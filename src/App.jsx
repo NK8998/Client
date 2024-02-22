@@ -6,8 +6,8 @@ import Home from "./route-components/home/home";
 import { Route, Routes } from "react-router-dom";
 import BareHome from "./bare-routes/bare-home";
 import BareWatch from "./bare-routes/bare-watch";
-import { useDispatch } from "react-redux";
-import { handleNavigation, updateLocation, updateRefs, updateWindowWidth } from "./store/Slices/app-slice";
+import { useDispatch, useSelector } from "react-redux";
+import { handleNavigation, handlePopState, updateLocation, updateRefs, updateWindowWidth } from "./store/Slices/app-slice";
 import GuideWrapper from "./high-level-components/guide-wrapper/guide-wrapper";
 
 function App() {
@@ -24,16 +24,13 @@ function App() {
 
     dispatch(updateRefs(refArray));
 
-    const currentRoute = window.location.pathname.split("?")[0];
-    // console.log(currentRoute);
-    dispatch(handleNavigation(currentRoute));
+    // const currentRoute = window.location.pathname.split("?")[0];
+    // // console.log(currentRoute);
+    // dispatch(handleNavigation(currentRoute));
 
-    window.addEventListener("popstate", () => {
-      const currentRoute = window.location.pathname.split("?")[0];
-      // check if data is being fetched before navigating
-      dispatch(updateLocation(currentRoute));
-      dispatch(handleNavigation(currentRoute));
-    });
+    // window.addEventListener("popstate", () => {
+    //   dispatch(handlePopState());
+    // });
 
     window.addEventListener("resize", () => {
       const windowWidth = window.innerWidth;
