@@ -7,6 +7,9 @@ export default function BareHome() {
 
   useEffect(() => {
     // fetch data and store in homeSlices
+    if (document.fullscreenElement) {
+      document.exitFullscreen();
+    }
 
     dispatch(fetchRecommendedVideos());
   }, []);
