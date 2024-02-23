@@ -28,9 +28,9 @@ function App() {
     // // console.log(currentRoute);
     // dispatch(handleNavigation(currentRoute));
 
-    // window.addEventListener("popstate", () => {
-    //   dispatch(handlePopState());
-    // });
+    window.addEventListener("popstate", () => {
+      dispatch(handlePopState());
+    });
 
     window.addEventListener("resize", () => {
       const windowWidth = window.innerWidth;

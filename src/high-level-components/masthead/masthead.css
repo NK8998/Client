@@ -19,6 +19,7 @@
     align-items: center;
     height: 100%;
     width: 240px;
+    gap: 10px;
 }
 .burger{
     cursor: pointer;
@@ -31,5 +32,16 @@
     background-color: rgba(128, 128, 128, 0.486);
 }
 .burger svg{
+    fill: white;
+}
+.start .logo{
+    cursor: pointer;
+    width: 100px;
+    height: 56px;
+    display: flex;
+    align-items: center;
+    
+}
+.start .logo svg{
     fill: white;
 }

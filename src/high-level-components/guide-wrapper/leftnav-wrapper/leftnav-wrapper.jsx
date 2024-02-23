@@ -10,6 +10,24 @@ export default function LeftNavWrapper() {
   const isWatchPage = location.includes("watch");
   const leftNavRef = useRef();
 
+  const addRemoveWatchPageStyle = () => {
+    if (isWatchPage) {
+      leftNavRef.current.classList.add("hide");
+      leftNavRef.current.classList.remove("not-watch");
+    } else {
+      leftNavRef.current.classList.remove("hide");
+      leftNavRef.current.classList.add("not-watch");
+    }
+  };
+  useEffect(() => {
+    addRemoveWatchPageStyle();
+    window.addEventListener("resize", addRemoveWatchPageStyle);
+
+    return () => {
+      window.removeEventListener("resize", addRemoveWatchPageStyle);
+    };
+  }, [location]);
+
   return (
     <>
       <div ref={leftNavRef} className={`leftnav-wrapper ${isWatchPage ? "hide" : "not-watch"} ${prefersMini ? "hide-home" : ""}`}>

@@ -1,7 +1,8 @@
 .watch-flexy{
     width: 100%;    
-    background-color: red;
-    height: calc(100dvh - 40px);
+    /* background-color: red; */
+    min-height: calc(100dvh - 40px);
+    height: fit-content;
 }
 .watch-flexy.hidden{
     display: none;
@@ -10,5 +11,22 @@
     width: 100%;
 }
 .columns{
+    margin-top: 20px;
     display: flex;
+    gap: 24px;
+    width: 100%;
+    justify-content: center;
+}
+.secondary{
+    /* padding-left: 24px; */
+    min-width: 400px;
+    max-width: 450px;
+    height: 150vh;
+    background-color: rgba(110, 110, 110, 0.377);
+}
+ 
+@media(max-width: 65em){
+    .secondary{
+        display: none
+    }
 }

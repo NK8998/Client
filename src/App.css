@@ -1,5 +1,15 @@
 #root{
     position: relative;
+    user-select: var(--select);
+}
+
+:root{
+    --hovering:false;
+    --height: 100%;
+    --width: 100%;
+    --hoverChapterIndex: 0;
+    --currentChapterIndex:0;
+    --select: '';
 }
 .flex-content{
     display: flex;

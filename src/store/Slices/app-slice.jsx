@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { fetchWatchData } from "./watch-slice";
 
 const appSlice = createSlice({
   name: "app",
@@ -75,10 +76,12 @@ export const handleNavResize = () => {
 export const handlePopState = () => {
   return async (dispatch, getState) => {
     const isFetching = getState().app.isFetching;
-    if (isFetching) return;
-    const currentRoute = window.location.pathname.split("?")[0];
-
-    dispatch(updateLocation(currentRoute));
-    dispatch(handleNavigation(currentRoute));
+    const url = new URL(window.location.href);
+    const currentRoute = url.pathname;
+    const videoId = url.search.split("=")[1];
+    const isWatchPage = currentRoute.includes("watch");
+    if (isWatchPage) {
+      dispatch(fetchWatchData(videoId, currentRoute));
+    }
   };
 };

@@ -1,24 +1,42 @@
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import MiniPlayer from "../../high-level-components/player/mini-player";
 import Player from "../../high-level-components/player/player";
 import "./watch.css";
-import { useEffect } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import { Link } from "react-router-dom";
+import { fetchWatchData } from "../../store/Slices/watch-slice";
 
 export default function Watch({ watchRef }) {
   const dispatch = useDispatch();
-  useEffect(() => {}, []);
+  const primaryRef = useRef();
+  const videoRef = useRef();
+  const secondaryRef = useRef();
+  const expandedContainerRef = useRef();
+  const containerRef = useRef();
 
   return (
     <div className='watch-flexy hidden' ref={watchRef} id='watch'>
-      <div className='player-expanded-container'></div>
+      <div className='player-expanded-container' ref={expandedContainerRef}></div>
       <div className='columns'>
-        <div className='primary'>
-          <Player />
+        <div className='primary' ref={primaryRef}>
+          <Player
+            secondaryRef={secondaryRef}
+            videoRef={videoRef}
+            containerRef={containerRef}
+            expandedContainerRef={expandedContainerRef}
+            primaryRef={primaryRef}
+          />
           <MiniPlayer />
           <div className='lower'></div>
           <div className='secondary-in-primary'></div>
         </div>
-        <div className='secondary-outer'></div>
+        <div className='secondary' ref={secondaryRef}>
+          <div className='pseudo-link'>
+            <Link to={"/watch?v=i94bjbYU"} onClick={() => dispatch(fetchWatchData("i94bjbYU", "/watch"))}>
+              Next video
+            </Link>
+          </div>
+        </div>
       </div>
     </div>
   );

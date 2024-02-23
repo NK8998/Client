@@ -1,7 +1,8 @@
 import { useDispatch, useSelector } from "react-redux";
-import { Burger } from "../../assets/icons";
+import { Burger, YTLogo } from "../../assets/icons";
 import "./masthead.css";
 import { handleNavResize } from "../../store/Slices/app-slice";
+import { Link } from "react-router-dom";
 
 export default function MastHead() {
   const dispatch = useDispatch();
@@ -15,7 +16,11 @@ export default function MastHead() {
           <div className='burger' onClick={() => dispatch(handleNavResize())}>
             <Burger />
           </div>
-          <div className='logo'></div>
+          <Link to={"/"}>
+            <div className='logo'>
+              <YTLogo />
+            </div>
+          </Link>
         </div>
         <div className='middle'></div>
         <div className='end'>
