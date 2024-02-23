@@ -8,6 +8,9 @@
     overflow: hidden;
     pointer-events: none;
 }
+.guide-wrapper.fullscreen{
+    margin-top: 0px;
+}
 .leftnav-wrapper{
     /* background-color: blue; */
    

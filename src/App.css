@@ -1,6 +1,13 @@
 #root{
     position: relative;
     user-select: var(--select);
+    max-height: 100vh;
+    min-height: 100vh;
+    overflow-y: scroll;
+
+}
+#root.fullscreen::-webkit-scrollbar{
+    display: none;
 }
 
 :root{
@@ -18,6 +25,9 @@
     /* gap: 24px; */
     min-width: 0;
 
+}
+.flex-content.fullscreen{
+    margin-top: -56px;
 }
 
 .page-manager{

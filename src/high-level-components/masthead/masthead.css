@@ -6,6 +6,16 @@
     position: sticky;
     z-index: 20;
     top: 0;
+    transition: transform 150ms ease;
+    transform: translateY(0px);
+
+}
+.masthead-outer.fullscreen{
+    transform: translateY(-56px);
+
+}
+.masthead-outer.fullscreen.visible{
+    transform: translateY(0px);
 }
 .masthead-inner{
     display: flex;

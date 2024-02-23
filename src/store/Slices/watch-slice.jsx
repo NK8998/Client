@@ -7,6 +7,7 @@ const watchSlice = createSlice({
     playingVideo: { videoId: "", aspectRatio: 16 / 9, url: "", descriptionString: "", duration: 0 },
     recommendations: [],
     theatreMode: false,
+    fullScreen: false,
   },
   reducers: {
     updatePlayingVideo: (state, action) => {
@@ -16,12 +17,15 @@ const watchSlice = createSlice({
       state.recommendations = action.payload;
     },
     toggleTheatreMode: (state, action) => {
-      state.theatreMode = !state.theatreMode;
+      state.theatreMode = action.payload;
+    },
+    toggleFullScreen: (state, action) => {
+      state.fullScreen = action.payload;
     },
   },
 });
 
-export const { updatePlayingVideo, updateRecommendedVideosWatch, toggleTheatreMode } = watchSlice.actions;
+export const { updatePlayingVideo, updateRecommendedVideosWatch, toggleTheatreMode, toggleFullScreen } = watchSlice.actions;
 
 export default watchSlice.reducer;
 
@@ -70,5 +74,39 @@ export const fetchWatchData = (videoId, currentRoute) => {
     dispatch(updatePlayingVideo(playingVideoData));
     dispatch(updateRecommendedVideosWatch(recommendationsData));
     dispatch(handleNavigation("/watch"));
+  };
+};
+
+export const handleTheatre = (theatreMode) => {
+  return (dispatch) => {
+    if (document.fullscreenElement) {
+      dispatch(toggleTheatreMode(true));
+      dispatch(toggleFullScreen(false));
+    } else {
+      if (theatreMode) {
+        dispatch(toggleTheatreMode(false));
+      } else {
+        dispatch(toggleTheatreMode(true));
+      }
+    }
+  };
+};
+
+export const handleFullscreen = (fullScreen) => {
+  return (dispatch) => {
+    const root = document.querySelector("#root");
+
+    if (!fullScreen && window.location.pathname.includes("watch")) {
+      root.scrollTo({ top: 0, behavior: "instant" });
+      document.documentElement.requestFullscreen().then(() => {
+        dispatch(toggleFullScreen(true));
+      });
+    } else if (fullScreen) {
+      if (document.fullscreenElement) {
+        document.exitFullscreen().then(() => {
+          dispatch(toggleFullScreen(false));
+        });
+      }
+    }
   };
 };

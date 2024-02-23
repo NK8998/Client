@@ -6,13 +6,14 @@ import BottomControls from "./player-components/bottom-controls/bottom-controls"
 import Chapters from "./player-components/chapters/chapters";
 import generateChapters from "./player-components/chapters/chaptersGen";
 import { toNormal, toPause, toPlay, toTheatre } from "./utilities/gsap-animations";
-import { toggleTheatreMode } from "../../store/Slices/watch-slice";
+import { handleFullscreen, handleTheatre } from "../../store/Slices/watch-slice";
 
 export default function Player({ videoRef, secondaryRef, containerRef, expandedContainerRef, primaryRef }) {
   const dispatch = useDispatch();
   const location = useSelector((state) => state.app.location);
   const playingVideo = useSelector((state) => state.watch.playingVideo);
   const theatreMode = useSelector((state) => state.watch.theatreMode);
+  const fullScreen = useSelector((state) => state.watch.fullScreen);
   const { descriptionString, duration, videoId, url } = playingVideo;
   const [chapters, setChapters] = useState([]);
 
@@ -21,6 +22,7 @@ export default function Player({ videoRef, secondaryRef, containerRef, expandedC
   const redDotRef = useRef();
   const redDotWrapperRef = useRef();
   const chapterContainerRef = useRef();
+  const innerChapterContainerRef = useRef();
   const timeoutRef = useRef();
   const timeIntervalRef = useRef();
   const spinnerRef = useRef();
@@ -33,6 +35,7 @@ export default function Player({ videoRef, secondaryRef, containerRef, expandedC
   const currentTimeTracker = useRef(0);
   const mouseDownTracker = useRef();
   const isDragging = useRef(false);
+  const fullScreenTimeout = useRef();
 
   useLayoutEffect(() => {
     const generatedChapters = generateChapters(descriptionString, duration);
@@ -107,7 +110,7 @@ export default function Player({ videoRef, secondaryRef, containerRef, expandedC
           clearTimeout(theatreTimeOut.current);
         }
         theatreTimeOut.current = setTimeout(() => {
-          dispatch(toggleTheatreMode());
+          dispatch(handleTheatre(theatreMode));
         }, 400);
       } else if (key === " ") {
         e.preventDefault();
@@ -119,6 +122,13 @@ export default function Player({ videoRef, secondaryRef, containerRef, expandedC
           videoRef.current.playbackRate = 2;
           isHolding.current = true;
         }, 250);
+      } else if (key === "f") {
+        if (fullScreenTimeout.current) {
+          clearTimeout(fullScreenTimeout.current);
+        }
+        fullScreenTimeout.current = setTimeout(() => {
+          dispatch(handleFullscreen(fullScreen));
+        }, 400);
       }
     };
 
@@ -142,7 +152,7 @@ export default function Player({ videoRef, secondaryRef, containerRef, expandedC
       window.removeEventListener("keydown", handleKeyPress);
       window.removeEventListener("keyup", handleKeyUp);
     };
-  }, [play]);
+  }, [play, theatreMode, fullScreen]);
 
   useLayoutEffect(() => {
     const isWatchpage = location.includes("watch") || window.location.pathname.includes("watch");
@@ -161,19 +171,95 @@ export default function Player({ videoRef, secondaryRef, containerRef, expandedC
     toggleTheatre();
   }, [theatreMode, chapters]);
 
+  useLayoutEffect(() => {
+    toggleFullScreen();
+  }, [fullScreen, theatreMode]);
+
   const updateStyles = () => {
     applyChapterStyles();
     updateRedDot("");
+  };
+
+  const handleScrollPosition = (e) => {
+    const root = document.querySelector("#root");
+    const masthead = document.querySelector(".masthead-outer");
+    if (root.scrollTop > 6) {
+      masthead.classList.add("visible");
+    } else {
+      masthead.classList.remove("visible");
+    }
+  };
+  const toggleFullScreen = () => {
+    const isWatchpage = location.includes("watch") || window.location.pathname.includes("watch");
+    if (!isWatchpage) return;
+    if (!primaryRef.current || !containerRef.current) return;
+    const masthead = document.querySelector(".masthead-outer");
+    const root = document.querySelector("#root");
+    const flexContent = document.querySelector(".flex-content");
+    const guideWrapper = document.querySelector(".guide-wrapper");
+
+    if (primaryRef.current && fullScreen) {
+      if (Array.from(primaryRef.current.children).includes(containerRef.current)) {
+        primaryRef.current.removeChild(containerRef.current);
+        expandedContainerRef.current.append(containerRef.current);
+      }
+
+      videoRef.current.classList.add("fullscreen");
+      containerRef.current.classList.add("fullscreen");
+      applyChapterStyles();
+      calculateWidth();
+
+      updateRedDot("");
+      root.classList.add("fullscreen");
+      flexContent.classList.add("fullscreen");
+      masthead.classList.add("fullscreen");
+      guideWrapper.classList.add("fullscreen");
+
+      root.addEventListener("scroll", handleScrollPosition);
+    } else if (primaryRef.current && !Array.from(primaryRef.current.children).includes(containerRef.current) && !fullScreen) {
+      if (document.fullscreenElement) {
+        document.exitFullscreen();
+      }
+      if (Array.from(expandedContainerRef.current.children).includes(containerRef.current) && !theatreMode) {
+        expandedContainerRef.current.removeChild(containerRef.current);
+        const firstChild = primaryRef.current.firstChild;
+        primaryRef.current.insertBefore(containerRef.current, firstChild);
+        videoRef.current.classList.remove("theatre");
+        containerRef.current.classList.remove("theatre");
+      }
+      if (theatreMode) {
+        videoRef.current.classList.add("theatre");
+        containerRef.current.classList.add("theatre");
+        toTheatre();
+      }
+
+      videoRef.current.classList.remove("fullscreen");
+      containerRef.current.classList.remove("fullscreen");
+      applyChapterStyles();
+      calculateWidth();
+
+      updateRedDot("");
+      masthead.classList.remove("fullscreen");
+      masthead.classList.remove("visible");
+      flexContent.classList.remove("fullscreen");
+      root.classList.remove("fullscreen");
+      guideWrapper.classList.remove("fullscreen");
+      root.removeEventListener("scroll", handleScrollPosition);
+    }
   };
 
   const toggleTheatre = () => {
     const isWatchpage = location.includes("watch") || window.location.pathname.includes("watch");
     if (!isWatchpage) return;
     if (!primaryRef.current || !containerRef.current) return;
+
     if (Array.from(primaryRef.current.children).includes(containerRef.current) && primaryRef.current && theatreMode) {
-      if (!Array.from(primaryRef.current.children).includes(containerRef.current)) return;
-      primaryRef.current.removeChild(containerRef.current);
-      expandedContainerRef.current.append(containerRef.current);
+      if (Array.from(primaryRef.current.children).includes(containerRef.current)) {
+        primaryRef.current.removeChild(containerRef.current);
+        expandedContainerRef.current.append(containerRef.current);
+      }
+      videoRef.current.classList.remove("fullscreen");
+      containerRef.current.classList.remove("fullscreen");
       videoRef.current.classList.add("theatre");
       containerRef.current.classList.add("theatre");
       applyChapterStyles();
@@ -182,10 +268,11 @@ export default function Player({ videoRef, secondaryRef, containerRef, expandedC
       updateRedDot("");
       toTheatre();
     } else if (primaryRef.current && !Array.from(primaryRef.current.children).includes(containerRef.current) && !theatreMode) {
-      if (!Array.from(expandedContainerRef.current.children).includes(containerRef.current)) return;
-      expandedContainerRef.current.removeChild(containerRef.current);
-      const firstChild = primaryRef.current.firstChild;
-      primaryRef.current.insertBefore(containerRef.current, firstChild);
+      if (Array.from(expandedContainerRef.current.children).includes(containerRef.current)) {
+        expandedContainerRef.current.removeChild(containerRef.current);
+        const firstChild = primaryRef.current.firstChild;
+        primaryRef.current.insertBefore(containerRef.current, firstChild);
+      }
       videoRef.current.classList.remove("theatre");
       containerRef.current.classList.remove("theatre");
       applyChapterStyles();
@@ -257,7 +344,7 @@ export default function Player({ videoRef, secondaryRef, containerRef, expandedC
   };
 
   const resetBars = () => {
-    console.log("resetting");
+    // console.log("resetting");
     const scrubbingBarRefs = document.querySelectorAll(".scrubbing.bar");
     const bufferBarRefs = document.querySelectorAll(".buffer.bar");
     const progressBarRefs = document.querySelectorAll(".progress.bar");
@@ -271,6 +358,9 @@ export default function Player({ videoRef, secondaryRef, containerRef, expandedC
 
   const detachPlayer = async () => {
     if (playerRef.current) {
+      if (timeIntervalRef.current) {
+        clearInterval(timeIntervalRef.current);
+      }
       clearIntervalProgress();
       await playerRef.current.unload();
       playerRef.current = null;
@@ -412,7 +502,7 @@ export default function Player({ videoRef, secondaryRef, containerRef, expandedC
         const chapter = chapters[curIndex];
 
         if (chapter.start <= currentTime && chapter.end >= currentTime) {
-          const position = progressBar.getBoundingClientRect().right - chapterContainerRef.current.getBoundingClientRect().left;
+          const position = progressBar.getBoundingClientRect().right - innerChapterContainerRef.current.getBoundingClientRect().left;
           redDotWrapperRef.current.style.transform = `translateX(${position}px)`;
         }
       });
@@ -420,7 +510,7 @@ export default function Player({ videoRef, secondaryRef, containerRef, expandedC
       const position = 0;
       redDotWrapperRef.current.style.transform = `translateX(${position}px)`;
     } else if (currentTime > chapters[chapters.length - 1].end) {
-      const position = chapterContainerRef.current.clientWidth;
+      const position = innerChapterContainerRef.current.clientWidth;
       redDotWrapperRef.current.style.transform = `translateX(${position}px)`;
     }
   };
@@ -620,9 +710,9 @@ export default function Player({ videoRef, secondaryRef, containerRef, expandedC
 
   function applyChapterStyles() {
     const chaptersContainers = document.querySelectorAll(".chapter-padding");
-    console.log("running");
+    // console.log("running");
     let totalWidth = 0;
-    const chapterContainerRefWidth = chapterContainerRef.current.clientWidth;
+    const chapterContainerRefWidth = chapterContainerRef.current.clientWidth - 28;
     if (chapters.length === 0) return;
     chaptersContainers.forEach((chaptersContainer, index) => {
       const calculatedPercentage = ((chapters[index].end - chapters[index].start) / chapters[chapters.length - 1].end) * 100;
@@ -652,8 +742,9 @@ export default function Player({ videoRef, secondaryRef, containerRef, expandedC
   };
 
   const handleBufferBarOnTrackChange = () => {
-    chapters.forEach((chapter, index) => {
-      bufferBarRefs[index].current.style.width = `0`;
+    const bufferBarRefs = document.querySelectorAll(".buffer.bar");
+    bufferBarRefs.forEach((bufferBarRef) => {
+      bufferBarRef.style.width = `0`;
     });
   };
 
@@ -704,6 +795,7 @@ export default function Player({ videoRef, secondaryRef, containerRef, expandedC
 
   const checkBuffered = () => {
     // console.log("running");
+    if (!videoRef.current) return;
     const video = videoRef.current;
     const currentTime = video.currentTime;
     if (video.buffered.length > 0) {
@@ -759,6 +851,7 @@ export default function Player({ videoRef, secondaryRef, containerRef, expandedC
             onMouseMove={handleMouseMove}
           >
             <Chapters
+              innerChapterContainerRef={innerChapterContainerRef}
               chapters={chapters}
               redDotRef={redDotRef}
               redDotWrapperRef={redDotWrapperRef}

@@ -9,6 +9,7 @@ import BareWatch from "./bare-routes/bare-watch";
 import { useDispatch, useSelector } from "react-redux";
 import { handleNavigation, handlePopState, updateLocation, updateRefs, updateWindowWidth } from "./store/Slices/app-slice";
 import GuideWrapper from "./high-level-components/guide-wrapper/guide-wrapper";
+import { toggleFullScreen } from "./store/Slices/watch-slice";
 
 function App() {
   const dispatch = useDispatch();
@@ -27,6 +28,14 @@ function App() {
     // const currentRoute = window.location.pathname.split("?")[0];
     // // console.log(currentRoute);
     // dispatch(handleNavigation(currentRoute));
+
+    document.addEventListener("fullscreenchange", () => {
+      if (document.fullscreenElement) {
+        dispatch(toggleFullScreen(true));
+      } else {
+        dispatch(toggleFullScreen(false));
+      }
+    });
 
     window.addEventListener("popstate", () => {
       dispatch(handlePopState());

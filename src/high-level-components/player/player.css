@@ -1,25 +1,37 @@
 .player-outer{
-    height: var(--height);
-    width: var(--width);
-    max-height: 73.5vh;
-    position: relative;
+  height: var(--height);
+  width: var(--width);
+  max-height: 73.5vh;
+  position: relative;
+  border-radius: 12px;
+  overflow: hidden;
 }
 .player-outer.theatre{
-    width: 100%;
-    height: unset;
-    max-height: 81vh;
-    border-radius: 0px;
-
+  width: 100%;
+  height: unset;
+  max-height: 81vh;
+  border-radius: 0px;
+  overflow: hidden;
+}
+.player-outer.fullscreen, .player-outer.fullscreen.theatre{
+  width: 100%;
+  height: 100vh;
+  max-height: 100vh;
+  border-radius: 0px;
 }
 
 .html5-player{
-    height: var(--height);
-    width: var(--width);
-    border-radius: 12px;
-    overflow: hidden;
-    width: 100%;
-    max-height: 73.5vh;
+  height: var(--height);
+  width: var(--width);
+  border-radius: 12px;
+  overflow: hidden;
+  width: 100%;
+  max-height: 73.5vh;
     
+}
+.player-expanded-container{
+  background-color: black;
+
 }
 
 /* .html5-player::-webkit-media-controls {
@@ -27,178 +39,175 @@
   } */
 
 .html5-player.theatre{
-max-height: 81vh;
-border-radius: 0px;
-height: unset;
-width: 100%;
-background-color: black;
-border-radius: 0px;
+  max-height: 81vh;
+  border-radius: 0px;
+  height: 100%;
+  width: 100%;
+  background-color: black;
+  border-radius: 0px;
+}
+.html5-player.fullscreen, .html5-player.fullscreen.theatre{
+  width: 100%;
+  height: 100vh;
+  max-height: 100vh;
+  border-radius: 0px;
+  background-color: black;
 }
 
 .player-inner-absolute{
-position: absolute;
-width: 100%;
-height: 100%;
-z-index: 4;
-top: 0;
-pointer-events: none;
-transition: opacity 150ms ease;
+ 
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  z-index: 4;
+  top: 0;
+  pointer-events: none;
+  transition: opacity 150ms ease;
 }
 .player-inner-absolute.hide{
-opacity: 0;
+  opacity: 0;
 }
 .player-inner-relative{
-opacity: 1;
-position: relative;
-width: calc(100% - 30px);
-height: 100%;
-margin: auto;
-transition: opacity 150ms ease;
+  opacity: 1;
+  position: relative;
+  width: calc(100% - 30px);
+  padding: 0px 15px;
+  height: 100%;
+  margin: auto;
+  transition: opacity 150ms ease;
+  background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.171), rgba(0, 0, 0, 0.521));
 }
 .player-inner-relative.hide{
   opacity: 0;
 }
 .player-inner-relative.theatre{
-bottom: 4px;
+  bottom: 4px;
 }
 
 .chapters-absolute{
-pointer-events: all;
-position: absolute;
-bottom: 40px;
-width: 100%;
+  pointer-events: all;
+  position: absolute;
+  bottom: 42px;
+  width: 100%;
+  left: 0px;
+  display: flex;
+  justify-content: center;
+  
 }
 .chapters-container{
-width: 100%;
-display: flex;
-position: relative;
-cursor: pointer;
-/* gap: 2px; */
-/* background-color: blue; */
-
+  display: flex;
+  position: relative;
+  cursor: pointer;
+  /* gap: 2px; */
+  /* background-color: blue; */
 
 }
 
 .controls-relative.theatre{
-    bottom: 4px;
-  }
+  bottom: 4px;
+}
   
-  .chapters-absolute{
-    pointer-events: all;
-    position: absolute;
-    bottom: 40px;
-    width: 100%;
-  }
-  .chapters-container{
-    width: 100%;
-    display: flex;
-    position: relative;
-    cursor: pointer;
-    /* gap: 2px; */
-    /* background-color: blue; */
-    
+.chapters-container:hover .bar, .chapters-container.drag-expand .bar{
+  transform: scaleY(1.7);
   
-  }
-  .chapters-container:hover .bar, .chapters-container.drag-expand .bar{
-    transform: scaleY(1.4);
+}
+.chapters-container:hover .scrubbing{
+  visibility: visible;
+}
+.chapter-padding:hover > .bar, .chapter-padding.drag-expand > .bar{
+  transform: scaleY(3);
   
-  }
-  .chapters-container:hover .scrubbing{
-    visibility: visible;
-  }
-  .chapter-padding:hover > .bar, .chapter-padding.drag-expand > .bar{
-    transform: scaleY(3);
+}
   
-  }
-  
-  .chapter-padding.single:hover > .bar, .chapter-padding.single.drag-expand > .bar{
-    transform: scaleY(1.4);
-  }
-  .chapter-padding{
-    --padding: 15px;
-    --height: 10px;
-    position: relative;
-    pointer-events: all;
-    padding-top: var(--padding);
-    height: var(--height);
-  }
+.chapter-padding.single:hover > .bar, .chapter-padding.single.drag-expand > .bar{
+  transform: scaleY(1.7);
+}
+.chapter-padding{
+  --padding: 15px;
+  --height: 10px;
+  position: relative;
+  pointer-events: all;
+  padding-top: var(--padding);
+  height: var(--height);
+}
   
   
-  .bar{
-    /* width: 100%; */
-    height: 3px;
-    position: absolute;
-    pointer-events: none;
-    transition: transform 100ms ease;
-  }
+.bar{
+  /* width: 100%; */
+  height: 3px;
+  position: absolute;
+  pointer-events: none;
+  transition: transform 100ms ease;
+}
   
-  .progress{
-    background-color: red;
-    z-index: 4;
-  }
-  .scrubbing{
-    background-color: rgba(212, 212, 212, 0.329);
-    z-index: 3;
-    visibility: hidden;
-  }
-  .buffer{
-    background-color: rgba(212, 212, 212, 0.582);
-    z-index: 2;
-  }
-  .grey-bg{
-    background-color: rgba(212, 212, 212, 0.178);
-    z-index: 1;
-    width: 100%;
-  }
-  .red-dot{
-    height: 13px;
-    width: 13px;
-    border-radius: 50%;
-    background-color: red;
-    transition: scale 100ms ease;
-    scale: 0;
-  
-  }
-  .red-dot-wrapper{
-    /* visibility: hidden; */
-    pointer-events: none;
-    position: absolute;
-    top: 10px;
-    left: -6.5px;
-    z-index: 5;
-  }
-  
+.progress{
+  background-color: red;
+  z-index: 4;
+}
+.scrubbing{
+  background-color: rgba(212, 212, 212, 0.329);
+  z-index: 3;
+  visibility: hidden;
+}
+.buffer{
+  background-color: rgba(212, 212, 212, 0.582);
+  z-index: 2;
+}
+.grey-bg{
+  background-color: rgba(212, 212, 212, 0.178);
+  z-index: 1;
+  width: 100%;
+}
+.red-dot{
+  height: 13px;
+  width: 13px;
+  border-radius: 50%;
+  background-color: red;
+  transition: scale 100ms ease;
+  scale: 0;
+
+}
+
+.red-dot-wrapper{
+  /* visibility: hidden; */
+  pointer-events: none;
+  position: absolute;
+  top: 10px;
+  left: -6.5px;
+  z-index: 5;
+}
 
 .bottom-controls{
-position: absolute;
-bottom: 0px;
-width: calc(100% - 20px);
-padding: 0px 10px;
-/* background: burlywood; */
-height: 45px;
-display: flex;
-justify-content: space-between;
-pointer-events: all;
+  position: absolute;
+  left: 0;
+  bottom: 0px;
+  width: calc(100% - 24px);
+  padding: 0px 12px;
+  /* background: burlywood; */
+  height: 45px;
+  display: flex;
+  justify-content: space-between;
+  pointer-events: all;
 
 }
 
 .player-button{
-width: 45px;
-height: 100%;
-cursor: pointer;
-background-color: transparent;
-border: none;
+  width: 45px;
+  height: 100%;
+  cursor: pointer;
+  background-color: transparent;
+  border: none;
 
 }
 .player-button svg{
-fill: white;
+  fill: white;
 }
 
 .lower{
-    height: 1000px;
-    background-color: grey;
-    width: var(--width);
-  }
+  height: 1000px;
+  background-color: grey;
+  width: var(--width);
+}
 
 
   

@@ -8,6 +8,7 @@ export default function Chapters({
   stopDragging,
   handleClick,
   updateScrubbingBar,
+  innerChapterContainerRef,
 }) {
   const chapterEls = chapters.map((chapter, index) => {
     // const calculatedPercentage = Math.round(((chapter.end - chapter.start) / chapters[chapters.length - 1].end) * 100);
@@ -28,11 +29,11 @@ export default function Chapters({
     );
   });
   return (
-    <div className='chapters-absolute'>
+    <div className='chapters-absolute' ref={chapterContainerRef}>
       <div
         className='chapters-container'
+        ref={innerChapterContainerRef}
         onMouseMove={updateScrubbingBar}
-        ref={chapterContainerRef}
         onMouseOut={resetDot}
         onMouseDown={startDrag}
         onMouseUp={stopDragging}
