@@ -15,6 +15,7 @@ export default function Player({ videoRef, secondaryRef, containerRef, expandedC
   const theatreMode = useSelector((state) => state.watch.theatreMode);
   const fullScreen = useSelector((state) => state.watch.fullScreen);
   const { descriptionString, duration, videoId, url } = playingVideo;
+  const attempts = useRef(0);
   const [chapters, setChapters] = useState([]);
 
   const [play, setPlay] = useState(false);
@@ -288,14 +289,15 @@ export default function Player({ videoRef, secondaryRef, containerRef, expandedC
   }, [videoId, location]);
 
   useLayoutEffect(() => {
+    clearIntervalProgress();
     resetBars();
     calculateWidth();
-  }, [playingVideo]);
+  }, [playingVideo, videoId]);
 
   const attatchPlayer = async () => {
     await detachPlayer();
     const manifestUri = url;
-    if (manifestUri.length === 0) return;
+    if (manifestUri.length === 0 || !manifestUri.includes("http") || !videoRef.current) return;
     shaka.polyfill.installAll();
     if (shaka.Player.isBrowserSupported()) {
       playerRef.current = new shaka.Player();
@@ -340,6 +342,9 @@ export default function Player({ videoRef, secondaryRef, containerRef, expandedC
 
     function onError(error) {
       console.error("Error code", error.code, "object", error);
+      if (attempts.current > 2) return;
+      attatchPlayer();
+      attempts.current += 1;
     }
   };
 
@@ -687,6 +692,9 @@ export default function Player({ videoRef, secondaryRef, containerRef, expandedC
   // };
 
   const updateProgess = (e) => {
+    if (intervalRef.current) {
+      clearInterval(intervalRef.current);
+    }
     intervalRef.current = setInterval(() => {
       // console.log("running");
       updateBufferBar();
@@ -790,7 +798,7 @@ export default function Player({ videoRef, secondaryRef, containerRef, expandedC
 
     timeIntervalRef.current = setInterval(() => {
       checkBuffered();
-    }, 100);
+    }, 250);
   };
 
   const checkBuffered = () => {

@@ -24,26 +24,38 @@ const watchSlice = createSlice({
     toggleFullScreen: (state, action) => {
       state.fullScreen = action.payload;
     },
+    updateRetrievedVideos: (state, action) => {
+      state.retrievedVideos = [...state.retrievedVideos, action.payload];
+    },
   },
 });
 
-export const { updatePlayingVideo, updateRecommendedVideosWatch, toggleTheatreMode, toggleFullScreen } = watchSlice.actions;
+export const { updatePlayingVideo, updateRecommendedVideosWatch, toggleTheatreMode, toggleFullScreen, updateRetrievedVideos } = watchSlice.actions;
 
 export default watchSlice.reducer;
 
 export const fetchWatchData = (videoId, currentRoute) => {
   return async (dispatch, getState) => {
-    const recommendations = getState().watch.recommendations;
-    const currentId = getState().watch.playingVideo.videoId;
+    const currentVideoId = getState().watch.playingVideo.videoId;
+    const isFetching = getState().app.isFetching;
+    const location = getState().app.location;
+    if (currentVideoId === videoId && location.includes("watch")) return;
+    if (isFetching) return;
+    dispatch(updateIsFetching());
+
+    const retrievedVideos = getState().watch.retrievedVideos;
+    const currentVideo = retrievedVideos.find((retrievedVideo) => retrievedVideo.videoId === videoId);
     // check whether the videoId exists in the retrievedVideos array first if it does just update the playingvideo values and recommendations
     // and navigate immediately
-    if (recommendations.length > 0 && currentId === videoId) {
+    if (currentVideo) {
+      dispatch(updatePlayingVideo(currentVideo.videoData));
+      dispatch(updateRecommendedVideosWatch(currentVideo.recommendations));
       dispatch(updateLocation(currentRoute));
 
       dispatch(handleNavigation("/watch"));
+      dispatch(updateIsFetching());
       return;
     }
-    dispatch(updateIsFetching());
     const simulatePlayingVideo = await new Promise((resolve, reject) => {
       setTimeout(() => {
         resolve(videoId);
@@ -73,7 +85,9 @@ export const fetchWatchData = (videoId, currentRoute) => {
     ];
     const playingVideoData = videoId === "i94bjbYU" ? videosArr[0] : videosArr[1];
     const recommendationsData = simulateRecommendations;
+    const newVideoObject = { videoId: videoId, recommendations: recommendationsData, videoData: playingVideoData };
     dispatch(updateIsFetching());
+    dispatch(updateRetrievedVideos(newVideoObject));
     dispatch(updatePlayingVideo(playingVideoData));
     dispatch(updateRecommendedVideosWatch(recommendationsData));
     if (window.location.pathname.includes("watch")) {
