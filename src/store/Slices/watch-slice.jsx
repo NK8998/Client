@@ -1,6 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { handleNavigation, updateIsFetching, updateLocation } from "./app-slice";
 
+// store each retrieved video and its recommendations in an array
 const watchSlice = createSlice({
   name: "watch",
   initialState: {
@@ -8,6 +9,7 @@ const watchSlice = createSlice({
     recommendations: [],
     theatreMode: false,
     fullScreen: false,
+    retrievedVideos: [{ videoId: "", recommendations: [], videoData: {} }],
   },
   reducers: {
     updatePlayingVideo: (state, action) => {
@@ -33,6 +35,8 @@ export const fetchWatchData = (videoId, currentRoute) => {
   return async (dispatch, getState) => {
     const recommendations = getState().watch.recommendations;
     const currentId = getState().watch.playingVideo.videoId;
+    // check whether the videoId exists in the retrievedVideos array first if it does just update the playingvideo values and recommendations
+    // and navigate immediately
     if (recommendations.length > 0 && currentId === videoId) {
       dispatch(updateLocation(currentRoute));
 
@@ -62,18 +66,20 @@ export const fetchWatchData = (videoId, currentRoute) => {
     const wide =
       "https://getting-started8998.s3.ap-south-1.amazonaws.com/%5B219%5D+AVATAR+2+The+Way+of+Water+(2022)+Ultrawide+4K+HDR+Trailer+++UltrawideVideos/output.mpd";
     const normal = "https://getting-started8998.s3.ap-south-1.amazonaws.com/Microsoft+Flight+Simulator+2024+-+Announce+Trailer+-+4K/output.mpd";
-    const randomInt = Math.round(Math.random());
+    // const randomInt = Math.round(Math.random());
     const videosArr = [
-      { videoId: simulatePlayingVideo, aspectRatio: 16 / 9, url: normal, descriptionString: string1, duration: 134 },
-      { videoId: simulatePlayingVideo, aspectRatio: 1920 / 824, url: wide, descriptionString: string1, duration: 96 },
+      { videoId: "i94bjbYU", aspectRatio: 16 / 9, url: normal, descriptionString: string1, duration: 134 },
+      { videoId: "I938buiYN", aspectRatio: 1920 / 824, url: wide, descriptionString: string2, duration: 96 },
     ];
-    const playingVideoData = videosArr[randomInt];
+    const playingVideoData = videoId === "i94bjbYU" ? videosArr[0] : videosArr[1];
     const recommendationsData = simulateRecommendations;
     dispatch(updateIsFetching());
-    dispatch(updateLocation(currentRoute));
     dispatch(updatePlayingVideo(playingVideoData));
     dispatch(updateRecommendedVideosWatch(recommendationsData));
-    dispatch(handleNavigation("/watch"));
+    if (window.location.pathname.includes("watch")) {
+      dispatch(handleNavigation("/watch"));
+      dispatch(updateLocation(currentRoute));
+    }
   };
 };
 

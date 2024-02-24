@@ -34,9 +34,9 @@
 
 }
 
-/* .html5-player::-webkit-media-controls {
+.html5-player::-webkit-media-controls {
     display: none;
-  } */
+  }
 
 .html5-player.theatre{
   max-height: 81vh;
