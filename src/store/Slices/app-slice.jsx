@@ -1,5 +1,5 @@
-import { createSlice } from "@reduxjs/toolkit";
-import { fetchWatchData } from "./watch-slice";
+import { createSlice, current } from "@reduxjs/toolkit";
+import { fetchWatchData, toggleFullScreen } from "./watch-slice";
 
 const appSlice = createSlice({
   name: "app",
@@ -35,6 +35,13 @@ export default appSlice.reducer;
 
 export const handleNavigation = (targetRoute) => {
   return (dispatch, getState) => {
+    if (!targetRoute.includes("watch")) {
+      if (document.fullscreenElement) {
+        document.exitFullscreen().then(() => {
+          dispatch(toggleFullScreen(false));
+        });
+      }
+    }
     const refs = getState().app.refs;
     const currentRoute = refs.find((ref) => ref.route === targetRoute);
 
@@ -73,6 +80,21 @@ export const handleNavResize = () => {
   };
 };
 
+export const handleResize = () => {
+  return (dispatch) => {
+    const windowWidth = window.innerWidth;
+    const leftNavMain = document.querySelector(".leftnav-wrapper");
+    if (!leftNavMain) return;
+
+    if (windowWidth >= 1024) {
+      leftNavMain.classList.remove("show-not-watch");
+    } else if (windowWidth < 1024) {
+      leftNavMain.classList.toggle("hide");
+    }
+    dispatch(updateWindowWidth(windowWidth));
+  };
+};
+
 export const handlePopState = () => {
   return async (dispatch, getState) => {
     const isFetching = getState().app.isFetching;
@@ -82,6 +104,20 @@ export const handlePopState = () => {
     const isWatchPage = currentRoute.includes("watch");
     if (isWatchPage) {
       dispatch(fetchWatchData(videoId, currentRoute));
+    }
+  };
+};
+
+export const handleFullscreenChange = () => {
+  return (dispatch) => {
+    if (window.location.pathname.includes("watch")) {
+      if (document.fullscreenElement) {
+        dispatch(toggleFullScreen(true));
+      } else {
+        dispatch(toggleFullScreen(false));
+      }
+    } else {
+      dispatch(toggleFullScreen(false));
     }
   };
 };

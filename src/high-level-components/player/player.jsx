@@ -174,6 +174,12 @@ export default function Player({ videoRef, secondaryRef, containerRef, expandedC
 
   useLayoutEffect(() => {
     toggleFullScreen();
+
+    return () => {
+      const root = document.querySelector("#root");
+      if (!root) return;
+      root.removeEventListener("scroll", handleScrollPosition);
+    };
   }, [fullScreen, theatreMode]);
 
   const updateStyles = () => {
@@ -190,14 +196,34 @@ export default function Player({ videoRef, secondaryRef, containerRef, expandedC
       masthead.classList.remove("visible");
     }
   };
+
+  const changeFullscreenStyles = () => {
+    const masthead = document.querySelector(".masthead-outer");
+    const root = document.querySelector("#root");
+    const flexContent = document.querySelector(".flex-content");
+    const guideWrapper = document.querySelector(".guide-wrapper");
+
+    videoRef.current.classList.remove("fullscreen");
+    containerRef.current.classList.remove("fullscreen");
+
+    masthead.classList.remove("fullscreen");
+    masthead.classList.remove("visible");
+    flexContent.classList.remove("fullscreen");
+    root.classList.remove("fullscreen");
+    guideWrapper.classList.remove("fullscreen");
+    root.removeEventListener("scroll", handleScrollPosition);
+  };
   const toggleFullScreen = () => {
-    const isWatchpage = location.includes("watch") || window.location.pathname.includes("watch");
-    if (!isWatchpage) return;
     if (!primaryRef.current || !containerRef.current) return;
     const masthead = document.querySelector(".masthead-outer");
     const root = document.querySelector("#root");
     const flexContent = document.querySelector(".flex-content");
     const guideWrapper = document.querySelector(".guide-wrapper");
+
+    if (!fullScreen && !location.includes("watch")) {
+      changeFullscreenStyles();
+      return;
+    }
 
     if (primaryRef.current && fullScreen) {
       if (Array.from(primaryRef.current.children).includes(containerRef.current)) {
@@ -218,6 +244,7 @@ export default function Player({ videoRef, secondaryRef, containerRef, expandedC
 
       root.addEventListener("scroll", handleScrollPosition);
     } else if (primaryRef.current && !Array.from(primaryRef.current.children).includes(containerRef.current) && !fullScreen) {
+      console.log("running");
       if (document.fullscreenElement) {
         document.exitFullscreen();
       }
@@ -233,19 +260,11 @@ export default function Player({ videoRef, secondaryRef, containerRef, expandedC
         containerRef.current.classList.add("theatre");
         toTheatre();
       }
-
-      videoRef.current.classList.remove("fullscreen");
-      containerRef.current.classList.remove("fullscreen");
+      changeFullscreenStyles();
       applyChapterStyles();
       calculateWidth();
 
       updateRedDot("");
-      masthead.classList.remove("fullscreen");
-      masthead.classList.remove("visible");
-      flexContent.classList.remove("fullscreen");
-      root.classList.remove("fullscreen");
-      guideWrapper.classList.remove("fullscreen");
-      root.removeEventListener("scroll", handleScrollPosition);
     }
   };
 
@@ -580,7 +599,6 @@ export default function Player({ videoRef, secondaryRef, containerRef, expandedC
         const curIndex = progressBarRefs[index].getAttribute("dataIndex");
         document.documentElement.style.setProperty("--currentChapterIndex", `${curIndex}`);
         document.documentElement.style.setProperty("--hoverChapterIndex", `${curIndex}`);
-        updateRedDot(currentTime);
         chaptersContainers[index].classList.add("drag-expand");
       } else if (chapter.end < currentTime) {
         progressBarRefs[index].style.width = `100%`;
@@ -590,6 +608,7 @@ export default function Player({ videoRef, secondaryRef, containerRef, expandedC
         chaptersContainers[index].classList.remove("drag-expand");
       }
     });
+    updateRedDot(currentTime);
   };
 
   const handleDrag = (e) => {

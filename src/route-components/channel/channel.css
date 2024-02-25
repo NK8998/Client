@@ -1,0 +1,14 @@
+.channel-content{
+    width: calc(100% - 24px);
+    /* background-color: blue; */
+    height: fit-content;
+    padding-left: 24px;
+    
+}
+.channel-content::-webkit-scrollbar{
+    display: none;
+}
+.channel-content.hidden{
+    display: none;
+}
+

@@ -6,35 +6,36 @@ import Home from "./route-components/home/home";
 import { Route, Routes } from "react-router-dom";
 import BareHome from "./bare-routes/bare-home";
 import BareWatch from "./bare-routes/bare-watch";
-import { useDispatch, useSelector } from "react-redux";
-import { handleNavigation, handlePopState, updateLocation, updateRefs, updateWindowWidth } from "./store/Slices/app-slice";
+import { useDispatch } from "react-redux";
+import { handleFullscreenChange, handlePopState, handleResize, updateRefs } from "./store/Slices/app-slice";
 import GuideWrapper from "./high-level-components/guide-wrapper/guide-wrapper";
-import { toggleFullScreen } from "./store/Slices/watch-slice";
+import Channel from "./route-components/channel/channel";
+import BareChannel from "./bare-routes/bare-channel/bare-channel";
+import BareFeatured from "./bare-routes/bare-channel/bare-channel-routes/bare-featured/bare-featured";
+import BareVideos from "./bare-routes/bare-channel/bare-channel-routes/bare-videos/bare-videos";
+import BareShorts from "./bare-routes/bare-channel/bare-channel-routes/bare-shorts/bare-shorts";
+import BareLive from "./bare-routes/bare-channel/bare-channel-routes/bare-live/bare-live";
+import BarePlaylists from "./bare-routes/bare-channel/bare-channel-routes/bare-playlists/bare-playlists";
+import BareCommunity from "./bare-routes/bare-channel/bare-channel-routes/bare-community/bare-community";
 
 function App() {
   const dispatch = useDispatch();
   const homeRef = useRef();
   const watchRef = useRef();
+  const channelRef = useRef();
   // all refs should be here to enure they are all called when app loads
 
   useLayoutEffect(() => {
     const refArray = [
       { route: "/", ref: homeRef.current.id },
       { route: "/watch", ref: watchRef.current.id },
+      { route: "/:channel", ref: channelRef.current.id },
     ];
 
     dispatch(updateRefs(refArray));
 
-    // const currentRoute = window.location.pathname.split("?")[0];
-    // // console.log(currentRoute);
-    // dispatch(handleNavigation(currentRoute));
-
     document.addEventListener("fullscreenchange", () => {
-      if (document.fullscreenElement) {
-        dispatch(toggleFullScreen(true));
-      } else {
-        dispatch(toggleFullScreen(false));
-      }
+      dispatch(handleFullscreenChange());
     });
 
     window.addEventListener("popstate", () => {
@@ -42,15 +43,7 @@ function App() {
     });
 
     window.addEventListener("resize", () => {
-      const windowWidth = window.innerWidth;
-      const leftNavMain = document.querySelector(".leftnav-wrapper");
-
-      if (windowWidth >= 1024) {
-        leftNavMain.classList.remove("show-not-watch");
-      } else if (windowWidth < 1024) {
-        leftNavMain.classList.toggle("hide");
-      }
-      dispatch(updateWindowWidth(windowWidth));
+      dispatch(handleResize());
     });
   }, []);
 
@@ -62,11 +55,22 @@ function App() {
         <div className='page-manager'>
           <Home homeRef={homeRef} />
           <Watch watchRef={watchRef} />
+          <Channel channelRef={channelRef} />
         </div>
       </div>
       <Routes>
         <Route path='/' element={<BareHome />} />
         <Route path='/watch' element={<BareWatch />} />
+        <Route path='/:channel/*' element={<BareChannel />}>
+          <Route path='' element={<BareFeatured />} />
+          <Route path='featured' element={<BareFeatured />} />
+          <Route path='videos' element={<BareVideos />} />
+          <Route path='shorts' element={<BareShorts />} />
+          <Route path='live' element={<BareLive />} />
+          <Route path='playlists' element={<BarePlaylists />} />
+          <Route path='community' element={<BareCommunity />} />
+          <Route path='*' element={<BareFeatured />} />
+        </Route>
       </Routes>
     </>
   );

@@ -3,6 +3,7 @@ import homeSlice from "./Slices/home-slice";
 import watchSlice from "./Slices/watch-slice";
 import authSlice from "./Slices/auth-slice";
 import appSlice from "./Slices/app-slice";
+import channelSlice from "./Slices/channel-slice";
 
 const store = configureStore({
   reducer: {
@@ -10,6 +11,7 @@ const store = configureStore({
     home: homeSlice,
     watch: watchSlice,
     auth: authSlice,
+    channel: channelSlice,
   },
 });
 
