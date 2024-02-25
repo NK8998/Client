@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { useLocation } from "react-router-dom";
-import { fetchLiveContent } from "../../../../store/Slices/channel-slice";
+import { fetchTabContent } from "../../../../store/Slices/channel-slice";
 
 export default function BareLive() {
   const dispatch = useDispatch();
@@ -9,7 +9,7 @@ export default function BareLive() {
 
   useEffect(() => {
     // fetch data and store in homeSlices
-    dispatch(fetchLiveContent(location.pathname));
+    dispatch(fetchTabContent(location.pathname, "live"));
   }, []);
 
   return <div className='live-content'></div>;

@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { useLocation } from "react-router-dom";
-import { fetchCommunityContent } from "../../../../store/Slices/channel-slice";
+import { fetchTabContent } from "../../../../store/Slices/channel-slice";
 
 export default function BareCommunity() {
   const dispatch = useDispatch();
@@ -9,7 +9,7 @@ export default function BareCommunity() {
 
   useEffect(() => {
     // fetch data and store in homeSlices
-    dispatch(fetchCommunityContent(location.pathname));
+    dispatch(fetchTabContent(location.pathname, "community"));
   }, []);
 
   return <div className='community-content'></div>;

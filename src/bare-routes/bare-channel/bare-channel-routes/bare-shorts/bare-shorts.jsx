@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { fetchShortsContent } from "../../../../store/Slices/channel-slice";
+import { fetchTabContent } from "../../../../store/Slices/channel-slice";
 import { useLocation } from "react-router-dom";
 
 export default function BareShorts() {
@@ -9,7 +9,7 @@ export default function BareShorts() {
 
   useEffect(() => {
     // fetch data and store in homeSlices
-    dispatch(fetchShortsContent(location.pathname));
+    dispatch(fetchTabContent(location.pathname, "shorts"));
   }, []);
 
   return <div className='shorts-content'></div>;

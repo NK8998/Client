@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { fetchVideosContent } from "../../../../store/Slices/channel-slice";
+import { fetchTabContent } from "../../../../store/Slices/channel-slice";
 import { useLocation } from "react-router-dom";
 
 export default function BareVideos() {
@@ -9,7 +9,7 @@ export default function BareVideos() {
 
   useEffect(() => {
     // fetch data and store in homeSlices
-    dispatch(fetchVideosContent(location.pathname));
+    dispatch(fetchTabContent(location.pathname, "videos"));
   }, []);
 
   return <div className='videos-content'></div>;

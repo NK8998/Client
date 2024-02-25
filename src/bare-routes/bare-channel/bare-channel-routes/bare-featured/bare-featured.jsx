@@ -1,15 +1,15 @@
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { useLocation } from "react-router-dom";
-import { fetchFeaturedContent } from "../../../../store/Slices/channel-slice";
+import { useLocation, useParams } from "react-router-dom";
+import { fetchTabContent } from "../../../../store/Slices/channel-slice";
 
 export default function BareFeatured() {
   const dispatch = useDispatch();
-  const location = useLocation();
-
+  const { channel } = useParams();
+  const currentRoute = `/${channel}/featured`;
   useEffect(() => {
     // fetch data and store in homeSlices
-    dispatch(fetchFeaturedContent(location.pathname));
+    dispatch(fetchTabContent(currentRoute, "featured"));
   }, []);
 
   return <div className='featured-content'></div>;
