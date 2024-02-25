@@ -7,6 +7,7 @@ import Chapters from "./player-components/chapters/chapters";
 import generateChapters from "./player-components/chapters/chaptersGen";
 import { toNormal, toPause, toPlay, toTheatre } from "./utilities/gsap-animations";
 import { handleFullscreen, handleTheatre } from "../../store/Slices/watch-slice";
+import { seekVideo } from "./utilities/player-progressBar-logic";
 
 export default function Player({ videoRef, secondaryRef, containerRef, expandedContainerRef, primaryRef }) {
   const dispatch = useDispatch();
@@ -37,6 +38,7 @@ export default function Player({ videoRef, secondaryRef, containerRef, expandedC
   const mouseDownTracker = useRef();
   const isDragging = useRef(false);
   const fullScreenTimeout = useRef();
+  const focusViaKeyBoard = useRef(false);
 
   useLayoutEffect(() => {
     const generatedChapters = generateChapters(descriptionString, duration);
@@ -75,6 +77,7 @@ export default function Player({ videoRef, secondaryRef, containerRef, expandedC
     } else if (isWatchpage === true) {
       attatchPlayer();
       calculateWidth();
+      applyChapterStyles();
     }
   }, [location, videoId, playingVideo]);
 
@@ -83,6 +86,8 @@ export default function Player({ videoRef, secondaryRef, containerRef, expandedC
       const isWatchpage = location.includes("watch") || window.location.pathname.includes("watch");
       if (!isWatchpage) return;
       if (e.target.tagName === "TEXTAREA" || e.target.tagName === "INPUT") return;
+      // console.log(e.target);
+
       keyDownTime.current = Date.now();
       let wasPlaying = !videoRef.current.paused;
 
@@ -96,15 +101,15 @@ export default function Player({ videoRef, secondaryRef, containerRef, expandedC
           videoRef.current.play();
         }
         updateBufferBar();
-        updateProgressBar();
+        updateProgressBar(videoRef, chapters, redDotRef);
         checkBuffered();
         updateRedDot("");
       };
       if (key === "arrowleft" && currentTime > 0) {
-        seekVideo(currentTime - timeStep);
+        seekVideo(currentTime - timeStep, videoRef);
         handlePlayingState();
       } else if (key === "arrowright" && currentTime < duration) {
-        seekVideo(currentTime + timeStep);
+        seekVideo(currentTime + timeStep, videoRef);
         handlePlayingState();
       } else if (key === "t") {
         if (theatreTimeOut.current) {
@@ -136,12 +141,20 @@ export default function Player({ videoRef, secondaryRef, containerRef, expandedC
     const handleKeyUp = (e) => {
       const isWatchpage = location.includes("watch") || window.location.pathname.includes("watch");
       if (!isWatchpage) return;
-      if (e.key === " ") {
+      const key = e.key.toLowerCase();
+
+      if (key === " ") {
         !isHolding.current && handlePlayState();
         videoRef.current.playbackRate = 1;
         clearTimeout(timeoutRef2.current);
         timeoutRef2.current = null;
         isHolding.current = false;
+      } else if (key === "tab" && e.target.classList.contains("chapters-container")) {
+        focusViaKeyBoard.current = true;
+        innerChapterContainerRef.current.classList.add("focused");
+      } else if (key !== "tab" && !e.target.classList.contains("chapters-container")) {
+        focusViaKeyBoard.current = false;
+        innerChapterContainerRef.current.classList.remove("focused");
       }
     };
 
@@ -153,7 +166,7 @@ export default function Player({ videoRef, secondaryRef, containerRef, expandedC
       window.removeEventListener("keydown", handleKeyPress);
       window.removeEventListener("keyup", handleKeyUp);
     };
-  }, [play, theatreMode, fullScreen]);
+  }, [play, theatreMode, fullScreen, location]);
 
   useLayoutEffect(() => {
     const isWatchpage = location.includes("watch") || window.location.pathname.includes("watch");
@@ -244,7 +257,7 @@ export default function Player({ videoRef, secondaryRef, containerRef, expandedC
 
       root.addEventListener("scroll", handleScrollPosition);
     } else if (primaryRef.current && !Array.from(primaryRef.current.children).includes(containerRef.current) && !fullScreen) {
-      console.log("running");
+      // console.log("running");
       if (document.fullscreenElement) {
         document.exitFullscreen();
       }
@@ -508,7 +521,6 @@ export default function Player({ videoRef, secondaryRef, containerRef, expandedC
       }
     });
   };
-
   const updateRedDot = (currentTimeTracker) => {
     if (chapters.length === 0) return;
     const endThreshold = Math.abs(videoRef.current.currentTime - chapters[chapters.length - 1].end);
@@ -717,7 +729,7 @@ export default function Player({ videoRef, secondaryRef, containerRef, expandedC
     intervalRef.current = setInterval(() => {
       // console.log("running");
       updateBufferBar();
-      updateProgressBar(e);
+      updateProgressBar();
       updateRedDot("");
     }, 60);
   };
@@ -729,10 +741,6 @@ export default function Player({ videoRef, secondaryRef, containerRef, expandedC
   const resetDot = () => {
     document.documentElement.style.setProperty("--hovering", `false`);
     redDotRef.current.style.scale = 0;
-  };
-
-  const seekVideo = (newTime) => {
-    videoRef.current.currentTime = newTime;
   };
 
   function applyChapterStyles() {
@@ -756,6 +764,7 @@ export default function Player({ videoRef, secondaryRef, containerRef, expandedC
   }
 
   const handlePlayState = () => {
+    handleDoubleClick();
     if (timeIntervalRef.current) {
       clearInterval(timeIntervalRef.current);
     }
@@ -774,6 +783,8 @@ export default function Player({ videoRef, secondaryRef, containerRef, expandedC
       bufferBarRef.style.width = `0`;
     });
   };
+
+  const isFocusing = useRef(false);
 
   const handleMouseMove = () => {
     handleHover();
@@ -797,7 +808,7 @@ export default function Player({ videoRef, secondaryRef, containerRef, expandedC
     }, 3000);
   };
   const handleMouseOut = () => {
-    if (videoRef.current.paused) return;
+    if (videoRef.current.paused || isFocusing.current === true) return;
 
     if (timeoutRef.current) {
       clearTimeout(timeoutRef.current);
@@ -841,6 +852,22 @@ export default function Player({ videoRef, secondaryRef, containerRef, expandedC
     }
   };
 
+  const clickRef = useRef();
+  let clicks = useRef(0);
+  const handleDoubleClick = () => {
+    if (clickRef.current) {
+      clearTimeout(clickRef.current);
+    }
+    clicks.current += 1;
+    if (clicks.current === 2) {
+      dispatch(handleFullscreen(fullScreen));
+    }
+
+    clickRef.current = setTimeout(() => {
+      clicks.current = 0;
+    }, 300);
+  };
+
   return (
     <>
       <div className={`player-outer`} ref={containerRef} onMouseEnter={handleHover} onMouseOut={handleMouseOut} onMouseMove={handleMouseMove}>
@@ -878,6 +905,10 @@ export default function Player({ videoRef, secondaryRef, containerRef, expandedC
             onMouseMove={handleMouseMove}
           >
             <Chapters
+              updateProgressBar={updateProgressBar}
+              updateRedDot={updateRedDot}
+              handleMouseMove={handleMouseMove}
+              videoRef={videoRef}
               innerChapterContainerRef={innerChapterContainerRef}
               chapters={chapters}
               redDotRef={redDotRef}
@@ -888,8 +919,9 @@ export default function Player({ videoRef, secondaryRef, containerRef, expandedC
               stopDragging={stopDragging}
               handleClick={handleClick}
               updateScrubbingBar={updateScrubbingBar}
+              isFocusing={isFocusing}
             />
-            <BottomControls handlePlayState={handlePlayState} />
+            <BottomControls handlePlayState={handlePlayState} isFocusing={isFocusing} handleMouseMove={handleMouseMove} />
           </div>
         </div>
       </div>

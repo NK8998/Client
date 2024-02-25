@@ -10,23 +10,23 @@ export default function LeftNavWrapper() {
   const isWatchPage = location.includes("watch");
   const leftNavRef = useRef();
 
-  const addRemoveWatchPageStyle = () => {
-    if (isWatchPage) {
-      leftNavRef.current.classList.add("hide");
-      leftNavRef.current.classList.remove("not-watch");
-    } else {
-      leftNavRef.current.classList.remove("hide");
-      leftNavRef.current.classList.add("not-watch");
-    }
-  };
-  useEffect(() => {
-    addRemoveWatchPageStyle();
-    window.addEventListener("resize", addRemoveWatchPageStyle);
+  // const addRemoveWatchPageStyle = () => {
+  //   if (isWatchPage) {
+  //     leftNavRef.current.classList.add("hide");
+  //     leftNavRef.current.classList.remove("not-watch");
+  //   } else {
+  //     leftNavRef.current.classList.remove("hide");
+  //     leftNavRef.current.classList.add("not-watch");
+  //   }
+  // };
+  // useEffect(() => {
+  //   addRemoveWatchPageStyle();
+  //   window.addEventListener("resize", addRemoveWatchPageStyle);
 
-    return () => {
-      window.removeEventListener("resize", addRemoveWatchPageStyle);
-    };
-  }, [location]);
+  //   return () => {
+  //     window.removeEventListener("resize", addRemoveWatchPageStyle);
+  //   };
+  // }, [location]);
 
   return (
     <>

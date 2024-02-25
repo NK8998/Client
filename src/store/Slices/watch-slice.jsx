@@ -116,11 +116,13 @@ export const handleFullscreen = (fullScreen) => {
   return (dispatch) => {
     const root = document.querySelector("#root");
 
-    if (!fullScreen && window.location.pathname.includes("watch")) {
+    if (!fullScreen && window.location.pathname.includes("watch") && root) {
       root.scrollTo({ top: 0, behavior: "instant" });
-      document.documentElement.requestFullscreen().then(() => {
-        dispatch(toggleFullScreen(true));
-      });
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen().then(() => {
+          dispatch(toggleFullScreen(true));
+        });
+      }
     } else if (fullScreen) {
       if (document.fullscreenElement) {
         document.exitFullscreen().then(() => {

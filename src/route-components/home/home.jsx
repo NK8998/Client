@@ -5,7 +5,7 @@ import { useSelector } from "react-redux";
 export default function Home({ homeRef }) {
   const recommendedVideos = useSelector((state) => state.home.recommendedVideos);
 
-  console.log(recommendedVideos);
+  // console.log(recommendedVideos);
 
   return (
     <div className='home hidden' ref={homeRef} id='home'>
@@ -18,6 +18,7 @@ export default function Home({ homeRef }) {
             <div className='press me'>press me</div>
           </Link>
           <Link to={"/@AbanPreach"}>Aba n Preach</Link>
+          <Link to={"/@WbeDevSimplified"}>WbeDevSimplified</Link>
         </div>
       </div>
     </div>

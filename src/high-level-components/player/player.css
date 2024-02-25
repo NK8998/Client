@@ -1,4 +1,5 @@
 .player-outer{
+  --outline-color: rgb(47, 127, 247);
   height: var(--height);
   width: var(--width);
   max-height: 73.5vh;
@@ -19,7 +20,34 @@
   max-height: 100vh;
   border-radius: 0px;
 }
-
+.player-outer.fullscreen  .player-button, .player-outer.fullscreen.theatre  .player-button{
+  width: 58px;
+  height: 58px;
+}
+.player-outer.fullscreen  .chapters-absolute, .player-outer.fullscreen.theatre  .chapters-absolute{
+  bottom: 56px;
+}
+.player-outer.fullscreen  .bar, .player-outer.fullscreen.theatre  .bar{
+  height: 5px;
+}
+.player-outer.fullscreen  .bottom-controls, .player-outer.fullscreen.theatre  .bottom-controls{
+  height: 59px;
+}
+.player-outer.fullscreen  .red-dot, .player-outer.fullscreen.theatre  .red-dot{
+  height: 20px;
+  width: 20px;
+}
+.player-outer.fullscreen .red-dot-wrapper, .player-outer.fullscreen.theatre .red-dot-wrapper{
+  top: 7.5px;
+}
+.player-outer.fullscreen .chapters-container.focused.single::after, .player-outer.fullscreen.theatre .chapters-container.focused.single::after{
+  height: 13px;
+  bottom: 1px;
+}
+.player-outer.fullscreen .chapters-container.focused::after, .player-outer.fullscreen.theatre .chapters-container.focused::after{
+  height: 15px;
+  bottom: 0px;
+}
 .html5-player{
   height: var(--height);
   width: var(--width);
@@ -53,6 +81,8 @@
   border-radius: 0px;
   background-color: black;
 }
+
+
 
 .player-inner-absolute{
  
@@ -100,15 +130,36 @@
   cursor: pointer;
   /* gap: 2px; */
   /* background-color: blue; */
+  outline: none;
 
 }
+.chapters-container.single.focused::after{
+  box-sizing: content-box;
+  height: 9px;
+  bottom: 0px;
+  bottom: 4px;
+}
+.chapters-container::after{
+  content:' ';
+  position: absolute;
+  z-index: 9;
+  width: 100%;
+  height: 13px;
+  pointer-events: none;
+  bottom: 2px;
+
+}
+.chapters-container.focused:focus::after{
+  box-shadow: 0 0 0 2px inset var(--outline-color); /* Adjust the spread-radius to 2px and remove offsets and blur */
+}
+
 
 .controls-relative.theatre{
   bottom: 4px;
 }
   
 .chapters-container:hover .bar, .chapters-container.drag-expand .bar{
-  transform: scaleY(1.7);
+  transform: scaleY(1.6);
   
 }
 .chapters-container:hover .scrubbing{
@@ -192,13 +243,22 @@
 }
 
 .player-button{
+  box-sizing: border-box;
   width: 45px;
   height: 100%;
   cursor: pointer;
   background-color: transparent;
   border: none;
+  outline: none;
+  margin-top: -2px;
+  position: relative;
+  z-index: 10;
 
 }
+.player-button.focused:focus{
+  box-shadow: 0 0 0 2px inset var(--outline-color); /* Adjust the spread-radius to 2px and remove offsets and blur */
+}
+
 .player-button svg{
   fill: white;
 }

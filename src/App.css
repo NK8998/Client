@@ -1,5 +1,6 @@
 #root{
     position: relative;
+    -webkit-user-select:var(--select);
     user-select: var(--select);
     max-height: 100vh ;
     min-height: 100vh;

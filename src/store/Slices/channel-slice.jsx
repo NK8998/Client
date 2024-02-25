@@ -33,18 +33,35 @@ const channelSlice = createSlice({
         tabToUpdate.state.initial = content;
       }
     },
+    resetTabContent: (state, action) => {
+      const tabs = [
+        { tab: "featured", state: state.featured },
+        { tab: "videos", state: state.videos },
+        { tab: "live", state: state.live },
+        { tab: "playlists", state: state.playlists },
+        { tab: "shorts", state: state.shorts },
+        { tab: "community", state: state.community },
+      ];
+
+      tabs.forEach((tab) => {
+        tab.state.initial = [];
+        tab.state.dynamic = [];
+      });
+    },
   },
 });
 
-export const { updateCurrentChannel, updateTabContent } = channelSlice.actions;
+export const { updateCurrentChannel, updateTabContent, resetTabContent } = channelSlice.actions;
 export default channelSlice.reducer;
 
 let timeoutRef;
 
 let instanceArr = [];
 
+let currentContentType;
+
 const finalStep = (dispatch, currentChannel, targetRoute, instanceObj, getState) => {
-  const isFetching = getState().app.isFetching;
+  // const isFetching = getState().app.isFetching;
   // Sort the array based on the difference between Date.now() and the UID of each instance
   instanceArr.sort((a, b) => Math.abs(Date.now() - a.UID) - Math.abs(Date.now() - b.UID));
 
@@ -52,48 +69,68 @@ const finalStep = (dispatch, currentChannel, targetRoute, instanceObj, getState)
   const latestInstance = instanceArr[0];
 
   // Check if the instance for which finalStep is being called is the latest one
-  if (instanceObj.UID !== latestInstance.UID || isFetching) return;
+  if (instanceObj.UID !== latestInstance.UID) return;
 
   dispatch(handleNavigation("/:channel"));
   dispatch(updateLocation(targetRoute));
   dispatch(updateCurrentChannel(currentChannel));
-  // instanceArr = [];
+  currentContentType = "";
+  instanceArr = [];
+};
+
+const fetchNewContent = async (contentType) => {
+  const content = await new Promise((resolve, reject) => {
+    setTimeout(() => {
+      resolve([
+        { videoId: "ajdjJI900", title: "ajndjas" },
+        { videoId: "ajdjJI900", title: "ajndjas" },
+        { videoId: "ajdjJI900", title: "ajndjas" },
+      ]);
+    }, 2000);
+  });
+  const tabObj = { tabName: contentType, content: content };
+  return tabObj;
 };
 
 export const fetchTabContent = (targetRoute, contentType) => {
   return async (dispatch, getState) => {
+    const currentChannelState = getState().channel.currentChannel;
+    const currentChannel = targetRoute.split("/")[1];
     const currentRoute = getState().app.location;
-    if (currentRoute === targetRoute) return;
-    console.log({ instance: Date.now() });
     const instanceObj = { instance: contentType, UID: Date.now() };
     instanceArr.push(instanceObj);
-    dispatch(updateIsFetching());
-    const initialContent = getState().channel[contentType].initial;
-    if (initialContent.length > 0) {
-      dispatch(updateIsFetching());
-
-      const currentChannel = targetRoute.split("/")[1];
-
+    if (currentRoute === targetRoute || currentContentType === contentType) {
       finalStep(dispatch, currentChannel, targetRoute, instanceObj, getState);
 
       return;
     }
+    currentContentType = contentType;
 
-    const content = await new Promise((resolve, reject) => {
-      setTimeout(() => {
-        resolve([
-          { videoId: "ajdjJI900", title: "ajndjas" },
-          { videoId: "ajdjJI900", title: "ajndjas" },
-          { videoId: "ajdjJI900", title: "ajndjas" },
-        ]);
-      }, 2000);
-    });
-    const tabObj = { tabName: contentType, content: content };
-
-    dispatch(updateTabContent(tabObj));
-
-    const currentChannel = targetRoute.split("/")[1];
     dispatch(updateIsFetching());
-    finalStep(dispatch, currentChannel, targetRoute, instanceObj, getState);
+
+    if (currentChannelState === currentChannel) {
+      const initialContent = getState().channel[contentType].initial;
+      if (initialContent.length > 0) {
+        dispatch(updateIsFetching());
+
+        finalStep(dispatch, currentChannel, targetRoute, instanceObj, getState);
+
+        return;
+      } else {
+        const tabObj = await fetchNewContent(contentType);
+
+        dispatch(updateTabContent(tabObj));
+        dispatch(updateIsFetching());
+        finalStep(dispatch, currentChannel, targetRoute, instanceObj, getState);
+        return;
+      }
+    } else {
+      dispatch(resetTabContent());
+      const tabObj = await fetchNewContent(contentType);
+
+      dispatch(updateTabContent(tabObj));
+      dispatch(updateIsFetching());
+      finalStep(dispatch, currentChannel, targetRoute, instanceObj, getState);
+    }
   };
 };

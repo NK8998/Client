@@ -80,6 +80,19 @@ export const handleNavResize = () => {
   };
 };
 
+const addRemoveWatchPageStyle = () => {
+  const isWatchPage = window.location.pathname.includes("watch");
+  const leftNavMain = document.querySelector(".leftnav-wrapper");
+
+  if (isWatchPage) {
+    leftNavMain.classList.add("hide");
+    leftNavMain.classList.remove("not-watch");
+  } else {
+    leftNavMain.classList.remove("hide");
+    leftNavMain.classList.add("not-watch");
+  }
+};
+
 export const handleResize = () => {
   return (dispatch) => {
     const windowWidth = window.innerWidth;
@@ -89,8 +102,10 @@ export const handleResize = () => {
     if (windowWidth >= 1024) {
       leftNavMain.classList.remove("show-not-watch");
     } else if (windowWidth < 1024) {
-      leftNavMain.classList.toggle("hide");
+      leftNavMain.classList.add("hide");
     }
+    addRemoveWatchPageStyle();
+
     dispatch(updateWindowWidth(windowWidth));
   };
 };
