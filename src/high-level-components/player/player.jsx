@@ -616,19 +616,19 @@ export default function Player({ videoRef, secondaryRef, containerRef, expandedC
         const curIndex = progressBarRefs[index].getAttribute("dataIndex");
         document.documentElement.style.setProperty("--currentChapterIndex", `${curIndex}`);
         document.documentElement.style.setProperty("--hoverChapterIndex", `${curIndex}`);
-        updateRedDot(currentTime);
 
         chaptersContainers[index].classList.add("drag-expand");
       } else if (chapter.end < currentTime) {
         progressBarRefs[index].style.width = `100%`;
         chaptersContainers[index].classList.remove("drag-expand");
-        updateRedDot(currentTime);
+        // updateRedDot(currentTime);
       } else {
         progressBarRefs[index].style.width = `0%`;
         chaptersContainers[index].classList.remove("drag-expand");
-        updateRedDot(currentTime);
+        // updateRedDot(currentTime);
       }
     });
+    updateRedDot(currentTime);
   };
 
   const handleSelect = (e) => {
