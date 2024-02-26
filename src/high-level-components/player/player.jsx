@@ -490,26 +490,11 @@ export default function Player({ videoRef, secondaryRef, containerRef, expandedC
   const updateProgressBar = () => {
     const currentTime = videoRef.current.currentTime;
 
-    const style = getComputedStyle(document.documentElement);
-    const hovering = style.getPropertyValue("--hovering").trim();
-    // console.log(hovering);
-
-    if (hovering === "true") {
-      const hoveringChapterIndex = style.getPropertyValue("--hoverChapterIndex").trim();
-      const currentChapterIndex = style.getPropertyValue("--currentChapterIndex").trim();
-      if (hoveringChapterIndex === currentChapterIndex && chapters.length > 1) {
-        redDotRef.current.style.scale = 1.5;
-      } else {
-        redDotRef.current.style.scale = 1;
-      }
-    }
-
     const progressBarRefs = document.querySelectorAll(".progress.bar");
 
     progressBarRefs.forEach((progressBar) => {
       const curIndex = progressBar.getAttribute("dataIndex");
       const chapter = chapters[curIndex];
-
       if (chapter.start <= currentTime && chapter.end >= currentTime) {
         document.documentElement.style.setProperty("--currentChapterIndex", `${curIndex}`);
         const chapterWidth = ((currentTime - chapter.start) / (chapter.end - chapter.start)) * 100;
@@ -520,6 +505,20 @@ export default function Player({ videoRef, secondaryRef, containerRef, expandedC
         progressBar.style.width = `0%`;
       }
     });
+
+    const style = getComputedStyle(document.documentElement);
+    const hovering = style.getPropertyValue("--hovering").trim();
+    // console.log(hovering);
+
+    if (hovering === "true" && chapters.length > 1) {
+      const hoveringChapterIndex = style.getPropertyValue("--hoverChapterIndex").trim();
+      const currentChapterIndex = style.getPropertyValue("--currentChapterIndex").trim();
+      if (hoveringChapterIndex === currentChapterIndex) {
+        redDotRef.current.style.scale = 1.5;
+      } else {
+        redDotRef.current.style.scale = 1;
+      }
+    }
   };
   const updateRedDot = (currentTimeTracker) => {
     if (chapters.length === 0) return;
@@ -808,7 +807,7 @@ export default function Player({ videoRef, secondaryRef, containerRef, expandedC
     }, 3000);
   };
   const handleMouseOut = () => {
-    if (videoRef.current.paused || isFocusing.current === true) return;
+    if (videoRef.current.paused) return;
 
     if (timeoutRef.current) {
       clearTimeout(timeoutRef.current);
