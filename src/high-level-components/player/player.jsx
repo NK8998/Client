@@ -17,7 +17,7 @@ export default function Player({ videoRef, secondaryRef, containerRef, expandedC
   const fullScreen = useSelector((state) => state.watch.fullScreen);
   const { descriptionString, duration, videoId, url } = playingVideo;
   const attempts = useRef(0);
-  const [chapters, setChapters] = useState([]);
+  const [chapters, setChapters] = useState([{ start: 0, title: "", end: 50 }]);
 
   const [play, setPlay] = useState(false);
   const playerRef = useRef();
@@ -101,7 +101,7 @@ export default function Player({ videoRef, secondaryRef, containerRef, expandedC
           videoRef.current.play();
         }
         updateBufferBar();
-        updateProgressBar(videoRef, chapters, redDotRef);
+        updateProgressBar();
         checkBuffered();
         updateRedDot("");
       };
