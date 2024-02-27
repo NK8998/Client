@@ -7,11 +7,16 @@
     overflow-y: scroll;
 
 }
+body{
+    width: 100vw;
+}
 #root.fullscreen::-webkit-scrollbar{
     display: none;
 }
 
 :root{
+    --theatreWidth: 0;
+    --theatreHeight: 0;
     --hovering:false;
     --height: 100%;
     --width: 100%;

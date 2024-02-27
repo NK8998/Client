@@ -2,17 +2,20 @@
     position: fixed;
     bottom: 0px;
     right: 30px;
-    overflow: hidden;
+    /* overflow: hidden; */
     z-index: 20;
     border-radius: 20px 20px 0px 0px;
     pointer-events: none;
 
 }
 .mini-player-inner{
+    overflow: visible;
     background-color: rgb(22, 22, 22);
     height: 290px;
     width: 400px;
     opacity: 0;
+    border-radius: 20px 20px 0px 0px;
+
 
 }
 .mini-player-inner.visible{

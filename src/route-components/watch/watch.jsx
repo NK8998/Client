@@ -12,21 +12,25 @@ export default function Watch({ watchRef, miniplayerRef, miniPlayerBoolean }) {
   const secondaryRef = useRef();
   const expandedContainerRef = useRef();
   const containerRef = useRef();
+  const playerIf = useRef();
 
   return (
     <div className='watch-flexy hidden' ref={watchRef} id='watch'>
       <div className='player-expanded-container' ref={expandedContainerRef}></div>
       <div className='columns'>
-        <div className='primary' ref={primaryRef}>
-          <Player
-            secondaryRef={secondaryRef}
-            videoRef={videoRef}
-            containerRef={containerRef}
-            expandedContainerRef={expandedContainerRef}
-            primaryRef={primaryRef}
-            miniplayerRef={miniplayerRef}
-            miniPlayerBoolean={miniPlayerBoolean}
-          />
+        <div className='primary'>
+          <div className='player-if' ref={primaryRef}>
+            <Player
+              secondaryRef={secondaryRef}
+              videoRef={videoRef}
+              containerRef={containerRef}
+              expandedContainerRef={expandedContainerRef}
+              primaryRef={primaryRef}
+              miniplayerRef={miniplayerRef}
+              miniPlayerBoolean={miniPlayerBoolean}
+              playerIf={playerIf}
+            />
+          </div>
           <div className='lower'></div>
           <div className='secondary-in-primary'></div>
         </div>

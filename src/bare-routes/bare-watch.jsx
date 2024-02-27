@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useLayoutEffect } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { fetchWatchData, handleMiniPLayer } from "../store/Slices/watch-slice";
@@ -8,7 +8,7 @@ export default function BareWatch({ miniPlayerBoolean }) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     const url = new URL(window.location.href);
     const currentRoute = url.pathname;
     const videoId = url.search.split("=")[1];

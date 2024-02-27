@@ -40,11 +40,16 @@ export const { updatePlayingVideo, updateRecommendedVideosWatch, toggleTheatreMo
 
 export default watchSlice.reducer;
 
+let timeoutRef;
 export const fetchWatchData = (videoId, currentRoute) => {
   return async (dispatch, getState) => {
+    if (timeoutRef) {
+      clearTimeout(timeoutRef);
+    }
     const currentVideoId = getState().watch.playingVideo.videoId;
     const isFetching = getState().app.isFetching;
     const location = getState().app.location;
+    const miniPlayer = getState().watch.miniPlayer;
     if (currentVideoId === videoId && location.includes("watch")) return;
     if (isFetching) return;
     dispatch(updateIsFetching());
@@ -56,10 +61,19 @@ export const fetchWatchData = (videoId, currentRoute) => {
     if (currentVideo) {
       dispatch(updatePlayingVideo(currentVideo.videoData));
       dispatch(updateRecommendedVideosWatch(currentVideo.recommendations));
-      dispatch(updateLocation(currentRoute));
-
-      dispatch(handleNavigation("/watch"));
       dispatch(updateIsFetching());
+
+      if (miniPlayer) {
+        timeoutRef = setTimeout(() => {
+          dispatch(updateLocation(currentRoute));
+
+          dispatch(handleNavigation("/watch"));
+        }, 50);
+      } else {
+        dispatch(updateLocation(currentRoute));
+
+        dispatch(handleNavigation("/watch"));
+      }
       return;
     }
     const simulatePlayingVideo = await new Promise((resolve, reject) => {

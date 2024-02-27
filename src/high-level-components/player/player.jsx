@@ -9,7 +9,16 @@ import { toNormal, toPause, toPlay, toTheatre } from "./utilities/gsap-animation
 import { handleFullscreen, handleTheatre } from "../../store/Slices/watch-slice";
 import { seekVideo } from "./utilities/player-progressBar-logic";
 
-export default function Player({ videoRef, secondaryRef, containerRef, expandedContainerRef, primaryRef, miniplayerRef, miniPlayerBoolean }) {
+export default function Player({
+  videoRef,
+  secondaryRef,
+  containerRef,
+  expandedContainerRef,
+  primaryRef,
+  miniplayerRef,
+  miniPlayerBoolean,
+  playerIf,
+}) {
   const dispatch = useDispatch();
   const location = useSelector((state) => state.app.location);
   const playingVideo = useSelector((state) => state.watch.playingVideo);
@@ -41,21 +50,17 @@ export default function Player({ videoRef, secondaryRef, containerRef, expandedC
   const fullScreenTimeout = useRef();
   const focusViaKeyBoard = useRef(false);
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     const generatedChapters = generateChapters(descriptionString, duration);
 
     setChapters(generatedChapters);
   }, [playingVideo]);
 
-  useLayoutEffect(() => {
-    const isWatchpage = location.includes("watch") || window.location.pathname.includes("watch");
+  useEffect(() => {
+    applyChapterStyles();
+  }, [chapters]);
 
-    if (isWatchpage) {
-      applyChapterStyles();
-    }
-  }, [chapters, location]);
-
-  useLayoutEffect(() => {
+  useEffect(() => {
     const isWatchpage = location.includes("watch") || window.location.pathname.includes("watch");
     if (isWatchpage === false) {
       window.removeEventListener("resize", calculateWidth);
@@ -68,7 +73,7 @@ export default function Player({ videoRef, secondaryRef, containerRef, expandedC
     };
   }, [location, videoId, theatreMode]);
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     const isWatchpage = location.includes("watch");
     if (miniPlayerBoolean.current === false) {
       if (isWatchpage === false) {
@@ -85,7 +90,7 @@ export default function Player({ videoRef, secondaryRef, containerRef, expandedC
     }
   }, [location]);
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     const handleKeyPress = (e) => {
       const isWatchpage = location.includes("watch") || window.location.pathname.includes("watch");
       if (e.target.tagName === "TEXTAREA" || e.target.tagName === "INPUT") return;
@@ -157,7 +162,7 @@ export default function Player({ videoRef, secondaryRef, containerRef, expandedC
       }
     };
 
-    // handleHover();
+    handleHover();
     window.addEventListener("keydown", handleKeyPress);
     window.addEventListener("keyup", handleKeyUp);
 
@@ -167,7 +172,7 @@ export default function Player({ videoRef, secondaryRef, containerRef, expandedC
     };
   }, [play, theatreMode, fullScreen, location]);
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     const isWatchpage = location.includes("watch") || window.location.pathname.includes("watch");
     if (isWatchpage) {
       window.addEventListener("resize", updateStyles);
@@ -194,39 +199,54 @@ export default function Player({ videoRef, secondaryRef, containerRef, expandedC
     };
   }, [fullScreen, theatreMode]);
 
+  const layoutShiftRef = useRef();
   useLayoutEffect(() => {
     if (!miniplayerRef.current) return;
     if (!miniPlayer) {
+      if (layoutShiftRef.current) {
+        clearTimeout(layoutShiftRef.current);
+      }
+      miniplayerRef.current.classList.remove("visible");
+
       if (Array.from(miniplayerRef.current.children).includes(containerRef.current)) {
         miniplayerRef.current.removeChild(containerRef.current);
-        miniplayerRef.current.classList.remove("visible");
-        containerRef.current.classList.remove("miniplayer");
-        videoRef.current.classList.remove("miniplayer");
         if (theatreMode) {
+          primaryRef.current.classList.remove("has-content");
           expandedContainerRef.current.append(containerRef.current);
         } else {
-          const firstChild = primaryRef.current.firstChild;
-          primaryRef.current.insertBefore(containerRef.current, firstChild);
+          primaryRef.current.append(containerRef.current);
+          expandedContainerRef.current.classList.remove("has-content");
         }
+        containerRef.current.classList.remove("miniplayer");
+        videoRef.current.classList.remove("miniplayer");
         // toggle regular
-        calculateWidth();
-        applyChapterStyles();
-        updateRedDot("");
+
+        handleMouseOut();
+        controlsRef.current.classList.add("transition");
+        layoutShiftRef.current = setTimeout(() => {
+          calculateWidth();
+          applyChapterStyles();
+          updateRedDot("");
+          controlsRef.current.classList.remove("transition");
+          handleMouseMove();
+        }, 50);
       }
     } else if (miniPlayer) {
       // toggle miniPlayer
       if (Array.from(primaryRef.current.children).includes(containerRef.current)) {
         primaryRef.current.removeChild(containerRef.current);
         miniplayerRef.current.append(containerRef.current);
+        primaryRef.current.classList.add("has-content");
       } else if (Array.from(expandedContainerRef.current.children).includes(containerRef.current)) {
         expandedContainerRef.current.removeChild(containerRef.current);
         miniplayerRef.current.append(containerRef.current);
+        expandedContainerRef.current.classList.add("has-content");
       }
       applyChapterStyles();
       updateRedDot("");
-      miniplayerRef.current.classList.add("visible");
       containerRef.current.classList.add("miniplayer");
       videoRef.current.classList.add("miniplayer");
+      miniplayerRef.current.classList.add("visible");
     }
   }, [miniPlayer, theatreMode, fullScreen]);
 
@@ -274,10 +294,13 @@ export default function Player({ videoRef, secondaryRef, containerRef, expandedC
     }
 
     if (primaryRef.current && fullScreen) {
+      expandedContainerRef.current.classList.remove("has-content");
+
       if (Array.from(primaryRef.current.children).includes(containerRef.current)) {
         primaryRef.current.removeChild(containerRef.current);
         expandedContainerRef.current.append(containerRef.current);
       }
+      primaryRef.current.classList.remove("has-content");
 
       videoRef.current.classList.add("fullscreen");
       containerRef.current.classList.add("fullscreen");
@@ -298,12 +321,15 @@ export default function Player({ videoRef, secondaryRef, containerRef, expandedC
       }
       if (Array.from(expandedContainerRef.current.children).includes(containerRef.current) && !theatreMode) {
         expandedContainerRef.current.removeChild(containerRef.current);
+        expandedContainerRef.current.classList.remove("has-content");
         const firstChild = primaryRef.current.firstChild;
         primaryRef.current.insertBefore(containerRef.current, firstChild);
         videoRef.current.classList.remove("theatre");
         containerRef.current.classList.remove("theatre");
+        primaryRef.current.classList.add("has-content");
       }
       if (theatreMode) {
+        primaryRef.current.classList.remove("has-content");
         videoRef.current.classList.add("theatre");
         containerRef.current.classList.add("theatre");
         toTheatre();
@@ -322,9 +348,11 @@ export default function Player({ videoRef, secondaryRef, containerRef, expandedC
     if (!primaryRef.current || !containerRef.current) return;
 
     if (Array.from(primaryRef.current.children).includes(containerRef.current) && primaryRef.current && theatreMode) {
+      primaryRef.current.classList.remove("has-content");
       if (Array.from(primaryRef.current.children).includes(containerRef.current)) {
         primaryRef.current.removeChild(containerRef.current);
         expandedContainerRef.current.append(containerRef.current);
+        expandedContainerRef.current.classList.add("has-content");
       }
       videoRef.current.classList.remove("fullscreen");
       containerRef.current.classList.remove("fullscreen");
@@ -338,8 +366,10 @@ export default function Player({ videoRef, secondaryRef, containerRef, expandedC
     } else if (primaryRef.current && !Array.from(primaryRef.current.children).includes(containerRef.current) && !theatreMode) {
       if (Array.from(expandedContainerRef.current.children).includes(containerRef.current)) {
         expandedContainerRef.current.removeChild(containerRef.current);
+        expandedContainerRef.current.classList.remove("has-content");
         const firstChild = primaryRef.current.firstChild;
         primaryRef.current.insertBefore(containerRef.current, firstChild);
+        primaryRef.current.classList.add("has-content");
       }
       videoRef.current.classList.remove("theatre");
       containerRef.current.classList.remove("theatre");
@@ -351,11 +381,11 @@ export default function Player({ videoRef, secondaryRef, containerRef, expandedC
     }
   };
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     checkBufferedOnTrackChange();
   }, [videoId, location]);
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     clearIntervalProgress();
     resetBars();
     calculateWidth();
@@ -443,12 +473,17 @@ export default function Player({ videoRef, secondaryRef, containerRef, expandedC
 
   const calculateWidth = () => {
     // console.log("running");
+    const root = document.querySelector("#root");
+    if (!root) return;
+
     let secondaryRefWidth = 0;
     if (secondaryRef.current) {
       secondaryRefWidth = secondaryRef.current.clientWidth;
     }
-    const windowWidth = window.innerWidth;
-    const gaps = windowWidth >= 1041 ? 88 : 60;
+    const windowWidth = root.clientWidth;
+    const windowHeight = window.innerHeight;
+
+    const gaps = windowWidth >= 1041 ? 64 : 36;
     const maxVideoHeight = (73.5 * window.innerHeight) / 100;
     const remainingSpace = windowWidth - (gaps + secondaryRefWidth);
     // const aspectRatio = wideScreen ? 1920 / 1080 : 16 / 9;
@@ -473,6 +508,16 @@ export default function Player({ videoRef, secondaryRef, containerRef, expandedC
     // console.log({ videoHeight, videoWidth });
     document.documentElement.style.setProperty("--height", `${Math.round(videoHeight)}px`);
     document.documentElement.style.setProperty("--width", `${Math.round(videoWidth)}px`);
+    const newRatio = 16 / 9;
+    const theatreWidth = windowWidth;
+    const calculatedHeight = windowWidth * (1 / newRatio);
+    const maxHeight = 0.81 * windowHeight;
+    let theatreHeight = Math.trunc(calculatedHeight > maxHeight ? maxHeight : calculatedHeight);
+    if (windowWidth <= 810) {
+      theatreHeight = Math.trunc(0.55 * windowHeight);
+    }
+    document.documentElement.style.setProperty("--theatreHeight", `${theatreHeight}px`);
+    document.documentElement.style.setProperty("--theatreWidth", `${theatreWidth}px`);
   };
 
   const updateBufferBar = () => {
@@ -759,6 +804,7 @@ export default function Player({ videoRef, secondaryRef, containerRef, expandedC
   // };
 
   const updateProgess = (e) => {
+    toPlay();
     if (intervalRef.current) {
       clearInterval(intervalRef.current);
     }
@@ -771,6 +817,7 @@ export default function Player({ videoRef, secondaryRef, containerRef, expandedC
   };
 
   const clearIntervalProgress = () => {
+    toPause();
     clearInterval(intervalRef.current);
   };
 
@@ -808,6 +855,7 @@ export default function Player({ videoRef, secondaryRef, containerRef, expandedC
       videoRef.current.play();
       toPlay();
     } else {
+      handleMouseMove();
       videoRef.current.pause();
       toPause();
     }
@@ -922,10 +970,10 @@ export default function Player({ videoRef, secondaryRef, containerRef, expandedC
       <div
         className={`player-outer`}
         ref={containerRef}
+        tabIndex={0}
         onMouseEnter={handleHover}
         onMouseOut={handleMouseOut}
         onMouseMove={handleMouseMove}
-        tabIndex={0}
         onFocus={handlePlayerFocus}
         onBlur={handlePlayerBlur}
         onClick={handlePlayerClick}
@@ -957,13 +1005,7 @@ export default function Player({ videoRef, secondaryRef, containerRef, expandedC
               <circle r='20' cy='50' cx='50'></circle>
             </svg>
           </div>
-          <div
-            className='player-inner-relative'
-            ref={controlsRef}
-            onMouseEnter={handleHover}
-            onMouseOut={handleMouseOut}
-            onMouseMove={handleMouseMove}
-          >
+          <div className='player-inner-relative' ref={controlsRef}>
             <Chapters
               updateProgressBar={updateProgressBar}
               updateRedDot={updateRedDot}

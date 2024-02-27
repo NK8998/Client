@@ -1,7 +1,7 @@
 import { useDispatch, useSelector } from "react-redux";
 import { FullscreenButton, MiniPlayerButton, PlayPauseButton, SmallScreenButton, TheatreNormalButton } from "../../../../assets/icons";
 import { handleFullscreen, handleMiniPLayer, handleTheatre } from "../../../../store/Slices/watch-slice";
-import { useLayoutEffect } from "react";
+import { useLayoutEffect, useRef } from "react";
 import { handleFocusingElements } from "../../utilities/player-progressBar-logic";
 import { useNavigate } from "react-router-dom";
 
@@ -12,6 +12,7 @@ export default function BottomControls({ handlePlayState, handleMouseMove, miniP
   const playingVideo = useSelector((state) => state.watch.playingVideo);
   const locationsArr = useSelector((state) => state.app.locationsArr);
   const { videoId } = playingVideo;
+  const timeoutRef = useRef();
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const handleFocus = () => {
@@ -26,15 +27,20 @@ export default function BottomControls({ handlePlayState, handleMouseMove, miniP
   };
 
   const handleKeyUp = (e) => {
-    const key = e.key.toLowerCase();
-
-    if (key === "i") {
-      if (!miniPlayer) {
-        handleMiniPlayerNavigation();
-      } else {
-        navigate(`/watch?v=${videoId}`);
-      }
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
     }
+    timeoutRef.current = setTimeout(() => {
+      const key = e.key.toLowerCase();
+
+      if (key === "i") {
+        if (!miniPlayer) {
+          handleMiniPlayerNavigation();
+        } else {
+          navigate(`/watch?v=${videoId}`);
+        }
+      }
+    }, 400);
   };
   useLayoutEffect(() => {
     window.addEventListener("keyup", handleKeyUp);
