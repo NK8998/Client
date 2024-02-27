@@ -6,6 +6,7 @@ const appSlice = createSlice({
   initialState: {
     isFetching: false,
     refs: [],
+    locationsArr: [],
     location: "",
     windowWidth: window.innerWidth,
     prefersMini: false,
@@ -27,10 +28,13 @@ const appSlice = createSlice({
     updatePreference: (state, action) => {
       state.prefersMini = !state.prefersMini;
     },
+    upadteLocationsArr: (state, action) => {
+      state.locationsArr = [action.payload, ...state.locationsArr];
+    },
   },
 });
 
-export const { updateRefs, updateIsFetching, updateLocation, updateWindowWidth, updatePreference } = appSlice.actions;
+export const { updateRefs, updateIsFetching, updateLocation, updateWindowWidth, updatePreference, upadteLocationsArr } = appSlice.actions;
 export default appSlice.reducer;
 
 export const handleNavigation = (targetRoute) => {

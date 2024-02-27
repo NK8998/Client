@@ -75,12 +75,6 @@ const finalStep = (dispatch, currentChannel, targetRoute, instanceObj, getState)
   dispatch(updateLocation(targetRoute));
   dispatch(updateCurrentChannel(currentChannel));
   currentContentType = "";
-  if (timeoutRef) {
-    clearTimeout(timeoutRef);
-  }
-  timeoutRef = setTimeout(() => {
-    instanceArr = [];
-  }, 2000);
 };
 
 const fetchNewContent = async (contentType) => {

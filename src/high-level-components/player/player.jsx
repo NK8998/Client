@@ -9,12 +9,13 @@ import { toNormal, toPause, toPlay, toTheatre } from "./utilities/gsap-animation
 import { handleFullscreen, handleTheatre } from "../../store/Slices/watch-slice";
 import { seekVideo } from "./utilities/player-progressBar-logic";
 
-export default function Player({ videoRef, secondaryRef, containerRef, expandedContainerRef, primaryRef }) {
+export default function Player({ videoRef, secondaryRef, containerRef, expandedContainerRef, primaryRef, miniplayerRef, miniPlayerBoolean }) {
   const dispatch = useDispatch();
   const location = useSelector((state) => state.app.location);
   const playingVideo = useSelector((state) => state.watch.playingVideo);
   const theatreMode = useSelector((state) => state.watch.theatreMode);
   const fullScreen = useSelector((state) => state.watch.fullScreen);
+  const miniPlayer = useSelector((state) => state.watch.miniPlayer);
   const { descriptionString, duration, videoId, url } = playingVideo;
   const attempts = useRef(0);
   const [chapters, setChapters] = useState([{ start: 0, title: "", end: 50 }]);
@@ -68,23 +69,25 @@ export default function Player({ videoRef, secondaryRef, containerRef, expandedC
   }, [location, videoId, theatreMode]);
 
   useLayoutEffect(() => {
-    const isWatchpage = location.includes("watch") || window.location.pathname.includes("watch");
-    if (isWatchpage === false) {
-      videoRef.current.pause();
-      clearIntervalProgress();
-      detachPlayer();
-      window.removeEventListener("resize", calculateWidth);
-    } else if (isWatchpage === true) {
-      attatchPlayer();
-      calculateWidth();
-      applyChapterStyles();
+    const isWatchpage = location.includes("watch");
+    if (miniPlayerBoolean.current === false) {
+      if (isWatchpage === false) {
+        videoRef.current.pause();
+        clearIntervalProgress();
+        detachPlayer();
+        window.removeEventListener("resize", calculateWidth);
+      } else if (isWatchpage === true && playerRef.current === null) {
+        console.log("I ran");
+        attatchPlayer();
+        calculateWidth();
+        applyChapterStyles();
+      }
     }
-  }, [location, videoId, playingVideo]);
+  }, [location]);
 
   useLayoutEffect(() => {
     const handleKeyPress = (e) => {
       const isWatchpage = location.includes("watch") || window.location.pathname.includes("watch");
-      if (!isWatchpage) return;
       if (e.target.tagName === "TEXTAREA" || e.target.tagName === "INPUT") return;
       // console.log(e.target);
 
@@ -112,6 +115,7 @@ export default function Player({ videoRef, secondaryRef, containerRef, expandedC
         seekVideo(currentTime + timeStep, videoRef);
         handlePlayingState();
       } else if (key === "t") {
+        if (!isWatchpage) return;
         if (theatreTimeOut.current) {
           clearTimeout(theatreTimeOut.current);
         }
@@ -129,6 +133,7 @@ export default function Player({ videoRef, secondaryRef, containerRef, expandedC
           isHolding.current = true;
         }, 250);
       } else if (key === "f") {
+        if (!isWatchpage) return;
         if (fullScreenTimeout.current) {
           clearTimeout(fullScreenTimeout.current);
         }
@@ -139,8 +144,8 @@ export default function Player({ videoRef, secondaryRef, containerRef, expandedC
     };
 
     const handleKeyUp = (e) => {
+      focusViaKeyBoard.current = true;
       const isWatchpage = location.includes("watch") || window.location.pathname.includes("watch");
-      if (!isWatchpage) return;
       const key = e.key.toLowerCase();
 
       if (key === " ") {
@@ -149,16 +154,10 @@ export default function Player({ videoRef, secondaryRef, containerRef, expandedC
         clearTimeout(timeoutRef2.current);
         timeoutRef2.current = null;
         isHolding.current = false;
-      } else if (key === "tab" && e.target.classList.contains("chapters-container")) {
-        focusViaKeyBoard.current = true;
-        innerChapterContainerRef.current.classList.add("focused");
-      } else if (key !== "tab" && !e.target.classList.contains("chapters-container")) {
-        focusViaKeyBoard.current = false;
-        innerChapterContainerRef.current.classList.remove("focused");
       }
     };
 
-    handleHover();
+    // handleHover();
     window.addEventListener("keydown", handleKeyPress);
     window.addEventListener("keyup", handleKeyUp);
 
@@ -194,6 +193,42 @@ export default function Player({ videoRef, secondaryRef, containerRef, expandedC
       root.removeEventListener("scroll", handleScrollPosition);
     };
   }, [fullScreen, theatreMode]);
+
+  useLayoutEffect(() => {
+    if (!miniplayerRef.current) return;
+    if (!miniPlayer) {
+      if (Array.from(miniplayerRef.current.children).includes(containerRef.current)) {
+        miniplayerRef.current.removeChild(containerRef.current);
+        miniplayerRef.current.classList.remove("visible");
+        containerRef.current.classList.remove("miniplayer");
+        videoRef.current.classList.remove("miniplayer");
+        if (theatreMode) {
+          expandedContainerRef.current.append(containerRef.current);
+        } else {
+          const firstChild = primaryRef.current.firstChild;
+          primaryRef.current.insertBefore(containerRef.current, firstChild);
+        }
+        // toggle regular
+        calculateWidth();
+        applyChapterStyles();
+        updateRedDot("");
+      }
+    } else if (miniPlayer) {
+      // toggle miniPlayer
+      if (Array.from(primaryRef.current.children).includes(containerRef.current)) {
+        primaryRef.current.removeChild(containerRef.current);
+        miniplayerRef.current.append(containerRef.current);
+      } else if (Array.from(expandedContainerRef.current.children).includes(containerRef.current)) {
+        expandedContainerRef.current.removeChild(containerRef.current);
+        miniplayerRef.current.append(containerRef.current);
+      }
+      applyChapterStyles();
+      updateRedDot("");
+      miniplayerRef.current.classList.add("visible");
+      containerRef.current.classList.add("miniplayer");
+      videoRef.current.classList.add("miniplayer");
+    }
+  }, [miniPlayer, theatreMode, fullScreen]);
 
   const updateStyles = () => {
     applyChapterStyles();
@@ -324,6 +359,7 @@ export default function Player({ videoRef, secondaryRef, containerRef, expandedC
     clearIntervalProgress();
     resetBars();
     calculateWidth();
+    attatchPlayer();
   }, [playingVideo, videoId]);
 
   const attatchPlayer = async () => {
@@ -394,6 +430,7 @@ export default function Player({ videoRef, secondaryRef, containerRef, expandedC
   };
 
   const detachPlayer = async () => {
+    console.log("run");
     if (playerRef.current) {
       if (timeIntervalRef.current) {
         clearInterval(timeIntervalRef.current);
@@ -746,7 +783,7 @@ export default function Player({ videoRef, secondaryRef, containerRef, expandedC
     const chaptersContainers = document.querySelectorAll(".chapter-padding");
     // console.log("running");
     let totalWidth = 0;
-    const chapterContainerRefWidth = chapterContainerRef.current.clientWidth - 28;
+    const chapterContainerRefWidth = miniPlayerBoolean.current === true ? 400 : chapterContainerRef.current.clientWidth - 28;
     if (chapters.length === 0) return;
     chaptersContainers.forEach((chaptersContainer, index) => {
       const calculatedPercentage = ((chapters[index].end - chapters[index].start) / chapters[chapters.length - 1].end) * 100;
@@ -866,10 +903,34 @@ export default function Player({ videoRef, secondaryRef, containerRef, expandedC
       clicks.current = 0;
     }, 300);
   };
+  const handlePlayerClick = () => {
+    focusViaKeyBoard.current = false;
+    containerRef.current.classList.remove("focus-via-keyboard");
+  };
+  const handlePlayerFocus = (e) => {
+    if (focusViaKeyBoard.current === true) {
+      if (containerRef.current.classList.contains("focus-via-keyboard")) return;
+      containerRef.current.classList.add("focus-via-keyboard");
+    }
+  };
 
+  const handlePlayerBlur = (e) => {
+    containerRef.current.classList.remove("focus-via-keyboard");
+  };
   return (
     <>
-      <div className={`player-outer`} ref={containerRef} onMouseEnter={handleHover} onMouseOut={handleMouseOut} onMouseMove={handleMouseMove}>
+      <div
+        className={`player-outer`}
+        ref={containerRef}
+        onMouseEnter={handleHover}
+        onMouseOut={handleMouseOut}
+        onMouseMove={handleMouseMove}
+        tabIndex={0}
+        onFocus={handlePlayerFocus}
+        onBlur={handlePlayerBlur}
+        onClick={handlePlayerClick}
+        onClickCapture={handlePlayerClick}
+      >
         <video
           ref={videoRef}
           className={`html5-player`}
@@ -920,7 +981,7 @@ export default function Player({ videoRef, secondaryRef, containerRef, expandedC
               updateScrubbingBar={updateScrubbingBar}
               isFocusing={isFocusing}
             />
-            <BottomControls handlePlayState={handlePlayState} isFocusing={isFocusing} handleMouseMove={handleMouseMove} />
+            <BottomControls handlePlayState={handlePlayState} handleMouseMove={handleMouseMove} miniPlayerBoolean={miniPlayerBoolean} />
           </div>
         </div>
       </div>

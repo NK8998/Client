@@ -17,12 +17,15 @@ import BareShorts from "./bare-routes/bare-channel/bare-channel-routes/bare-shor
 import BareLive from "./bare-routes/bare-channel/bare-channel-routes/bare-live/bare-live";
 import BarePlaylists from "./bare-routes/bare-channel/bare-channel-routes/bare-playlists/bare-playlists";
 import BareCommunity from "./bare-routes/bare-channel/bare-channel-routes/bare-community/bare-community";
+import MiniPlayer from "./high-level-components/player/mini-player";
 
 function App() {
   const dispatch = useDispatch();
   const homeRef = useRef();
   const watchRef = useRef();
   const channelRef = useRef();
+  const miniplayerRef = useRef();
+  const miniPlayerBoolean = useRef(false);
   // all refs should be here to enure they are all called when app loads
 
   useLayoutEffect(() => {
@@ -54,13 +57,14 @@ function App() {
         <GuideWrapper />
         <div className='page-manager'>
           <Home homeRef={homeRef} />
-          <Watch watchRef={watchRef} />
+          <Watch watchRef={watchRef} miniplayerRef={miniplayerRef} miniPlayerBoolean={miniPlayerBoolean} />
           <Channel channelRef={channelRef} />
         </div>
       </div>
+      <MiniPlayer miniplayerRef={miniplayerRef} />
       <Routes>
         <Route path='/' element={<BareHome />} />
-        <Route path='/watch' element={<BareWatch />} />
+        <Route path='/watch' element={<BareWatch miniPlayerBoolean={miniPlayerBoolean} />} />
         <Route path='/:channel/*' element={<BareChannel />}>
           <Route path='' element={<BareFeatured />} />
           <Route path='featured' element={<BareFeatured />} />

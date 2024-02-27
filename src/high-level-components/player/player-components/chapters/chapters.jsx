@@ -35,7 +35,7 @@ export default function Chapters({
       </div>
     );
   });
-  const handleKeyPress = (e) => {
+  const handleKeyDown = (e) => {
     const key = e.key.toLowerCase();
     const currentTime = videoRef.current.currentTime;
     const timeStep = 5;
@@ -56,14 +56,7 @@ export default function Chapters({
     updateRedDot(newTime);
   };
   const handleFocus = (e) => {
-    handleFocusingElements(isFocusing);
     handleMouseMove();
-    innerChapterContainerRef.current.addEventListener("keydown", handleKeyPress);
-  };
-  const handleBlur = (e) => {
-    handleFocusingElements(isFocusing);
-    innerChapterContainerRef.current.removeEventListener("keydown", handleKeyPress);
-    innerChapterContainerRef.current.classList.remove("focused");
   };
   return (
     <div className='chapters-absolute' ref={chapterContainerRef}>
@@ -72,11 +65,11 @@ export default function Chapters({
         ref={innerChapterContainerRef}
         tabIndex={0}
         onFocus={handleFocus}
-        onBlur={handleBlur}
         onMouseMove={updateScrubbingBar}
         onMouseOut={resetDot}
         onMouseDown={startDrag}
         onMouseUp={stopDragging}
+        onKeyDown={handleKeyDown}
       >
         {chapterEls}
         <div ref={redDotWrapperRef} className='red-dot-wrapper'>

@@ -1,5 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { handleNavigation, updateIsFetching, updateLocation } from "./app-slice";
+import { useNavigate } from "react-router-dom";
 
 // store each retrieved video and its recommendations in an array
 const watchSlice = createSlice({
@@ -9,6 +10,7 @@ const watchSlice = createSlice({
     recommendations: [],
     theatreMode: false,
     fullScreen: false,
+    miniPlayer: false,
     retrievedVideos: [{ videoId: "", recommendations: [], videoData: {} }],
   },
   reducers: {
@@ -27,10 +29,14 @@ const watchSlice = createSlice({
     updateRetrievedVideos: (state, action) => {
       state.retrievedVideos = [...state.retrievedVideos, action.payload];
     },
+    toggleMiniPlayer: (state, action) => {
+      state.miniPlayer = action.payload;
+    },
   },
 });
 
-export const { updatePlayingVideo, updateRecommendedVideosWatch, toggleTheatreMode, toggleFullScreen, updateRetrievedVideos } = watchSlice.actions;
+export const { updatePlayingVideo, updateRecommendedVideosWatch, toggleTheatreMode, toggleFullScreen, updateRetrievedVideos, toggleMiniPlayer } =
+  watchSlice.actions;
 
 export default watchSlice.reducer;
 
@@ -129,6 +135,33 @@ export const handleFullscreen = (fullScreen) => {
           dispatch(toggleFullScreen(false));
         });
       }
+    }
+  };
+};
+
+let intervalRef;
+export const handleMiniPLayer = (miniPlayer) => {
+  return async (dispatch, getState) => {
+    await new Promise((resolve, reject) => {
+      intervalRef = setInterval(() => {
+        const isFetching = getState().app.isFetching;
+        if (!isFetching) {
+          resolve(true);
+          clearInterval(intervalRef);
+        }
+      }, 50);
+    });
+    if (miniPlayer) {
+      if (document.fullscreenElement) {
+        document.exitFullscreen().then(() => {
+          dispatch(toggleFullScreen(false));
+          dispatch(toggleMiniPlayer(true));
+        });
+      } else {
+        dispatch(toggleMiniPlayer(true));
+      }
+    } else {
+      dispatch(toggleMiniPlayer(false));
     }
   };
 };

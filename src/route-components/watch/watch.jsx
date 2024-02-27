@@ -1,12 +1,11 @@
 import { useDispatch, useSelector } from "react-redux";
-import MiniPlayer from "../../high-level-components/player/mini-player";
 import Player from "../../high-level-components/player/player";
 import "./watch.css";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { fetchWatchData } from "../../store/Slices/watch-slice";
 
-export default function Watch({ watchRef }) {
+export default function Watch({ watchRef, miniplayerRef, miniPlayerBoolean }) {
   const dispatch = useDispatch();
   const primaryRef = useRef();
   const videoRef = useRef();
@@ -25,8 +24,9 @@ export default function Watch({ watchRef }) {
             containerRef={containerRef}
             expandedContainerRef={expandedContainerRef}
             primaryRef={primaryRef}
+            miniplayerRef={miniplayerRef}
+            miniPlayerBoolean={miniPlayerBoolean}
           />
-          <MiniPlayer />
           <div className='lower'></div>
           <div className='secondary-in-primary'></div>
         </div>
