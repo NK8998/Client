@@ -111,6 +111,7 @@ export const fetchWatchData = (videoId, currentRoute) => {
     dispatch(updatePlayingVideo(playingVideoData));
     dispatch(updateRecommendedVideosWatch(recommendationsData));
     if (window.location.pathname.includes("watch")) {
+      console.log("yes");
       dispatch(handleNavigation("/watch"));
       dispatch(updateLocation(currentRoute));
     }

@@ -74,15 +74,16 @@ export default function Player({
   }, [location, videoId, theatreMode]);
 
   useEffect(() => {
+    console.log(location);
     const isWatchpage = location.includes("watch");
     if (miniPlayerBoolean.current === false) {
-      if (isWatchpage === false) {
+      if (!isWatchpage) {
         videoRef.current.pause();
         clearIntervalProgress();
         detachPlayer();
         window.removeEventListener("resize", calculateWidth);
-      } else if (isWatchpage === true && playerRef.current === null) {
-        console.log("I ran");
+      } else if (isWatchpage && playerRef.current === null) {
+        // console.log("I ran");
         attatchPlayer();
         calculateWidth();
         applyChapterStyles();
@@ -386,10 +387,14 @@ export default function Player({
   }, [videoId, location]);
 
   useEffect(() => {
-    clearIntervalProgress();
-    resetBars();
-    calculateWidth();
-    attatchPlayer();
+    if (window.location.pathname.includes("watch")) {
+      clearIntervalProgress();
+      resetBars();
+      calculateWidth();
+      attatchPlayer();
+    } else {
+      playerRef.current = null;
+    }
   }, [playingVideo, videoId]);
 
   const attatchPlayer = async () => {
@@ -460,7 +465,7 @@ export default function Player({
   };
 
   const detachPlayer = async () => {
-    console.log("run");
+    // console.log("run");
     if (playerRef.current) {
       if (timeIntervalRef.current) {
         clearInterval(timeIntervalRef.current);

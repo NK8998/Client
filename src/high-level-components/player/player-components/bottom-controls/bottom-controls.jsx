@@ -21,7 +21,7 @@ export default function BottomControls({ handlePlayState, handleMouseMove, miniP
   const handleMiniPlayerNavigation = () => {
     miniPlayerBoolean.current = true;
     const nonWatchRoute = locationsArr.slice().find((path) => !path.includes("/watch")) || "/";
-    console.log(nonWatchRoute);
+    // console.log(nonWatchRoute);
     navigate(`${nonWatchRoute}`);
     dispatch(handleMiniPLayer(true));
   };
