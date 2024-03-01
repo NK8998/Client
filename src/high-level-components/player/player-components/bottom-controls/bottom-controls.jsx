@@ -11,6 +11,7 @@ export default function BottomControls({ handlePlayState, handleMouseMove, miniP
   const miniPlayer = useSelector((state) => state.watch.miniPlayer);
   const playingVideo = useSelector((state) => state.watch.playingVideo);
   const locationsArr = useSelector((state) => state.app.locationsArr);
+  const isFetching = useSelector((state) => state.app.isFetching);
   const { videoId } = playingVideo;
   const timeoutRef = useRef();
   const dispatch = useDispatch();
@@ -27,6 +28,7 @@ export default function BottomControls({ handlePlayState, handleMouseMove, miniP
   };
 
   const handleKeyUp = (e) => {
+    if (isFetching) return;
     if (timeoutRef.current) {
       clearTimeout(timeoutRef.current);
     }
@@ -47,7 +49,7 @@ export default function BottomControls({ handlePlayState, handleMouseMove, miniP
     return () => {
       window.removeEventListener("keyup", handleKeyUp);
     };
-  }, [miniPlayer, locationsArr]);
+  }, [miniPlayer, locationsArr, isFetching]);
 
   return (
     <div className='bottom-controls'>

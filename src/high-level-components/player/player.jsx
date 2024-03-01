@@ -74,7 +74,7 @@ export default function Player({
   }, [location, videoId, theatreMode]);
 
   useEffect(() => {
-    console.log(location);
+    // console.log(location);
     const isWatchpage = location.includes("watch");
     if (miniPlayerBoolean.current === false) {
       if (!isWatchpage) {
