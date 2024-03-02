@@ -8,17 +8,9 @@ import generateChapters from "./player-components/chapters/chaptersGen";
 import { toNormal, toPause, toPlay, toTheatre } from "./utilities/gsap-animations";
 import { handleFullscreen, handleTheatre } from "../../store/Slices/watch-slice";
 import { seekVideo } from "./utilities/player-progressBar-logic";
+import { usePlayerMouseMove } from "./utilities/player-mouse-interactions";
 
-export default function Player({
-  videoRef,
-  secondaryRef,
-  containerRef,
-  expandedContainerRef,
-  primaryRef,
-  miniplayerRef,
-  miniPlayerBoolean,
-  playerIf,
-}) {
+export default function Player({ videoRef, secondaryRef, containerRef, expandedContainerRef, primaryRef, miniplayerRef, miniPlayerBoolean }) {
   const dispatch = useDispatch();
   const location = useSelector((state) => state.app.location);
   const playingVideo = useSelector((state) => state.watch.playingVideo);
@@ -26,10 +18,11 @@ export default function Player({
   const fullScreen = useSelector((state) => state.watch.fullScreen);
   const miniPlayer = useSelector((state) => state.watch.miniPlayer);
   const { descriptionString, duration, videoId, url } = playingVideo;
-  const attempts = useRef(0);
-  const [chapters, setChapters] = useState([{ start: 0, title: "", end: 50 }]);
 
+  const [chapters, setChapters] = useState([{ start: 0, title: "", end: 50 }]);
   const [play, setPlay] = useState(false);
+
+  const [handleMouseMove, handleHover, handleMouseOut] = usePlayerMouseMove();
   const playerRef = useRef();
   const redDotRef = useRef();
   const redDotWrapperRef = useRef();
@@ -38,7 +31,6 @@ export default function Player({
   const timeoutRef = useRef();
   const timeIntervalRef = useRef();
   const spinnerRef = useRef();
-  const controlsRef = useRef();
   const theatreTimeOut = useRef();
   const keyDownTime = useRef();
   const timeoutRef2 = useRef();
@@ -49,6 +41,8 @@ export default function Player({
   const isDragging = useRef(false);
   const fullScreenTimeout = useRef();
   const focusViaKeyBoard = useRef(false);
+  const controlsRef = useRef();
+  const attempts = useRef(0);
 
   useEffect(() => {
     const generatedChapters = generateChapters(descriptionString, duration);
@@ -872,39 +866,6 @@ export default function Player({
       bufferBarRef.style.width = `0`;
     });
   };
-
-  const isFocusing = useRef(false);
-
-  const handleMouseMove = () => {
-    handleHover();
-    if (timeoutRef.current) {
-      clearTimeout(timeoutRef.current);
-    }
-    timeoutRef.current = setTimeout(() => {
-      handleMouseOut();
-    }, 3000);
-  };
-
-  const handleHover = () => {
-    if (!controlsRef.current) return;
-    controlsRef.current.classList.remove("hide");
-
-    if (timeoutRef.current) {
-      clearTimeout(timeoutRef.current);
-    }
-    timeoutRef.current = setTimeout(() => {
-      handleMouseOut();
-    }, 3000);
-  };
-  const handleMouseOut = () => {
-    if (videoRef.current.paused) return;
-
-    if (timeoutRef.current) {
-      clearTimeout(timeoutRef.current);
-    }
-    controlsRef.current.classList.add("hide");
-  };
-
   const handleContextMenu = (e) => {
     // e.preventDefault();
     handleHover();
@@ -1012,10 +973,9 @@ export default function Player({
           </div>
           <div className='player-inner-relative' ref={controlsRef}>
             <Chapters
+              videoRef={videoRef}
               updateProgressBar={updateProgressBar}
               updateRedDot={updateRedDot}
-              handleMouseMove={handleMouseMove}
-              videoRef={videoRef}
               innerChapterContainerRef={innerChapterContainerRef}
               chapters={chapters}
               redDotRef={redDotRef}
@@ -1026,9 +986,8 @@ export default function Player({
               stopDragging={stopDragging}
               handleClick={handleClick}
               updateScrubbingBar={updateScrubbingBar}
-              isFocusing={isFocusing}
             />
-            <BottomControls handlePlayState={handlePlayState} handleMouseMove={handleMouseMove} miniPlayerBoolean={miniPlayerBoolean} />
+            <BottomControls handlePlayState={handlePlayState} miniPlayerBoolean={miniPlayerBoolean} />
           </div>
         </div>
       </div>

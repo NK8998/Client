@@ -1,10 +1,11 @@
-import { handleFocusingElements, seekVideo } from "../../utilities/player-progressBar-logic";
+import { usePlayerMouseMove } from "../../utilities/player-mouse-interactions";
+import { seekVideo } from "../../utilities/player-progressBar-logic";
+import { usePlayerRefs } from "../../utilities/player-refs";
 
 export default function Chapters({
+  videoRef,
   updateProgressBar,
   updateRedDot,
-  handleMouseMove,
-  videoRef,
   chapterContainerRef,
   redDotRef,
   redDotWrapperRef,
@@ -15,8 +16,8 @@ export default function Chapters({
   updateScrubbingBar,
   innerChapterContainerRef,
   chapters,
-  isFocusing,
 }) {
+  const [handleMouseMove] = usePlayerMouseMove();
   const chapterEls = chapters.map((chapter, index) => {
     // const calculatedPercentage = Math.round(((chapter.end - chapter.start) / chapters[chapters.length - 1].end) * 100);
     return (

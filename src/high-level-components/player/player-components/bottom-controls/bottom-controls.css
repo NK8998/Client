@@ -1,0 +1,127 @@
+.bottom-controls-left,
+.bottom-controls-right{
+    display: flex;
+
+}
+.bottom-controls{
+    position: absolute;
+    left: 0;
+    bottom: 0px;
+    width: calc(100% - 24px);
+    padding: 0px 12px;
+    /* background: burlywood; */
+    height: 46px;
+    display: flex;
+    justify-content: space-between;
+    pointer-events: all;
+  
+  }
+
+  .player-outer.fullscreen  .SliderRoot, .player-outer.fullscreen.theatre  .SliderRoot{
+     min-width: 100px;
+    max-width: 100px;
+    margin-top: 0px;
+  }
+  .player-outer.fullscreen  .SliderTrack , .player-outer.fullscreen.theatre    .SliderTrack {
+    height: 5px;
+  }
+
+  .player-outer.fullscreen   form.volume-slider, .player-outer.fullscreen.theatre   form.volume-slider{
+    width: 0px;
+  
+  }
+  .player-outer.fullscreen   form.volume-slider.show, .player-outer.fullscreen.theatre   form.volume-slider.show{
+    width: 100px;
+  
+  }
+
+.player-outer.fullscreen  .SliderThumb, .player-outer.fullscreen.theatre  .SliderThumb{
+    height: 20px;
+    width: 20px;
+}
+  .player-button{
+    box-sizing: border-box;
+    height: 45px;
+    width: 45px;
+    height: 100%;
+    cursor: pointer;
+    background-color: transparent;
+    border: none;
+    outline: none;
+    margin-top: -2px;
+    position: relative;
+    z-index: 10;
+    display: grid;
+    place-content: center;
+  
+  }
+  .player-outer.focus-via-keyboard .player-button:focus{
+    box-shadow: 0 0 0 2px inset var(--outline-color); 
+  }
+  /* .player-button:focus{
+    box-shadow: 0 0 0 2px inset var(--outline-color); 
+  } */
+  
+.player-button svg{
+    fill: white;
+    height: 45px;
+    pointer-events: none;
+}
+.player-button.volume {
+    margin-left: 6px;
+}
+form.volume-slider.show{
+    width: 60px;
+}
+form.volume-slider{
+    display: block;
+    cursor: pointer;
+    overflow: hidden;
+    width: 0px;
+    transition: width 100ms ease;
+
+}
+
+.SliderRoot {
+  position: relative;
+  display: flex;
+  align-items: center;
+  user-select: none;
+  touch-action: none;
+  min-width: 60px;
+  max-width: 60px;
+  height: 20px;
+  height: 100%;
+  margin-top: 1px;
+}
+
+.SliderTrack {
+  background-color: white;
+  position: relative;
+  flex-grow: 1;
+  /* border-radius: 9999px; */
+  height: 3px;
+}
+
+.SliderRange {
+  position: absolute;
+  background-color: white;
+  border-radius: 9999px;
+  height: 100%;
+}
+
+.SliderThumb {
+  display: block;
+  width: 14px;
+  height: 14px;
+  background-color: white;
+  /* box-shadow: 0 2px 10px var(--black-a7); */
+  border-radius: 10px;
+}
+/* .SliderThumb:hover {
+  background-color: var(--violet-3);
+} */
+.SliderThumb:focus {
+  outline: none;
+  /* box-shadow: 0 0 0 5px var(--black-a8); */
+}

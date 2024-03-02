@@ -7,12 +7,11 @@ import { fetchWatchData } from "../../store/Slices/watch-slice";
 
 export default function Watch({ watchRef, miniplayerRef, miniPlayerBoolean }) {
   const dispatch = useDispatch();
-  const primaryRef = useRef();
   const videoRef = useRef();
+  const primaryRef = useRef();
   const secondaryRef = useRef();
   const expandedContainerRef = useRef();
   const containerRef = useRef();
-  const playerIf = useRef();
 
   return (
     <div className='watch-flexy hidden' ref={watchRef} id='watch'>
@@ -21,14 +20,13 @@ export default function Watch({ watchRef, miniplayerRef, miniPlayerBoolean }) {
         <div className='primary'>
           <div className='player-if' ref={primaryRef}>
             <Player
-              secondaryRef={secondaryRef}
               videoRef={videoRef}
+              secondaryRef={secondaryRef}
               containerRef={containerRef}
               expandedContainerRef={expandedContainerRef}
               primaryRef={primaryRef}
               miniplayerRef={miniplayerRef}
               miniPlayerBoolean={miniPlayerBoolean}
-              playerIf={playerIf}
             />
           </div>
           <div className='lower'></div>
