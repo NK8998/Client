@@ -67,13 +67,13 @@ export default function BottomControls({ handlePlayState, miniPlayerBoolean }) {
         <button type='button' className={`player-button play-pause`} onClick={handlePlayState} onFocus={handleFocus}>
           <PlayPauseButton />
         </button>
-        <button type='button' className='player-button forward'>
+        <button type='button' className='player-button forward' onFocus={handleFocus}>
           <ForwardButton />
         </button>
-        <VolumeSlider />
+        <VolumeSlider handleFocus={handleFocus} />
       </div>
       <div className='bottom-controls-right'>
-        <button type='button' className='player-button miniplayer' onClick={handleMiniPlayerNavigation}>
+        <button type='button' className='player-button miniplayer' onClick={handleMiniPlayerNavigation} onFocus={handleFocus}>
           <MiniPlayerButton />
         </button>
         <button type='button' className='player-button theatre-normal' onClick={() => dispatch(handleTheatre(theatreMode))} onFocus={handleFocus}>

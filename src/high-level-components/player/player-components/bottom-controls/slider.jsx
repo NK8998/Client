@@ -3,7 +3,7 @@ import { usePlayerMouseMove } from "../../utilities/player-mouse-interactions";
 import { useRef, useState } from "react";
 import { VolumeHighButton, VolumeLowButton, VolumeMuteButton } from "../../../../assets/icons";
 
-export default function VolumeSlider({}) {
+export default function VolumeSlider({ handleFocus }) {
   const [handleMouseMove] = usePlayerMouseMove();
   const [volume, setVolume] = useState(1);
   const hoveringRef = useRef();
@@ -26,6 +26,7 @@ export default function VolumeSlider({}) {
   }
 
   const handleMouseEnter = () => {
+    handleFocus();
     hoveringRef.current = true;
     const volumeForm = document.querySelector(".volume-slider");
     volumeForm.classList.add("show");
@@ -41,7 +42,13 @@ export default function VolumeSlider({}) {
 
   return (
     <>
-      <button type='button' className='player-button volume' onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeavePlayerButton}>
+      <button
+        type='button'
+        className='player-button volume'
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeavePlayerButton}
+        onFocus={handleFocus}
+      >
         {volumeIcon}
       </button>
       <form className='volume-slider player-button' tabIndex={0} onFocus={handleMouseEnter} onBlur={handleBlur}>
