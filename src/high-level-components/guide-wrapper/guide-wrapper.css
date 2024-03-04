@@ -11,6 +11,9 @@
 .guide-wrapper.fullscreen{
     margin-top: 0px;
 }
+.guide-wrapper .top-row .loader{
+    visibility: visible;
+}
 .leftnav-wrapper{
     /* background-color: blue; */
    

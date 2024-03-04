@@ -31,7 +31,7 @@
   
   }
   .player-outer.fullscreen   form.volume-slider.show, .player-outer.fullscreen.theatre   form.volume-slider.show{
-    width: 100px;
+    width: 103px;
   
   }
 
@@ -71,7 +71,7 @@
     margin-left: 6px;
 }
 form.volume-slider.show{
-    width: 60px;
+    width: 63px;
 }
 form.volume-slider{
     display: block;
@@ -112,11 +112,12 @@ form.volume-slider{
 
 .SliderThumb {
   display: block;
-  width: 14px;
-  height: 14px;
+  width: 12px;
+  height: 12px;
   background-color: white;
   /* box-shadow: 0 2px 10px var(--black-a7); */
   border-radius: 10px;
+  
 }
 /* .SliderThumb:hover {
   background-color: var(--violet-3);

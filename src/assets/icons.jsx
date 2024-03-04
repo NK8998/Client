@@ -187,7 +187,7 @@ export const VolumeHighButton = () => {
 export const ForwardButton = () => {
   return (
     <svg height='100%' version='1.1' viewBox='1 1 33 33' width='100%' pointerEvents='none'>
-      <use className='ytp-svg-shadow' xlink:href='#ytp-id-13'></use>
+      <use className='ytp-svg-shadow'></use>
       <path className='ytp-svg-fill' d='M 12,24 20.5,18 12,12 V 24 z M 22,12 v 12 h 2 V 12 h -2 z' id='ytp-id-13'></path>
     </svg>
   );
