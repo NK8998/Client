@@ -480,7 +480,7 @@ export default function Player({ videoRef, secondaryRef, containerRef, expandedC
       secondaryRefWidth = secondaryRef.current.clientWidth;
     }
     const windowWidth = root.clientWidth;
-    const windowHeight = window.innerHeight;
+    const windowHeight = window.innerHeight < 800 ? 800 : window.innerHeight;
 
     const gaps = windowWidth >= 1041 ? 64 : 36;
     const maxVideoHeight = (73.5 * window.innerHeight) / 100;
@@ -510,7 +510,7 @@ export default function Player({ videoRef, secondaryRef, containerRef, expandedC
     const newRatio = 16 / 9;
     const theatreWidth = windowWidth;
     const calculatedHeight = windowWidth * (1 / newRatio);
-    const maxHeight = 0.81 * windowHeight;
+    const maxHeight = 0.795 * windowHeight;
     let theatreHeight = Math.trunc(calculatedHeight > maxHeight ? maxHeight : calculatedHeight);
     if (windowWidth <= 810) {
       theatreHeight = Math.trunc(0.55 * windowHeight);
