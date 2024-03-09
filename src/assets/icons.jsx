@@ -155,8 +155,8 @@ export const VolumeLowButton = () => {
 export const VolumeHighButton = () => {
   return (
     <svg height='100%' version='1.1' viewBox='-1 -4 42 42' width='100%' pointerEvents='none'>
-      <use className='ytp-svg-shadow' xlink:href='#ytp-id-15'></use>
-      <use className='ytp-svg-shadow' xlink:href='#ytp-id-16'></use>
+      <use className='ytp-svg-shadow'></use>
+      <use className='ytp-svg-shadow'></use>
       <defs>
         <clipPath id='ytp-svg-volume-animation-mask'>
           <path d='m 14.35,-0.14 -5.86,5.86 20.73,20.78 5.86,-5.91 z'></path>

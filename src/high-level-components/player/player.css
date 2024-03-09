@@ -90,6 +90,7 @@
   width: 20px;
 }
 .player-outer.fullscreen .red-dot-wrapper, .player-outer.fullscreen.theatre .red-dot-wrapper{
+  left: -10px;
   top: 7.5px;
 }
 .player-outer.focus-via-keyboard.fullscreen .chapters-container.single::after, .player-outer.focus-via-keyboard.fullscreen.theatre .chapters-container.single::after{
@@ -203,6 +204,18 @@
   height: 13px;
   pointer-events: none;
   bottom: 2px;
+
+}
+.chapter-hover{
+  height: fit-content;
+  /* background-color: blue; */
+}
+.chapter-hover:hover > .chapter-padding > .bar{
+  transform: scaleY(3);
+
+}
+.chapter-hover.single:hover > .chapter-padding > .bar{
+  transform: scaleY(1.6);
 
 }
 .player-outer.focus-via-keyboard .chapters-container:focus::after{

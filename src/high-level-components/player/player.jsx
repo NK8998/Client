@@ -239,9 +239,10 @@ export default function Player({ videoRef, secondaryRef, containerRef, expandedC
       }
       applyChapterStyles();
       updateRedDot("");
+      miniplayerRef.current.classList.add("visible");
+
       containerRef.current.classList.add("miniplayer");
       videoRef.current.classList.add("miniplayer");
-      miniplayerRef.current.classList.add("visible");
     }
   }, [miniPlayer, theatreMode, fullScreen]);
 
@@ -827,6 +828,7 @@ export default function Player({ videoRef, secondaryRef, containerRef, expandedC
 
   function applyChapterStyles() {
     const chaptersContainers = document.querySelectorAll(".chapter-padding");
+    const hoverBars = document.querySelectorAll(".chapter-hover");
     // console.log("running");
     let totalWidth = 0;
     const chapterContainerRefWidth = miniPlayerBoolean.current === true ? 400 : chapterContainerRef.current.clientWidth - 28;
@@ -834,6 +836,7 @@ export default function Player({ videoRef, secondaryRef, containerRef, expandedC
     chaptersContainers.forEach((chaptersContainer, index) => {
       const calculatedPercentage = ((chapters[index].end - chapters[index].start) / chapters[chapters.length - 1].end) * 100;
       let width = Math.trunc((calculatedPercentage / 100) * chapterContainerRefWidth);
+      hoverBars[index].style.width = `${width}px`;
       totalWidth += width;
       if (index === chapters.length - 1) {
         // Adjust the width of the last chapter block to fill the remaining space
