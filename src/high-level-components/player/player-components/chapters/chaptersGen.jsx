@@ -1,14 +1,17 @@
 function convertToSeconds(timeString) {
+  if (timeString.split(":").length < 3) {
+    timeString = `0:${timeString}`;
+  }
   // Split the time string into minutes and seconds
-  let [minutes, seconds] = timeString.split(":").map(Number);
+  let [hours, minutes, seconds] = timeString.split(":").map(Number);
 
   // Convert minutes to seconds and add to the seconds
-  return minutes * 60 + seconds;
+  return hours * 3600 + minutes * 60 + seconds;
 }
 
 function extractChapters(inputString) {
   // Define the regex pattern
-  const pattern = /(\d+:\d+)\s-\s(\w*)/g;
+  const pattern = /(?:\()?(\d{1,2}:\d{2}:\d{2}|\d+:\d+)(?:\))?(?:\s-\s|\-|\s)?(.+)?/g;
 
   // Initialize an empty array to store the matches
   let matches = [];
@@ -16,14 +19,11 @@ function extractChapters(inputString) {
   // Use regex exec method to find all matches
   let match;
   while ((match = pattern.exec(inputString)) !== null) {
-    // Check if the left side is in the format 0:00
-    if (/^\d+:\d+$/.test(match[1])) {
-      // Convert the left side to seconds
-      let timeInSeconds = convertToSeconds(match[1]);
+    // Convert the time string to seconds
+    let timeInSeconds = convertToSeconds(match[1]);
 
-      // Store each match as an object in the matches array
-      matches.push({ left: timeInSeconds, right: match[2] });
-    }
+    // Store each match as an object in the matches array
+    matches.push({ left: timeInSeconds, right: match[2] ? match[2].trim() : "" });
   }
 
   // Return the matches array
@@ -80,5 +80,4 @@ function generateChapters(string, totalTime) {
 
   return segmentObjs;
 }
-
 export default generateChapters;
