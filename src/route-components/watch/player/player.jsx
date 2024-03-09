@@ -6,10 +6,9 @@ import BottomControls from "./player-components/bottom-controls/bottom-controls"
 import Chapters from "./player-components/chapters/chapters";
 import generateChapters from "./player-components/chapters/chaptersGen";
 import { toNormal, toPause, toPlay, toTheatre } from "./utilities/gsap-animations";
-import { handleFullscreen, handleTheatre } from "../../store/Slices/watch-slice";
 import { seekVideo } from "./utilities/player-progressBar-logic";
 import { usePlayerMouseMove } from "./utilities/player-mouse-interactions";
-import { usePlayerRefs } from "./utilities/player-refs";
+import { handleFullscreen, handleTheatre } from "../../../store/Slices/watch-slice";
 
 export default function Player({ videoRef, secondaryRef, containerRef, expandedContainerRef, primaryRef, miniplayerRef, miniPlayerBoolean }) {
   const dispatch = useDispatch();
@@ -29,7 +28,6 @@ export default function Player({ videoRef, secondaryRef, containerRef, expandedC
   const redDotWrapperRef = useRef();
   const chapterContainerRef = useRef();
   const innerChapterContainerRef = useRef();
-  const timeoutRef = useRef();
   const timeIntervalRef = useRef();
   const spinnerRef = useRef();
   const theatreTimeOut = useRef();
@@ -158,7 +156,7 @@ export default function Player({ videoRef, secondaryRef, containerRef, expandedC
       }
     };
 
-    handleHover(playerRef);
+    handleHover();
     window.addEventListener("keydown", handleKeyPress);
     window.addEventListener("keyup", handleKeyUp);
 
@@ -217,14 +215,14 @@ export default function Player({ videoRef, secondaryRef, containerRef, expandedC
         videoRef.current.classList.remove("miniplayer");
         // toggle regular
 
-        handleMouseOut(playerRef);
+        handleMouseOut();
         controlsRef.current.classList.add("transition");
         layoutShiftRef.current = setTimeout(() => {
           calculateWidth();
           applyChapterStyles();
           updateRedDot("");
           controlsRef.current.classList.remove("transition");
-          handleMouseMove(playerRef);
+          handleMouseMove();
         }, 50);
       }
     } else if (miniPlayer) {
@@ -780,7 +778,7 @@ export default function Player({ videoRef, secondaryRef, containerRef, expandedC
     if (hovering === "false") {
       resetDot();
     }
-    chapterContainerRef.current.classList.remove("drag-expand");
+    innerChapterContainerRef.current.classList.remove("drag-expand");
   };
 
   const startDrag = () => {
@@ -789,7 +787,7 @@ export default function Player({ videoRef, secondaryRef, containerRef, expandedC
       toPause();
       isDragging.current = true;
       videoRef.current.style.visibility = "hidden";
-      chapterContainerRef.current.classList.add("drag-expand");
+      innerChapterContainerRef.current.classList.add("drag-expand");
       window.addEventListener("mousemove", handleDrag);
       window.addEventListener("mouseup", stopDragging);
       window.addEventListener("selectstart", handleSelect);
@@ -858,7 +856,7 @@ export default function Player({ videoRef, secondaryRef, containerRef, expandedC
       videoRef.current.play();
       toPlay();
     } else {
-      handleMouseMove(playerRef);
+      handleMouseMove();
       videoRef.current.pause();
       toPause();
     }
@@ -872,7 +870,7 @@ export default function Player({ videoRef, secondaryRef, containerRef, expandedC
   };
   const handleContextMenu = (e) => {
     // e.preventDefault();
-    handleHover(playerRef);
+    handleHover();
   };
 
   const checkBufferedOnTrackChange = () => {
@@ -941,9 +939,9 @@ export default function Player({ videoRef, secondaryRef, containerRef, expandedC
         className={`player-outer`}
         ref={containerRef}
         tabIndex={0}
-        onMouseEnter={() => handleHover(playerRef)}
-        onMouseOut={() => handleMouseOut(playerRef)}
-        onMouseMove={() => handleMouseMove(playerRef)}
+        onMouseEnter={handleHover}
+        onMouseOut={handleMouseOut}
+        onMouseMove={handleMouseMove}
         onFocus={handlePlayerFocus}
         onBlur={handlePlayerBlur}
         onClick={handlePlayerClick}
@@ -977,7 +975,6 @@ export default function Player({ videoRef, secondaryRef, containerRef, expandedC
           </div>
           <div className='player-inner-relative' ref={controlsRef}>
             <Chapters
-              playerRef={playerRef}
               videoRef={videoRef}
               updateProgressBar={updateProgressBar}
               updateRedDot={updateRedDot}

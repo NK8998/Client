@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from "react-redux";
-import Player from "../../high-level-components/player/player";
+import Player from "./player/player";
 import "./watch.css";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";

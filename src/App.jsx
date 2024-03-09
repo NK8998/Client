@@ -17,7 +17,7 @@ import BareShorts from "./bare-routes/bare-channel/bare-channel-routes/bare-shor
 import BareLive from "./bare-routes/bare-channel/bare-channel-routes/bare-live/bare-live";
 import BarePlaylists from "./bare-routes/bare-channel/bare-channel-routes/bare-playlists/bare-playlists";
 import BareCommunity from "./bare-routes/bare-channel/bare-channel-routes/bare-community/bare-community";
-import MiniPlayer from "./high-level-components/player/mini-player";
+import MiniPlayer from "./route-components/watch/player/mini-player";
 
 function App() {
   const dispatch = useDispatch();

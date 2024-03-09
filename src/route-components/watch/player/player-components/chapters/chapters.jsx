@@ -3,7 +3,6 @@ import { seekVideo } from "../../utilities/player-progressBar-logic";
 import { usePlayerRefs } from "../../utilities/player-refs";
 
 export default function Chapters({
-  playerRef,
   videoRef,
   updateProgressBar,
   updateRedDot,
@@ -60,7 +59,7 @@ export default function Chapters({
     updateRedDot(newTime);
   };
   const handleFocus = (e) => {
-    handleMouseMove(playerRef);
+    handleMouseMove();
   };
   return (
     <div className='chapters-absolute' ref={chapterContainerRef}>

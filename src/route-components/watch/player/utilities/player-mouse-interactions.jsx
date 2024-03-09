@@ -3,42 +3,39 @@ import { useRef } from "react";
 export function usePlayerMouseMove() {
   const timeoutRef = useRef();
 
-  const handleMouseMove = (playerRef) => {
-    if (!playerRef.current) return;
-    handleHover(playerRef);
+  const handleMouseMove = () => {
+    handleHover();
     if (timeoutRef.current) {
       clearTimeout(timeoutRef.current);
     }
     timeoutRef.current = setTimeout(() => {
-      handleMouseOut(playerRef);
+      handleMouseOut();
     }, 3000);
   };
 
-  const handleHover = (playerRef) => {
+  const handleHover = () => {
     const controlsRef = document.querySelector(".player-inner-relative");
-    if (!controlsRef || !playerRef.current) return;
+    if (!controlsRef) return;
     controlsRef.classList.remove("hide");
-    const tracks = playerRef.current.getTextTracks();
     if (timeoutRef.current) {
       clearTimeout(timeoutRef.current);
     }
     timeoutRef.current = setTimeout(() => {
-      handleMouseOut(playerRef);
+      handleMouseOut();
     }, 3000);
   };
 
-  const handleMouseOut = (playerRef) => {
+  const handleMouseOut = () => {
     const controlsRef = document.querySelector(".player-inner-relative");
     const videoRef = document.querySelector("#html5-player");
 
-    if (!videoRef || !controlsRef || !playerRef.current) return;
+    if (!videoRef || !controlsRef) return;
     if (videoRef.paused) return;
 
     if (timeoutRef.current) {
       clearTimeout(timeoutRef.current);
     }
     controlsRef.classList.add("hide");
-    const tracks = playerRef.current.getTextTracks();
   };
 
   return [handleMouseMove, handleHover, handleMouseOut];

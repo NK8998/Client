@@ -2,22 +2,17 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   CaptionsButton,
   CogButton,
-  ForwardButton,
   FullscreenButton,
   MiniPlayerButton,
-  PlayPauseButton,
   SmallScreenButton,
   TheatreNormalButton,
-} from "../../../../assets/icons";
-import { handleFullscreen, handleMiniPLayer, handleTheatre } from "../../../../store/Slices/watch-slice";
-import { useLayoutEffect, useRef } from "react";
+} from "../../../../../../assets/icons";
+import { handleFullscreen, handleMiniPLayer, handleTheatre } from "../../../../../../store/Slices/watch-slice";
+import { usePlayerMouseMove } from "../../../utilities/player-mouse-interactions";
 import { useNavigate } from "react-router-dom";
-import "./bottom-controls.css";
-import VolumeSlider from "./slider";
-import { usePlayerMouseMove } from "../../utilities/player-mouse-interactions";
-import { usePlayerRefs } from "../../utilities/player-refs";
+import { useLayoutEffect, useRef } from "react";
 
-export default function BottomControls({ handlePlayState, miniPlayerBoolean, playerRef }) {
+export const BottomControlsRight = ({ miniPlayerBoolean, playerRef }) => {
   const fullScreen = useSelector((state) => state.watch.fullScreen);
   const theatreMode = useSelector((state) => state.watch.theatreMode);
   const miniPlayer = useSelector((state) => state.watch.miniPlayer);
@@ -30,9 +25,6 @@ export default function BottomControls({ handlePlayState, miniPlayerBoolean, pla
   const timeoutRef = useRef();
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const handleFocus = () => {
-    handleMouseMove(playerRef);
-  };
   const handleMiniPlayerNavigation = () => {
     miniPlayerBoolean.current = true;
     const nonWatchRoute = locationsArr.slice().find((path) => !path.includes("/watch")) || "/";
@@ -67,11 +59,6 @@ export default function BottomControls({ handlePlayState, miniPlayerBoolean, pla
     };
   }, [miniPlayer, locationsArr, isFetching]);
 
-  const handleMouseLeaveControlsLeft = (e) => {
-    const volumeForm = document.querySelector(".volume-slider");
-    volumeForm.classList.remove("show");
-  };
-
   const toggleCaptions = () => {
     if (!playingVideo.subtitles) return;
     // Assuming player is an instance of shaka.Player
@@ -95,44 +82,33 @@ export default function BottomControls({ handlePlayState, miniPlayerBoolean, pla
   };
 
   return (
-    <div className='bottom-controls'>
-      <div className='bottom-controls-left' onMouseLeave={handleMouseLeaveControlsLeft}>
-        <button type='button' className={`player-button play-pause`} onClick={handlePlayState} onFocus={handleFocus}>
-          <PlayPauseButton />
-        </button>
-        <button type='button' className='player-button forward' onFocus={handleFocus}>
-          <ForwardButton />
-        </button>
-        <VolumeSlider handleFocus={handleFocus} />
-      </div>
-      <div className='bottom-controls-right'>
-        <button
-          type='button'
-          className={`player-button captions ${playingVideo.subtitles ? "has-captions" : ""}`}
-          ref={captionsRef}
-          onFocus={handleFocus}
-          onClick={toggleCaptions}
-        >
-          <CaptionsButton />
-        </button>
-        <button type='button' className='player-button cog' onFocus={handleFocus}>
-          <CogButton />
-        </button>
-        <button type='button' className='player-button miniplayer' onClick={handleMiniPlayerNavigation} onFocus={handleFocus}>
-          <MiniPlayerButton />
-        </button>
-        <button type='button' className='player-button theatre-normal' onClick={() => dispatch(handleTheatre(theatreMode))} onFocus={handleFocus}>
-          <TheatreNormalButton />
-        </button>
-        <button
-          type='button'
-          className='player-button fullscreen-normal'
-          onClick={() => dispatch(handleFullscreen(fullScreen))}
-          onFocus={handleFocus}
-        >
-          {fullScreen ? <SmallScreenButton /> : <FullscreenButton />}
-        </button>
-      </div>
+    <div className='bottom-controls-right'>
+      <button
+        type='button'
+        className={`player-button captions ${playingVideo.subtitles ? "has-captions" : ""}`}
+        ref={captionsRef}
+        onFocus={handleMouseMove}
+        onClick={toggleCaptions}
+      >
+        <CaptionsButton />
+      </button>
+      <button type='button' className='player-button cog' onFocus={handleMouseMove}>
+        <CogButton />
+      </button>
+      <button type='button' className='player-button miniplayer' onClick={handleMiniPlayerNavigation} onFocus={handleMouseMove}>
+        <MiniPlayerButton />
+      </button>
+      <button type='button' className='player-button theatre-normal' onClick={() => dispatch(handleTheatre(theatreMode))} onFocus={handleMouseMove}>
+        <TheatreNormalButton />
+      </button>
+      <button
+        type='button'
+        className='player-button fullscreen-normal'
+        onClick={() => dispatch(handleFullscreen(fullScreen))}
+        onFocus={handleMouseMove}
+      >
+        {fullScreen ? <SmallScreenButton /> : <FullscreenButton />}
+      </button>
     </div>
   );
-}
+};
