@@ -100,8 +100,22 @@ export const fetchWatchData = (videoId, currentRoute) => {
     const normal = "https://getting-started8998.s3.ap-south-1.amazonaws.com/Microsoft+Flight+Simulator+2024+-+Announce+Trailer+-+4K/output.mpd";
     // const randomInt = Math.round(Math.random());
     const videosArr = [
-      { videoId: "i94bjbYU", aspectRatio: 16 / 9, url: normal, descriptionString: string1, duration: 134 },
-      { videoId: "I938buiYN", aspectRatio: 1920 / 824, url: wide, descriptionString: string2, duration: 96 },
+      {
+        videoId: "i94bjbYU",
+        aspectRatio: 16 / 9,
+        url: normal,
+        descriptionString: string1,
+        duration: 134,
+        subtitles: null,
+      },
+      {
+        videoId: "I938buiYN",
+        aspectRatio: 1920 / 824,
+        url: wide,
+        descriptionString: string2,
+        duration: 96,
+        subtitles: "https://unprocessed-videos-yt-db.s3.ap-south-1.amazonaws.com/video-transcription.vtt",
+      },
     ];
     const playingVideoData = videoId === "i94bjbYU" ? videosArr[0] : videosArr[1];
     const recommendationsData = simulateRecommendations;

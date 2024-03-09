@@ -3,6 +3,7 @@ import { seekVideo } from "../../utilities/player-progressBar-logic";
 import { usePlayerRefs } from "../../utilities/player-refs";
 
 export default function Chapters({
+  playerRef,
   videoRef,
   updateProgressBar,
   updateRedDot,
@@ -21,12 +22,7 @@ export default function Chapters({
   const chapterEls = chapters.map((chapter, index) => {
     // const calculatedPercentage = Math.round(((chapter.end - chapter.start) / chapters[chapters.length - 1].end) * 100);
     return (
-      <div
-        className={`chapter-hover ${chapters.length === 1 ? "single" : ""}`}
-        dataindex={index}
-        onClick={handleClick}
-        key={`hover-${chapter.title + index}`}
-      >
+      <div className={`chapter-hover ${chapters.length === 1 ? "single" : ""}`} dataindex={index} key={`hover-${chapter.title + index}`}>
         <div
           key={`${chapter.title + index}`}
           className={`chapter-padding ${chapters.length === 1 ? "single" : ""}`}
@@ -64,7 +60,7 @@ export default function Chapters({
     updateRedDot(newTime);
   };
   const handleFocus = (e) => {
-    handleMouseMove();
+    handleMouseMove(playerRef);
   };
   return (
     <div className='chapters-absolute' ref={chapterContainerRef}>

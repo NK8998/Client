@@ -9,6 +9,7 @@ import { toNormal, toPause, toPlay, toTheatre } from "./utilities/gsap-animation
 import { handleFullscreen, handleTheatre } from "../../store/Slices/watch-slice";
 import { seekVideo } from "./utilities/player-progressBar-logic";
 import { usePlayerMouseMove } from "./utilities/player-mouse-interactions";
+import { usePlayerRefs } from "./utilities/player-refs";
 
 export default function Player({ videoRef, secondaryRef, containerRef, expandedContainerRef, primaryRef, miniplayerRef, miniPlayerBoolean }) {
   const dispatch = useDispatch();
@@ -157,7 +158,7 @@ export default function Player({ videoRef, secondaryRef, containerRef, expandedC
       }
     };
 
-    handleHover();
+    handleHover(playerRef);
     window.addEventListener("keydown", handleKeyPress);
     window.addEventListener("keyup", handleKeyUp);
 
@@ -216,14 +217,14 @@ export default function Player({ videoRef, secondaryRef, containerRef, expandedC
         videoRef.current.classList.remove("miniplayer");
         // toggle regular
 
-        handleMouseOut();
+        handleMouseOut(playerRef);
         controlsRef.current.classList.add("transition");
         layoutShiftRef.current = setTimeout(() => {
           calculateWidth();
           applyChapterStyles();
           updateRedDot("");
           controlsRef.current.classList.remove("transition");
-          handleMouseMove();
+          handleMouseMove(playerRef);
         }, 50);
       }
     } else if (miniPlayer) {
@@ -857,7 +858,7 @@ export default function Player({ videoRef, secondaryRef, containerRef, expandedC
       videoRef.current.play();
       toPlay();
     } else {
-      handleMouseMove();
+      handleMouseMove(playerRef);
       videoRef.current.pause();
       toPause();
     }
@@ -871,7 +872,7 @@ export default function Player({ videoRef, secondaryRef, containerRef, expandedC
   };
   const handleContextMenu = (e) => {
     // e.preventDefault();
-    handleHover();
+    handleHover(playerRef);
   };
 
   const checkBufferedOnTrackChange = () => {
@@ -940,9 +941,9 @@ export default function Player({ videoRef, secondaryRef, containerRef, expandedC
         className={`player-outer`}
         ref={containerRef}
         tabIndex={0}
-        onMouseEnter={handleHover}
-        onMouseOut={handleMouseOut}
-        onMouseMove={handleMouseMove}
+        onMouseEnter={() => handleHover(playerRef)}
+        onMouseOut={() => handleMouseOut(playerRef)}
+        onMouseMove={() => handleMouseMove(playerRef)}
         onFocus={handlePlayerFocus}
         onBlur={handlePlayerBlur}
         onClick={handlePlayerClick}
@@ -976,6 +977,7 @@ export default function Player({ videoRef, secondaryRef, containerRef, expandedC
           </div>
           <div className='player-inner-relative' ref={controlsRef}>
             <Chapters
+              playerRef={playerRef}
               videoRef={videoRef}
               updateProgressBar={updateProgressBar}
               updateRedDot={updateRedDot}
@@ -990,7 +992,7 @@ export default function Player({ videoRef, secondaryRef, containerRef, expandedC
               handleClick={handleClick}
               updateScrubbingBar={updateScrubbingBar}
             />
-            <BottomControls handlePlayState={handlePlayState} miniPlayerBoolean={miniPlayerBoolean} />
+            <BottomControls handlePlayState={handlePlayState} miniPlayerBoolean={miniPlayerBoolean} playerRef={playerRef} />
           </div>
         </div>
       </div>

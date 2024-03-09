@@ -3,6 +3,9 @@
     display: flex;
 
 }
+.bottom-controls-right{
+  gap: .2em;
+}
 .bottom-controls{
     position: absolute;
     left: 0;
@@ -61,6 +64,32 @@
   /* .player-button:focus{
     box-shadow: 0 0 0 2px inset var(--outline-color); 
   } */
+.player-button.captions.has-captions{
+  opacity: 1;
+}
+.player-button.captions{
+  position: relative;
+  opacity: .6;
+}
+.player-button.captions::after{
+  content: '';
+  position: absolute;
+  bottom: 8px;
+  width: calc(100% - 21px);
+  border-radius: 10000px;
+  background-color: red;
+  transform: scaleX(0);
+  transition: transform 250ms ease;
+  transform-origin: center center;
+  margin-left: 11px;
+  height: 4px;
+
+
+}
+.player-button.captions.captions-on::after{
+  transform: scaleX(1);
+  
+}
   
 .player-button svg{
     fill: white;

@@ -1,10 +1,7 @@
-import { useEffect, useRef } from "react";
+import { useRef } from "react";
 
 export function usePlayerRefs() {
-  const videoRef = useRef();
-  const controlsRef = useRef();
+  const playerRef = useRef();
 
-  useEffect(() => {}, [videoRef.current]);
-
-  return [videoRef, controlsRef];
+  return playerRef;
 }
