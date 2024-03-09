@@ -1,6 +1,7 @@
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import shaka from "shaka-player";
+// import * as shaka from "shaka-player";
+import shaka from "shaka-player/dist/shaka-player.ui.js";
 import "./player.css";
 import BottomControls from "./player-components/bottom-controls/bottom-controls";
 import Chapters from "./player-components/chapters/chapters";
@@ -66,7 +67,7 @@ export default function Player({ videoRef, secondaryRef, containerRef, expandedC
     };
   }, [location, videoId, theatreMode]);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     // console.log(location);
     const isWatchpage = location.includes("watch");
     if (miniPlayerBoolean.current === false) {
@@ -380,7 +381,7 @@ export default function Player({ videoRef, secondaryRef, containerRef, expandedC
     checkBufferedOnTrackChange();
   }, [videoId, location]);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (window.location.pathname.includes("watch")) {
       clearIntervalProgress();
       resetBars();
@@ -400,6 +401,8 @@ export default function Player({ videoRef, secondaryRef, containerRef, expandedC
       playerRef.current = new shaka.Player();
       playerRef.current.attach(videoRef.current);
 
+      const videoContainer = document.querySelector(".captions-container-relative");
+      const ui = new shaka.ui.Overlay(playerRef.current, videoContainer, videoRef.current);
       playerRef.current.configure({
         manifest: {
           dash: {
@@ -967,6 +970,9 @@ export default function Player({ videoRef, secondaryRef, containerRef, expandedC
           onContextMenuCapture={handleContextMenu}
           onEnded={() => toPause()}
         ></video>
+        <div className='captions-container-abolute'>
+          <div className='captions-container-relative'></div>
+        </div>
         <div className='player-inner-absolute'>
           <div className='loader' ref={spinnerRef}>
             <svg viewBox='25 25 50 50'>
