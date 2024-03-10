@@ -1,7 +1,7 @@
 import * as Slider from "@radix-ui/react-slider";
-import { usePlayerMouseMove } from "../../utilities/player-mouse-interactions";
+import { usePlayerMouseMove } from "../../../utilities/player-mouse-interactions";
 import { useRef, useState } from "react";
-import { VolumeHighButton, VolumeLowButton, VolumeMuteButton } from "../../../../../assets/icons";
+import { VolumeHighButton, VolumeLowButton, VolumeMuteButton } from "../../../../../../assets/icons";
 
 export default function VolumeSlider({ handleFocus }) {
   const [handleMouseMove] = usePlayerMouseMove();

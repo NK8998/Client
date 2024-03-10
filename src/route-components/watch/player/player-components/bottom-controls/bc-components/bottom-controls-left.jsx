@@ -1,6 +1,6 @@
 import { ForwardButton, PlayPauseButton } from "../../../../../../assets/icons";
 import { usePlayerMouseMove } from "../../../utilities/player-mouse-interactions";
-import VolumeSlider from "../slider";
+import VolumeSlider from "./slider";
 
 export const BottomControlsLeft = ({ handlePlayState }) => {
   const [handleMouseMove] = usePlayerMouseMove();
