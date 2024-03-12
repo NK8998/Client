@@ -49,7 +49,7 @@
 }
 .leftnav-wrapper.show + .dark-bg-closer, .leftnav-wrapper.show-not-watch + .dark-bg-closer{
    
-    background-color: rgba(0, 0, 0, 0.185);
+    background-color: rgba(0, 0, 0, 0.479);
     z-index: 22;
     pointer-events: all;
 }
