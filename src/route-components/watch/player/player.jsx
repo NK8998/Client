@@ -18,7 +18,7 @@ export default function Player({ videoRef, secondaryRef, containerRef, expandedC
   const theatreMode = useSelector((state) => state.watch.theatreMode);
   const fullScreen = useSelector((state) => state.watch.fullScreen);
   const miniPlayer = useSelector((state) => state.watch.miniPlayer);
-  const { descriptionString, duration, videoId, url } = playingVideo;
+  const { description_tring, duration, video_id, mpd_url, aspect_ratio } = playingVideo;
 
   const [chapters, setChapters] = useState([{ start: 0, title: "", end: 50 }]);
   const [play, setPlay] = useState(false);
@@ -45,7 +45,7 @@ export default function Player({ videoRef, secondaryRef, containerRef, expandedC
   const attempts = useRef(0);
 
   useEffect(() => {
-    const generatedChapters = generateChapters(descriptionString, duration);
+    const generatedChapters = generateChapters(description_tring, duration);
 
     setChapters(generatedChapters);
   }, [playingVideo]);
@@ -65,7 +65,7 @@ export default function Player({ videoRef, secondaryRef, containerRef, expandedC
     return () => {
       window.removeEventListener("resize", calculateWidth);
     };
-  }, [location, videoId, theatreMode]);
+  }, [location, video_id, theatreMode]);
 
   useLayoutEffect(() => {
     // console.log(location);
@@ -178,7 +178,7 @@ export default function Player({ videoRef, secondaryRef, containerRef, expandedC
     return () => {
       window.removeEventListener("resize", updateStyles);
     };
-  }, [location, videoId, theatreMode, chapters]);
+  }, [location, video_id, theatreMode, chapters]);
 
   useLayoutEffect(() => {
     toggleTheatre();
@@ -379,7 +379,7 @@ export default function Player({ videoRef, secondaryRef, containerRef, expandedC
 
   useEffect(() => {
     checkBufferedOnTrackChange();
-  }, [videoId, location]);
+  }, [video_id, location]);
 
   useLayoutEffect(() => {
     if (window.location.pathname.includes("watch")) {
@@ -390,11 +390,11 @@ export default function Player({ videoRef, secondaryRef, containerRef, expandedC
     } else {
       playerRef.current = null;
     }
-  }, [playingVideo, videoId]);
+  }, [playingVideo, video_id]);
 
   const attatchPlayer = async () => {
     await detachPlayer();
-    const manifestUri = url;
+    const manifestUri = mpd_url;
     if (manifestUri.length === 0 || !manifestUri.includes("http") || !videoRef.current) return;
     shaka.polyfill.installAll();
     if (shaka.Player.isBrowserSupported()) {
@@ -488,22 +488,21 @@ export default function Player({ videoRef, secondaryRef, containerRef, expandedC
     const gaps = windowWidth >= 1041 ? 64 : 36;
     const maxVideoHeight = (73.5 * window.innerHeight) / 100;
     const remainingSpace = windowWidth - (gaps + secondaryRefWidth);
-    // const aspectRatio = wideScreen ? 1920 / 1080 : 16 / 9;
-    const aspectRatio = playingVideo.aspectRatio;
+    // const aspect_ratio = wideScreen ? 1920 / 1080 : 16 / 9;
 
-    let videoHeight = remainingSpace * aspectRatio > maxVideoHeight ? maxVideoHeight : remainingSpace * aspectRatio;
-    let videoWidth = videoHeight * aspectRatio;
+    let videoHeight = remainingSpace * aspect_ratio > maxVideoHeight ? maxVideoHeight : remainingSpace * aspect_ratio;
+    let videoWidth = videoHeight * aspect_ratio;
 
     // Check if the videoWidth is greater than the remainingSpace
     if (videoWidth > remainingSpace) {
       // Adjust the videoWidth and videoHeight to fit the remaining space
       videoWidth = remainingSpace;
-      videoHeight = videoWidth * (1 / aspectRatio);
+      videoHeight = videoWidth * (1 / aspect_ratio);
     }
 
     if (videoWidth >= 1280) {
       videoWidth = 1280;
-      videoHeight = videoWidth * (1 / aspectRatio);
+      videoHeight = videoWidth * (1 / aspect_ratio);
     }
 
     // console.log({ remainingSpace });

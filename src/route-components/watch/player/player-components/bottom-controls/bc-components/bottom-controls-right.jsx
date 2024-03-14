@@ -21,7 +21,7 @@ export const BottomControlsRight = ({ miniPlayerBoolean, playerRef }) => {
   const isFetching = useSelector((state) => state.app.isFetching);
   const captionsRef = useRef();
   const [handleMouseMove] = usePlayerMouseMove();
-  const { videoId } = playingVideo;
+  const { video_id, captions_url } = playingVideo;
   const timeoutRef = useRef();
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -47,7 +47,7 @@ export const BottomControlsRight = ({ miniPlayerBoolean, playerRef }) => {
         if (!miniPlayer) {
           handleMiniPlayerNavigation();
         } else {
-          navigate(`/watch?v=${videoId}`);
+          navigate(`/watch?v=${video_id}`);
         }
       }
     }, 400);
@@ -60,7 +60,7 @@ export const BottomControlsRight = ({ miniPlayerBoolean, playerRef }) => {
   }, [miniPlayer, locationsArr, isFetching]);
 
   const toggleCaptions = () => {
-    if (!playingVideo.subtitles) return;
+    if (!captions_url) return;
     // Assuming player is an instance of shaka.Player
     const tracks = playerRef.current.getTextTracks();
     const hasCaptions = tracks.some((track) => track.kind === "subtitles");
@@ -68,7 +68,7 @@ export const BottomControlsRight = ({ miniPlayerBoolean, playerRef }) => {
 
     if (!hasCaptions) {
       playerRef.current
-        .addTextTrackAsync(playingVideo.subtitles, "en", "subtitles", "text/vtt")
+        .addTextTrackAsync(captions_url, "en", "subtitles", "text/vtt")
         .then(function () {
           console.log("Subtitle track added");
         })
@@ -85,7 +85,7 @@ export const BottomControlsRight = ({ miniPlayerBoolean, playerRef }) => {
     <div className='bottom-controls-right'>
       <button
         type='button'
-        className={`player-button captions ${playingVideo.subtitles ? "has-captions" : ""}`}
+        className={`player-button captions ${captions_url ? "has-captions" : ""}`}
         ref={captionsRef}
         onFocus={handleMouseMove}
         onClick={toggleCaptions}
