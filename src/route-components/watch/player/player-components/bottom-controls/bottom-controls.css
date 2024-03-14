@@ -63,6 +63,7 @@
   }
 .player-button.miniplayer svg{
   height: 40px;
+
 }
   /* .player-button:focus{
     box-shadow: 0 0 0 2px inset var(--outline-color); 
@@ -95,7 +96,7 @@
 }
   
 .player-button svg{
-    fill: white;
+    fill: rgb(228, 228, 228);
     height: 45px;
     pointer-events: none;
 }

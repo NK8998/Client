@@ -95,8 +95,8 @@ export const fetchWatchData = (videoId, currentRoute) => {
       "ajknjksfnjksdbf\n asdabbf\n\najdbajksf\n adjbadsjh\n 0:00 - \n 0:40 - chapter2\n 1:00 - chapter3\n 1:10 - chapter4\n 4efnjksdfbsjkdfbjksdfbsjk";
     const string2 = "jkcnjkanscjkanscj ascajkcnasc\n acjasnkcjansc\nasnacacacabcjasc\nascbhasbcjah\n\n   ac";
 
-    const wide = "https://getting-started8998.s3.ap-south-1.amazonaws.com/Marvel+Studios'+Avengers+Infinity+War+Official+Trailer.mp4/output.mpd";
-    const normal = "https://getting-started8998.s3.ap-south-1.amazonaws.com/Microsoft+Flight+Simulator+2024+-+Announce+Trailer+-+4K/output.mpd";
+    const wide = "https://getting-started8998.s3.ap-south-1.amazonaws.com/fgj89bjloQ/chunks/output.mpd";
+    const normal = "https://getting-started8998.s3.ap-south-1.amazonaws.com/ZMIjWdisZf4/chunks/output.mpd";
     // const randomInt = Math.round(Math.random());
     const videosArr = [
       {
@@ -104,12 +104,12 @@ export const fetchWatchData = (videoId, currentRoute) => {
         aspectRatio: 16 / 9,
         url: normal,
         descriptionString: string1,
-        duration: 134,
+        duration: 148,
         subtitles: null,
       },
       {
         videoId: "I938buiYN",
-        aspectRatio: 1280 / 532,
+        aspectRatio: 1920 / 798,
         url: wide,
         descriptionString: string2,
         duration: 144,
