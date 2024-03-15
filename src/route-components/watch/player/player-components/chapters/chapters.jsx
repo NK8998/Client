@@ -61,8 +61,16 @@ export default function Chapters({
   const handleFocus = (e) => {
     handleMouseMove();
   };
+  const handleMouseEnter = () => {
+    const scrubbingPreviewContainer = document.querySelector(".scrubbing-preview-container");
+    scrubbingPreviewContainer.classList.add("show");
+  };
+  const handleMouseLeave = () => {
+    const scrubbingPreviewContainer = document.querySelector(".scrubbing-preview-container");
+    scrubbingPreviewContainer.classList.remove("show");
+  };
   return (
-    <div className='chapters-absolute' ref={chapterContainerRef}>
+    <div className='chapters-absolute' ref={chapterContainerRef} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
       <div
         className={`chapters-container ${chapters.length === 1 ? "single" : ""}`}
         ref={innerChapterContainerRef}

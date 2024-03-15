@@ -8,6 +8,9 @@
     pointer-events: none;
 
 }
+.player-outer.miniplayer .scrubbing-preview-container{
+    bottom: 20px;
+}
 .mini-player-inner{
     /* overflow: visible; */
     background-color: rgb(22, 22, 22);

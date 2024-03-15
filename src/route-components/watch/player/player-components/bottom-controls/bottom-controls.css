@@ -159,3 +159,12 @@ form.volume-slider{
   outline: none;
   /* box-shadow: 0 0 0 5px var(--black-a8); */
 }
+
+@media(max-width: 35em){
+  .bottom-controls{
+    height: 40px;
+  }
+  .player-button{
+    width: 40px;
+  }
+}

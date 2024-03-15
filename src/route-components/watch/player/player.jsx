@@ -10,6 +10,9 @@ import { toNormal, toPause, toPlay, toTheatre } from "./utilities/gsap-animation
 import { seekVideo } from "./utilities/player-progressBar-logic";
 import { usePlayerMouseMove } from "./utilities/player-mouse-interactions";
 import { handleFullscreen, handleTheatre } from "../../../store/Slices/watch-slice";
+import Loader from "./utilities/loader";
+import ScrubbingPreviews from "./player-components/scrubbing-previews/scrubbing-previews";
+import { getTimeStamp } from "../../../utilities/getTimestamp";
 
 export default function Player({ videoRef, secondaryRef, containerRef, expandedContainerRef, primaryRef, miniplayerRef, miniPlayerBoolean }) {
   const dispatch = useDispatch();
@@ -18,7 +21,7 @@ export default function Player({ videoRef, secondaryRef, containerRef, expandedC
   const theatreMode = useSelector((state) => state.watch.theatreMode);
   const fullScreen = useSelector((state) => state.watch.fullScreen);
   const miniPlayer = useSelector((state) => state.watch.miniPlayer);
-  const { description_tring, duration, video_id, mpd_url, aspect_ratio } = playingVideo;
+  const { description_string, duration, video_id, mpd_url, aspect_ratio, palette_urls, extraction_and_palette } = playingVideo;
 
   const [chapters, setChapters] = useState([{ start: 0, title: "", end: 50 }]);
   const [play, setPlay] = useState(false);
@@ -45,7 +48,7 @@ export default function Player({ videoRef, secondaryRef, containerRef, expandedC
   const attempts = useRef(0);
 
   useEffect(() => {
-    const generatedChapters = generateChapters(description_tring, duration);
+    const generatedChapters = generateChapters(description_string, duration);
 
     setChapters(generatedChapters);
   }, [playingVideo]);
@@ -394,7 +397,7 @@ export default function Player({ videoRef, secondaryRef, containerRef, expandedC
 
   const attatchPlayer = async () => {
     await detachPlayer();
-    const manifestUri = mpd_url;
+    const manifestUri = mpd_url || "";
     if (manifestUri.length === 0 || !manifestUri.includes("http") || !videoRef.current) return;
     shaka.polyfill.installAll();
     if (shaka.Player.isBrowserSupported()) {
@@ -633,11 +636,69 @@ export default function Player({ videoRef, secondaryRef, containerRef, expandedC
     }
   };
 
-  const updateScrubbingBar = (e) => {
-    if (e.target.getAttribute("dataIndex")) {
-      const hoveringIndex = e.target.getAttribute("dataIndex");
-      document.documentElement.style.setProperty("--hoverChapterIndex", `${hoveringIndex}`);
+  const updatePreviewLeft = (e) => {
+    const scrubbingPreviewContainer = document.querySelector(".scrubbing-preview-container");
+    const scrubbingPreviewContainerWidth = scrubbingPreviewContainer.clientWidth;
+    const chaptersContainerWidth = chapterContainerRef.current.clientWidth;
+    const chaptersContainerLeft = chapterContainerRef.current.getBoundingClientRect().left;
+    const chaptersContainerRight = chapterContainerRef.current.getBoundingClientRect().right;
+    const cursorPosition = e.clientX;
+    const clientPosition = cursorPosition - chaptersContainerLeft;
+    const percentage = (clientPosition / chaptersContainerWidth) * 100;
+    let scrubbingLeft = `calc(${percentage}% - ${scrubbingPreviewContainerWidth / 2}px)`;
+    const boundary = scrubbingPreviewContainerWidth / 2 + 10;
+    if (clientPosition < boundary) {
+      scrubbingLeft = `calc(0% + 10px)`;
+    } else if (chaptersContainerRight - cursorPosition < boundary) {
+      scrubbingLeft = `calc(100% - ${scrubbingPreviewContainerWidth + 10}px)`;
     }
+    scrubbingPreviewContainer.style.left = scrubbingLeft;
+  };
+
+  const movePreviews = (e, hoveringIndex) => {
+    const previewTime = document.querySelector(".preview-time");
+    const scrubbingPreview = document.querySelector(".preview-img-container");
+    const chaptersContainers = document.querySelectorAll(".chapter-padding");
+    const chapterDuration = chapters[hoveringIndex].end - chapters[hoveringIndex].start;
+    const currentChapterLeft = chaptersContainers[hoveringIndex].getBoundingClientRect().left;
+    const currentChapterWidth = chaptersContainers[hoveringIndex].getBoundingClientRect().width;
+    const position = e.clientX - currentChapterLeft;
+    const ratio = position / currentChapterWidth;
+    const timeOffset = ratio * chapterDuration;
+    const currentTime = chapters[hoveringIndex].start + timeOffset;
+    const timeStamp = getTimeStamp(Math.trunc(currentTime));
+    previewTime.textContent = timeStamp;
+    const { paletteSize, extractionRate } = extraction_and_palette;
+
+    const pallete = paletteSize * paletteSize;
+    const timePerPallete = extractionRate * pallete;
+    const currentPallete = Math.floor(currentTime / timePerPallete);
+    // Get the total elapsed time within all palettes
+    const elapsedTimeWithinCurrentPallete = currentTime - currentPallete * timePerPallete;
+
+    const currentTile = Math.floor(elapsedTimeWithinCurrentPallete / extractionRate) + 1;
+
+    const backgroundPallete = palette_urls[`palleteUrl-${currentPallete}`];
+    const width = scrubbingPreview.clientWidth;
+    const height = scrubbingPreview.clientHeight;
+
+    // Calculate background offsets based on tile size and currentTile
+    const offsetX = ((currentTile - 1) % paletteSize) * width;
+    const offsetY = Math.floor((currentTile - 1) / paletteSize) * height;
+    scrubbingPreview.style.backgroundSize = `${width * paletteSize}px ${height * paletteSize}px`;
+    let backgroundImage = scrubbingPreview.style.backgroundImage;
+    let url = backgroundImage.slice(5, backgroundImage.length - 2);
+    if (url !== backgroundPallete) {
+      scrubbingPreview.style.backgroundImage = `url(${backgroundPallete})`;
+    }
+    scrubbingPreview.style.backgroundPosition = `-${offsetX}px -${offsetY}px`;
+    updatePreviewLeft(e);
+  };
+
+  const updateScrubbingBar = (e) => {
+    const hoveringIndex = e.target.getAttribute("dataIndex");
+    document.documentElement.style.setProperty("--hoverChapterIndex", `${hoveringIndex}`);
+    movePreviews(e, hoveringIndex);
 
     document.documentElement.style.setProperty("--hovering", `true`);
 
@@ -684,6 +745,7 @@ export default function Player({ videoRef, secondaryRef, containerRef, expandedC
     const timeOffset = ratio * chapterDuration;
     const currentTime = chapters[currentIndex].start + timeOffset;
     videoRef.current.currentTime = currentTime;
+    console.log(currentTime);
 
     redDotRef.current.style.scale = chapters.length === 1 ? 1 : 1.5;
     chapters.forEach((chapter, index) => {
@@ -849,19 +911,31 @@ export default function Player({ videoRef, secondaryRef, containerRef, expandedC
     });
   }
 
+  const timeoutClick = useRef();
+  const handleDoubleClick = () => {
+    if (timeoutClick.current) {
+      clearTimeout(timeoutClick.current);
+    }
+
+    dispatch(handleFullscreen(fullScreen));
+  };
   const handlePlayState = () => {
-    handleDoubleClick();
-    if (timeIntervalRef.current) {
-      clearInterval(timeIntervalRef.current);
+    if (timeoutClick.current) {
+      clearTimeout(timeoutClick.current);
     }
-    if (videoRef.current.paused) {
-      videoRef.current.play();
-      toPlay();
-    } else {
-      handleMouseMove();
-      videoRef.current.pause();
-      toPause();
-    }
+    timeoutClick.current = setTimeout(() => {
+      if (timeIntervalRef.current) {
+        clearInterval(timeIntervalRef.current);
+      }
+      if (videoRef.current.paused) {
+        videoRef.current.play();
+        toPlay();
+      } else {
+        handleMouseMove();
+        videoRef.current.pause();
+        toPause();
+      }
+    }, 200);
   };
 
   const handleBufferBarOnTrackChange = () => {
@@ -906,21 +980,6 @@ export default function Player({ videoRef, secondaryRef, containerRef, expandedC
     }
   };
 
-  const clickRef = useRef();
-  let clicks = useRef(0);
-  const handleDoubleClick = () => {
-    if (clickRef.current) {
-      clearTimeout(clickRef.current);
-    }
-    clicks.current += 1;
-    if (clicks.current === 2) {
-      dispatch(handleFullscreen(fullScreen));
-    }
-
-    clickRef.current = setTimeout(() => {
-      clicks.current = 0;
-    }, 300);
-  };
   const handlePlayerClick = () => {
     focusViaKeyBoard.current = false;
     containerRef.current.classList.remove("focus-via-keyboard");
@@ -950,6 +1009,8 @@ export default function Player({ videoRef, secondaryRef, containerRef, expandedC
         onClickCapture={handlePlayerClick}
       >
         <video
+          onDoubleClickCapture={handleDoubleClick}
+          onDoubleClick={handleDoubleClick}
           ref={videoRef}
           className={`html5-player`}
           id='html5-player'
@@ -973,12 +1034,9 @@ export default function Player({ videoRef, secondaryRef, containerRef, expandedC
           <div className='captions-container-relative'></div>
         </div>
         <div className='player-inner-absolute'>
-          <div className='loader' ref={spinnerRef}>
-            <svg viewBox='25 25 50 50'>
-              <circle r='20' cy='50' cx='50'></circle>
-            </svg>
-          </div>
+          <Loader spinnerRef={spinnerRef} />
           <div className='player-inner-relative' ref={controlsRef}>
+            <ScrubbingPreviews videoRef={videoRef} />
             <Chapters
               videoRef={videoRef}
               updateProgressBar={updateProgressBar}

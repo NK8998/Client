@@ -13,7 +13,7 @@ export default function Videos() {
       <Link to={"/watch?v=fgj89bjloQ"} onClick={(e) => handleNavigation(e, "/watch?v=fgj89bjloQ")}>
         <div className='press me'>press me</div>
       </Link>
-      <Link to={"/watch?v=i94bjbYU"} onClick={(e) => handleNavigation(e, "/watch?v=i94bjbYU")}>
+      <Link to={"/watch?v=ZMIjWdisZf4"} onClick={(e) => handleNavigation(e, "/watch?v=ZMIjWdisZf4")}>
         <div className='press me'>press me</div>
       </Link>
     </div>
