@@ -488,7 +488,7 @@ export default function Player({ videoRef, secondaryRef, containerRef, expandedC
     const windowWidth = root.clientWidth;
     const windowHeight = window.innerHeight < 800 ? 800 : window.innerHeight;
 
-    const gaps = windowWidth >= 1041 ? 64 : 36;
+    const gaps = windowWidth >= 1041 ? 74 : 46;
     const maxVideoHeight = (73.5 * window.innerHeight) / 100;
     const remainingSpace = windowWidth - (gaps + secondaryRefWidth);
     // const aspect_ratio = wideScreen ? 1920 / 1080 : 16 / 9;
@@ -894,7 +894,7 @@ export default function Player({ videoRef, secondaryRef, containerRef, expandedC
     const hoverBars = document.querySelectorAll(".chapter-hover");
     // console.log("running");
     let totalWidth = 0;
-    const chapterContainerRefWidth = miniPlayerBoolean.current === true ? 400 : chapterContainerRef.current.clientWidth - 28;
+    const chapterContainerRefWidth = miniPlayer === true ? 400 : chapterContainerRef.current.clientWidth - 28;
     if (chapters.length === 0) return;
     chaptersContainers.forEach((chaptersContainer, index) => {
       const calculatedPercentage = ((chapters[index].end - chapters[index].start) / chapters[chapters.length - 1].end) * 100;
