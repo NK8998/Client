@@ -35,7 +35,12 @@ export default function Watch({ watchRef, miniplayerRef, miniPlayerBoolean }) {
         <div className='secondary' ref={secondaryRef}>
           <div className='pseudo-link'>
             <Link to={"/watch?v=ZMIjWdisZf4"} onClick={() => dispatch(fetchWatchData("ZMIjWdisZf4", "/watch"))}>
-              Next video
+              first video
+            </Link>
+          </div>
+          <div className='pseudo-link'>
+            <Link to={"/watch?v=01fcm15LWbo"} onClick={() => dispatch(fetchWatchData("01fcm15LWbo", "/watch"))}>
+              second video
             </Link>
           </div>
         </div>

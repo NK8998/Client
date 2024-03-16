@@ -222,8 +222,68 @@ export const fetchWatchData = (videoId, currentRoute) => {
         duration_timestamp: "02:24",
         aspect_ratio: 2.406,
       },
+      {
+        id: 8,
+        created_at: "2024-03-16T12:25:41.051681+00:00",
+        video_id: "01fcm15LWbo",
+        resolutions: [
+          {
+            width: 1920,
+            height: 824,
+            bitrate: 2500,
+            framerate: 25,
+            tag: "1080p",
+            supersript: "HD",
+          },
+          {
+            width: 1280,
+            height: 548,
+            bitrate: 2000,
+            framerate: 25,
+            tag: "720p",
+            supersript: "",
+          },
+          {
+            width: 640,
+            height: 274,
+            bitrate: 800,
+            framerate: 25,
+            tag: "360p",
+            supersript: "",
+          },
+          {
+            width: 256,
+            height: 110,
+            bitrate: 200,
+            framerate: 25,
+            tag: "144p",
+            supersript: "",
+          },
+        ],
+        extraction_and_palette: { extractionRate: 1, paletteSize: 5 },
+        captions_url: null,
+        channel_id: "UCISaSW2bq0PcmxxsejrESu81eUff2",
+        mpd_url: "https://getting-started8998.s3.ap-south-1.amazonaws.com/01fcm15LWbo/chunks/output.mpd",
+        possible_thumbnail_urls: {
+          "thumbnailUrl-0": "https://getting-started8998.s3.ap-south-1.amazonaws.com/01fcm15LWbo/possible_thumbnails/output_0001_preview.jpeg",
+          "thumbnailUrl-1": "https://getting-started8998.s3.ap-south-1.amazonaws.com/01fcm15LWbo/possible_thumbnails/output_0048_preview.jpeg",
+          "thumbnailUrl-2": "https://getting-started8998.s3.ap-south-1.amazonaws.com/01fcm15LWbo/possible_thumbnails/output_0094_preview.jpeg",
+        },
+        preferred_thumbnail_url: null,
+        palette_urls: {
+          "palleteUrl-0": "https://getting-started8998.s3.ap-south-1.amazonaws.com/01fcm15LWbo/palletes/batch_001_palette.jpeg",
+          "palleteUrl-1": "https://getting-started8998.s3.ap-south-1.amazonaws.com/01fcm15LWbo/palletes/batch_002_palette.jpeg",
+          "palleteUrl-2": "https://getting-started8998.s3.ap-south-1.amazonaws.com/01fcm15LWbo/palletes/batch_003_palette.jpeg",
+          "palleteUrl-3": "https://getting-started8998.s3.ap-south-1.amazonaws.com/01fcm15LWbo/palletes/batch_004_palette.jpeg",
+        },
+        duration: 96.36,
+        description_string: null,
+        duration_timestamp: "01:36",
+        aspect_ratio: 2.33,
+        title: "[219] AVATAR 2 The Way of Water (2022) Ultrawide 4K HDR Trailer   UltrawideVideos.mp4",
+      },
     ];
-    const playingVideoData = videoId === "ZMIjWdisZf4" ? videosArr[0] : videosArr[1];
+    const playingVideoData = videosArr.find((video) => video.video_id === videoId);
     const recommendationsData = simulateRecommendations;
     const newVideoObject = { videoId: videoId, recommendations: recommendationsData, videoData: playingVideoData };
     dispatch(updateIsFetching());
