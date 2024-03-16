@@ -655,6 +655,62 @@ export default function Player({ videoRef, secondaryRef, containerRef, expandedC
     scrubbingPreviewContainer.style.left = scrubbingLeft;
   };
 
+  const retrieveCurPalleteAndTile = (currentTime) => {
+    const { paletteSize, extractionRate } = extraction_and_palette;
+
+    const pallete = paletteSize * paletteSize;
+    const timePerPallete = extractionRate * pallete;
+    const currentPallete = Math.floor(currentTime / timePerPallete);
+    // Get the total elapsed time within all palettes
+    const elapsedTimeWithinCurrentPallete = currentTime - currentPallete * timePerPallete;
+
+    const currentTile = Math.floor(elapsedTimeWithinCurrentPallete / extractionRate) + 1;
+
+    const backgroundPallete = palette_urls[`palleteUrl-${currentPallete}`];
+
+    return { currentTile: currentTile, backgroundPallete: backgroundPallete };
+  };
+
+  const previewCanvas = (currentTime) => {
+    const { currentTile, backgroundPallete } = retrieveCurPalleteAndTile(currentTime);
+    const { paletteSize } = extraction_and_palette;
+    const previewImageBg = document.querySelector(".preview-image-bg");
+    previewImageBg.classList.add("show");
+    const style = getComputedStyle(document.documentElement);
+
+    let height;
+    let width;
+    if (!theatreMode) {
+      height = parseInt(style.getPropertyValue("--height").split("px")[0]);
+      width = parseInt(style.getPropertyValue("--width").split("px")[0]);
+    } else {
+      const theatreHeight = parseInt(style.getPropertyValue("--theatreHeight").split("px")[0]);
+      const theatreWidth = parseInt(style.getPropertyValue("--theatreWidth").split("px")[0]);
+      height = theatreWidth * aspect_ratio;
+      width = theatreHeight * aspect_ratio;
+      if (width > theatreWidth) {
+        width = theatreWidth;
+        height = width * (1 / aspect_ratio);
+      }
+      if (height > theatreHeight) {
+        height = theatreHeight;
+      }
+    }
+    previewImageBg.style.height = `${height}px`;
+    previewImageBg.style.width = `${width}px`;
+
+    console.log({ height }, { width });
+    const offsetX = ((currentTile - 1) % paletteSize) * width;
+    const offsetY = Math.floor((currentTile - 1) / paletteSize) * height;
+    previewImageBg.style.backgroundSize = `${width * paletteSize}px ${height * paletteSize}px`;
+    let backgroundImage = previewImageBg.style.backgroundImage;
+    let url = backgroundImage.slice(5, backgroundImage.length - 2);
+    if (url !== backgroundPallete) {
+      previewImageBg.style.backgroundImage = `url(${backgroundPallete})`;
+    }
+    previewImageBg.style.backgroundPosition = `-${offsetX}px -${offsetY}px`;
+  };
+
   const movePreviews = (e, hoveringIndex) => {
     const previewTime = document.querySelector(".preview-time");
     const scrubbingPreview = document.querySelector(".preview-img-container");
@@ -668,19 +724,10 @@ export default function Player({ videoRef, secondaryRef, containerRef, expandedC
     const currentTime = chapters[hoveringIndex].start + timeOffset;
     const timeStamp = getTimeStamp(Math.trunc(currentTime));
     previewTime.textContent = timeStamp;
-    const { paletteSize, extractionRate } = extraction_and_palette;
-
-    const pallete = paletteSize * paletteSize;
-    const timePerPallete = extractionRate * pallete;
-    const currentPallete = Math.floor(currentTime / timePerPallete);
-    // Get the total elapsed time within all palettes
-    const elapsedTimeWithinCurrentPallete = currentTime - currentPallete * timePerPallete;
-
-    const currentTile = Math.floor(elapsedTimeWithinCurrentPallete / extractionRate) + 1;
-
-    const backgroundPallete = palette_urls[`palleteUrl-${currentPallete}`];
+    const { currentTile, backgroundPallete } = retrieveCurPalleteAndTile(currentTime);
     const width = scrubbingPreview.clientWidth;
     const height = scrubbingPreview.clientHeight;
+    const { paletteSize } = extraction_and_palette;
 
     // Calculate background offsets based on tile size and currentTile
     const offsetX = ((currentTile - 1) % paletteSize) * width;
@@ -781,6 +828,8 @@ export default function Player({ videoRef, secondaryRef, containerRef, expandedC
     const ratio = position / currentChapterWidth;
     const timeOffset = ratio * chapterDuration;
     const currentTime = chapters[currentIndex].start + timeOffset;
+    previewCanvas(currentTime);
+
     currentTimeTracker.current = currentTime;
 
     redDotRef.current.style.scale = chapters.length === 1 ? 1 : 1.5;
@@ -816,6 +865,8 @@ export default function Player({ videoRef, secondaryRef, containerRef, expandedC
   };
 
   const stopDragging = () => {
+    const previewImageBg = document.querySelector(".preview-image-bg");
+    previewImageBg.classList.remove("show");
     document.documentElement.style.setProperty("--select", "");
     const style = getComputedStyle(document.documentElement);
     if (mouseDownTracker.current) {
@@ -1035,6 +1086,7 @@ export default function Player({ videoRef, secondaryRef, containerRef, expandedC
           <div className='captions-container-relative'></div>
         </div>
         <div className='player-inner-absolute'>
+          <div className='preview-image-bg' />
           <Loader spinnerRef={spinnerRef} />
           <div className='player-inner-relative' ref={controlsRef}>
             <ScrubbingPreviews videoRef={videoRef} />

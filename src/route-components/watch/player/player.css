@@ -437,6 +437,21 @@
   font-size: 12px;
   color: rgba(255, 255, 255, 0.842);
 }
+.preview-image-bg{
+  background-color: black;
+  position: absolute;
+  z-index: 0;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  visibility: hidden;
+
+}
+.preview-image-bg.show{
+  /* pointer-events: all; */
+  visibility: visible;
+}
  
 @media(max-width: 65em){
     .player-outer.theatre, .html5-player.theatre{
