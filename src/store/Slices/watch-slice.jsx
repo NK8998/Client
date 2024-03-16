@@ -156,7 +156,8 @@ export const fetchWatchData = (videoId, currentRoute) => {
           "palleteUrl-5": "https://getting-started8998.s3.ap-south-1.amazonaws.com/ZMIjWdisZf4/palletes/batch_006_palette.jpeg",
         },
         duration: 148.106,
-        description_string: null,
+        description_string:
+          "ajknjksfnjksdbf\n asdabbf\n\najdbajksf\n adjbadsjh\n 0:00 - \n 0:40 - chapter2 \n 1:00 - chapter3 \n 1:10 - chapter4 \n 4efnjksdfbsjkdfbjksdfbsjk",
         duration_timestamp: "02:28",
         aspect_ratio: 1.778,
       },

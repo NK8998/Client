@@ -745,7 +745,7 @@ export default function Player({ videoRef, secondaryRef, containerRef, expandedC
     const timeOffset = ratio * chapterDuration;
     const currentTime = chapters[currentIndex].start + timeOffset;
     videoRef.current.currentTime = currentTime;
-    console.log(currentTime);
+    // console.log(currentTime);
 
     redDotRef.current.style.scale = chapters.length === 1 ? 1 : 1.5;
     chapters.forEach((chapter, index) => {

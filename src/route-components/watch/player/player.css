@@ -415,7 +415,7 @@
   pointer-events: none;
   opacity: 0;
   position: absolute;
-  bottom: 65px;
+  bottom: 75px;
   left: calc(100% - 260px);
 }
 .scrubbing-preview-container.show{
@@ -429,7 +429,7 @@
   
 }
 .preview-time-container{
-  margin-top: 5px;
+  margin-top: 10px;
 }
 .preview-time{
   width: fit-content;
