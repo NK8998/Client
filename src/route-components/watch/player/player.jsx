@@ -696,6 +696,7 @@ export default function Player({ videoRef, secondaryRef, containerRef, expandedC
   };
 
   const updateScrubbingBar = (e) => {
+    handleHover();
     const hoveringIndex = e.target.getAttribute("dataIndex");
     document.documentElement.style.setProperty("--hoverChapterIndex", `${hoveringIndex}`);
     movePreviews(e, hoveringIndex);
