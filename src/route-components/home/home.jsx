@@ -14,7 +14,7 @@ export default function Home({ homeRef }) {
       </div>
       <div className='grid-renderers'>
         <div className='pseudo-link'>
-          <Link to={"/watch?v=fgj89bjloQ"} onClick={(e) => handleNavigation(e, `/watch?v=fgj89bjloQ`)}>
+          <Link to={"/watch?v=F5Uy13S7Wlq"} onClick={(e) => handleNavigation(e, `/watch?v=F5Uy13S7Wlq`)}>
             <div className='press me'>press me</div>
           </Link>
           <Link to={"/@AbanPreach"} onClick={(e) => handleNavigation(e, `/@AbanPreach`)}>
