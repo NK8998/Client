@@ -670,7 +670,9 @@ export default function Player({ videoRef, secondaryRef, containerRef, expandedC
     const hoveringIndex = e.target.getAttribute("dataIndex");
     document.documentElement.style.setProperty("--hoverChapterIndex", `${hoveringIndex}`);
 
-    movePreviews(e, hoveringIndex);
+    if (hoveringIndex) {
+      movePreviews(e, hoveringIndex);
+    }
 
     document.documentElement.style.setProperty("--hovering", `true`);
 
@@ -864,23 +866,22 @@ export default function Player({ videoRef, secondaryRef, containerRef, expandedC
     const hoverBars = document.querySelectorAll(".chapter-hover");
     // console.log("running");
     let totalWidth = 0;
-    const gaps = (chapters.length - 1) * 2;
-    const chapterContainerRefWidth = miniPlayer === true ? 400 - gaps : chapterContainerRef.current.clientWidth - 28 - gaps;
+    const chapterContainerRefWidth = miniPlayer === true ? 400 : innerChapterContainerRef.current.clientWidth;
 
     if (chapters.length === 0) return;
     chaptersContainers.forEach((chaptersContainer, index) => {
       const calculatedPercentage = ((chapters[index].end - chapters[index].start) / chapters[chapters.length - 1].end) * 100;
       let width = Math.trunc((calculatedPercentage / 100) * chapterContainerRefWidth);
-      // if (index === chapters.length - 1 && chapters.length > 1) {
-      //
-      // }
-      // width -= 2;
       totalWidth += width;
 
+      if (chapters.length > 1 && index !== chapters.length - 1) {
+        width -= 2;
+      } else if (chapters.length > 1 && index === chapters.length - 1) {
+        width += chapterContainerRefWidth - totalWidth;
+      }
       hoverBars[index].style.width = `${width}px`;
       chaptersContainer.style.width = `${width}px`;
     });
-    console.log(chapterContainerRefWidth, totalWidth, gaps);
   }
 
   const handleDoubleClick = () => {
@@ -895,9 +896,6 @@ export default function Player({ videoRef, secondaryRef, containerRef, expandedC
       clearTimeout(timeoutClick.current);
     }
     timeoutClick.current = setTimeout(() => {
-      if (timeIntervalRef.current) {
-        clearInterval(timeIntervalRef.current);
-      }
       if (videoRef.current.paused) {
         videoRef.current.play();
         toPlay();

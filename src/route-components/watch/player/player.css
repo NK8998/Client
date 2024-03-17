@@ -211,6 +211,7 @@
   /* gap: 2px; */
   /* background-color: blue; */
   outline: none;
+  width: calc(100% - 28px);
 
 }
 .player-outer.focus-via-keyboard .chapters-container.single::after{
