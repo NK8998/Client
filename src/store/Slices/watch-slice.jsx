@@ -216,7 +216,8 @@ export const fetchWatchData = (videoId, currentRoute) => {
           "palleteUrl-5": "https://getting-started8998.s3.ap-south-1.amazonaws.com/QpZYoxRun3B/palletes/batch_006_palette.jpeg",
         },
         duration: 144.144,
-        description_string: null,
+        description_string:
+          "ajknjksfnjksdbf\n asdabbf\n\najdbajksf\n adjbadsjh\n 0:00 - \n 0:40 - chapter2 \n 1:00 - chapter3 \n 1:10 - chapter4 \n 1:30 - chapter4 \n 1:40 - chapter4 \n 1:50 - chapter4 \n 1:55 - chapter4 \n 2:10 - chapter4 \n  4efnjksdfbsjkdfbjksdfbsjk",
         duration_timestamp: "02:24",
         aspect_ratio: 2.406,
         title: "Marvel Studios' Avengers Infinity War Official Trailer.mp4",

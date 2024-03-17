@@ -1,6 +1,5 @@
 import { usePlayerMouseMove } from "../../utilities/player-mouse-interactions";
 import { seekVideo } from "../../utilities/player-progressBar-logic";
-import { usePlayerRefs } from "../../utilities/player-refs";
 
 export default function Chapters({
   videoRef,
@@ -16,6 +15,7 @@ export default function Chapters({
   updateScrubbingBar,
   innerChapterContainerRef,
   chapters,
+  isDragging,
 }) {
   const [handleMouseMove] = usePlayerMouseMove();
   const chapterEls = chapters.map((chapter, index) => {
@@ -55,7 +55,7 @@ export default function Chapters({
       newTime = currentTime + timeStep;
       seekVideo(newTime, videoRef);
     }
-    updateProgressBar();
+    updateProgressBar(chapters);
     updateRedDot(newTime);
   };
   const handleFocus = (e) => {
@@ -66,6 +66,7 @@ export default function Chapters({
     scrubbingPreviewContainer.classList.add("show");
   };
   const handleMouseLeave = () => {
+    if (isDragging.current === true) return;
     const scrubbingPreviewContainer = document.querySelector(".scrubbing-preview-container");
     scrubbingPreviewContainer.classList.remove("show");
   };

@@ -7,12 +7,13 @@ import BottomControls from "./player-components/bottom-controls/bottom-controls"
 import Chapters from "./player-components/chapters/chapters";
 import generateChapters from "./player-components/chapters/chaptersGen";
 import { toNormal, toPause, toPlay, toTheatre } from "./utilities/gsap-animations";
-import { seekVideo } from "./utilities/player-progressBar-logic";
+import { seekVideo, updateBufferBar, updateProgressBar } from "./utilities/player-progressBar-logic";
 import { usePlayerMouseMove } from "./utilities/player-mouse-interactions";
 import { handleFullscreen, handleTheatre } from "../../../store/Slices/watch-slice";
 import Loader from "./utilities/loader";
 import ScrubbingPreviews from "./player-components/scrubbing-previews/scrubbing-previews";
 import { getTimeStamp } from "../../../utilities/getTimestamp";
+import { usePlayerState } from "./utilities/player-refs";
 
 export default function Player({ videoRef, secondaryRef, containerRef, expandedContainerRef, primaryRef, miniplayerRef, miniPlayerBoolean }) {
   const dispatch = useDispatch();
@@ -23,9 +24,8 @@ export default function Player({ videoRef, secondaryRef, containerRef, expandedC
   const miniPlayer = useSelector((state) => state.watch.miniPlayer);
   const { description_string, duration, video_id, mpd_url, aspect_ratio, palette_urls, extraction_and_palette } = playingVideo;
 
-  const [chapters, setChapters] = useState([{ start: 0, title: "", end: 50 }]);
-  const [play, setPlay] = useState(false);
-
+  const [chapters, setChapters] = usePlayerState();
+  const [play, setPlay] = usePlayerState();
   const [handleMouseMove, handleHover, handleMouseOut] = usePlayerMouseMove();
   const playerRef = useRef();
   const redDotRef = useRef();
@@ -46,6 +46,8 @@ export default function Player({ videoRef, secondaryRef, containerRef, expandedC
   const focusViaKeyBoard = useRef(false);
   const controlsRef = useRef();
   const attempts = useRef(0);
+  const layoutShiftRef = useRef();
+  const timeoutClick = useRef();
 
   useEffect(() => {
     const generatedChapters = generateChapters(description_string, duration);
@@ -106,8 +108,8 @@ export default function Player({ videoRef, secondaryRef, containerRef, expandedC
         if (wasPlaying) {
           videoRef.current.play();
         }
-        updateBufferBar();
-        updateProgressBar();
+        updateBufferBar(chapters);
+        updateProgressBar(chapters);
         checkBuffered();
         updateRedDot("");
       };
@@ -185,7 +187,7 @@ export default function Player({ videoRef, secondaryRef, containerRef, expandedC
 
   useLayoutEffect(() => {
     toggleTheatre();
-  }, [theatreMode, chapters]);
+  }, [theatreMode]);
 
   useLayoutEffect(() => {
     toggleFullScreen();
@@ -195,9 +197,8 @@ export default function Player({ videoRef, secondaryRef, containerRef, expandedC
       if (!root) return;
       root.removeEventListener("scroll", handleScrollPosition);
     };
-  }, [fullScreen, theatreMode]);
+  }, [fullScreen]);
 
-  const layoutShiftRef = useRef();
   useLayoutEffect(() => {
     if (!miniplayerRef.current) return;
     if (!miniPlayer) {
@@ -281,6 +282,8 @@ export default function Player({ videoRef, secondaryRef, containerRef, expandedC
     root.removeEventListener("scroll", handleScrollPosition);
   };
   const toggleFullScreen = () => {
+    // console.log("togglefullscreen ran");
+
     if (!primaryRef.current || !containerRef.current) return;
     const masthead = document.querySelector(".masthead-outer");
     const root = document.querySelector("#root");
@@ -314,10 +317,11 @@ export default function Player({ videoRef, secondaryRef, containerRef, expandedC
 
       root.addEventListener("scroll", handleScrollPosition);
     } else if (primaryRef.current && !Array.from(primaryRef.current.children).includes(containerRef.current) && !fullScreen) {
-      // console.log("running");
+      // console.log("exiting fullscreen");
       if (document.fullscreenElement) {
         document.exitFullscreen();
       }
+      containerRef.current.classList.remove("fullscreen");
       if (Array.from(expandedContainerRef.current.children).includes(containerRef.current) && !theatreMode) {
         expandedContainerRef.current.removeChild(containerRef.current);
         expandedContainerRef.current.classList.remove("has-content");
@@ -342,6 +346,8 @@ export default function Player({ videoRef, secondaryRef, containerRef, expandedC
   };
 
   const toggleTheatre = () => {
+    // console.log("toggletheatre ran");
+
     const isWatchpage = location.includes("watch") || window.location.pathname.includes("watch");
     if (!isWatchpage) return;
     if (!primaryRef.current || !containerRef.current) return;
@@ -524,88 +530,6 @@ export default function Player({ videoRef, secondaryRef, containerRef, expandedC
     document.documentElement.style.setProperty("--theatreWidth", `${theatreWidth}px`);
   };
 
-  const updateBufferBar = () => {
-    const buffered = videoRef.current.buffered;
-    const currentTime = videoRef.current.currentTime;
-
-    if (buffered.length > 0) {
-      const bufferGroups = [];
-      let currentGroup = [buffered.start(0), buffered.end(0)];
-
-      for (let i = 0; i < buffered.length; i++) {
-        const start = buffered.start(i);
-        const end = buffered.end(i);
-        // console.log({ start: start }, { end: end });
-
-        if (start - currentGroup[1] <= 1) {
-          currentGroup[1] = end;
-        } else {
-          bufferGroups.push(currentGroup);
-          currentGroup = [start, end];
-        }
-      }
-      bufferGroups.push(currentGroup);
-
-      // Determine buffer range to use based on currentTime
-      let bufferToUse;
-      for (const group of bufferGroups) {
-        if (currentTime >= group[0] && currentTime <= group[1]) {
-          bufferToUse = group;
-          break;
-        }
-      }
-      if (!bufferToUse) return;
-      const bufferBarRefs = document.querySelectorAll(".buffer.bar");
-
-      bufferBarRefs.forEach((bufferBar) => {
-        const index = bufferBar.getAttribute("dataIndex"); // get the data-index attribute
-        const chapter = chapters[index]; // find the corresponding chapter
-
-        if (chapter.start <= bufferToUse[1] && chapter.end >= bufferToUse[1]) {
-          const chapterWidth = ((bufferToUse[1] - chapter.start) / (chapter.end - chapter.start)) * 100;
-          bufferBar.style.width = `${chapterWidth}%`;
-        } else if (chapter.end < bufferToUse[1]) {
-          bufferBar.style.width = `100%`;
-        } else {
-          bufferBar.style.width = `0%`;
-        }
-      });
-    }
-  };
-
-  const updateProgressBar = () => {
-    const currentTime = videoRef.current.currentTime;
-
-    const progressBarRefs = document.querySelectorAll(".progress.bar");
-
-    progressBarRefs.forEach((progressBar) => {
-      const curIndex = progressBar.getAttribute("dataIndex");
-      const chapter = chapters[curIndex];
-      if (chapter.start <= currentTime && chapter.end >= currentTime) {
-        document.documentElement.style.setProperty("--currentChapterIndex", `${curIndex}`);
-        const chapterWidth = ((currentTime - chapter.start) / (chapter.end - chapter.start)) * 100;
-        progressBar.style.width = `${chapterWidth}%`;
-      } else if (chapter.end < currentTime) {
-        progressBar.style.width = `100%`;
-      } else {
-        progressBar.style.width = `0%`;
-      }
-    });
-
-    const style = getComputedStyle(document.documentElement);
-    const hovering = style.getPropertyValue("--hovering").trim();
-    // console.log(hovering);
-
-    if (hovering === "true" && chapters.length > 1) {
-      const hoveringChapterIndex = style.getPropertyValue("--hoverChapterIndex").trim();
-      const currentChapterIndex = style.getPropertyValue("--currentChapterIndex").trim();
-      if (hoveringChapterIndex === currentChapterIndex) {
-        redDotRef.current.style.scale = 1.5;
-      } else {
-        redDotRef.current.style.scale = 1;
-      }
-    }
-  };
   const updateRedDot = (currentTimeTracker) => {
     if (chapters.length === 0) return;
     const endThreshold = Math.abs(videoRef.current.currentTime - chapters[chapters.length - 1].end);
@@ -655,7 +579,8 @@ export default function Player({ videoRef, secondaryRef, containerRef, expandedC
     scrubbingPreviewContainer.style.left = scrubbingLeft;
   };
 
-  const retrieveCurPalleteAndTile = (currentTime) => {
+  const retrieveCurPalleteAndTile = (currentTime, element, dimensions) => {
+    const { width, height } = dimensions;
     const { paletteSize, extractionRate } = extraction_and_palette;
 
     const pallete = paletteSize * paletteSize;
@@ -668,12 +593,18 @@ export default function Player({ videoRef, secondaryRef, containerRef, expandedC
 
     const backgroundPallete = palette_urls[`palleteUrl-${currentPallete}`];
 
-    return { currentTile: currentTile, backgroundPallete: backgroundPallete };
+    const offsetX = ((currentTile - 1) % paletteSize) * width;
+    const offsetY = Math.floor((currentTile - 1) / paletteSize) * height;
+    element.style.backgroundSize = `${width * paletteSize}px ${height * paletteSize}px`;
+    let backgroundImage = element.style.backgroundImage;
+    let url = backgroundImage.slice(5, backgroundImage.length - 2);
+    if (url !== backgroundPallete) {
+      element.style.backgroundImage = `url(${backgroundPallete})`;
+    }
+    element.style.backgroundPosition = `-${offsetX}px -${offsetY}px`;
   };
 
   const previewCanvas = (currentTime) => {
-    const { currentTile, backgroundPallete } = retrieveCurPalleteAndTile(currentTime);
-    const { paletteSize } = extraction_and_palette;
     const previewImageBg = document.querySelector(".preview-image-bg");
     previewImageBg.classList.add("show");
     const style = getComputedStyle(document.documentElement);
@@ -683,7 +614,7 @@ export default function Player({ videoRef, secondaryRef, containerRef, expandedC
     if (!theatreMode) {
       height = parseInt(style.getPropertyValue("--height").split("px")[0]);
       width = parseInt(style.getPropertyValue("--width").split("px")[0]);
-    } else {
+    } else if (theatreMode) {
       const theatreHeight = parseInt(style.getPropertyValue("--theatreHeight").split("px")[0]);
       const theatreWidth = parseInt(style.getPropertyValue("--theatreWidth").split("px")[0]);
       height = theatreWidth * aspect_ratio;
@@ -696,19 +627,19 @@ export default function Player({ videoRef, secondaryRef, containerRef, expandedC
         height = theatreHeight;
       }
     }
+    if (miniPlayer) {
+      width = 400;
+      height = 400 * (1 / aspect_ratio);
+    }
+    if (fullScreen) {
+      width = parseInt(style.getPropertyValue("--theatreWidth").split("px")[0]);
+      height = width * (1 / aspect_ratio);
+    }
     previewImageBg.style.height = `${height}px`;
     previewImageBg.style.width = `${width}px`;
+    const dimensions = { width: width, height: height };
 
-    console.log({ height }, { width });
-    const offsetX = ((currentTile - 1) % paletteSize) * width;
-    const offsetY = Math.floor((currentTile - 1) / paletteSize) * height;
-    previewImageBg.style.backgroundSize = `${width * paletteSize}px ${height * paletteSize}px`;
-    let backgroundImage = previewImageBg.style.backgroundImage;
-    let url = backgroundImage.slice(5, backgroundImage.length - 2);
-    if (url !== backgroundPallete) {
-      previewImageBg.style.backgroundImage = `url(${backgroundPallete})`;
-    }
-    previewImageBg.style.backgroundPosition = `-${offsetX}px -${offsetY}px`;
+    retrieveCurPalleteAndTile(currentTime, previewImageBg, dimensions);
   };
 
   const movePreviews = (e, hoveringIndex) => {
@@ -724,28 +655,21 @@ export default function Player({ videoRef, secondaryRef, containerRef, expandedC
     const currentTime = chapters[hoveringIndex].start + timeOffset;
     const timeStamp = getTimeStamp(Math.trunc(currentTime));
     previewTime.textContent = timeStamp;
-    const { currentTile, backgroundPallete } = retrieveCurPalleteAndTile(currentTime);
     const width = scrubbingPreview.clientWidth;
     const height = scrubbingPreview.clientHeight;
-    const { paletteSize } = extraction_and_palette;
+    const dimensions = { width: width, height: height };
+    retrieveCurPalleteAndTile(currentTime, scrubbingPreview, dimensions);
 
-    // Calculate background offsets based on tile size and currentTile
-    const offsetX = ((currentTile - 1) % paletteSize) * width;
-    const offsetY = Math.floor((currentTile - 1) / paletteSize) * height;
-    scrubbingPreview.style.backgroundSize = `${width * paletteSize}px ${height * paletteSize}px`;
-    let backgroundImage = scrubbingPreview.style.backgroundImage;
-    let url = backgroundImage.slice(5, backgroundImage.length - 2);
-    if (url !== backgroundPallete) {
-      scrubbingPreview.style.backgroundImage = `url(${backgroundPallete})`;
-    }
-    scrubbingPreview.style.backgroundPosition = `-${offsetX}px -${offsetY}px`;
     updatePreviewLeft(e);
   };
 
   const updateScrubbingBar = (e) => {
+    const scrubbingPreviewContainer = document.querySelector(".scrubbing-preview-container");
+    scrubbingPreviewContainer.classList.add("show");
     handleHover();
     const hoveringIndex = e.target.getAttribute("dataIndex");
     document.documentElement.style.setProperty("--hoverChapterIndex", `${hoveringIndex}`);
+
     movePreviews(e, hoveringIndex);
 
     document.documentElement.style.setProperty("--hovering", `true`);
@@ -829,7 +753,7 @@ export default function Player({ videoRef, secondaryRef, containerRef, expandedC
     const timeOffset = ratio * chapterDuration;
     const currentTime = chapters[currentIndex].start + timeOffset;
     previewCanvas(currentTime);
-
+    movePreviews(e, currentIndex);
     currentTimeTracker.current = currentTime;
 
     redDotRef.current.style.scale = chapters.length === 1 ? 1 : 1.5;
@@ -856,15 +780,8 @@ export default function Player({ videoRef, secondaryRef, containerRef, expandedC
     updateRedDot(currentTime);
   };
 
-  const handleSelect = (e) => {
-    document.documentElement.style.setProperty("--select", "none");
-    if (e && e.preventDefault) {
-      e.preventDefault();
-    }
-    return false;
-  };
-
   const stopDragging = () => {
+    const scrubbingPreviewContainer = document.querySelector(".scrubbing-preview-container");
     const previewImageBg = document.querySelector(".preview-image-bg");
     previewImageBg.classList.remove("show");
     document.documentElement.style.setProperty("--select", "");
@@ -872,8 +789,9 @@ export default function Player({ videoRef, secondaryRef, containerRef, expandedC
     if (mouseDownTracker.current) {
       clearTimeout(mouseDownTracker.current);
     }
-    isDragging.current === true && (videoRef.current.currentTime = currentTimeTracker.current);
+    videoRef.current.currentTime = currentTimeTracker.current;
     isDragging.current = false;
+    scrubbingPreviewContainer.classList.remove("show");
     if (play) {
       videoRef.current.play();
       toPlay();
@@ -881,14 +799,13 @@ export default function Player({ videoRef, secondaryRef, containerRef, expandedC
     videoRef.current.style.visibility = "visible";
     window.removeEventListener("mousemove", handleDrag);
     window.removeEventListener("mouseup", stopDragging);
-    window.removeEventListener("selectstart", handleSelect);
 
     setTimeout(() => {
       const chaptersContainers = document.querySelectorAll(".chapter-padding");
       chaptersContainers.forEach((chaptersContainer, index) => {
-        chaptersContainers[index].classList.remove("drag-expand");
+        chaptersContainer.classList.remove("drag-expand");
       });
-    }, 100);
+    }, 30);
 
     const hovering = style.getPropertyValue("--hovering").trim();
     if (hovering === "false") {
@@ -897,8 +814,10 @@ export default function Player({ videoRef, secondaryRef, containerRef, expandedC
     innerChapterContainerRef.current.classList.remove("drag-expand");
   };
 
-  const startDrag = () => {
+  const startDrag = (e) => {
+    document.documentElement.style.setProperty("--select", "none");
     mouseDownTracker.current = setTimeout(() => {
+      handleDrag(e);
       videoRef.current.pause();
       toPause();
       isDragging.current = true;
@@ -906,7 +825,6 @@ export default function Player({ videoRef, secondaryRef, containerRef, expandedC
       innerChapterContainerRef.current.classList.add("drag-expand");
       window.addEventListener("mousemove", handleDrag);
       window.addEventListener("mouseup", stopDragging);
-      window.addEventListener("selectstart", handleSelect);
     }, 130);
   };
 
@@ -925,8 +843,8 @@ export default function Player({ videoRef, secondaryRef, containerRef, expandedC
     }
     intervalRef.current = setInterval(() => {
       // console.log("running");
-      updateBufferBar();
-      updateProgressBar();
+      updateBufferBar(chapters);
+      updateProgressBar(chapters);
       updateRedDot("");
     }, 60);
   };
@@ -953,17 +871,13 @@ export default function Player({ videoRef, secondaryRef, containerRef, expandedC
       let width = Math.trunc((calculatedPercentage / 100) * chapterContainerRefWidth);
       hoverBars[index].style.width = `${width}px`;
       totalWidth += width;
-      if (index === chapters.length - 1) {
-        // Adjust the width of the last chapter block to fill the remaining space
-        width += chapterContainerRefWidth - totalWidth;
-      } else {
+      if (index !== chapters.length - 1 && chapters.length > 1) {
         width -= 2;
       }
       chaptersContainer.style.width = `${width}px`;
     });
   }
 
-  const timeoutClick = useRef();
   const handleDoubleClick = () => {
     if (timeoutClick.current) {
       clearTimeout(timeoutClick.current);
@@ -1068,7 +982,7 @@ export default function Player({ videoRef, secondaryRef, containerRef, expandedC
           id='html5-player'
           onTimeUpdate={checkBuffered}
           // onWaiting={handleTracksChanged}
-          onProgress={updateBufferBar}
+          onProgress={() => updateBufferBar(chapters)}
           onClick={handlePlayState}
           onPlay={(e) => {
             setPlay(true);
@@ -1095,7 +1009,6 @@ export default function Player({ videoRef, secondaryRef, containerRef, expandedC
               updateProgressBar={updateProgressBar}
               updateRedDot={updateRedDot}
               innerChapterContainerRef={innerChapterContainerRef}
-              chapters={chapters}
               redDotRef={redDotRef}
               redDotWrapperRef={redDotWrapperRef}
               chapterContainerRef={chapterContainerRef}
@@ -1104,6 +1017,8 @@ export default function Player({ videoRef, secondaryRef, containerRef, expandedC
               stopDragging={stopDragging}
               handleClick={handleClick}
               updateScrubbingBar={updateScrubbingBar}
+              chapters={chapters}
+              isDragging={isDragging}
             />
             <BottomControls handlePlayState={handlePlayState} miniPlayerBoolean={miniPlayerBoolean} playerRef={playerRef} />
           </div>

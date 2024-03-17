@@ -1,7 +1,8 @@
-import { useRef } from "react";
+import { useState } from "react";
 
-export function usePlayerRefs() {
-  const playerRef = useRef();
+export function usePlayerState() {
+  const [chapters, setChapters] = useState([{ start: 0, title: "", end: 50 }]);
+  const [play, setPlay] = useState(false);
 
-  return playerRef;
+  return [chapters, setChapters, play, setPlay];
 }
