@@ -981,7 +981,7 @@ export default function Player({ videoRef, secondaryRef, containerRef, expandedC
         ref={containerRef}
         tabIndex={0}
         onMouseEnter={handleHover}
-        onMouseOut={handleMouseOut}
+        onMouseLeave={handleMouseOut}
         onMouseMove={handleMouseMove}
         onFocus={handlePlayerFocus}
         onBlur={handlePlayerBlur}

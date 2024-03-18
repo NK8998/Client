@@ -16,7 +16,7 @@ export const BottomControlsLeft = ({ handlePlayState }) => {
       <button type='button' className='player-button forward' onFocus={handleMouseMove}>
         <ForwardButton />
       </button>
-      <VolumeSlider handleFocus={handleMouseMove} />
+      <VolumeSlider />
     </div>
   );
 };

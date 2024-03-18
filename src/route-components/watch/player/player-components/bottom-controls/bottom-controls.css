@@ -141,6 +141,7 @@ form.volume-slider{
   background-color: white;
   border-radius: 9999px;
   height: 100%;
+  pointer-events: none;
 }
 
 .SliderThumb {
@@ -150,6 +151,7 @@ form.volume-slider{
   background-color: white;
   /* box-shadow: 0 2px 10px var(--black-a7); */
   border-radius: 10px;
+  pointer-events: none;
   
 }
 /* .SliderThumb:hover {
