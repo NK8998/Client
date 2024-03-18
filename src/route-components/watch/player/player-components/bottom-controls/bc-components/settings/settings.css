@@ -138,6 +138,9 @@
     min-width: 32px;
 }
 
+.player-outer.fullscreen .subtitles-panel, .player-outer.fullscreen.theatre .subtitles-panel {
+    width: 310px;
+}
 
 .settings-menu-selector-items{
     scrollbar-gutter: stable;
@@ -198,7 +201,8 @@
     gap: 1em;
     border-bottom: 1px solid rgba(199, 199, 199, 0.301);
 }
-.playback-speed-upper{
+.playback-speed-upper,
+.subtitles-panel-upper{
     width: calc(100% - 20px);
     padding: 10px 10px;
     padding-bottom: 15px;
@@ -207,7 +211,8 @@
     gap: 1em;
     border-bottom: 1px solid rgba(199, 199, 199, 0.301);
 }
-.playback-speed-upper-left{
+.playback-speed-upper-left,
+.subtitles-panel-upper-left{
     display: flex;
     align-items: center;
     gap: 5px;
@@ -223,7 +228,8 @@
 
 }
 .resolutions-upper svg,
-.playback-speed-upper-left svg{
+.playback-speed-upper-left svg,
+.subtitles-panel-upper-left svg{
     fill: white;
     height: 24px;
 }
@@ -234,7 +240,8 @@
     transition: height 0ms, width 0ms;
 }
 .resolution-item,
-.speed-option{
+.speed-option,
+.sub-item{
     width: calc(100% - 20px);
     min-width: 200px;
     padding: 10px 10px;
@@ -242,7 +249,9 @@
     position: relative;
     gap: 10px;
 }
-.resolution-item svg{
+.resolution-item svg,
+.speed-option svg,
+.sub-item svg{
     fill: white;
 }
 .superscript{
@@ -252,7 +261,8 @@
     color: rgba(255, 255, 255, 0.452);
 }
 .resolution-item:hover,
-.speed-option:hover{
+.speed-option:hover,
+.sub-item:hover{
     background-color: rgba(104, 104, 104, 0.534);
     cursor: pointer;
 }
@@ -274,6 +284,14 @@
 .custom-handler{
     margin-left:20px ;
 }
+.custom-handler.options{
+    margin-left: 50px;
+    text-decoration: underline;
+}
 .panel-hidden{
     visibility: hidden;
+}
+.subtitles-panel{
+    height: fit-content;
+    width: 240px;
 }

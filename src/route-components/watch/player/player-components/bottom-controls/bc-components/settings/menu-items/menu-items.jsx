@@ -35,6 +35,7 @@ export const AnnotationsMenu = ({}) => {
 
 export const SubtitlesMenu = ({}) => {
   const dispatch = useDispatch();
+  const subtitles = useSelector((state) => state.player.subtitles);
 
   return (
     <div
@@ -46,7 +47,7 @@ export const SubtitlesMenu = ({}) => {
         <p>Subtitles/CC</p>
       </div>
       <div className='settings-button-right'>
-        <p>English(auto-generated)</p>
+        <p>{subtitles}</p>
         <ArrowRightButton />
       </div>
     </div>

@@ -8,6 +8,7 @@ const playerSlicer = createSlice({
     preferredResolution: false,
     resolution: "144p",
     settingsShowing: false,
+    subtitles: "off",
   },
   reducers: {
     updateResolution: (state, action) => {
@@ -25,10 +26,13 @@ const playerSlicer = createSlice({
     updateCurrentPanel: (state, action) => {
       state.currentPanel = action.payload;
     },
+    updateSubtitles: (state, action) => {
+      state.subtitles = action.payload;
+    },
   },
 });
 
-export const { updateResolution, updateSettingsShowing, updatePreferredRes, updatePanel, updateCurrentPanel } = playerSlicer.actions;
+export const { updateResolution, updateSettingsShowing, updatePreferredRes, updatePanel, updateCurrentPanel, updateSubtitles } = playerSlicer.actions;
 export default playerSlicer.reducer;
 
 let timeout1;

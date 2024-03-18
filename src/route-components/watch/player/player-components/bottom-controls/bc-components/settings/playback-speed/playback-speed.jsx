@@ -11,6 +11,7 @@ export const PlayBackSpeed = ({}) => {
   const items = speed.map((option, index) => {
     return (
       <div className='speed-option' key={`${option}-${index}`}>
+        <p className='tick-container'></p>
         {option}
       </div>
     );
