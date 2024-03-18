@@ -111,6 +111,7 @@ export const handleTranslatingHere = (panel, currentElement, element) => {
 
     settingsScrollContainer.style.transition = `all 0ms`;
     settingsRef.style.transition = `all 0ms`;
+    settingsScrollContainer.style.transform = `translate(-${0}px, 0px)`;
 
     const panelEl = document.querySelectorAll(".panel-item");
 
