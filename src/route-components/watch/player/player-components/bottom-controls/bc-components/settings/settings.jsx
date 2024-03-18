@@ -22,6 +22,8 @@ export default function Settings({ playerRef, checkBufferedOnTrackChange }) {
 
   useLayoutEffect(setCurrentElement, [location]);
 
+  // get currentPanel and simply multiply that by whatever size it needs to grow by as for the rest css can handle resizing.
+
   return (
     <>
       <div className={`settings`} ref={settingsRef}>
