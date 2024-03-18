@@ -1,0 +1,208 @@
+.settings{
+    position: absolute;
+    right: 20px;
+    bottom: 70px;
+    z-index: 4;
+    background-color: rgba(34, 34, 34, 0.897);
+    height: fit-content;
+    width: fit-content;
+    border-radius: 14px;
+    font-size: 13px;
+    font-weight: 500;
+    padding: 8px 0px;
+    pointer-events: none;
+    opacity: 0;
+    max-height: calc(var(--height) - 100px);
+    transition: height 200ms ease, width 200ms ease, opacity 100ms ease;
+    white-space: nowrap;
+    overflow: auto;
+    overflow-x: hidden;
+    scrollbar-gutter: stable;
+
+}
+.settings-clikcregion{
+    width: 100%;
+    position: absolute;
+    bottom: 70px;
+    height: 80%;
+    left: 0;
+    z-index: 3;
+    pointer-events: none;
+}
+.settings-clikcregion.show{
+    pointer-events: all;
+}
+.settings.show{
+    opacity: 1;
+    pointer-events: all;
+
+}
+
+.player-outer.theatre .settings{
+    max-height: calc(var(--theatreHeight) - 100px);
+}
+.player-outer.theatre .menu-panel{
+    max-height: calc(var(--theatreHeight) - 100px);
+
+}
+
+/* .player-outer.fullscreen .settings{
+    height: var(--settingsHeight) ;
+    width: var(--settingsWidth);
+}
+.player-outer.fullscreen .settings-inner{
+    width: var(--settingsScrollWidth);
+    height: var(--settingsScrollHeight);
+} */
+/* .menu-panel{
+    max-height: calc(var(--height) - 100px);
+    overflow-y: scroll;
+    overflow-x: hidden;
+} */
+
+.settings-inner{
+    transition: all 200ms ease;
+    display: flex;
+    align-items: flex-end;
+    width: fit-content;
+    height: fit-content;
+
+}
+/* .player-outer.fullscreen .settings-menu-selector-items{
+    width: 100%;
+
+} */
+.settings-menu-selector-items{
+    scrollbar-gutter: stable;
+
+    height: fit-content;
+    width: fit-content;
+
+}
+/* .player-outer.fullscreen .settings-button{
+    padding: 12px 10px;
+} */
+
+.settings-button{
+    /* min-width: 320px; */
+    width: calc(100% - 20px);
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 10px;
+    gap: 3em;
+    cursor: pointer;
+}
+.settings-button:hover{
+    background-color: rgba(104, 104, 104, 0.534);
+}
+
+.settings-button svg{
+    min-height: 24px;
+    min-width: 24px;
+    fill: rgba(255, 255, 255, 0.884);
+}
+
+.settings-button-left{
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+.settings-button-right{
+    font-size: 12px;
+    font-weight: 400;
+    min-width: 70px;
+    /* background-color: blue; */
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.settings-button-right svg{
+    height: 20px;
+    fill: white;
+}
+.resolutions-upper,
+.custom-speed-upper{
+    width: calc(100% - 20px);
+    padding: 10px 10px;
+    padding-bottom: 15px;
+    display: flex;
+    align-items: center;
+    gap: 1em;
+    border-bottom: 1px solid rgba(199, 199, 199, 0.301);
+}
+.playback-speed-upper{
+    width: calc(100% - 20px);
+    padding: 10px 10px;
+    padding-bottom: 15px;
+    display: flex;
+    align-items: center;
+    gap: 1em;
+    border-bottom: 1px solid rgba(199, 199, 199, 0.301);
+}
+.playback-speed-upper-left{
+    display: flex;
+    align-items: center;
+    gap: 5px;
+
+}
+.tick-container{
+    min-width: 24px;
+}
+.tick-container svg{
+    height: 14px;
+    width: 14px;
+    transform: scale(1.4) translateY(2px);
+
+}
+.resolutions-upper svg,
+.playback-speed-upper-left svg{
+    fill: white;
+    height: 24px;
+}
+
+.resolutions-settings{
+    width: fit-content;
+    height: fit-content;
+}
+.resolution-item,
+.speed-option{
+    width: calc(100% - 20px);
+    min-width: 200px;
+    padding: 10px 10px;
+    display: flex;
+    position: relative;
+    gap: 10px;
+}
+.resolution-item svg{
+    fill: white;
+}
+.superscript{
+    left: 40%;
+    position: absolute;
+    font-size: 11px;
+    color: rgba(255, 255, 255, 0.452);
+}
+.resolution-item:hover,
+.speed-option:hover{
+    background-color: rgba(104, 104, 104, 0.534);
+    cursor: pointer;
+}
+
+.play-back-speed-outer{
+    display: flex;
+    align-items: end;
+    /* overflow-y: scroll; */
+}
+.playback-speed-panel{
+    /* overflow-y: scroll; */
+}
+
+.custom-speed{
+    width: 200px;
+    height: 150px;
+    background-color: red;
+}
+
+.custom-handler{
+    margin-left:20px ;
+}

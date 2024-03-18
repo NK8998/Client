@@ -23,6 +23,12 @@ body{
     --hoverChapterIndex: 0;
     --currentChapterIndex:0;
     --select: '';
+    --mainSettingsHeight:0;
+    --mainSettingsWidth:0;
+    --settingsHeight: 0;
+    --settingsWidth: 0;
+    --settingsScrollHeight: 0;
+    --settingsScrollWidth:0;
 }
 .flex-content{
     display: flex;

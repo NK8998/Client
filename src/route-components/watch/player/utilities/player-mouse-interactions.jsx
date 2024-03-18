@@ -3,17 +3,17 @@ import { useRef } from "react";
 export function usePlayerMouseMove() {
   const timeoutRef = useRef();
 
-  const handleMouseMove = () => {
+  const handleMouseMove = (settingsShowing) => {
     handleHover();
     if (timeoutRef.current) {
       clearTimeout(timeoutRef.current);
     }
     timeoutRef.current = setTimeout(() => {
-      handleMouseOut();
+      handleMouseOut(settingsShowing);
     }, 3000);
   };
 
-  const handleHover = () => {
+  const handleHover = (settingsShowing) => {
     const videoContainer = document.querySelector(".captions-container-relative");
     const controlsRef = document.querySelector(".player-inner-relative");
     if (!controlsRef || !videoContainer) return;
@@ -23,18 +23,18 @@ export function usePlayerMouseMove() {
       clearTimeout(timeoutRef.current);
     }
     timeoutRef.current = setTimeout(() => {
-      handleMouseOut();
+      handleMouseOut(settingsShowing);
     }, 3000);
   };
 
-  const handleMouseOut = () => {
+  const handleMouseOut = (settingsShowing) => {
     const videoContainer = document.querySelector(".captions-container-relative");
 
     const controlsRef = document.querySelector(".player-inner-relative");
     const videoRef = document.querySelector("#html5-player");
 
     if (!videoRef || !controlsRef || !videoContainer) return;
-    if (videoRef.paused) return;
+    if (videoRef.paused || settingsShowing) return;
 
     if (timeoutRef.current) {
       clearTimeout(timeoutRef.current);

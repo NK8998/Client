@@ -1,6 +1,5 @@
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-// import * as shaka from "shaka-player";
 import shaka from "shaka-player/dist/shaka-player.ui.js";
 import "./player.css";
 import BottomControls from "./player-components/bottom-controls/bottom-controls";
@@ -13,7 +12,8 @@ import { handleFullscreen, handleTheatre } from "../../../store/Slices/watch-sli
 import Loader from "./utilities/loader";
 import ScrubbingPreviews from "./player-components/scrubbing-previews/scrubbing-previews";
 import { getTimeStamp } from "../../../utilities/getTimestamp";
-import { usePlayerState } from "./utilities/player-refs";
+import { updatePreferredRes, updateResolution } from "../../../store/Slices/player-slice";
+import Settings from "./player-components/bottom-controls/bc-components/settings/settings";
 
 export default function Player({ videoRef, secondaryRef, containerRef, expandedContainerRef, primaryRef, miniplayerRef, miniPlayerBoolean }) {
   const dispatch = useDispatch();
@@ -22,10 +22,11 @@ export default function Player({ videoRef, secondaryRef, containerRef, expandedC
   const theatreMode = useSelector((state) => state.watch.theatreMode);
   const fullScreen = useSelector((state) => state.watch.fullScreen);
   const miniPlayer = useSelector((state) => state.watch.miniPlayer);
+  const settingsShowing = useSelector((state) => state.player.settingsShowing);
   const { description_string, duration, video_id, mpd_url, aspect_ratio, palette_urls, extraction_and_palette } = playingVideo;
 
-  const [chapters, setChapters] = usePlayerState();
-  const [play, setPlay] = usePlayerState();
+  const [chapters, setChapters] = useState([{ start: 0, title: "", end: 50 }]);
+  const [play, setPlay] = useState(false);
   const [handleMouseMove, handleHover, handleMouseOut] = usePlayerMouseMove();
   const playerRef = useRef();
   const redDotRef = useRef();
@@ -53,6 +54,7 @@ export default function Player({ videoRef, secondaryRef, containerRef, expandedC
     const generatedChapters = generateChapters(description_string, duration);
 
     setChapters(generatedChapters);
+    dispatch(updatePreferredRes(false));
   }, [playingVideo]);
 
   useEffect(() => {
@@ -162,7 +164,7 @@ export default function Player({ videoRef, secondaryRef, containerRef, expandedC
       }
     };
 
-    handleHover();
+    handleHover(settingsShowing);
     window.addEventListener("keydown", handleKeyPress);
     window.addEventListener("keyup", handleKeyUp);
 
@@ -220,14 +222,14 @@ export default function Player({ videoRef, secondaryRef, containerRef, expandedC
         videoRef.current.classList.remove("miniplayer");
         // toggle regular
 
-        handleMouseOut();
+        handleMouseOut(settingsShowing);
         controlsRef.current.classList.add("transition");
         layoutShiftRef.current = setTimeout(() => {
           calculateWidth();
           applyChapterStyles();
           updateRedDot("");
           controlsRef.current.classList.remove("transition");
-          handleMouseMove();
+          handleMouseMove(settingsShowing);
         }, 50);
       }
     } else if (miniPlayer) {
@@ -435,6 +437,13 @@ export default function Player({ videoRef, secondaryRef, containerRef, expandedC
         const tracks = tracksInfo.map((track) => {
           return track.height;
         });
+      });
+
+      playerRef.current.addEventListener("adaptation", (value) => {
+        const newTrack = value.newTrack.height;
+        const { resolutions } = playingVideo;
+        const resolution = resolutions.find((res) => res.height === newTrack);
+        dispatch(updateResolution(resolution.tag));
       });
 
       // Load the manifest
@@ -665,8 +674,10 @@ export default function Player({ videoRef, secondaryRef, containerRef, expandedC
 
   const updateScrubbingBar = (e) => {
     const scrubbingPreviewContainer = document.querySelector(".scrubbing-preview-container");
-    scrubbingPreviewContainer.classList.add("show");
-    handleHover();
+    if (!settingsShowing) {
+      scrubbingPreviewContainer.classList.add("show");
+    }
+    handleHover(settingsShowing);
     const hoveringIndex = e.target.getAttribute("dataIndex");
     document.documentElement.style.setProperty("--hoverChapterIndex", `${hoveringIndex}`);
 
@@ -900,7 +911,7 @@ export default function Player({ videoRef, secondaryRef, containerRef, expandedC
         videoRef.current.play();
         toPlay();
       } else {
-        handleMouseMove();
+        handleMouseMove(settingsShowing);
         videoRef.current.pause();
         toPause();
       }
@@ -915,7 +926,7 @@ export default function Player({ videoRef, secondaryRef, containerRef, expandedC
   };
   const handleContextMenu = (e) => {
     // e.preventDefault();
-    handleHover();
+    handleHover(settingsShowing);
   };
 
   const checkBufferedOnTrackChange = () => {
@@ -969,9 +980,9 @@ export default function Player({ videoRef, secondaryRef, containerRef, expandedC
         className={`player-outer`}
         ref={containerRef}
         tabIndex={0}
-        onMouseEnter={handleHover}
-        onMouseOut={handleMouseOut}
-        onMouseMove={handleMouseMove}
+        onMouseEnter={() => handleHover(settingsShowing)}
+        onMouseOut={() => handleMouseOut(settingsShowing)}
+        onMouseMove={() => handleMouseMove(settingsShowing)}
         onFocus={handlePlayerFocus}
         onBlur={handlePlayerBlur}
         onClick={handlePlayerClick}
@@ -1006,6 +1017,7 @@ export default function Player({ videoRef, secondaryRef, containerRef, expandedC
           <div className='preview-image-bg' />
           <Loader spinnerRef={spinnerRef} />
           <div className='player-inner-relative' ref={controlsRef}>
+            <Settings playerRef={playerRef} checkBufferedOnTrackChange={checkBufferedOnTrackChange} />
             <ScrubbingPreviews videoRef={videoRef} />
             <Chapters
               videoRef={videoRef}

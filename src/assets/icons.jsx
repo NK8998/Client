@@ -216,3 +216,67 @@ export const CogButton = () => {
     </svg>
   );
 };
+
+export const AmbientModeButton = () => {
+  return (
+    <svg height='24' viewBox='0 0 24 24' width='24'>
+      <path d='M21 7v10H3V7h18m1-1H2v12h20V6zM11.5 2v3h1V2h-1zm1 17h-1v3h1v-3zM3.79 3 6 5.21l.71-.71L4.5 2.29 3.79 3zm2.92 16.5L6 18.79 3.79 21l.71.71 2.21-2.21zM19.5 2.29 17.29 4.5l.71.71L20.21 3l-.71-.71zm0 19.42.71-.71L18 18.79l-.71.71 2.21 2.21z'></path>
+    </svg>
+  );
+};
+
+export const AnnotationsButton = () => {
+  return (
+    <svg height='24' viewBox='0 0 24 24' width='24'>
+      <path d='M17.5,7c1.93,0,3.5,1.57,3.5,3.5c0,1-0.53,4.5-0.85,6.5h-2.02l0.24-1.89l0.14-1.09l-1.1-0.03C15.5,13.94,14,12.4,14,10.5 C14,8.57,15.57,7,17.5,7             M6.5,7C8.43,7,10,8.57,10,10.5c0,1-0.53,4.5-0.85,6.5H7.13l0.24-1.89l0.14-1.09l-1.1-0.03 C4.5,13.94,3,12.4,3,10.5C3,8.57,4.57,7,6.5,7             M17.5,6C15.01,6,13,8.01,13,10.5c0,2.44,1.95,4.42,4.38,4.49L17,18h4c0,0,1-6,1-7.5 C22,8.01,19.99,6,17.5,6L17.5,6z             M6.5,6C4.01,6,2,8.01,2,10.5c0,2.44,1.95,4.42,4.38,4.49L6,18h4c0,0,1-6,1-7.5 C11,8.01,8.99,6,6.5,6L6.5,6z'></path>
+    </svg>
+  );
+};
+
+export const SubtitlesButton = () => {
+  return (
+    <svg height='24' viewBox='0 0 24 24' width='24'>
+      <path d='M5,11h2v2H5V11z M15,15H5v2h10V15z M19,15h-2v2h2V15z M19,11H9v2h10V11z M22,6H2v14h20V6z M3,7h18v12H3V7z'></path>
+    </svg>
+  );
+};
+
+export const PlaybackSpeedButton = () => {
+  return (
+    <svg height='24' viewBox='0 0 24 24' width='24'>
+      <path d='M10,8v8l6-4L10,8L10,8z M6.3,5L5.7,4.2C7.2,3,9,2.2,11,2l0.1,1C9.3,3.2,7.7,3.9,6.3,5z            M5,6.3L4.2,5.7C3,7.2,2.2,9,2,11 l1,.1C3.2,9.3,3.9,7.7,5,6.3z            M5,17.7c-1.1-1.4-1.8-3.1-2-4.8L2,13c0.2,2,1,3.8,2.2,5.4L5,17.7z            M11.1,21c-1.8-0.2-3.4-0.9-4.8-2 l-0.6,.8C7.2,21,9,21.8,11,22L11.1,21z            M22,12c0-5.2-3.9-9.4-9-10l-0.1,1c4.6,.5,8.1,4.3,8.1,9s-3.5,8.5-8.1,9l0.1,1 C18.2,21.5,22,17.2,22,12z'></path>
+    </svg>
+  );
+};
+
+export const QualityCogButton = () => {
+  return (
+    <svg height='24' viewBox='0 0 24 24' width='24'>
+      <path d='M15,17h6v1h-6V17z M11,17H3v1h8v2h1v-2v-1v-2h-1V17z M14,8h1V6V5V3h-1v2H3v1h11V8z            M18,5v1h3V5H18z M6,14h1v-2v-1V9H6v2H3v1 h3V14z M10,12h11v-1H10V12z'></path>
+    </svg>
+  );
+};
+
+export const ArrowRightButton = () => {
+  return (
+    <svg xmlns='http://www.w3.org/2000/svg' height='24' viewBox='0 -960 960 960' width='24'>
+      <path d='m535.847-480-189-189L384-706.153 610.153-480 384-253.847 346.847-291l189-189Z' />
+    </svg>
+  );
+};
+
+export const ArrowLeftButton = () => {
+  return (
+    <svg xmlns='http://www.w3.org/2000/svg' height='20' viewBox='0 -960 960 960' width='20'>
+      <path d='M576-253.847 349.847-480 576-706.153 613.153-669l-189 189 189 189L576-253.847Z' />
+    </svg>
+  );
+};
+
+export const TickIcon = () => {
+  return (
+    <svg xmlns='http://www.w3.org/2000/svg' height='24' viewBox='0 -960 960 960' width='24'>
+      <path d='M382-253.847 168.616-467.231l42.769-42.768L382-339.384l366.615-366.615 42.769 42.768L382-253.847Z' />
+    </svg>
+  );
+};

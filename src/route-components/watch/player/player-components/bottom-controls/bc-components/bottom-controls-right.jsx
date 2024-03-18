@@ -11,6 +11,7 @@ import { handleFullscreen, handleMiniPLayer, handleTheatre } from "../../../../.
 import { usePlayerMouseMove } from "../../../utilities/player-mouse-interactions";
 import { useNavigate } from "react-router-dom";
 import { useLayoutEffect, useRef } from "react";
+import { handleTranslating, updateSettingsShowing } from "../../../../../../store/Slices/player-slice";
 
 export const BottomControlsRight = ({ miniPlayerBoolean, playerRef }) => {
   const fullScreen = useSelector((state) => state.watch.fullScreen);
@@ -19,6 +20,7 @@ export const BottomControlsRight = ({ miniPlayerBoolean, playerRef }) => {
   const playingVideo = useSelector((state) => state.watch.playingVideo);
   const locationsArr = useSelector((state) => state.app.locationsArr);
   const isFetching = useSelector((state) => state.app.isFetching);
+  const currentPanel = useSelector((state) => state.player.currentPanel);
   const captionsRef = useRef();
   const [handleMouseMove] = usePlayerMouseMove();
   const { video_id, captions_url } = playingVideo;
@@ -81,6 +83,33 @@ export const BottomControlsRight = ({ miniPlayerBoolean, playerRef }) => {
     playerRef.current.setTextTrackVisibility(!visibility);
   };
 
+  const removeSettingsOnoutsideClick = (e) => {
+    const element = e.target;
+
+    if (!element.classList.contains("settings") && !element.closest(".settings") && !element.classList.contains("cog")) {
+      const settings = document.querySelector(".settings");
+      const settingsClickRegion = document.querySelector(".settings-clikcregion");
+      settings.classList.remove("show");
+      settingsClickRegion.classList.remove("show");
+      document.removeEventListener("click", removeSettingsOnoutsideClick);
+      dispatch(updateSettingsShowing());
+      setTimeout(() => {
+        dispatch(handleTranslating(null, currentPanel, "settings-menu-selector-items"));
+      }, 150);
+    }
+  };
+
+  const handleSettingsShowing = () => {
+    document.addEventListener("click", removeSettingsOnoutsideClick);
+    const settings = document.querySelector(".settings");
+    const settingsClickRegion = document.querySelector(".settings-clikcregion");
+    settingsClickRegion.classList.toggle("show");
+    settings.classList.toggle("show");
+    dispatch(updateSettingsShowing());
+    setTimeout(() => {
+      dispatch(handleTranslating(null, currentPanel, "settings-menu-selector-items"));
+    }, 150);
+  };
   return (
     <div className='bottom-controls-right'>
       <button
@@ -92,7 +121,7 @@ export const BottomControlsRight = ({ miniPlayerBoolean, playerRef }) => {
       >
         <CaptionsButton />
       </button>
-      <button type='button' className='player-button cog' onFocus={handleMouseMove}>
+      <button type='button' className='player-button cog' onFocus={handleMouseMove} onClick={handleSettingsShowing}>
         <CogButton />
       </button>
       <button type='button' className='player-button miniplayer' onClick={handleMiniPlayerNavigation} onFocus={handleMouseMove}>

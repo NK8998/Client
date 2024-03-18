@@ -1,3 +1,4 @@
+import { useSelector } from "react-redux";
 import { usePlayerMouseMove } from "../../utilities/player-mouse-interactions";
 import { seekVideo } from "../../utilities/player-progressBar-logic";
 
@@ -17,6 +18,7 @@ export default function Chapters({
   chapters,
   isDragging,
 }) {
+  const settingsShowing = useSelector((state) => state.player.settingsShowing);
   const [handleMouseMove] = usePlayerMouseMove();
   const chapterEls = chapters.map((chapter, index) => {
     // const calculatedPercentage = Math.round(((chapter.end - chapter.start) / chapters[chapters.length - 1].end) * 100);
@@ -66,6 +68,7 @@ export default function Chapters({
     handleMouseMove();
   };
   const handleMouseEnter = () => {
+    if (settingsShowing) return;
     const scrubbingPreviewContainer = document.querySelector(".scrubbing-preview-container");
     scrubbingPreviewContainer.classList.add("show");
   };
@@ -75,7 +78,7 @@ export default function Chapters({
     scrubbingPreviewContainer.classList.remove("show");
   };
   return (
-    <div className='chapters-absolute' ref={chapterContainerRef} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
+    <div className='chapters-absolute' ref={chapterContainerRef}>
       <div
         className={`chapters-container ${chapters.length === 1 ? "single" : ""}`}
         ref={innerChapterContainerRef}
@@ -86,6 +89,8 @@ export default function Chapters({
         onMouseDown={startDrag}
         onMouseUp={stopDragging}
         onKeyDown={handleKeyDown}
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
       >
         {chapterEls}
         <div ref={redDotWrapperRef} className='red-dot-wrapper'>
