@@ -5,7 +5,7 @@ import { handleTranslating } from "../../../../../../../../store/Slices/player-s
 export const CustomSpeed = ({}) => {
   const dispatch = useDispatch();
   return (
-    <div className='custom-speed'>
+    <div className='custom-speed panel-item'>
       <div className='custom-speed-upper' onClick={() => dispatch(handleTranslating(1, "custom-speed", "playback-speed-panel"))}>
         <ArrowLeftButton />
         <p>Playback speed</p>

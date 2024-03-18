@@ -39,10 +39,10 @@
 }
 
 .player-outer.theatre .settings{
-    max-height: calc(var(--theatreHeight) - 100px);
+    max-height: calc(var(--theatreHeight) - 50px);
 }
 .player-outer.theatre .menu-panel{
-    max-height: calc(var(--theatreHeight) - 100px);
+    max-height: calc(var(--theatreHeight) - 50px);
 
 }
 
@@ -68,10 +68,44 @@
     height: fit-content;
 
 }
-/* .player-outer.fullscreen .settings-menu-selector-items{
-    width: 100%;
+.player-outer.fullscreen .settings{
+    font-size: 18px;
+}
+.player-outer.fullscreen .settings-menu-selector-items{
+    min-width: 450px;
+    height: fit-content;
+}
+.player-outer.fullscreen .settings-button{
+    padding: 10px 10px;
 
-} */
+}
+.player-outer.fullscreen .playback-speed-panel{
+    width: 280px;
+    height: 420px;
+}
+
+.player-outer.fullscreen .resolutions-settings{
+    width: 240px;
+    height: 320px;
+
+}
+
+.player-outer.fullscreen  .resolution-item{
+    padding: 12px 10px;
+    gap: 15px;
+}
+.player-outer.fullscreen .settings-button-left {
+    gap: 20px;
+}
+.player-outer.fullscreen .settings-button-right {
+    font-size: 15px;
+}
+.player-outer.fullscreen .settings-button svg{
+    min-height: 32px;
+    min-width: 32px;
+}
+
+
 .settings-menu-selector-items{
     scrollbar-gutter: stable;
 
@@ -161,8 +195,9 @@
 }
 
 .resolutions-settings{
-    width: fit-content;
+    width: 230px;
     height: fit-content;
+    transition: height 0ms, width 0ms;
 }
 .resolution-item,
 .speed-option{
@@ -200,9 +235,11 @@
 .custom-speed{
     width: 200px;
     height: 150px;
-    background-color: red;
 }
 
 .custom-handler{
     margin-left:20px ;
+}
+.panel-hidden{
+    visibility: hidden;
 }

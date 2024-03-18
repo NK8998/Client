@@ -83,7 +83,7 @@ export const Resolutions = ({ playerRef, checkBufferedOnTrackChange }) => {
   });
 
   return (
-    <div className='resolutions-settings menu-panel'>
+    <div className='resolutions-settings menu-panel panel-item'>
       <div className='resolutions-upper' onClick={() => dispatch(handleTranslating(null, "resolutions-settings", "settings-menu-selector-items"))}>
         <ArrowLeftButton />
         <p>Quality</p>

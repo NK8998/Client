@@ -1,12 +1,17 @@
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 import "./settings.css";
 import { PanelHandler } from "./panel-handler";
-import { useLayoutEffect, useRef } from "react";
+import { useEffect, useLayoutEffect, useRef } from "react";
 import { AmbientModeMenu, AnnotationsMenu, PlayBackMenu, QualityMenu, SubtitlesMenu } from "./menu-items/menu-items";
+import { handleTranslating } from "../../../../../../../store/Slices/player-slice";
 
 export default function Settings({ playerRef, checkBufferedOnTrackChange }) {
+  const dispatch = useDispatch();
   const location = useSelector((state) => state.app.location);
+  const fullScreen = useSelector((state) => state.watch.fullScreen);
+  const currentPanel = useSelector((state) => state.player.currentPanel);
+  const panel = useSelector((state) => state.player.panel);
   const settingsRef = useRef();
   const settingsScrollContainer = useRef();
   const mainSettingsRef = useRef();
@@ -22,13 +27,15 @@ export default function Settings({ playerRef, checkBufferedOnTrackChange }) {
 
   useLayoutEffect(setCurrentElement, [location]);
 
-  // get currentPanel and simply multiply that by whatever size it needs to grow by as for the rest css can handle resizing.
+  useLayoutEffect(() => {
+    dispatch(handleTranslating(panel, currentPanel, currentPanel));
+  }, [fullScreen]);
 
   return (
     <>
       <div className={`settings`} ref={settingsRef}>
         <div className='settings-inner' ref={settingsScrollContainer}>
-          <div className='settings-menu-selector-items' ref={mainSettingsRef}>
+          <div className='settings-menu-selector-items panel-item' ref={mainSettingsRef}>
             <AmbientModeMenu />
             <AnnotationsMenu />
             <SubtitlesMenu />

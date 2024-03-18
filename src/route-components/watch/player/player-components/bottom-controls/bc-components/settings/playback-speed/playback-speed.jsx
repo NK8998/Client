@@ -17,7 +17,7 @@ export const PlayBackSpeed = ({}) => {
   });
   return (
     <div className='play-back-speed-outer '>
-      <div className='playback-speed-panel menu-panel'>
+      <div className='playback-speed-panel menu-panel panel-item'>
         <div className='playback-speed-upper'>
           <div
             className='playback-speed-upper-left'
