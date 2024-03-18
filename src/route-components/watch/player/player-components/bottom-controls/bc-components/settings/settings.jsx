@@ -2,9 +2,9 @@ import { useDispatch, useSelector } from "react-redux";
 
 import "./settings.css";
 import { PanelHandler } from "./panel-handler";
-import { useEffect, useLayoutEffect, useRef } from "react";
+import { useLayoutEffect, useRef } from "react";
 import { AmbientModeMenu, AnnotationsMenu, PlayBackMenu, QualityMenu, SubtitlesMenu } from "./menu-items/menu-items";
-import { handleTranslating } from "../../../../../../../store/Slices/player-slice";
+import { handleTranslatingHere } from "../../../../../../../store/Slices/player-slice";
 
 export default function Settings({ playerRef, checkBufferedOnTrackChange }) {
   const dispatch = useDispatch();
@@ -21,14 +21,14 @@ export default function Settings({ playerRef, checkBufferedOnTrackChange }) {
 
     settingsRef.current.style.width = `${width}px`;
     settingsRef.current.style.height = `${height}px`;
-    settingsScrollContainer.current.style.width = `${width}px`;
+    // settingsScrollContainer.current.style.width = `${width}px`;
     settingsScrollContainer.current.style.height = `${height}px`;
   };
 
   useLayoutEffect(setCurrentElement, [location]);
 
   useLayoutEffect(() => {
-    dispatch(handleTranslating(panel, currentPanel, currentPanel));
+    dispatch(handleTranslatingHere(panel, currentPanel, currentPanel));
   }, [fullScreen]);
 
   return (

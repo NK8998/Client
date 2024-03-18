@@ -65,7 +65,7 @@ export default function Chapters({
     updateRedDot(newTime);
   };
   const handleFocus = (e) => {
-    handleMouseMove();
+    // handleMouseMove();
   };
   const handleMouseEnter = () => {
     if (settingsShowing) return;

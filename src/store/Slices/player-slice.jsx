@@ -48,13 +48,14 @@ export const handleTranslating = (panel, currentElement, element) => {
       dispatch(updatePanel(panel));
     }
 
-    const currentEl = document.querySelector(`.${currentElement}`);
+    // const currentEl = document.querySelector(`.${currentElement}`);
 
     // if (currentEl) {
     //   const { width } = currentEl.getBoundingClientRect();
     //   currentEl.style.minWidth = `${width}px`;
     // }
 
+    console.log("running");
     timeout1 = setTimeout(() => {
       const panelEl = document.querySelectorAll(".panel-item");
 
@@ -64,24 +65,21 @@ export const handleTranslating = (panel, currentElement, element) => {
       const targetEl = document.querySelector(`.${element}`);
       const { width, height } = targetEl.getBoundingClientRect();
       const targetLeft = targetEl.offsetLeft;
-
-      settingsRef.style.width = `${width}px`;
-      settingsRef.style.height = `${height}px`;
-      settingsScrollContainer.style.width = `${width}px`;
-      settingsScrollContainer.style.height = `${height}px`;
       if (currentElement === element) {
-        settingsRef.style.transition = `height 0ms ease, width 0ms ease, opacity 0ms ease`;
-        settingsScrollContainer.style.transition = `all 0ms ease`;
+        settingsRef.style.transition = `all 0ms`;
+        settingsScrollContainer.style.transition = `all 0ms`;
       } else if (currentElement !== element) {
         settingsRef.style.transition = `height 200ms ease, width 200ms ease, opacity 100ms ease`;
 
         settingsScrollContainer.style.transition = `all 200ms ease`;
       }
+      settingsRef.style.width = `${width}px`;
+      settingsRef.style.height = `${height}px`;
+      // settingsScrollContainer.style.width = `${width}px`;
+      settingsScrollContainer.style.height = `${height}px`;
+
       settingsScrollContainer.style.transform = `translate(-${targetLeft}px, 0px)`;
-      timeout2 = setTimeout(() => {
-        if (typeof panel !== "number") {
-          dispatch(updatePanel(-4));
-        }
+      if (currentElement === element) {
         const panelEl = document.querySelectorAll(".panel-item");
 
         panelEl.forEach((panelel) => {
@@ -89,7 +87,60 @@ export const handleTranslating = (panel, currentElement, element) => {
             panelel.classList.add("panel-hidden");
           }
         });
+      }
+      timeout2 = setTimeout(() => {
+        if (typeof panel !== "number") {
+          dispatch(updatePanel(-4));
+        }
+        // const panelEl = document.querySelectorAll(".panel-item");
+
+        // panelEl.forEach((panelel) => {
+        //   if (!panelel.classList.contains(element)) {
+        //     panelel.classList.add("panel-hidden");
+        //   }
+        // });
       }, 200);
-    }, 40);
+    }, 5);
+  };
+};
+
+export const handleTranslatingHere = (panel, currentElement, element) => {
+  return (dispatch) => {
+    const settingsRef = document.querySelector(".settings");
+    const settingsScrollContainer = document.querySelector(".settings-inner");
+
+    settingsScrollContainer.style.transition = `all 0ms`;
+    settingsRef.style.transition = `all 0ms`;
+
+    const panelEl = document.querySelectorAll(".panel-item");
+
+    panelEl.forEach((panelel) => {
+      if (!panelel.classList.contains(element)) {
+        panelel.classList.add("panel-hidden");
+      }
+    });
+
+    setTimeout(() => {
+      if (typeof panel === "number") {
+        dispatch(updatePanel(panel));
+      }
+      const targetEl = document.querySelector(`.${element}`);
+      const { width, height } = targetEl.getBoundingClientRect();
+      const targetLeft = targetEl.offsetLeft;
+      if (currentElement === element) {
+        settingsRef.style.transition = `all 0ms`;
+        settingsScrollContainer.style.transition = `all 0ms`;
+      } else if (currentElement !== element) {
+        settingsRef.style.transition = `height 200ms ease, width 200ms ease, opacity 100ms ease`;
+
+        settingsScrollContainer.style.transition = `all 200ms ease`;
+      }
+      settingsRef.style.width = `${width}px`;
+      settingsRef.style.height = `${height}px`;
+      // settingsScrollContainer.style.width = `${width}px`;
+      settingsScrollContainer.style.height = `${height}px`;
+
+      settingsScrollContainer.style.transform = `translate(-${targetLeft}px, 0px)`;
+    }, 5);
   };
 };

@@ -14,6 +14,7 @@ import { useLayoutEffect, useRef } from "react";
 import { handleTranslating, updateSettingsShowing } from "../../../../../../store/Slices/player-slice";
 
 export const BottomControlsRight = ({ miniPlayerBoolean, playerRef }) => {
+  const settingsShowing = useSelector((state) => state.player.settingsShowing);
   const fullScreen = useSelector((state) => state.watch.fullScreen);
   const theatreMode = useSelector((state) => state.watch.theatreMode);
   const miniPlayer = useSelector((state) => state.watch.miniPlayer);
@@ -22,7 +23,7 @@ export const BottomControlsRight = ({ miniPlayerBoolean, playerRef }) => {
   const isFetching = useSelector((state) => state.app.isFetching);
   const currentPanel = useSelector((state) => state.player.currentPanel);
   const captionsRef = useRef();
-  const [handleMouseMove] = usePlayerMouseMove();
+  const [handleMouseMove, handleMouseOut] = usePlayerMouseMove();
   const { video_id, captions_url } = playingVideo;
   const timeoutRef = useRef();
   const dispatch = useDispatch();
@@ -95,7 +96,8 @@ export const BottomControlsRight = ({ miniPlayerBoolean, playerRef }) => {
       dispatch(updateSettingsShowing());
       setTimeout(() => {
         dispatch(handleTranslating(null, currentPanel, "settings-menu-selector-items"));
-      }, 150);
+      }, 100);
+      handleMouseOut();
     }
   };
 
@@ -106,9 +108,11 @@ export const BottomControlsRight = ({ miniPlayerBoolean, playerRef }) => {
     settingsClickRegion.classList.toggle("show");
     settings.classList.toggle("show");
     dispatch(updateSettingsShowing());
-    setTimeout(() => {
-      dispatch(handleTranslating(null, currentPanel, "settings-menu-selector-items"));
-    }, 150);
+    if (settingsShowing) {
+      setTimeout(() => {
+        dispatch(handleTranslating(null, currentPanel, "settings-menu-selector-items"));
+      }, 100);
+    }
   };
   return (
     <div className='bottom-controls-right'>

@@ -164,7 +164,7 @@ export default function Player({ videoRef, secondaryRef, containerRef, expandedC
       }
     };
 
-    handleHover(settingsShowing);
+    handleHover();
     window.addEventListener("keydown", handleKeyPress);
     window.addEventListener("keyup", handleKeyUp);
 
@@ -222,14 +222,14 @@ export default function Player({ videoRef, secondaryRef, containerRef, expandedC
         videoRef.current.classList.remove("miniplayer");
         // toggle regular
 
-        handleMouseOut(settingsShowing);
+        handleMouseOut();
         controlsRef.current.classList.add("transition");
         layoutShiftRef.current = setTimeout(() => {
           calculateWidth();
           applyChapterStyles();
           updateRedDot("");
           controlsRef.current.classList.remove("transition");
-          handleMouseMove(settingsShowing);
+          handleMouseMove();
         }, 50);
       }
     } else if (miniPlayer) {
@@ -677,7 +677,7 @@ export default function Player({ videoRef, secondaryRef, containerRef, expandedC
     if (!settingsShowing) {
       scrubbingPreviewContainer.classList.add("show");
     }
-    handleHover(settingsShowing);
+    handleHover();
     const hoveringIndex = e.target.getAttribute("dataIndex");
     document.documentElement.style.setProperty("--hoverChapterIndex", `${hoveringIndex}`);
 
@@ -911,7 +911,7 @@ export default function Player({ videoRef, secondaryRef, containerRef, expandedC
         videoRef.current.play();
         toPlay();
       } else {
-        handleMouseMove(settingsShowing);
+        handleMouseMove();
         videoRef.current.pause();
         toPause();
       }
@@ -926,7 +926,7 @@ export default function Player({ videoRef, secondaryRef, containerRef, expandedC
   };
   const handleContextMenu = (e) => {
     // e.preventDefault();
-    handleHover(settingsShowing);
+    handleHover();
   };
 
   const checkBufferedOnTrackChange = () => {
@@ -980,9 +980,9 @@ export default function Player({ videoRef, secondaryRef, containerRef, expandedC
         className={`player-outer`}
         ref={containerRef}
         tabIndex={0}
-        onMouseEnter={() => handleHover(settingsShowing)}
-        onMouseOut={() => handleMouseOut(settingsShowing)}
-        onMouseMove={() => handleMouseMove(settingsShowing)}
+        onMouseEnter={handleHover}
+        onMouseOut={handleMouseOut}
+        onMouseMove={handleMouseMove}
         onFocus={handlePlayerFocus}
         onBlur={handlePlayerBlur}
         onClick={handlePlayerClick}

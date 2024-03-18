@@ -43,7 +43,11 @@
 }
 .player-outer.theatre .menu-panel{
     max-height: calc(var(--theatreHeight) - 50px);
+}
 
+.player-outer.fullscreen.theatre .settings, .player-outer.fullscreen .settings,
+.player-outer.fullscreen.theatre .menu-panel, .player-outer.fullscreen .menu-panel{
+    max-height: calc(100vh - 50px);
 }
 
 /* .player-outer.fullscreen .settings{
@@ -64,43 +68,46 @@
     transition: all 200ms ease;
     display: flex;
     align-items: flex-end;
-    width: fit-content;
+    width: 1200px;
     height: fit-content;
 
 }
-.player-outer.fullscreen .settings{
+.player-outer.fullscreen  .settings, .player-outer.fullscreen.theatre  .settings{
+    transition: all 0ms ;
     font-size: 18px;
+    bottom:80px;
 }
-.player-outer.fullscreen .settings-menu-selector-items{
+.player-outer.fullscreen .settings-menu-selector-items, .player-outer.fullscreen.theatre .settings-menu-selector-items{
     min-width: 450px;
     height: fit-content;
 }
-.player-outer.fullscreen .settings-button{
+.player-outer.fullscreen .settings-button, .player-outer.fullscreen.theatre .settings-button{
     padding: 10px 10px;
 
 }
-.player-outer.fullscreen .playback-speed-panel{
+.player-outer.fullscreen .playback-speed-panel, .player-outer.fullscreen.theatre .playback-speed-panel{
     width: 280px;
-    height: 420px;
+    height: 450px;
 }
 
-.player-outer.fullscreen .resolutions-settings{
+.player-outer.fullscreen .resolutions-settings, 
+.player-outer.fullscreen.theatre .resolutions-settings{
     width: 240px;
     height: 320px;
 
 }
 
-.player-outer.fullscreen  .resolution-item{
+.player-outer.fullscreen  .resolution-item, .player-outer.fullscreen.theatre  .resolution-item{
     padding: 12px 10px;
     gap: 15px;
 }
-.player-outer.fullscreen .settings-button-left {
+.player-outer.fullscreen .settings-button-left, .player-outer.fullscreen.theatre .settings-button-left {
     gap: 20px;
 }
-.player-outer.fullscreen .settings-button-right {
+.player-outer.fullscreen .settings-button-right, .player-outer.fullscreen.theatre .settings-button-right {
     font-size: 15px;
 }
-.player-outer.fullscreen .settings-button svg{
+.player-outer.fullscreen .settings-button svg, .player-outer.fullscreen.theatre .settings-button svg{
     min-height: 32px;
     min-width: 32px;
 }
@@ -108,7 +115,8 @@
 
 .settings-menu-selector-items{
     scrollbar-gutter: stable;
-
+    max-width: 450px;
+    min-width: 280px;
     height: fit-content;
     width: fit-content;
 
@@ -118,7 +126,7 @@
 } */
 
 .settings-button{
-    /* min-width: 320px; */
+   
     width: calc(100% - 20px);
     display: flex;
     justify-content: space-between;

@@ -1,19 +1,29 @@
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
+import { useSelector } from "react-redux";
 
 export function usePlayerMouseMove() {
+  const settingsShowing = useSelector((state) => state.player.settingsShowing);
   const timeoutRef = useRef();
 
-  const handleMouseMove = (settingsShowing) => {
+  useEffect(() => {
+    if (settingsShowing) {
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
+    }
+  }, [settingsShowing]);
+
+  const handleMouseMove = () => {
     handleHover();
     if (timeoutRef.current) {
       clearTimeout(timeoutRef.current);
     }
     timeoutRef.current = setTimeout(() => {
-      handleMouseOut(settingsShowing);
+      handleMouseOut();
     }, 3000);
   };
 
-  const handleHover = (settingsShowing) => {
+  const handleHover = () => {
     const videoContainer = document.querySelector(".captions-container-relative");
     const controlsRef = document.querySelector(".player-inner-relative");
     if (!controlsRef || !videoContainer) return;
@@ -22,19 +32,20 @@ export function usePlayerMouseMove() {
     if (timeoutRef.current) {
       clearTimeout(timeoutRef.current);
     }
+
     timeoutRef.current = setTimeout(() => {
-      handleMouseOut(settingsShowing);
+      handleMouseOut();
     }, 3000);
   };
 
-  const handleMouseOut = (settingsShowing) => {
+  const handleMouseOut = () => {
     const videoContainer = document.querySelector(".captions-container-relative");
 
     const controlsRef = document.querySelector(".player-inner-relative");
     const videoRef = document.querySelector("#html5-player");
 
     if (!videoRef || !controlsRef || !videoContainer) return;
-    if (videoRef.paused || settingsShowing) return;
+    if (videoRef.paused || settingsShowing === true) return;
 
     if (timeoutRef.current) {
       clearTimeout(timeoutRef.current);
