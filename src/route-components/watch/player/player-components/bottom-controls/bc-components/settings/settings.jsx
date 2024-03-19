@@ -8,6 +8,8 @@ import { handleTranslatingHere } from "../../../../../../../store/Slices/player-
 
 export default function Settings({ playerRef, checkBufferedOnTrackChange }) {
   const dispatch = useDispatch();
+  const playingVideo = useSelector((state) => state.watch.playingVideo);
+  const { captions_url } = playingVideo;
   const location = useSelector((state) => state.app.location);
   const fullScreen = useSelector((state) => state.watch.fullScreen);
   const currentPanel = useSelector((state) => state.player.currentPanel);
@@ -33,12 +35,12 @@ export default function Settings({ playerRef, checkBufferedOnTrackChange }) {
 
   return (
     <>
-      <div className={`settings`} ref={settingsRef}>
+      <div className={`settings ${!location.includes("watch") ? "settings-hidden" : ""}`} ref={settingsRef}>
         <div className='settings-inner' ref={settingsScrollContainer}>
           <div className='settings-menu-selector-items panel-item' ref={mainSettingsRef}>
             <AmbientModeMenu />
             <AnnotationsMenu />
-            <SubtitlesMenu />
+            {captions_url && <SubtitlesMenu />}
             <PlayBackMenu />
             <QualityMenu />
           </div>
@@ -47,7 +49,7 @@ export default function Settings({ playerRef, checkBufferedOnTrackChange }) {
           </div>
         </div>
       </div>
-      <div className='settings-clikcregion'></div>
+      <div className={`settings-clikcregion ${!location.includes("watch") ? "settings-hidden" : ""}`}></div>
     </>
   );
 }

@@ -43,6 +43,11 @@ export default function Watch({ watchRef, miniplayerRef, miniPlayerBoolean }) {
               second video
             </Link>
           </div>
+          <div className='pseud-link'>
+            <Link to={"/watch?v=audxiH_CECi"} onClick={(e) => dispatch(fetchWatchData("audxiH_CECi", "/watch"))}>
+              <div className='press me'>third video</div>
+            </Link>
+          </div>
         </div>
       </div>
     </div>

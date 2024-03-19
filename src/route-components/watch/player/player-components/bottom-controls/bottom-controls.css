@@ -88,7 +88,6 @@
   margin-left: 11px;
   height: 4px;
 
-
 }
 .player-button.captions.captions-on::after{
   transform: scaleX(1);
@@ -160,6 +159,19 @@ form.volume-slider{
 .SliderThumb:focus {
   outline: none;
   /* box-shadow: 0 0 0 5px var(--black-a8); */
+}
+.time-container{
+  display: flex;
+  align-items: center;
+  font-size: 13px;
+  margin-top: -5px;
+  gap: 5px;
+  margin-left: 4px;
+  color: rgba(255, 255, 255, 0.76);
+
+}
+.player-outer.fullscreen .time-container, .player-outer.fullscreen.theatre .time-container{
+  font-size: 19px;
 }
 
 @media(max-width: 35em){

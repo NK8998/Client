@@ -22,6 +22,7 @@ export const BottomControlsRight = ({ miniPlayerBoolean, playerRef }) => {
   const locationsArr = useSelector((state) => state.app.locationsArr);
   const isFetching = useSelector((state) => state.app.isFetching);
   const currentPanel = useSelector((state) => state.player.currentPanel);
+  const location = useSelector((state) => state.app.location);
   const captionsRef = useRef();
   const [handleMouseMove, handleMouseOut] = usePlayerMouseMove();
   const { video_id, captions_url } = playingVideo;
@@ -49,6 +50,9 @@ export const BottomControlsRight = ({ miniPlayerBoolean, playerRef }) => {
       if (key === "i") {
         if (!miniPlayer) {
           handleMiniPlayerNavigation();
+          if (settingsShowing) {
+            handleSettingsShowing();
+          }
         } else {
           navigate(`/watch?v=${video_id}`);
         }
@@ -93,7 +97,7 @@ export const BottomControlsRight = ({ miniPlayerBoolean, playerRef }) => {
       settings.classList.remove("show");
       settingsClickRegion.classList.remove("show");
       document.removeEventListener("click", removeSettingsOnoutsideClick);
-      dispatch(updateSettingsShowing());
+      dispatch(updateSettingsShowing(false));
       setTimeout(() => {
         dispatch(handleTranslating(null, currentPanel, "settings-menu-selector-items"));
       }, 100);
@@ -102,18 +106,23 @@ export const BottomControlsRight = ({ miniPlayerBoolean, playerRef }) => {
   };
 
   const handleSettingsShowing = () => {
-    document.addEventListener("click", removeSettingsOnoutsideClick);
+    if (settingsShowing) {
+      document.removeEventListener("click", removeSettingsOnoutsideClick);
+    } else {
+      document.addEventListener("click", removeSettingsOnoutsideClick);
+    }
     const settings = document.querySelector(".settings");
     const settingsClickRegion = document.querySelector(".settings-clikcregion");
     settingsClickRegion.classList.toggle("show");
     settings.classList.toggle("show");
-    dispatch(updateSettingsShowing());
+    dispatch(updateSettingsShowing(!settingsShowing));
     if (settingsShowing) {
       setTimeout(() => {
         dispatch(handleTranslating(null, currentPanel, "settings-menu-selector-items"));
       }, 100);
     }
   };
+
   return (
     <div className='bottom-controls-right'>
       <button

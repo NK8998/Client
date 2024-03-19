@@ -11,9 +11,9 @@ export const Subtitles = () => {
     dispatch(handleTranslating(0, "subtitles-panel", "settings-menu-selector-items"));
   };
   const subs = ["English(UK)", "English(auto-generated)"];
-  const subEls = subs.map((sub) => {
+  const subEls = subs.map((sub, index) => {
     return (
-      <div className='sub-item' onClick={() => updateSubs(sub)}>
+      <div className='sub-item' onClick={() => updateSubs(sub)} key={`${sub}-${index}`}>
         <p className='tick-container'>{subtitles === sub && <TickIcon />}</p>
         <p>{sub}</p>
       </div>

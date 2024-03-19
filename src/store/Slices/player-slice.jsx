@@ -15,7 +15,7 @@ const playerSlicer = createSlice({
       state.resolution = action.payload;
     },
     updateSettingsShowing: (state, action) => {
-      state.settingsShowing = !state.settingsShowing;
+      state.settingsShowing = action.payload;
     },
     updatePreferredRes: (state, action) => {
       state.preferredResolution = action.payload;
@@ -59,7 +59,6 @@ export const handleTranslating = (panel, currentElement, element) => {
     //   currentEl.style.minWidth = `${width}px`;
     // }
 
-    console.log("running");
     timeout1 = setTimeout(() => {
       const panelEl = document.querySelectorAll(".panel-item");
 

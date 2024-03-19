@@ -1,6 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { handleNavigation, updateIsFetching, updateLocation } from "./app-slice";
 import { useNavigate } from "react-router-dom";
+import { updateSettingsShowing } from "./player-slice";
 
 // store each retrieved video and its recommendations in an array
 const watchSlice = createSlice({
@@ -284,6 +285,84 @@ export const fetchWatchData = (videoId, currentRoute) => {
         aspect_ratio: 1.778,
         title: "Avatar The Way of Water   Official Trailer.mp4",
       },
+      {
+        id: 20,
+        created_at: "2024-03-19T14:25:37.01544+00:00",
+        video_id: "audxiH_CECi",
+        resolutions: [
+          {
+            width: 3840,
+            height: 2160,
+            bitrate: 4000,
+            framerate: 59.94,
+            tag: "2160p",
+            supersript: "4k",
+          },
+          {
+            width: 2560,
+            height: 1440,
+            bitrate: 3000,
+            framerate: 59.94,
+            tag: "1440p",
+            supersript: "HD",
+          },
+          {
+            width: 1920,
+            height: 1080,
+            bitrate: 2500,
+            framerate: 59.94,
+            tag: "1080p",
+            supersript: "HD",
+          },
+          {
+            width: 1280,
+            height: 720,
+            bitrate: 2000,
+            framerate: 59.94,
+            tag: "720p",
+            supersript: "",
+          },
+          {
+            width: 640,
+            height: 360,
+            bitrate: 800,
+            framerate: 59.94,
+            tag: "360p",
+            supersript: "",
+          },
+          {
+            width: 256,
+            height: 144,
+            bitrate: 200,
+            framerate: 59.94,
+            tag: "144p",
+            supersript: "",
+          },
+        ],
+        extraction_and_palette: { extractionRate: 1, paletteSize: 5 },
+        captions_url: null,
+        channel_id: "UCISaSW2bq0PcmxxsejrESu81eUff2",
+        mpd_url: "https://getting-started8998.s3.ap-south-1.amazonaws.com/audxiH_CECi/chunks/output.mpd",
+        possible_thumbnail_urls: {
+          "thumbnailUrl-0": "https://getting-started8998.s3.ap-south-1.amazonaws.com/audxiH_CECi/possible_thumbnails/output_0001_preview.jpeg",
+          "thumbnailUrl-1": "https://getting-started8998.s3.ap-south-1.amazonaws.com/audxiH_CECi/possible_thumbnails/output_0064_preview.jpeg",
+          "thumbnailUrl-2": "https://getting-started8998.s3.ap-south-1.amazonaws.com/audxiH_CECi/possible_thumbnails/output_0125_preview.jpeg",
+        },
+        preferred_thumbnail_url: null,
+        palette_urls: {
+          "palleteUrl-0": "https://getting-started8998.s3.ap-south-1.amazonaws.com/audxiH_CECi/palletes/batch_001_palette.jpeg",
+          "palleteUrl-1": "https://getting-started8998.s3.ap-south-1.amazonaws.com/audxiH_CECi/palletes/batch_002_palette.jpeg",
+          "palleteUrl-2": "https://getting-started8998.s3.ap-south-1.amazonaws.com/audxiH_CECi/palletes/batch_003_palette.jpeg",
+          "palleteUrl-3": "https://getting-started8998.s3.ap-south-1.amazonaws.com/audxiH_CECi/palletes/batch_004_palette.jpeg",
+          "palleteUrl-4": "https://getting-started8998.s3.ap-south-1.amazonaws.com/audxiH_CECi/palletes/batch_005_palette.jpeg",
+          "palleteUrl-5": "https://getting-started8998.s3.ap-south-1.amazonaws.com/audxiH_CECi/palletes/batch_006_palette.jpeg",
+        },
+        duration: 126.59,
+        description_string: null,
+        duration_timestamp: "02:07",
+        aspect_ratio: 1.778,
+        title: "2020 LG OLED l The Black 4K HDR 60fps.mkv",
+      },
     ];
     const playingVideoData = videosArr.find((video) => video.video_id === videoId);
     const recommendationsData = simulateRecommendations;
@@ -359,5 +438,8 @@ export const handleMiniPLayer = (miniPlayer) => {
     } else {
       dispatch(toggleMiniPlayer(false));
     }
+    dispatch(updateSettingsShowing(false));
   };
 };
+
+[];

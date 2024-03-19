@@ -17,6 +17,9 @@ export default function Home({ homeRef }) {
           <Link to={"/watch?v=F5Uy13S7Wlq"} onClick={(e) => handleNavigation(e, `/watch?v=F5Uy13S7Wlq`)}>
             <div className='press me'>press me</div>
           </Link>
+          <Link to={"/watch?v=audxiH_CECi"} onClick={(e) => handleNavigation(e, `/watch?v=audxiH_CECi`)}>
+            <div className='press me'>press me</div>
+          </Link>
           <Link to={"/@AbanPreach"} onClick={(e) => handleNavigation(e, `/@AbanPreach`)}>
             Aba n Preach
           </Link>

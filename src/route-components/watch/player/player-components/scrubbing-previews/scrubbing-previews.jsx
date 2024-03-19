@@ -23,7 +23,7 @@ export default function ScrubbingPreviews({ videoRef }) {
         scrubbingImg.current.style.height = `${height}px`;
       }
     } else if (fullScreen) {
-      const width = 300;
+      const width = 400;
       const height = width * (1 / aspect_ratio);
       scrubbingImg.current.style.width = `${width}px`;
       scrubbingImg.current.style.height = `${height}px`;

@@ -21,6 +21,14 @@
 
 }
 
+.settings.settings-hidden.show, .settings.settings-hidden{
+    visibility: hidden;
+    pointer-events: none;
+}
+.settings-clikcregion.show.settings-hidden, .settings-clikcregion.settings-hidden{
+    visibility: hidden;
+    pointer-events: none;
+}
 .settings::-webkit-scrollbar{
     background-color: rgba(156, 156, 156, 0);
     width: 13px;
@@ -119,7 +127,7 @@
 .player-outer.fullscreen .resolutions-settings, 
 .player-outer.fullscreen.theatre .resolutions-settings{
     width: 240px;
-    height: 320px;
+    height: fit-content;
 
 }
 
@@ -209,7 +217,7 @@
     display: flex;
     align-items: center;
     gap: 1em;
-    border-bottom: 1px solid rgba(199, 199, 199, 0.301);
+    border-bottom: 1px solid rgba(199, 199, 199, 0.158);
 }
 .playback-speed-upper-left,
 .subtitles-panel-upper-left{
@@ -255,8 +263,7 @@
     fill: white;
 }
 .superscript{
-    left: 40%;
-    position: absolute;
+    margin-left: -8px;
     font-size: 11px;
     color: rgba(255, 255, 255, 0.452);
 }
@@ -279,6 +286,9 @@
 .custom-speed{
     width: 200px;
     height: 150px;
+}
+.custom-speed svg{
+    fill: white;
 }
 
 .custom-handler{

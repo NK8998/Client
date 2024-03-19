@@ -13,6 +13,13 @@ export const Resolutions = ({ playerRef, checkBufferedOnTrackChange }) => {
 
   const [currentRes, setCurrentRes] = useState();
 
+  const resetGreyBars = () => {
+    const greyBars = document.querySelectorAll(".bar.buffer");
+    greyBars.forEach((bar) => {
+      bar.style.width = `0%`;
+    });
+  };
+
   function changeResolution(resolution, tag) {
     if (resolution === currentRes) return;
     setCurrentRes(resolution);
@@ -59,6 +66,7 @@ export const Resolutions = ({ playerRef, checkBufferedOnTrackChange }) => {
         dispatch(updatePreferredRes(true));
         dispatch(updateResolution(tag));
         checkBufferedOnTrackChange();
+        resetGreyBars();
       }
     }
   }
