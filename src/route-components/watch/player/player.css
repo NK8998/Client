@@ -216,6 +216,7 @@
   width: calc(100% - 28px);
 
 }
+
 .player-outer.focus-via-keyboard .chapters-container.single::after{
   box-sizing: content-box;
   height: 9px;

@@ -11,8 +11,9 @@
 .player-outer.miniplayer .scrubbing-preview-container{
     bottom: 20px;
 }
+
 .player-outer.miniplayer .chapters-container{
-    left: -15px;
+    width: 100%;
 }
 .mini-player-inner{
     /* overflow: visible; */

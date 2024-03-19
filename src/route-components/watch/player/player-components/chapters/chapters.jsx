@@ -27,7 +27,7 @@ export default function Chapters({
         className={`chapter-hover ${chapters.length === 1 ? "single" : ""}`}
         dataindex={index}
         key={`hover-${chapter.title + index}`}
-        style={{ marginRight: index === chapters.length - 1 ? "0px" : "2px" }}
+        style={{ marginLeft: index === chapters.length - 1 ? "0px" : "0px" }}
       >
         <div
           key={`${chapter.title + index}`}

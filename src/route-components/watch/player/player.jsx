@@ -884,13 +884,14 @@ export default function Player({ videoRef, secondaryRef, containerRef, expandedC
       const calculatedPercentage = ((chapters[index].end - chapters[index].start) / chapters[chapters.length - 1].end) * 100;
       let width = Math.trunc((calculatedPercentage / 100) * chapterContainerRefWidth);
       totalWidth += width;
+      let chapterWidth = width;
 
       if (chapters.length > 1 && index !== chapters.length - 1) {
         width -= 2;
       } else if (chapters.length > 1 && index === chapters.length - 1) {
         width += chapterContainerRefWidth - totalWidth;
       }
-      hoverBars[index].style.width = `${width}px`;
+      hoverBars[index].style.width = `${chapterWidth}px`;
       chaptersContainer.style.width = `${width}px`;
     });
   }
