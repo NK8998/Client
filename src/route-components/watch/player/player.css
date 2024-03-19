@@ -11,10 +11,12 @@
 .player-if.has-content{
   height: var(--height);
   width: var(--width);
+  max-height: 73.5vh;
 }
 .player-expanded-container.has-content{
   height: var(--theatreHeight);
   width: var(--theatreWidth);
+  max-height: 81vh;
 }
 .player-outer.miniplayer .bottom-controls{
   display: none;
