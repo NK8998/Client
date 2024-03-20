@@ -3,6 +3,8 @@ import { createSlice } from "@reduxjs/toolkit";
 const playerSlicer = createSlice({
   name: "player",
   initialState: {
+    play: false,
+    chapters: [{ start: 0, title: "", end: 50 }],
     currentPanel: "settings-menu-selector-items",
     panel: -1,
     preferredResolution: false,
@@ -29,10 +31,25 @@ const playerSlicer = createSlice({
     updateSubtitles: (state, action) => {
       state.subtitles = action.payload;
     },
+    updateChapters: (state, action) => {
+      state.chapters = action.payload;
+    },
+    updatePlay: (state, action) => {
+      state.play = action.payload;
+    },
   },
 });
 
-export const { updateResolution, updateSettingsShowing, updatePreferredRes, updatePanel, updateCurrentPanel, updateSubtitles } = playerSlicer.actions;
+export const {
+  updateResolution,
+  updateSettingsShowing,
+  updatePreferredRes,
+  updatePanel,
+  updateCurrentPanel,
+  updateSubtitles,
+  updateChapters,
+  updatePlay,
+} = playerSlicer.actions;
 export default playerSlicer.reducer;
 
 let timeout1;

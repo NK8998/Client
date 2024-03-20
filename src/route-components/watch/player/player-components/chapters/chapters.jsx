@@ -1,25 +1,16 @@
 import { useSelector } from "react-redux";
 import { usePlayerMouseMove } from "../../utilities/player-mouse-interactions";
-import { seekVideo } from "../../utilities/player-progressBar-logic";
+import { seekVideo, usePlayerProgressBarLogic } from "../../utilities/player-progressBar-logic";
+import { usePlayerScrubbingBarInteractions } from "../../utilities/player-scrubbingBar-logic";
+import { usePlayerDraggingLogic } from "../../utilities/player-dragging-logic";
 
-export default function Chapters({
-  videoRef,
-  updateProgressBar,
-  updateRedDot,
-  chapterContainerRef,
-  redDotRef,
-  redDotWrapperRef,
-  resetDot,
-  startDrag,
-  stopDragging,
-  handleClick,
-  updateScrubbingBar,
-  innerChapterContainerRef,
-  chapters,
-  isDragging,
-}) {
+export default function Chapters({ videoRef, chapterContainerRef, redDotRef, redDotWrapperRef, innerChapterContainerRef }) {
   const settingsShowing = useSelector((state) => state.player.settingsShowing);
-  const [handleMouseMove] = usePlayerMouseMove();
+  const chapters = useSelector((state) => state.player.chapters);
+  const [updateBufferBar, updateProgressBar] = usePlayerProgressBarLogic();
+  const [updateScrubbingBar, previewCanvas, movePreviews] = usePlayerScrubbingBarInteractions();
+  const [startDrag, stopDragging, handleClick, handleDrag, updateRedDot, resetDot, isDragging] = usePlayerDraggingLogic();
+
   const chapterEls = chapters.map((chapter, index) => {
     // const calculatedPercentage = Math.round(((chapter.end - chapter.start) / chapters[chapters.length - 1].end) * 100);
     return (

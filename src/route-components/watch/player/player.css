@@ -16,7 +16,7 @@
 .player-expanded-container.has-content{
   height: var(--theatreHeight);
   width: var(--theatreWidth);
-  max-height: 81vh;
+  max-height: 79.5vh;
 }
 .player-outer.miniplayer .bottom-controls{
   display: none;
@@ -63,7 +63,7 @@
 .player-outer.theatre{
   width: var(--theatreWidth);
   height: var(--theatreHeight);
-  max-height: 81vh;
+  max-height: 79.5vh;
   border-radius: 0px;
   overflow: hidden;
 }
@@ -136,7 +136,7 @@
   }
 
 .html5-player.theatre{
-  max-height: 81vh;
+  max-height: 79.5vh;
   border-radius: 0px;
   height: var(--theatreHeight);
   width: var(--theatreWidth);
@@ -452,6 +452,9 @@
   pointer-events: none;
   visibility: hidden;
 
+}
+.player-outer.theatre .preview-image-bg{
+  max-height: 79.5vh;
 }
 .preview-image-bg.show{
   /* pointer-events: all; */

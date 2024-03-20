@@ -10,6 +10,7 @@ export default function ScrubbingPreviews({ videoRef }) {
   const { aspect_ratio } = playingVideo;
 
   useLayoutEffect(() => {
+    scrubbingImg.current.style.aspectRatio = aspect_ratio;
     if (!fullScreen) {
       if (miniPlayer) {
         const width = 130;

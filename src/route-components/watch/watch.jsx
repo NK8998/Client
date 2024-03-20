@@ -5,7 +5,7 @@ import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { fetchWatchData } from "../../store/Slices/watch-slice";
 
-export default function Watch({ watchRef, miniplayerRef, miniPlayerBoolean }) {
+export default function Watch({ watchRef, miniPlayerBoolean }) {
   const dispatch = useDispatch();
   const videoRef = useRef();
   const primaryRef = useRef();
@@ -19,20 +19,12 @@ export default function Watch({ watchRef, miniplayerRef, miniPlayerBoolean }) {
       <div className='columns'>
         <div className='primary'>
           <div className='player-if' ref={primaryRef}>
-            <Player
-              videoRef={videoRef}
-              secondaryRef={secondaryRef}
-              containerRef={containerRef}
-              expandedContainerRef={expandedContainerRef}
-              primaryRef={primaryRef}
-              miniplayerRef={miniplayerRef}
-              miniPlayerBoolean={miniPlayerBoolean}
-            />
+            <Player videoRef={videoRef} containerRef={containerRef} miniPlayerBoolean={miniPlayerBoolean} />
           </div>
           <div className='lower'></div>
           <div className='secondary-in-primary'></div>
         </div>
-        <div className='secondary' ref={secondaryRef}>
+        <div className='secondary content' ref={secondaryRef}>
           <div className='pseudo-link'>
             <Link to={"/watch?v=QpZYoxRun3B"} onClick={() => dispatch(fetchWatchData("QpZYoxRun3B", "/watch"))}>
               first video
