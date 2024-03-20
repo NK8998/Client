@@ -32,7 +32,6 @@ export const usePlayerStyles = () => {
   }
 
   const calculateWidth = () => {
-    // console.log("running");
     const root = document.querySelector("#root");
     const secondaryRef = document.querySelector(".secondary.content");
     if (!root) return;
