@@ -146,7 +146,7 @@ export default function Player({ videoRef, secondaryRef, containerRef, expandedC
         }
         fullScreenTimeout.current = setTimeout(() => {
           dispatch(handleFullscreen(fullScreen));
-        }, 400);
+        }, 300);
       }
     };
 
