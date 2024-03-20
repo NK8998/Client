@@ -73,10 +73,10 @@
 }
 
 .player-outer.theatre .settings{
-    max-height: calc(var(--theatreHeight) - 50px);
+    max-height: calc(var(--theatreHeight) - 80px);
 }
 .player-outer.theatre .menu-panel{
-    max-height: calc(var(--theatreHeight) - 50px);
+    /* max-height: calc(var(--theatreHeight) - 70px); */
 }
 
 .player-outer.fullscreen.theatre .settings, .player-outer.fullscreen .settings,

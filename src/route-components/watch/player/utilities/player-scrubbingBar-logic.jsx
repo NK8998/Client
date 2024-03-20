@@ -57,6 +57,7 @@ export function usePlayerScrubbingBarInteractions() {
   };
 
   const previewCanvas = (currentTime) => {
+    const playerOuter = document.querySelector(".player-outer");
     const previewImageBg = document.querySelector(".preview-image-bg");
     previewImageBg.classList.add("show");
     const style = getComputedStyle(document.documentElement);
@@ -64,11 +65,17 @@ export function usePlayerScrubbingBarInteractions() {
     let height;
     let width;
     if (!theatreMode) {
-      height = parseInt(style.getPropertyValue("--height").split("px")[0]);
-      width = parseInt(style.getPropertyValue("--width").split("px")[0]);
+      // height = parseInt(style.getPropertyValue("--height").split("px")[0]);
+      // width = parseInt(style.getPropertyValue("--width").split("px")[0]);
+      const dimensions = playerOuter.getBoundingClientRect();
+      width = dimensions.width;
+      height = dimensions.height;
     } else if (theatreMode) {
-      const theatreHeight = parseInt(style.getPropertyValue("--theatreHeight").split("px")[0]);
-      const theatreWidth = parseInt(style.getPropertyValue("--theatreWidth").split("px")[0]);
+      // const theatreHeight = parseInt(style.getPropertyValue("--theatreHeight").split("px")[0]);
+      // const theatreWidth = parseInt(style.getPropertyValue("--theatreWidth").split("px")[0]);
+      const dimensions = playerOuter.getBoundingClientRect();
+      const theatreWidth = dimensions.width;
+      const theatreHeight = dimensions.height;
       height = theatreWidth * aspect_ratio;
       width = theatreHeight * aspect_ratio;
       if (width > theatreWidth) {
@@ -84,7 +91,9 @@ export function usePlayerScrubbingBarInteractions() {
       height = 400 * (1 / aspect_ratio);
     }
     if (fullScreen) {
-      width = parseInt(style.getPropertyValue("--theatreWidth").split("px")[0]);
+      const dimensions = playerOuter.getBoundingClientRect();
+      // width = parseInt(style.getPropertyValue("--theatreWidth").split("px")[0]);
+      width = dimensions.width;
       height = width * (1 / aspect_ratio);
     }
     previewImageBg.style.height = `${height}px`;

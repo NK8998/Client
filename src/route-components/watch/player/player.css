@@ -120,6 +120,7 @@
 .html5-player{
   height: var(--height);
   width: var(--width);
+
   border-radius: 12px;
   /* overflow: hidden; */
   width: 100%;

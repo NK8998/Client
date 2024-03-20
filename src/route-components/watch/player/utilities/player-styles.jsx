@@ -1,3 +1,4 @@
+import { useRef } from "react";
 import { useSelector } from "react-redux";
 
 export const usePlayerStyles = () => {
@@ -40,9 +41,9 @@ export const usePlayerStyles = () => {
     if (secondaryRef) {
       secondaryRefWidth = secondaryRef.clientWidth;
     }
+
     const windowWidth = root.clientWidth;
     const windowHeight = window.innerHeight;
-
     const gaps = windowWidth >= 1041 ? 74 : 46;
     const maxVideoHeight = (73.5 * window.innerHeight) / 100;
     const remainingSpace = windowWidth - (gaps + secondaryRefWidth);

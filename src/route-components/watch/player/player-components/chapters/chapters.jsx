@@ -19,12 +19,13 @@ export default function Chapters({ videoRef, chapterContainerRef, redDotRef, red
         dataindex={index}
         key={`hover-${chapter.title + index}`}
         style={{ marginLeft: index === chapters.length - 1 ? "0px" : "0px" }}
+        onClick={handleClick}
       >
         <div
           key={`${chapter.title + index}`}
           className={`chapter-padding ${chapters.length === 1 ? "single" : ""}`}
           dataindex={index}
-          onClick={handleClick}
+
           // style={{ width: index === 0 ? `${calculatedPercentage}%` : `calc(${calculatedPercentage}% - 2px)` }}
         >
           <div className='grey-bg bar' dataindex={index}></div>
