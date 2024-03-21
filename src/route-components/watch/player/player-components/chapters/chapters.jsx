@@ -7,6 +7,7 @@ import { usePlayerDraggingLogic } from "../../utilities/player-dragging-logic";
 export default function Chapters({ videoRef, chapterContainerRef, redDotRef, redDotWrapperRef, innerChapterContainerRef }) {
   const settingsShowing = useSelector((state) => state.player.settingsShowing);
   const chapters = useSelector((state) => state.player.chapters);
+  const [handleMouseMove, handleHover, handleMouseOut] = usePlayerMouseMove();
   const [updateBufferBar, updateProgressBar] = usePlayerProgressBarLogic();
   const [updateScrubbingBar, previewCanvas, movePreviews] = usePlayerScrubbingBarInteractions();
   const [startDrag, stopDragging, handleClick, handleDrag, updateRedDot, resetDot, isDragging] = usePlayerDraggingLogic();
@@ -56,9 +57,6 @@ export default function Chapters({ videoRef, chapterContainerRef, redDotRef, red
     updateProgressBar(chapters);
     updateRedDot(newTime);
   };
-  const handleFocus = (e) => {
-    // handleMouseMove();
-  };
   const handleMouseEnter = () => {
     if (settingsShowing) return;
     const scrubbingPreviewContainer = document.querySelector(".scrubbing-preview-container");
@@ -75,7 +73,7 @@ export default function Chapters({ videoRef, chapterContainerRef, redDotRef, red
         className={`chapters-container ${chapters.length === 1 ? "single" : ""}`}
         ref={innerChapterContainerRef}
         tabIndex={0}
-        onFocus={handleFocus}
+        onFocus={handleMouseMove}
         onMouseMove={updateScrubbingBar}
         onMouseOut={resetDot}
         onMouseDown={startDrag}
