@@ -11,7 +11,7 @@ export const usePlayerDraggingLogic = () => {
   const chapters = useSelector((state) => state.player.chapters);
   const play = useSelector((state) => state.player.play);
   const [updateScrubbingBar, previewCanvas, movePreviews] = usePlayerScrubbingBarInteractions();
-  const [checkBufferedOnTrackChange, checkBuffered] = usePlayerBufferingState();
+  const [checkBufferedOnTrackChange, checkBuffered, clearIntervalOnTrackChange] = usePlayerBufferingState();
   const dispatch = useDispatch();
 
   const updateRedDot = (currentTimeTracker) => {
@@ -175,6 +175,7 @@ export const usePlayerDraggingLogic = () => {
       toPause();
       isDragging.current = true;
       dispatch(updateIsdragging(true));
+      clearIntervalOnTrackChange();
       videoRef.style.visibility = "hidden";
       innerChapterContainerRef.classList.add("drag-expand");
       window.addEventListener("mousemove", handleDrag);
@@ -196,11 +197,6 @@ export const usePlayerBufferingState = () => {
   const dispatch = useDispatch();
   const isDragging = useSelector((state) => state.player.isDragging);
 
-  useEffect(() => {
-    if (timeIntervalRef.current) {
-      clearInterval(timeIntervalRef.current);
-    }
-  }, [isDragging]);
   const checkBufferedOnTrackChange = () => {
     if (timeIntervalRef.current) {
       clearInterval(timeIntervalRef.current);
@@ -218,21 +214,52 @@ export const usePlayerBufferingState = () => {
   };
 
   const checkBuffered = () => {
-    // console.log("running");
     const videoRef = document.querySelector("#html5-player");
     const spinnerRef = document.querySelector(".player-spinner");
     const previewImageBg = document.querySelector(".preview-image-bg");
     if (!videoRef) return;
     const video = videoRef;
     const currentTime = video.currentTime;
-    if (video.buffered.length > 0) {
-      const lastBufferIndex = video.buffered.length - 1;
-      const end = video.buffered.end(lastBufferIndex);
+    const buffered = video.buffered;
+    if (buffered.length > 0) {
+      // const lastBufferIndex = buffered.length - 1;
+      // const end = buffered.end(lastBufferIndex);
+
+      const bufferGroups = [];
+      let currentGroup = [buffered.start(0), buffered.end(0)];
+
+      for (let i = 0; i < buffered.length; i++) {
+        const start = buffered.start(i);
+        const end = buffered.end(i);
+        // console.log({ start: start }, { end: end });
+
+        if (start - currentGroup[1] <= 1) {
+          currentGroup[1] = end;
+        } else {
+          bufferGroups.push(currentGroup);
+          currentGroup = [start, end];
+        }
+      }
+      bufferGroups.push(currentGroup);
+
+      // Determine buffer range to use based on currentTime
+      let bufferToUse;
+      for (const group of bufferGroups) {
+        if (currentTime >= group[0] && currentTime <= group[1]) {
+          bufferToUse = group;
+          break;
+        }
+      }
+      if (!bufferToUse) {
+        spinnerRef.classList.add("visible");
+        return;
+      }
+      const end = bufferToUse[1];
       if (end > currentTime && end - currentTime > 0) {
+        console.log(isDragging);
         if (isDragging === false) {
           previewImageBg.classList.remove("show");
           videoRef.style.visibility = "visible";
-          previewImageBg.style.visibility = "hidden";
         }
         spinnerRef.classList.remove("visible");
         dispatch(updateBuffering(false));

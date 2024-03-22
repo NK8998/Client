@@ -18,6 +18,7 @@ import { usePlayerClickInteractions, usePlayerkeyInteractions } from "./utilitie
 import { usePlayerStyles } from "./utilities/player-styles";
 import { useFullscreenMode, useMiniPlayermode, useTheatreMode } from "./utilities/player-modes";
 import { PreviewBgSize } from "./utilities/preview-bg-size";
+import PreviewBG from "./player-components/preview-bg/preview-bg";
 
 export default function Player({ videoRef, containerRef, miniPlayerBoolean }) {
   const dispatch = useDispatch();
@@ -137,7 +138,13 @@ export default function Player({ videoRef, containerRef, miniPlayerBoolean }) {
   }, [miniPlayer, theatreMode, fullScreen]);
 
   useEffect(() => {
-    checkBufferedOnTrackChange();
+    const isWatchpage = location.includes("watch") || window.location.pathname.includes("watch");
+
+    if (isWatchpage) {
+      checkBufferedOnTrackChange();
+    } else {
+      clearIntervalOnTrackChange();
+    }
   }, [video_id, location]);
 
   useLayoutEffect(() => {
@@ -317,7 +324,7 @@ export default function Player({ videoRef, containerRef, miniPlayerBoolean }) {
           <div className='captions-container-relative'></div>
         </div>
         <div className='player-inner-absolute'>
-          <div className='preview-image-bg' />
+          <PreviewBG />
           <Loader spinnerRef={spinnerRef} />
           <div className='player-inner-relative' ref={controlsRef}>
             <Settings playerRef={playerRef} checkBufferedOnTrackChange={checkBufferedOnTrackChange} />

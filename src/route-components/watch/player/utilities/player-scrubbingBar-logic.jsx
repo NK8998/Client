@@ -61,7 +61,6 @@ export function usePlayerScrubbingBarInteractions() {
     const playerOuter = document.querySelector(".player-outer");
     const previewImageBg = document.querySelector(".preview-image-bg");
     previewImageBg.classList.add("show");
-    previewImageBg.style.visibility = "visible";
     const style = getComputedStyle(document.documentElement);
 
     let height;
