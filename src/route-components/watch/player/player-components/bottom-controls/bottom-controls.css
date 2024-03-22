@@ -164,10 +164,13 @@ form.volume-slider{
   display: flex;
   align-items: center;
   font-size: 13px;
-  margin-top: -5px;
+  /* margin-top: -5px; */
   gap: 5px;
   margin-left: 4px;
   color: rgba(255, 255, 255, 0.76);
+  height: calc(100% - 10px);
+  margin-top: 3px;
+
 
 }
 .player-outer.fullscreen .time-container, .player-outer.fullscreen.theatre .time-container{
