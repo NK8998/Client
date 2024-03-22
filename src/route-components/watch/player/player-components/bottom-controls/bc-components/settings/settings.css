@@ -112,7 +112,7 @@
     bottom:80px;
 }
 .player-outer.fullscreen .settings-menu-selector-items, .player-outer.fullscreen.theatre .settings-menu-selector-items{
-    min-width: 450px;
+    width: fit-content;
     height: fit-content;
 }
 .player-outer.fullscreen .settings-button, .player-outer.fullscreen.theatre .settings-button{
