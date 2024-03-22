@@ -175,6 +175,7 @@ form.volume-slider{
 }
 .player-outer.fullscreen .time-container, .player-outer.fullscreen.theatre .time-container{
   font-size: 19px;
+  margin-top: 6px;
 }
 
 @media(max-width: 35em){
