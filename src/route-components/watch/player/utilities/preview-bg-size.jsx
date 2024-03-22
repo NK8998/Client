@@ -17,7 +17,8 @@ export const PreviewBgSize = () => {
   const calculateDimensions = () => {
     if (!buffering) return;
     const previewImageBg = document.querySelector(".preview-image-bg");
-    previewImageBg.classList.remove("show");
+    const prieviewBGShowing = previewImageBg.classList.contains("show");
+    if (!prieviewBGShowing) return;
 
     const style = getComputedStyle(document.documentElement);
     if (!aspect_ratio) return;

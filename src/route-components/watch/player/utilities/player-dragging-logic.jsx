@@ -256,7 +256,6 @@ export const usePlayerBufferingState = () => {
       }
       const end = bufferToUse[1];
       if (end > currentTime && end - currentTime > 0) {
-        console.log(isDragging);
         if (isDragging === false) {
           previewImageBg.classList.remove("show");
           videoRef.style.visibility = "visible";
