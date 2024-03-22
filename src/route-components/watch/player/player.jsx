@@ -13,10 +13,11 @@ import ScrubbingPreviews from "./player-components/scrubbing-previews/scrubbing-
 import { updateChapters, updatePlay, updatePreferredRes, updateResolution } from "../../../store/Slices/player-slice";
 import Settings from "./player-components/bottom-controls/bc-components/settings/settings";
 import { usePlayerScrubbingBarInteractions } from "./utilities/player-scrubbingBar-logic";
-import { checkBuffered, checkBufferedOnTrackChange, usePlayerDraggingLogic } from "./utilities/player-dragging-logic";
+import { usePlayerBufferingState, usePlayerDraggingLogic } from "./utilities/player-dragging-logic";
 import { usePlayerClickInteractions, usePlayerkeyInteractions } from "./utilities/player-key-interactions";
 import { usePlayerStyles } from "./utilities/player-styles";
 import { useFullscreenMode, useMiniPlayermode, useTheatreMode } from "./utilities/player-modes";
+import { PreviewBgSize } from "./utilities/preview-bg-size";
 
 export default function Player({ videoRef, containerRef, miniPlayerBoolean }) {
   const dispatch = useDispatch();
@@ -40,6 +41,7 @@ export default function Player({ videoRef, containerRef, miniPlayerBoolean }) {
   const [toggleTheatre] = useTheatreMode();
   const [toggleFullScreen] = useFullscreenMode();
   const [handleDoubleClick, handlePlayState] = usePlayerClickInteractions();
+  const [checkBufferedOnTrackChange, checkBuffered, clearIntervalOnTrackChange] = usePlayerBufferingState();
   const playerRef = useRef();
   const redDotRef = useRef();
   const redDotWrapperRef = useRef();
@@ -253,6 +255,7 @@ export default function Player({ videoRef, containerRef, miniPlayerBoolean }) {
   const clearIntervalProgress = () => {
     toPause();
     clearInterval(intervalRef.current);
+    clearIntervalOnTrackChange();
   };
 
   const handleContextMenu = (e) => {
@@ -330,6 +333,7 @@ export default function Player({ videoRef, containerRef, miniPlayerBoolean }) {
           </div>
         </div>
       </div>
+      <PreviewBgSize />
     </>
   );
 }

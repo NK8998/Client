@@ -452,11 +452,10 @@
   transform: translate(-50%, -50%);
   pointer-events: none;
   visibility: hidden;
+  background-repeat: no-repeat;
 
 }
-.player-outer.theatre .preview-image-bg{
-  max-height: 79.5vh;
-}
+
 .preview-image-bg.show{
   /* pointer-events: all; */
   visibility: visible;

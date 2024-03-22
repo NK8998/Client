@@ -32,6 +32,7 @@ export function usePlayerScrubbingBarInteractions() {
   };
 
   const retrieveCurPalleteAndTile = (currentTime, element, dimensions) => {
+    if (!aspect_ratio) return;
     const { width, height } = dimensions;
     const { paletteSize, extractionRate } = extraction_and_palette;
 
@@ -60,6 +61,7 @@ export function usePlayerScrubbingBarInteractions() {
     const playerOuter = document.querySelector(".player-outer");
     const previewImageBg = document.querySelector(".preview-image-bg");
     previewImageBg.classList.add("show");
+    previewImageBg.style.visibility = "visible";
     const style = getComputedStyle(document.documentElement);
 
     let height;
@@ -168,5 +170,5 @@ export function usePlayerScrubbingBarInteractions() {
       }
     });
   };
-  return [updateScrubbingBar, previewCanvas, movePreviews];
+  return [updateScrubbingBar, previewCanvas, movePreviews, retrieveCurPalleteAndTile];
 }

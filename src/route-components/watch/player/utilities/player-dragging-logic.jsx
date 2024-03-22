@@ -1,7 +1,8 @@
-import { useRef } from "react";
-import { useSelector } from "react-redux";
+import { useEffect, useRef } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { toPause, toPlay } from "./gsap-animations";
 import { usePlayerScrubbingBarInteractions } from "./player-scrubbingBar-logic";
+import { updateBuffering, updateIsdragging } from "../../../../store/Slices/player-slice";
 
 export const usePlayerDraggingLogic = () => {
   const mouseDownTracker = useRef();
@@ -10,6 +11,8 @@ export const usePlayerDraggingLogic = () => {
   const chapters = useSelector((state) => state.player.chapters);
   const play = useSelector((state) => state.player.play);
   const [updateScrubbingBar, previewCanvas, movePreviews] = usePlayerScrubbingBarInteractions();
+  const [checkBufferedOnTrackChange, checkBuffered] = usePlayerBufferingState();
+  const dispatch = useDispatch();
 
   const updateRedDot = (currentTimeTracker) => {
     const videoRef = document.querySelector("#html5-player");
@@ -45,7 +48,7 @@ export const usePlayerDraggingLogic = () => {
   };
 
   const handleClick = (e) => {
-    checkBufferedOnTrackChange();
+    // checkBufferedOnTrackChange();
     const videoRef = document.querySelector("#html5-player");
     const redDotRef = document.querySelector(".red-dot");
     const chaptersContainers = document.querySelectorAll(".chapter-padding");
@@ -84,7 +87,6 @@ export const usePlayerDraggingLogic = () => {
 
   const handleDrag = (e) => {
     const redDotRef = document.querySelector(".red-dot");
-    checkBufferedOnTrackChange();
     const style = getComputedStyle(document.documentElement);
     const chaptersContainers = document.querySelectorAll(".chapter-padding");
     const progressBarRefs = document.querySelectorAll(".progress.bar");
@@ -125,12 +127,11 @@ export const usePlayerDraggingLogic = () => {
   };
 
   const stopDragging = () => {
-    checkBufferedOnTrackChange();
+    const previewImageBg = document.querySelector(".preview-image-bg");
     const innerChapterContainerRef = document.querySelector(".chapters-container");
     const videoRef = document.querySelector("#html5-player");
     const scrubbingPreviewContainer = document.querySelector(".scrubbing-preview-container");
-    const previewImageBg = document.querySelector(".preview-image-bg");
-    previewImageBg.classList.remove("show");
+
     document.documentElement.style.setProperty("--select", "");
     const style = getComputedStyle(document.documentElement);
     if (mouseDownTracker.current) {
@@ -143,7 +144,6 @@ export const usePlayerDraggingLogic = () => {
       videoRef.play();
       toPlay();
     }
-    videoRef.style.visibility = "visible";
     window.removeEventListener("mousemove", handleDrag);
     window.removeEventListener("mouseup", stopDragging);
 
@@ -159,6 +159,10 @@ export const usePlayerDraggingLogic = () => {
       resetDot();
     }
     innerChapterContainerRef.classList.remove("drag-expand");
+    checkBufferedOnTrackChange();
+    checkBuffered();
+    dispatch(updateBuffering(true));
+    dispatch(updateIsdragging(false));
   };
 
   const startDrag = (e) => {
@@ -170,6 +174,7 @@ export const usePlayerDraggingLogic = () => {
       videoRef.pause();
       toPause();
       isDragging.current = true;
+      dispatch(updateIsdragging(true));
       videoRef.style.visibility = "hidden";
       innerChapterContainerRef.classList.add("drag-expand");
       window.addEventListener("mousemove", handleDrag);
@@ -186,37 +191,61 @@ export const usePlayerDraggingLogic = () => {
   return [startDrag, stopDragging, handleClick, handleDrag, updateRedDot, resetDot, isDragging];
 };
 
-let timeIntervalRef;
+export const usePlayerBufferingState = () => {
+  const timeIntervalRef = useRef();
+  const dispatch = useDispatch();
+  const isDragging = useSelector((state) => state.player.isDragging);
 
-export const checkBufferedOnTrackChange = () => {
-  if (timeIntervalRef) {
-    clearInterval(timeIntervalRef);
-  }
+  useEffect(() => {
+    if (timeIntervalRef.current) {
+      clearInterval(timeIntervalRef.current);
+    }
+  }, [isDragging]);
+  const checkBufferedOnTrackChange = () => {
+    if (timeIntervalRef.current) {
+      clearInterval(timeIntervalRef.current);
+    }
 
-  timeIntervalRef = setInterval(() => {
-    checkBuffered();
-  }, 250);
-};
+    timeIntervalRef.current = setInterval(() => {
+      checkBuffered();
+    }, 80);
+  };
 
-export const checkBuffered = () => {
-  // console.log("running");
-  const videoRef = document.querySelector("#html5-player");
-  const spinnerRef = document.querySelector(".player-spinner");
-  if (!videoRef) return;
-  const video = videoRef;
-  const currentTime = video.currentTime;
-  if (video.buffered.length > 0) {
-    const lastBufferIndex = video.buffered.length - 1;
-    const end = video.buffered.end(lastBufferIndex);
-    if (end > currentTime && end - currentTime > 2) {
-      spinnerRef.classList.remove("visible");
-      if (timeIntervalRef) {
-        clearInterval(timeIntervalRef);
+  const clearIntervalOnTrackChange = () => {
+    if (timeIntervalRef.current) {
+      clearInterval(timeIntervalRef.current);
+    }
+  };
+
+  const checkBuffered = () => {
+    // console.log("running");
+    const videoRef = document.querySelector("#html5-player");
+    const spinnerRef = document.querySelector(".player-spinner");
+    const previewImageBg = document.querySelector(".preview-image-bg");
+    if (!videoRef) return;
+    const video = videoRef;
+    const currentTime = video.currentTime;
+    if (video.buffered.length > 0) {
+      const lastBufferIndex = video.buffered.length - 1;
+      const end = video.buffered.end(lastBufferIndex);
+      if (end > currentTime && end - currentTime > 0) {
+        if (isDragging === false) {
+          previewImageBg.classList.remove("show");
+          videoRef.style.visibility = "visible";
+          previewImageBg.style.visibility = "hidden";
+        }
+        spinnerRef.classList.remove("visible");
+        dispatch(updateBuffering(false));
+        if (timeIntervalRef) {
+          clearInterval(timeIntervalRef);
+        }
+      } else if (currentTime > end || end - currentTime < 0) {
+        spinnerRef.classList.add("visible");
       }
-    } else if (currentTime > end || end - currentTime < 0) {
+    } else {
       spinnerRef.classList.add("visible");
     }
-  } else {
-    spinnerRef.classList.add("visible");
-  }
+  };
+
+  return [checkBufferedOnTrackChange, checkBuffered, clearIntervalOnTrackChange];
 };

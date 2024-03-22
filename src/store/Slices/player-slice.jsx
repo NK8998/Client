@@ -11,6 +11,8 @@ const playerSlicer = createSlice({
     resolution: "144p",
     settingsShowing: false,
     subtitles: "off",
+    buffering: false,
+    isDragging: false,
   },
   reducers: {
     updateResolution: (state, action) => {
@@ -37,6 +39,12 @@ const playerSlicer = createSlice({
     updatePlay: (state, action) => {
       state.play = action.payload;
     },
+    updateBuffering: (state, action) => {
+      state.buffering = action.payload;
+    },
+    updateIsdragging: (state, action) => {
+      state.isDragging = action.payload;
+    },
   },
 });
 
@@ -49,6 +57,8 @@ export const {
   updateSubtitles,
   updateChapters,
   updatePlay,
+  updateBuffering,
+  updateIsdragging,
 } = playerSlicer.actions;
 export default playerSlicer.reducer;
 

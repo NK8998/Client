@@ -4,7 +4,7 @@ import { useRef } from "react";
 import { seekVideo, usePlayerProgressBarLogic } from "./player-progressBar-logic";
 import { usePlayerMouseMove } from "./player-mouse-interactions";
 import { toPause, toPlay } from "./gsap-animations";
-import { checkBuffered, usePlayerDraggingLogic } from "./player-dragging-logic";
+import { usePlayerBufferingState, usePlayerDraggingLogic } from "./player-dragging-logic";
 
 export const usePlayerkeyInteractions = () => {
   const dispatch = useDispatch();
@@ -20,6 +20,7 @@ export const usePlayerkeyInteractions = () => {
   const [updateBufferBar, updateProgressBar] = usePlayerProgressBarLogic();
   const [handleDoubleClick, handlePlayState] = usePlayerClickInteractions();
   const [startDrag, stopDragging, handleClick, handleDrag, updateRedDot, resetDot, isDragging] = usePlayerDraggingLogic();
+  const [checkBufferedOnTrackChange, checkBuffered] = usePlayerBufferingState();
 
   const handleKeyPress = (e) => {
     const videoRef = document.querySelector("#html5-player");
