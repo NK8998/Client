@@ -1,10 +1,11 @@
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import { useSelector } from "react-redux";
 
 export const usePlayerStyles = () => {
   const playingVideo = useSelector((state) => state.watch.playingVideo);
   const miniPlayer = useSelector((state) => state.watch.miniPlayer);
   const chapters = useSelector((state) => state.player.chapters);
+  const fullScreen = useSelector((state) => state.watch.fullScreen);
   const { aspect_ratio } = playingVideo;
 
   function applyChapterStyles() {
@@ -23,7 +24,7 @@ export const usePlayerStyles = () => {
       let chapterWidth = width;
 
       if (chapters.length > 1 && index !== chapters.length - 1) {
-        width -= 2;
+        fullScreen ? (width -= 3) : (width -= 2);
       } else if (chapters.length > 1 && index === chapters.length - 1) {
         width += chapterContainerRefWidth - totalWidth;
       }
