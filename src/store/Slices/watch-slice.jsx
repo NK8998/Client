@@ -220,7 +220,7 @@ export const fetchWatchData = (videoId, currentRoute) => {
         description_string:
           "ajknjksfnjksdbf\n asdabbf\n\najdbajksf\n adjbadsjh\n 0:00 - \n 0:40 - chapter2 \n 1:00 - chapter3 \n 1:10 - chapter4 \n 1:30 - chapter4 \n 1:40 - chapter4 \n 1:50 - chapter4 \n 1:55 - chapter4 \n 2:10 - chapter4 \n  4efnjksdfbsjkdfbjksdfbsjk",
         duration_timestamp: "02:24",
-        aspect_ratio: 9 / 16,
+        aspect_ratio: 2.406,
         title: "Marvel Studios' Avengers Infinity War Official Trailer.mp4",
       },
       {
@@ -363,6 +363,114 @@ export const fetchWatchData = (videoId, currentRoute) => {
         aspect_ratio: 1.778,
         title: "2020 LG OLED l The Black 4K HDR 60fps.mkv",
       },
+      {
+        id: 22,
+        created_at: "2024-03-25T21:14:28.509139+00:00",
+        video_id: "XnY3LmSZpFy",
+        resolutions: [
+          {
+            width: 608,
+            height: 1080,
+            bitrate: 2500,
+            framerate: 30,
+            tag: "1080p",
+            supersript: "HD",
+          },
+          {
+            width: 404,
+            height: 720,
+            bitrate: 2000,
+            framerate: 30,
+            tag: "720p",
+            supersript: "",
+          },
+          {
+            width: 202,
+            height: 360,
+            bitrate: 800,
+            framerate: 30,
+            tag: "360p",
+            supersript: "",
+          },
+          {
+            width: 80,
+            height: 144,
+            bitrate: 200,
+            framerate: 30,
+            tag: "144p",
+            supersript: "",
+          },
+        ],
+        extraction_and_palette: { extractionRate: 1, paletteSize: 5 },
+        captions_url: null,
+        channel_id: "UCISaSW2bq0PcmxxsejrESu81eUff2",
+        mpd_url: "https://getting-started8998.s3.ap-south-1.amazonaws.com/XnY3LmSZpFy/chunks/output.mpd",
+        possible_thumbnail_urls: {
+          "thumbnailUrl-0": "https://getting-started8998.s3.ap-south-1.amazonaws.com/XnY3LmSZpFy/possible_thumbnails/output_0001_preview.jpeg",
+          "thumbnailUrl-1": "https://getting-started8998.s3.ap-south-1.amazonaws.com/XnY3LmSZpFy/possible_thumbnails/output_0030_preview.jpeg",
+          "thumbnailUrl-2": "https://getting-started8998.s3.ap-south-1.amazonaws.com/XnY3LmSZpFy/possible_thumbnails/output_0058_preview.jpeg",
+        },
+        preferred_thumbnail_url: null,
+        palette_urls: {
+          "palleteUrl-0": "https://getting-started8998.s3.ap-south-1.amazonaws.com/XnY3LmSZpFy/palletes/batch_001_palette.jpeg",
+          "palleteUrl-1": "https://getting-started8998.s3.ap-south-1.amazonaws.com/XnY3LmSZpFy/palletes/batch_002_palette.jpeg",
+          "palleteUrl-2": "https://getting-started8998.s3.ap-south-1.amazonaws.com/XnY3LmSZpFy/palletes/batch_003_palette.jpeg",
+        },
+        duration: 60.05,
+        description_string: null,
+        duration_timestamp: "01:00",
+        aspect_ratio: 0.563,
+        title: "916 Road Free to Use No Copyright Video   Copyright Free Videos   Free Stock Videos   Free Footage.mkv",
+      },
+      {
+        id: 23,
+        created_at: "2024-03-25T21:25:40.899733+00:00",
+        video_id: "QJI_jNDhZOe",
+        resolutions: [
+          {
+            width: 640,
+            height: 480,
+            bitrate: 800,
+            framerate: 29.97,
+            tag: "360p",
+            supersript: "",
+          },
+          {
+            width: 256,
+            height: 192,
+            bitrate: 200,
+            framerate: 29.97,
+            tag: "144p",
+            supersript: "",
+          },
+        ],
+        extraction_and_palette: { extractionRate: 1, paletteSize: 5 },
+        captions_url: null,
+        channel_id: "UCISaSW2bq0PcmxxsejrESu81eUff2",
+        mpd_url: "https://getting-started8998.s3.ap-south-1.amazonaws.com/QJI_jNDhZOe/chunks/output.mpd",
+        possible_thumbnail_urls: {
+          "thumbnailUrl-0": "https://getting-started8998.s3.ap-south-1.amazonaws.com/QJI_jNDhZOe/possible_thumbnails/output_0001_preview.jpeg",
+          "thumbnailUrl-1": "https://getting-started8998.s3.ap-south-1.amazonaws.com/QJI_jNDhZOe/possible_thumbnails/output_0101_preview.jpeg",
+          "thumbnailUrl-2": "https://getting-started8998.s3.ap-south-1.amazonaws.com/QJI_jNDhZOe/possible_thumbnails/output_0200_preview.jpeg",
+        },
+        preferred_thumbnail_url: null,
+        palette_urls: {
+          "palleteUrl-0": "https://getting-started8998.s3.ap-south-1.amazonaws.com/QJI_jNDhZOe/palletes/batch_001_palette.jpeg",
+          "palleteUrl-1": "https://getting-started8998.s3.ap-south-1.amazonaws.com/QJI_jNDhZOe/palletes/batch_002_palette.jpeg",
+          "palleteUrl-2": "https://getting-started8998.s3.ap-south-1.amazonaws.com/QJI_jNDhZOe/palletes/batch_003_palette.jpeg",
+          "palleteUrl-3": "https://getting-started8998.s3.ap-south-1.amazonaws.com/QJI_jNDhZOe/palletes/batch_004_palette.jpeg",
+          "palleteUrl-4": "https://getting-started8998.s3.ap-south-1.amazonaws.com/QJI_jNDhZOe/palletes/batch_005_palette.jpeg",
+          "palleteUrl-5": "https://getting-started8998.s3.ap-south-1.amazonaws.com/QJI_jNDhZOe/palletes/batch_006_palette.jpeg",
+          "palleteUrl-6": "https://getting-started8998.s3.ap-south-1.amazonaws.com/QJI_jNDhZOe/palletes/batch_007_palette.jpeg",
+          "palleteUrl-7": "https://getting-started8998.s3.ap-south-1.amazonaws.com/QJI_jNDhZOe/palletes/batch_008_palette.jpeg",
+          "palleteUrl-8": "https://getting-started8998.s3.ap-south-1.amazonaws.com/QJI_jNDhZOe/palletes/batch_009_palette.jpeg",
+        },
+        duration: 202.4,
+        description_string: null,
+        duration_timestamp: "03:22",
+        aspect_ratio: 1.333,
+        title: "The Bangles - Walk Like an Egyptian (Official Video).mkv",
+      },
     ];
     const playingVideoData = videosArr.find((video) => video.video_id === videoId);
     const recommendationsData = simulateRecommendations;
@@ -442,5 +550,3 @@ export const handleMiniPLayer = (miniPlayer) => {
     dispatch(updateSettingsShowing(false));
   };
 };
-
-[];

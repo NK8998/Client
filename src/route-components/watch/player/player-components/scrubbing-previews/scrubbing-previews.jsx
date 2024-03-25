@@ -14,9 +14,16 @@ export default function ScrubbingPreviews({ videoRef }) {
     let height = width * (1 / aspect_ratio);
 
     if (!fullScreen) {
-      if (height > 180) {
-        height = 180;
-        width = height * aspect_ratio;
+      if (miniPlayer) {
+        if (height > 100) {
+          height = 100;
+          width = height * aspect_ratio;
+        }
+      } else if (!miniPlayer) {
+        if (height > 180) {
+          height = 180;
+          width = height * aspect_ratio;
+        }
       }
     } else {
       if (height > 200) {
@@ -32,7 +39,7 @@ export default function ScrubbingPreviews({ videoRef }) {
     scrubbingImg.current.style.aspectRatio = aspect_ratio;
     if (!fullScreen) {
       if (miniPlayer) {
-        const { width, height } = calculateWidthAndHeight(130);
+        const { width, height } = calculateWidthAndHeight(150);
         scrubbingImg.current.style.width = `${width}px`;
         scrubbingImg.current.style.height = `${height}px`;
       } else if (!miniPlayer) {
@@ -46,8 +53,6 @@ export default function ScrubbingPreviews({ videoRef }) {
       scrubbingImg.current.style.height = `${height}px`;
     }
   }, [fullScreen, aspect_ratio, miniPlayer]);
-
-  const getBackground = () => {};
 
   return (
     <div className='scrubbing-preview-container' ref={scrubbingContainerRef}>
