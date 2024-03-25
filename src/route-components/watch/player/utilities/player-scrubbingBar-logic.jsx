@@ -61,41 +61,27 @@ export function usePlayerScrubbingBarInteractions() {
     const playerOuter = document.querySelector(".player-outer");
     const previewImageBg = document.querySelector(".preview-image-bg");
     previewImageBg.classList.add("show");
-    const style = getComputedStyle(document.documentElement);
-
     let height;
     let width;
-    if (!theatreMode) {
-      // height = parseInt(style.getPropertyValue("--height").split("px")[0]);
-      // width = parseInt(style.getPropertyValue("--width").split("px")[0]);
-      const dimensions = playerOuter.getBoundingClientRect();
-      width = dimensions.width;
-      height = dimensions.height;
-    } else if (theatreMode) {
-      // const theatreHeight = parseInt(style.getPropertyValue("--theatreHeight").split("px")[0]);
-      // const theatreWidth = parseInt(style.getPropertyValue("--theatreWidth").split("px")[0]);
-      const dimensions = playerOuter.getBoundingClientRect();
-      const theatreWidth = dimensions.width;
-      const theatreHeight = dimensions.height;
-      height = theatreWidth * aspect_ratio;
-      width = theatreHeight * aspect_ratio;
-      if (width > theatreWidth) {
-        width = theatreWidth;
-        height = width * (1 / aspect_ratio);
-      }
-      if (height > theatreHeight) {
-        height = theatreHeight;
-      }
-    }
-    if (miniPlayer) {
-      width = 400;
-      height = 400 * (1 / aspect_ratio);
-    }
-    if (fullScreen) {
-      const dimensions = playerOuter.getBoundingClientRect();
-      // width = parseInt(style.getPropertyValue("--theatreWidth").split("px")[0]);
-      width = dimensions.width;
+
+    const PlayerDimensions = playerOuter.getBoundingClientRect();
+    const normalWidth = PlayerDimensions.width;
+    const normalHeight = PlayerDimensions.height;
+    height = normalWidth * aspect_ratio;
+    width = normalHeight * aspect_ratio;
+    if (width > normalWidth) {
+      width = normalWidth;
       height = width * (1 / aspect_ratio);
+    }
+    if (height > normalHeight) {
+      height = normalHeight;
+    }
+    const ratioCheck = width / height;
+    if (ratioCheck > aspect_ratio + 0.1 || ratioCheck < aspect_ratio - 0.1) {
+      let prevWidth = width;
+      let prevHeight = height;
+      width = prevHeight;
+      height = prevWidth;
     }
     previewImageBg.style.height = `${height}px`;
     previewImageBg.style.width = `${width}px`;

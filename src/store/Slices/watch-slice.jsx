@@ -397,7 +397,8 @@ export const handleFullscreen = (fullScreen) => {
   return (dispatch) => {
     const root = document.querySelector("#root");
 
-    if (!fullScreen && window.location.pathname.includes("watch") && root) {
+    if (!root) return;
+    if (!fullScreen && window.location.pathname.includes("watch")) {
       root.scrollTo({ top: 0, behavior: "instant" });
       if (!document.fullscreenElement) {
         document.documentElement.requestFullscreen().then(() => {

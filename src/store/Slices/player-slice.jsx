@@ -158,6 +158,7 @@ export const handleTranslatingHere = (panel, currentElement, element) => {
       const targetEl = document.querySelector(`.${element}`);
       const { width, height } = targetEl.getBoundingClientRect();
       const targetLeft = targetEl.offsetLeft;
+      settingsScrollContainer.style.transform = `translate(-${targetLeft}px, 0px)`;
       if (currentElement === element) {
         settingsRef.style.transition = `all 0ms`;
         settingsScrollContainer.style.transition = `all 0ms`;
@@ -166,12 +167,11 @@ export const handleTranslatingHere = (panel, currentElement, element) => {
 
         settingsScrollContainer.style.transition = `all 200ms ease`;
       }
+
       settingsRef.style.width = `${width}px`;
       settingsRef.style.height = `${height}px`;
       // settingsScrollContainer.style.width = `${width}px`;
       settingsScrollContainer.style.height = `${height}px`;
-
-      settingsScrollContainer.style.transform = `translate(-${targetLeft}px, 0px)`;
     }, 5);
   };
 };

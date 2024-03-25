@@ -43,6 +43,7 @@ export const usePlayerStyles = () => {
       secondaryRefWidth = secondaryRef.clientWidth;
     }
 
+    const aspectRatio = aspect_ratio > 1.1 ? aspect_ratio : 16 / 9;
     const windowWidth = root.clientWidth;
     const windowHeight = window.innerHeight;
     const gaps = windowWidth >= 1041 ? 74 : 46;
@@ -50,19 +51,19 @@ export const usePlayerStyles = () => {
     const remainingSpace = windowWidth - (gaps + secondaryRefWidth);
     // const aspect_ratio = wideScreen ? 1920 / 1080 : 16 / 9;
 
-    let videoHeight = remainingSpace * aspect_ratio > maxVideoHeight ? maxVideoHeight : remainingSpace * aspect_ratio;
-    let videoWidth = videoHeight * aspect_ratio;
+    let videoHeight = remainingSpace * aspectRatio > maxVideoHeight ? maxVideoHeight : remainingSpace * aspectRatio;
+    let videoWidth = videoHeight * aspectRatio;
 
     // Check if the videoWidth is greater than the remainingSpace
     if (videoWidth > remainingSpace) {
       // Adjust the videoWidth and videoHeight to fit the remaining space
       videoWidth = remainingSpace;
-      videoHeight = videoWidth * (1 / aspect_ratio);
+      videoHeight = videoWidth * (1 / aspectRatio);
     }
 
     if (videoWidth >= 1280) {
       videoWidth = 1280;
-      videoHeight = videoWidth * (1 / aspect_ratio);
+      videoHeight = videoWidth * (1 / aspectRatio);
     }
 
     // console.log({ remainingSpace });
