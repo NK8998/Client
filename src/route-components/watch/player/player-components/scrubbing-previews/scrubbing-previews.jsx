@@ -14,13 +14,13 @@ export default function ScrubbingPreviews({ videoRef }) {
     let height = width * (1 / aspect_ratio);
 
     if (!fullScreen) {
-      if (height > 270) {
-        height = 270;
+      if (height > 180) {
+        height = 180;
         width = height * aspect_ratio;
       }
     } else {
-      if (height > 420) {
-        height = 420;
+      if (height > 200) {
+        height = 200;
         width = height * aspect_ratio;
       }
     }

@@ -220,7 +220,7 @@ export const fetchWatchData = (videoId, currentRoute) => {
         description_string:
           "ajknjksfnjksdbf\n asdabbf\n\najdbajksf\n adjbadsjh\n 0:00 - \n 0:40 - chapter2 \n 1:00 - chapter3 \n 1:10 - chapter4 \n 1:30 - chapter4 \n 1:40 - chapter4 \n 1:50 - chapter4 \n 1:55 - chapter4 \n 2:10 - chapter4 \n  4efnjksdfbsjkdfbjksdfbsjk",
         duration_timestamp: "02:24",
-        aspect_ratio: 2.406,
+        aspect_ratio: 9 / 16,
         title: "Marvel Studios' Avengers Infinity War Official Trailer.mp4",
       },
       {
