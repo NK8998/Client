@@ -20,8 +20,8 @@ export default function ScrubbingPreviews({ videoRef }) {
           width = height * aspect_ratio;
         }
       } else if (!miniPlayer) {
-        if (height > 180) {
-          height = 180;
+        if (height > 140) {
+          height = 140;
           width = height * aspect_ratio;
         }
       }
@@ -43,7 +43,7 @@ export default function ScrubbingPreviews({ videoRef }) {
         scrubbingImg.current.style.width = `${width}px`;
         scrubbingImg.current.style.height = `${height}px`;
       } else if (!miniPlayer) {
-        const { width, height } = calculateWidthAndHeight(240);
+        const { width, height } = calculateWidthAndHeight(200);
         scrubbingImg.current.style.width = `${width}px`;
         scrubbingImg.current.style.height = `${height}px`;
       }
