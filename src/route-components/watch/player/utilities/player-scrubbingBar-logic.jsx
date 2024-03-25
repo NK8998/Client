@@ -69,6 +69,7 @@ export function usePlayerScrubbingBarInteractions() {
     const normalHeight = PlayerDimensions.height;
     height = normalWidth * aspect_ratio;
     width = normalHeight * aspect_ratio;
+    console.log(width, height);
     if (width > normalWidth) {
       width = normalWidth;
       height = width * (1 / aspect_ratio);
@@ -82,6 +83,10 @@ export function usePlayerScrubbingBarInteractions() {
       let prevHeight = height;
       width = prevHeight;
       height = prevWidth;
+      if (theatreMode && window.innerWidth <= 810) {
+        height = normalHeight;
+        width = normalHeight * aspect_ratio;
+      }
     }
     previewImageBg.style.height = `${height}px`;
     previewImageBg.style.width = `${width}px`;

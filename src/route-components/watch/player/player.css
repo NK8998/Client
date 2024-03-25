@@ -459,6 +459,10 @@
   width: 100%;
   height: 100%;
 }
+.player-outer.theatre .preview-image-bg-container{
+  height: var(--theatreHeight);
+  width: var(--theatreWidth);
+}
 .player-outer.fullscreen .preview-image-bg-container, .player-outer.fullscreen.theatre .preview-image-bg-container{
   height: var(--theatreHeight);
   width: var(--theatreWidth);
