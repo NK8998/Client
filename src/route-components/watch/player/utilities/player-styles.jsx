@@ -8,6 +8,12 @@ export const usePlayerStyles = () => {
   const fullScreen = useSelector((state) => state.watch.fullScreen);
   const { aspect_ratio } = playingVideo;
 
+  useEffect(() => {
+    setTimeout(() => {
+      applyChapterStyles();
+    }, 40);
+  }, [fullScreen]);
+
   function applyChapterStyles() {
     const chaptersContainers = document.querySelectorAll(".chapter-padding");
     const hoverBars = document.querySelectorAll(".chapter-hover");

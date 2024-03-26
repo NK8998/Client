@@ -197,10 +197,10 @@ export const useFullscreenMode = () => {
       videoRef.classList.add("fullscreen");
       containerRef.classList.add("fullscreen");
       calculateWidth();
-      setTimeout(() => {
-        applyChapterStyles();
-      }, 10);
+
+      applyChapterStyles();
       updateRedDot("");
+
       root.classList.add("fullscreen");
       flexContent.classList.add("fullscreen");
       masthead.classList.add("fullscreen");

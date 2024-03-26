@@ -5,7 +5,7 @@ import { getTimeStamp } from "../../../../utilities/getTimestamp";
 export function usePlayerScrubbingBarInteractions() {
   const chapters = useSelector((state) => state.player.chapters);
   const playingVideo = useSelector((state) => state.watch.playingVideo);
-  const { extraction_and_palette, palette_urls, aspect_ratio } = playingVideo;
+  const { extraction_and_palette, palette_urls, aspect_ratio, duration } = playingVideo;
   const settingsShowing = useSelector((state) => state.player.settingsShowing);
   const theatreMode = useSelector((state) => state.watch.theatreMode);
   const miniPlayer = useSelector((state) => state.watch.miniPlayer);
@@ -69,7 +69,6 @@ export function usePlayerScrubbingBarInteractions() {
     const normalHeight = PlayerDimensions.height;
     height = normalWidth * aspect_ratio;
     width = normalHeight * aspect_ratio;
-    console.log(width, height);
     if (width > normalWidth) {
       width = normalWidth;
       height = width * (1 / aspect_ratio);
@@ -105,7 +104,7 @@ export function usePlayerScrubbingBarInteractions() {
     const position = e.clientX - currentChapterLeft;
     const ratio = position / currentChapterWidth;
     const timeOffset = ratio * chapterDuration;
-    const currentTime = chapters[hoveringIndex].start + timeOffset;
+    const currentTime = Math.min(Math.max(chapters[hoveringIndex].start + timeOffset, 0), duration);
     const timeStamp = getTimeStamp(Math.trunc(currentTime));
     previewTime.textContent = timeStamp;
     const width = scrubbingPreview.clientWidth;

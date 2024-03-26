@@ -10,6 +10,8 @@ export const usePlayerDraggingLogic = () => {
   const currentTimeTracker = useRef(0);
   const chapters = useSelector((state) => state.player.chapters);
   const play = useSelector((state) => state.player.play);
+  const playingVideo = useSelector((state) => state.watch.playingVideo);
+  const { duration } = playingVideo;
   const [updateScrubbingBar, previewCanvas, movePreviews] = usePlayerScrubbingBarInteractions();
   const [checkBufferedOnTrackChange, checkBuffered, clearIntervalOnTrackChange] = usePlayerBufferingState();
   const dispatch = useDispatch();
@@ -97,7 +99,7 @@ export const usePlayerDraggingLogic = () => {
     const position = e.clientX - currentChapterLeft;
     const ratio = position / currentChapterWidth;
     const timeOffset = ratio * chapterDuration;
-    const currentTime = chapters[currentIndex].start + timeOffset;
+    const currentTime = Math.min(Math.max(chapters[currentIndex].start + timeOffset, 0), duration);
     previewCanvas(currentTime);
     movePreviews(e, currentIndex);
     currentTimeTracker.current = currentTime;
