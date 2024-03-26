@@ -20,7 +20,7 @@ export const Resolutions = ({ playerRef, checkBufferedOnTrackChange }) => {
     });
   };
 
-  function changeResolution(resolution, tag) {
+  function changeResolution(resolution, tag, framerate) {
     if (resolution === currentRes) return;
     setCurrentRes(resolution);
 
@@ -64,7 +64,8 @@ export const Resolutions = ({ playerRef, checkBufferedOnTrackChange }) => {
       if (selectedTrack) {
         playerRef.current.selectVariantTrack(selectedTrack, true);
         dispatch(updatePreferredRes(true));
-        dispatch(updateResolution(tag));
+        const tagString = `${tag}${framerate > 30 ? framerate : ""}`;
+        dispatch(updateResolution(tagString));
         checkBufferedOnTrackChange();
         resetGreyBars();
       }
@@ -72,19 +73,25 @@ export const Resolutions = ({ playerRef, checkBufferedOnTrackChange }) => {
   }
 
   if (!resolutions || resolutions.length === 0) return;
-  const allResolutions = [...resolutions, { tag: "auto", supersript: "", height: "auto", width: "auto" }];
+  const allResolutions = [...resolutions, { tag: "auto", supersript: "", height: "auto", width: "auto", framerate: "" }];
   const resolutionsEl = allResolutions.map((res) => {
+    const fps = res.framerate > 30 ? res.framerate : "";
+    const tagString = `${res.tag}${fps}`;
     let icon;
-    if (res.tag === resolution && preferredResolution) {
+    if (tagString === resolution && preferredResolution) {
       icon = <TickIcon />;
     } else if (!preferredResolution && res.tag !== resolution && res.height === "auto") {
       icon = <TickIcon />;
     }
+    const framerate = typeof res.framerate === "number" && res.framerate > 30 ? Math.round(res.framerate) : "";
 
     return (
-      <div className='resolution-item' onClick={() => changeResolution(`${res.height}`, res.tag)} key={`${res.tag}`}>
+      <div className='resolution-item' onClick={() => changeResolution(`${res.height}`, res.tag, Math.round(res.framerate))} key={`${res.tag}`}>
         <p className='tick-container'>{icon}</p>
-        <p>{res.tag}</p>
+        <p>
+          {res.tag}
+          {framerate}
+        </p>
         <p className='superscript'>{res.supersript}</p>
       </div>
     );

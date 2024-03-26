@@ -59,6 +59,7 @@ export default function Player({ videoRef, containerRef, miniPlayerBoolean }) {
 
     dispatch(updateChapters(generatedChapters));
     dispatch(updatePreferredRes(false));
+    console.log(generatedChapters);
   }, [playingVideo]);
 
   useEffect(() => {
@@ -176,7 +177,7 @@ export default function Player({ videoRef, containerRef, miniPlayerBoolean }) {
           },
         },
         streaming: {
-          bufferingGoal: 30,
+          bufferingGoal: 100,
           rebufferingGoal: 2,
         },
       });
@@ -198,7 +199,8 @@ export default function Player({ videoRef, containerRef, miniPlayerBoolean }) {
         const newTrack = value.newTrack.height;
         const { resolutions } = playingVideo;
         const resolution = resolutions.find((res) => res.height === newTrack);
-        dispatch(updateResolution(resolution.tag));
+        const tag = `${resolution.tag}${resolution.framerate > 30 ? Math.round(resolution.framerate) : ""}`;
+        dispatch(updateResolution(tag));
       });
 
       // Load the manifest

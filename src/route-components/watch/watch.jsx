@@ -50,6 +50,11 @@ export default function Watch({ watchRef, miniPlayerBoolean }) {
               <div className='press me'>fifth video</div>
             </Link>
           </div>
+          <div className='pseud-link'>
+            <Link to={"/watch?v=xxfoYqTS86d"} onClick={(e) => dispatch(fetchWatchData("xxfoYqTS86d", "/watch"))}>
+              <div className='press me'>RX 580</div>
+            </Link>
+          </div>
         </div>
       </div>
     </div>

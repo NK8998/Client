@@ -471,6 +471,76 @@ export const fetchWatchData = (videoId, currentRoute) => {
         aspect_ratio: 1.333,
         title: "The Bangles - Walk Like an Egyptian (Official Video).mkv",
       },
+      {
+        id: 25,
+        created_at: "2024-03-26T19:29:44.173171+00:00",
+        video_id: "xxfoYqTS86d",
+        resolutions: [
+          {
+            width: 1920,
+            height: 1080,
+            bitrate: 2500,
+            framerate: 60,
+            tag: "1080p",
+            supersript: "HD",
+          },
+          {
+            width: 1280,
+            height: 720,
+            bitrate: 2000,
+            framerate: 60,
+            tag: "720p",
+            supersript: "",
+          },
+          {
+            width: 640,
+            height: 360,
+            bitrate: 800,
+            framerate: 30,
+            tag: "360p",
+            supersript: "",
+          },
+          {
+            width: 256,
+            height: 144,
+            bitrate: 200,
+            framerate: 30,
+            tag: "144p",
+            supersript: "",
+          },
+        ],
+        extraction_and_palette: { extractionRate: 3, paletteSize: 5 },
+        captions_url: null,
+        channel_id: "UCISaSW2bq0PcmxxsejrESu81eUff2",
+        mpd_url: "https://getting-started8998.s3.ap-south-1.amazonaws.com/xxfoYqTS86d/chunks/output.mpd",
+        possible_thumbnail_urls: {
+          "thumbnailUrl-0": "https://getting-started8998.s3.ap-south-1.amazonaws.com/xxfoYqTS86d/possible_thumbnails/output_0001_preview.jpeg",
+          "thumbnailUrl-1": "https://getting-started8998.s3.ap-south-1.amazonaws.com/xxfoYqTS86d/possible_thumbnails/output_0162_preview.jpeg",
+          "thumbnailUrl-2": "https://getting-started8998.s3.ap-south-1.amazonaws.com/xxfoYqTS86d/possible_thumbnails/output_0321_preview.jpeg",
+        },
+        preferred_thumbnail_url: null,
+        palette_urls: {
+          "palleteUrl-0": "https://getting-started8998.s3.ap-south-1.amazonaws.com/xxfoYqTS86d/palletes/batch_001_palette.jpeg",
+          "palleteUrl-1": "https://getting-started8998.s3.ap-south-1.amazonaws.com/xxfoYqTS86d/palletes/batch_002_palette.jpeg",
+          "palleteUrl-2": "https://getting-started8998.s3.ap-south-1.amazonaws.com/xxfoYqTS86d/palletes/batch_003_palette.jpeg",
+          "palleteUrl-3": "https://getting-started8998.s3.ap-south-1.amazonaws.com/xxfoYqTS86d/palletes/batch_004_palette.jpeg",
+          "palleteUrl-4": "https://getting-started8998.s3.ap-south-1.amazonaws.com/xxfoYqTS86d/palletes/batch_005_palette.jpeg",
+          "palleteUrl-5": "https://getting-started8998.s3.ap-south-1.amazonaws.com/xxfoYqTS86d/palletes/batch_006_palette.jpeg",
+          "palleteUrl-6": "https://getting-started8998.s3.ap-south-1.amazonaws.com/xxfoYqTS86d/palletes/batch_007_palette.jpeg",
+          "palleteUrl-7": "https://getting-started8998.s3.ap-south-1.amazonaws.com/xxfoYqTS86d/palletes/batch_008_palette.jpeg",
+          "palleteUrl-8": "https://getting-started8998.s3.ap-south-1.amazonaws.com/xxfoYqTS86d/palletes/batch_009_palette.jpeg",
+          "palleteUrl-9": "https://getting-started8998.s3.ap-south-1.amazonaws.com/xxfoYqTS86d/palletes/batch_010_palette.jpeg",
+          "palleteUrl-10": "https://getting-started8998.s3.ap-south-1.amazonaws.com/xxfoYqTS86d/palletes/batch_011_palette.jpeg",
+          "palleteUrl-11": "https://getting-started8998.s3.ap-south-1.amazonaws.com/xxfoYqTS86d/palletes/batch_012_palette.jpeg",
+          "palleteUrl-12": "https://getting-started8998.s3.ap-south-1.amazonaws.com/xxfoYqTS86d/palletes/batch_013_palette.jpeg",
+        },
+        duration: 969.64,
+        description_string:
+          "HFW running on the RX 580 8GB GDDR5 at 1080p, using the Very Low, Low, Medium and High settings, with and without FSR and XeSS!\n⏱ Timestamps ⏱\nIntro, Specs, Stuff - 0:00\n1080p Very Low - 0:38\n1080p Very Low / FSR Quality - 5:09\n1080p Very Low / XeSS Quality - 6:03\n1080p Low - 6:27\n1080p Medium - 9:27\n1080p Medium / High Textures - 12:52\n1080p High / Medium Textures - 14:11\n🔧SPECS🔧\n◾️ AMD Ryzen 5 3600X\n◾️ AMD Radeon RX 580 8GB - XFX GTS XXX\n◾️ RAM - 16GB DDR4 3200MHz (2x8GB)\n",
+        duration_timestamp: "16:10",
+        aspect_ratio: 1.778,
+        title: "RX 580 8GB - Horizon Forbidden West.mkv",
+      },
     ];
     const playingVideoData = videosArr.find((video) => video.video_id === videoId);
     const recommendationsData = simulateRecommendations;
@@ -550,3 +620,5 @@ export const handleMiniPLayer = (miniPlayer) => {
     dispatch(updateSettingsShowing(false));
   };
 };
+
+[];

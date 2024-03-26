@@ -40,7 +40,6 @@ export const usePlayerkeyInteractions = () => {
       if (wasPlaying) {
         videoRef.play();
       }
-      updateBufferBar();
       updateProgressBar();
       checkBuffered();
       updateRedDot("");
