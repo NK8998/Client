@@ -13,6 +13,11 @@ body{
 #root.fullscreen::-webkit-scrollbar{
     display: none;
 }
+#root.fullscreen{
+    scrollbar-width: none; /* for Firefox */
+    overflow-y: scroll;
+}
+
 
 :root{
     --theatreWidth: 0;
