@@ -1,17 +1,32 @@
 import { useDispatch, useSelector } from "react-redux";
 import Player from "./player/player";
 import "./watch.css";
-import { useEffect, useLayoutEffect, useRef, useState } from "react";
-import { Link } from "react-router-dom";
-import { fetchWatchData } from "../../store/Slices/watch-slice";
+import { useLayoutEffect, useRef } from "react";
+import SecondaryContent from "./secondary-content/secondary-content";
 
 export default function Watch({ watchRef, miniPlayerBoolean }) {
-  const dispatch = useDispatch();
   const videoRef = useRef();
   const primaryRef = useRef();
-  const secondaryRef = useRef();
+  const secondaryRefOuter = useRef();
+  const secondaryRefInner = useRef();
   const expandedContainerRef = useRef();
   const containerRef = useRef();
+  const windowWidth = useSelector((state) => state.app.windowWidth);
+
+  useLayoutEffect(() => {
+    const secondaryInnerContent = document.querySelector(".secondary-inner");
+    if (!secondaryInnerContent || !secondaryRefInner.current || !secondaryRefOuter.current) return;
+    if (windowWidth <= 1040) {
+      if (!Array.from(secondaryRefOuter.current.children).includes(secondaryInnerContent)) return;
+
+      secondaryRefOuter.current.removeChild(secondaryInnerContent);
+      secondaryRefInner.current.appendChild(secondaryInnerContent);
+    } else {
+      if (!Array.from(secondaryRefInner.current.children).includes(secondaryInnerContent)) return;
+      secondaryRefInner.current.removeChild(secondaryInnerContent);
+      secondaryRefOuter.current.appendChild(secondaryInnerContent);
+    }
+  }, [windowWidth]);
 
   return (
     <div className='watch-flexy hidden' ref={watchRef} id='watch'>
@@ -22,39 +37,10 @@ export default function Watch({ watchRef, miniPlayerBoolean }) {
             <Player videoRef={videoRef} containerRef={containerRef} miniPlayerBoolean={miniPlayerBoolean} />
           </div>
           <div className='lower'></div>
-          <div className='secondary-in-primary'></div>
+          <div className='secondary-in-primary' ref={secondaryRefInner}></div>
         </div>
-        <div className='secondary content' ref={secondaryRef}>
-          <div className='pseudo-link'>
-            <Link to={"/watch?v=QpZYoxRun3B"} onClick={() => dispatch(fetchWatchData("QpZYoxRun3B", "/watch"))}>
-              first video
-            </Link>
-          </div>
-          <div className='pseudo-link'>
-            <Link to={"/watch?v=DfYP6AooQ8H"} onClick={() => dispatch(fetchWatchData("DfYP6AooQ8H", "/watch"))}>
-              second video
-            </Link>
-          </div>
-          <div className='pseud-link'>
-            <Link to={"/watch?v=audxiH_CECi"} onClick={(e) => dispatch(fetchWatchData("audxiH_CECi", "/watch"))}>
-              <div className='press me'>third video</div>
-            </Link>
-          </div>
-          <div className='pseud-link'>
-            <Link to={"/watch?v=XnY3LmSZpFy"} onClick={(e) => dispatch(fetchWatchData("XnY3LmSZpFy", "/watch"))}>
-              <div className='press me'>fourth video</div>
-            </Link>
-          </div>
-          <div className='pseud-link'>
-            <Link to={"/watch?v=QJI_jNDhZOe"} onClick={(e) => dispatch(fetchWatchData("QJI_jNDhZOe", "/watch"))}>
-              <div className='press me'>fifth video</div>
-            </Link>
-          </div>
-          <div className='pseud-link'>
-            <Link to={"/watch?v=xxfoYqTS86d"} onClick={(e) => dispatch(fetchWatchData("xxfoYqTS86d", "/watch"))}>
-              <div className='press me'>RX 580</div>
-            </Link>
-          </div>
+        <div className='secondary content' ref={secondaryRefOuter}>
+          <SecondaryContent />
         </div>
       </div>
     </div>

@@ -1,0 +1,19 @@
+.filter-chip-container{
+    height: 50px;
+    position: sticky;
+    top: 56px;
+    width: 100%;
+    z-index: 20;
+}
+.filter-chip-bar-inner{
+    margin: auto;
+    height: 100%;
+    width: calc(100% - 48px);
+    background-color: rgba(17, 17, 17, 0.959);
+    overflow-x: auto;
+    overflow-y: auto;
+
+}
+.filter-chip-bar{
+    width: 100%;
+}

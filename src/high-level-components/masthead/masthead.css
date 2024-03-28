@@ -2,7 +2,7 @@
     width: calc(100% - 32px);
     height: 56px;
     padding: 0px 16px;
-    background-color: rgb(19, 19, 19);
+    background-color: rgb(14, 14, 14);
     position: sticky;
     z-index: 20;
     top: 0;

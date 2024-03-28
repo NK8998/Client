@@ -20,6 +20,7 @@ body{
 
 
 :root{
+    --skeletonWidth: 0px;
     --theatreWidth: 0;
     --theatreHeight: 0;
     --hovering:false;
@@ -50,4 +51,5 @@ body{
 .page-manager{
     /* background-color: blue; */
     width: 100%;
+    min-width: 0;
 }

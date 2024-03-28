@@ -130,9 +130,13 @@
     height: fit-content;
 
 }
-
-.player-outer.fullscreen  .resolution-item, .player-outer.fullscreen.theatre  .resolution-item{
-    padding: 12px 10px;
+.resolution-item,
+.speed-option,
+.sub-item
+.player-outer.fullscreen  .resolution-item, .player-outer.fullscreen.theatre  .resolution-item,
+.player-outer.fullscreen .speed-option, .player-outer.fullscreen.theatre .speed-option,
+.player-outer.fullscreen .sub-item, .play-back-speed-outer.fullscreen.theatre .sub-item{
+    padding: 14px 10px;
     gap: 15px;
 }
 .player-outer.fullscreen .settings-button-left, .player-outer.fullscreen.theatre .settings-button-left {
@@ -253,6 +257,7 @@
     width: calc(100% - 20px);
     min-width: 200px;
     padding: 10px 10px;
+    height: 20px;
     display: flex;
     position: relative;
     gap: 10px;

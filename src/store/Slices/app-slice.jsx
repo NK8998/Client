@@ -1,5 +1,6 @@
 import { createSlice, current } from "@reduxjs/toolkit";
 import { fetchWatchData, toggleFullScreen } from "./watch-slice";
+import { updateMaxNums } from "./home-slice";
 
 const appSlice = createSlice({
   name: "app",
@@ -72,12 +73,14 @@ export const handleNavResize = () => {
     const leftNavMain = document.querySelector(".leftnav-wrapper");
     if (!leftNavMain) return;
     if (!isWatchPage) {
-      if (windowWidth >= 1024) {
+      if (windowWidth >= 1344) {
         leftNavMain.classList.toggle("hide-home");
         dispatch(updatePreference());
-      } else if (windowWidth < 1024) {
+      } else if (windowWidth < 1344) {
         leftNavMain.classList.toggle("show-not-watch");
       }
+
+      dispatch(updateMaxNums());
     } else if (isWatchPage) {
       leftNavMain.classList.toggle("show");
     }
@@ -103,9 +106,9 @@ export const handleResize = () => {
     const leftNavMain = document.querySelector(".leftnav-wrapper");
     if (!leftNavMain) return;
 
-    if (windowWidth >= 1024) {
+    if (windowWidth >= 1344) {
       leftNavMain.classList.remove("show-not-watch");
-    } else if (windowWidth < 1024) {
+    } else if (windowWidth < 1344) {
       leftNavMain.classList.add("hide");
     }
     addRemoveWatchPageStyle();

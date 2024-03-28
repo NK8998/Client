@@ -20,13 +20,23 @@
 .secondary{
     /* padding-left: 24px; */
     min-width: 400px;
-    max-width: 450px;
+    max-width: 400px;
     height: 150vh;
-    background-color: rgba(110, 110, 110, 0.377);
+}
+.secondary-in-primary{
+    width: var(--width);
 }
  
 @media(max-width: 65em){
     .secondary{
         display: none
     }
+    .secondary-skeleton{
+        justify-content: space-between;
+    }
+    .secondary-skeleton-inner,
+    .skeleton-inner-link{
+        width: 100%;
+    }
+    
 }

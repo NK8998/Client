@@ -1,0 +1,24 @@
+.secondary-content-inner{
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 20px;
+
+}
+.secondary-skeleton{
+    display: flex;
+    width: 100%;
+}
+.secondary-skeleton-inner{
+    display: flex;
+    gap: 8px;
+}
+.secondary-skeleton-thumbnail{
+    min-width: 168px;
+    max-width: 168px;
+    min-height: 94px;
+    max-height: 94px;
+    border-radius: 8px;
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+}
