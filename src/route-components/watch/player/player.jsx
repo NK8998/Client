@@ -59,7 +59,6 @@ export default function Player({ videoRef, containerRef, miniPlayerBoolean }) {
 
     dispatch(updateChapters(generatedChapters));
     dispatch(updatePreferredRes(false));
-    console.log(generatedChapters);
   }, [playingVideo]);
 
   useEffect(() => {
