@@ -137,12 +137,21 @@ export const BottomControlsRight = ({ miniPlayerBoolean, playerRef }) => {
       <button type='button' className='player-button cog' onFocus={handleMouseMove} onClick={handleSettingsShowing}>
         <CogButton />
       </button>
-      <button type='button' className='player-button miniplayer' onClick={handleMiniPlayerNavigation} onFocus={handleMouseMove}>
-        <MiniPlayerButton />
-      </button>
-      <button type='button' className='player-button theatre-normal' onClick={() => dispatch(handleTheatre(theatreMode))} onFocus={handleMouseMove}>
-        <TheatreNormalButton />
-      </button>
+      {!fullScreen && (
+        <>
+          <button type='button' className='player-button miniplayer' onClick={handleMiniPlayerNavigation} onFocus={handleMouseMove}>
+            <MiniPlayerButton />
+          </button>
+          <button
+            type='button'
+            className='player-button theatre-normal'
+            onClick={() => dispatch(handleTheatre(theatreMode))}
+            onFocus={handleMouseMove}
+          >
+            <TheatreNormalButton />
+          </button>
+        </>
+      )}
       <button
         type='button'
         className='player-button fullscreen-normal'

@@ -43,9 +43,9 @@ export default function BrowseVideos() {
   //   });
   const elements = videoDrawers.map((drawer, index) => {
     return (
-      <div className='grid' key={index}>
+      <div className={`grid ${index === videoDrawers.length - 1 ? "last" : ""}`} key={index}>
         {drawer.map((video, index) => {
-          return <VideoComponent {...video} key={`${index}-${video.title}`} />;
+          return <VideoComponent data={video} key={`${index}-${video.title}`} />;
         })}
       </div>
     );

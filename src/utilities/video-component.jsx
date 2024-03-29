@@ -4,11 +4,14 @@ import { getTimeUploaded } from "./getTimeUploaded";
 import { removeLeadingZero } from "./getTimestamp";
 import { VerticalDots } from "../assets/icons";
 import { Link } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { fetchWatchData } from "../store/Slices/watch-slice";
 import { useAppNavigation } from "./navigation";
 
-export default function VideoComponent({ duration_timestamp, possible_thumbnail_urls, title, display_name, handle, created_at, video_id }) {
+export default function VideoComponent({ data }) {
+  const { duration_timestamp, possible_thumbnail_urls, title, display_name, handle, created_at, video_id } = data;
+  const dispatch = useDispatch();
   const handleNavigation = useAppNavigation();
-
   const views = useMemo(() => {
     return formatCount(generateRandomInteger());
   }, [title]);
@@ -19,7 +22,7 @@ export default function VideoComponent({ duration_timestamp, possible_thumbnail_
   return (
     <div className='browse-skeleton'>
       <div className='browse-skeleton-inner'>
-        <Link to={`/watch?v=${video_id}`} onClick={(e) => handleNavigation(e, `/watch?v=${video_id}`)}>
+        <Link to={`/watch?v=${video_id}`} onClick={(e) => dispatch(fetchWatchData(video_id, `/watch?v=${video_id}`, data))}>
           <div className='browse-video-upper'>
             <img src={possible_thumbnail_urls["thumbnailUrl-0"]} alt='thumbnail' className='skeleton-thumbnail' />
             <div className='skeleton-timestamp'>
@@ -30,7 +33,11 @@ export default function VideoComponent({ duration_timestamp, possible_thumbnail_
         <div className='browse-video-lower'>
           <div className='owner-pfp'></div>
           <div className='browse-middle-lower'>
-            <Link to={`/watch?v=${video_id}`} onClick={(e) => handleNavigation(e, `/watch?v=${video_id}`)} className='skeleton-title'>
+            <Link
+              to={`/watch?v=${video_id}`}
+              onClick={(e) => dispatch(fetchWatchData(video_id, `/watch?v=${video_id}`, data))}
+              className='skeleton-title'
+            >
               <p className='skeleton-title'>{title}</p>
             </Link>
             <Link to={`/${handle}`} onClick={(e) => handleNavigation(e, `/${handle}`)}>

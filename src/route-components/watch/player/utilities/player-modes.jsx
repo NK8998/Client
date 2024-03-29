@@ -83,10 +83,10 @@ export const useTheatreMode = () => {
     // console.log("toggletheatre ran");
     const videoRef = document.querySelector("#html5-player");
     const primaryRef = document.querySelector(".player-if");
-    const miniplayerRef = document.querySelector(".mini-player-inner");
     const containerRef = document.querySelector(".player-outer");
     const expandedContainerRef = document.querySelector(".player-expanded-container");
-    const controlsRef = document.querySelector(".player-inner-relative");
+    const secondary = document.querySelector(".secondary.content");
+    const columns = document.querySelector(".columns");
 
     const isWatchpage = location.includes("watch") || window.location.pathname.includes("watch");
     if (!isWatchpage) return;
@@ -94,6 +94,8 @@ export const useTheatreMode = () => {
 
     if (Array.from(primaryRef.children).includes(containerRef) && primaryRef && theatreMode) {
       primaryRef.classList.remove("has-content");
+      columns.classList.add("theatre");
+      secondary.classList.add("theatre");
       if (Array.from(primaryRef.children).includes(containerRef)) {
         primaryRef.removeChild(containerRef);
         expandedContainerRef.append(containerRef);
@@ -116,8 +118,10 @@ export const useTheatreMode = () => {
         primaryRef.insertBefore(containerRef, firstChild);
         primaryRef.classList.add("has-content");
       }
+      columns.classList.remove("theatre");
       videoRef.classList.remove("theatre");
       containerRef.classList.remove("theatre");
+      secondary.classList.remove("theatre");
       applyChapterStyles();
       calculateWidth();
 
@@ -153,6 +157,8 @@ export const useFullscreenMode = () => {
     const root = document.querySelector("#root");
     const flexContent = document.querySelector(".flex-content");
     const guideWrapper = document.querySelector(".guide-wrapper");
+    const secondary = document.querySelector(".secondary.content");
+    const columns = document.querySelector(".columns");
 
     if (!guideWrapper || !flexContent || !root || !masthead || !containerRef) return;
 
@@ -164,6 +170,8 @@ export const useFullscreenMode = () => {
     flexContent.classList.remove("fullscreen");
     root.classList.remove("fullscreen");
     guideWrapper.classList.remove("fullscreen");
+    secondary.classList.remove("fullscreen");
+    columns.classList.remove("fullscreen");
     root.removeEventListener("scroll", handleScrollPosition);
   };
   const toggleFullScreen = () => {
@@ -179,6 +187,8 @@ export const useFullscreenMode = () => {
     const root = document.querySelector("#root");
     const flexContent = document.querySelector(".flex-content");
     const guideWrapper = document.querySelector(".guide-wrapper");
+    const secondary = document.querySelector(".secondary.content");
+    const columns = document.querySelector(".columns");
 
     if (!fullScreen && !location.includes("watch")) {
       changeFullscreenStyles();
@@ -202,9 +212,11 @@ export const useFullscreenMode = () => {
       updateRedDot("");
 
       root.classList.add("fullscreen");
+      columns.classList.add("fullscreen");
       flexContent.classList.add("fullscreen");
       masthead.classList.add("fullscreen");
       guideWrapper.classList.add("fullscreen");
+      secondary.classList.add("fullscreen");
 
       root.addEventListener("scroll", handleScrollPosition);
     } else if (primaryRef && !Array.from(primaryRef.children).includes(containerRef) && !fullScreen) {

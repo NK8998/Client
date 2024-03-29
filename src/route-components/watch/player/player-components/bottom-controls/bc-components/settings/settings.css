@@ -130,9 +130,7 @@
     height: fit-content;
 
 }
-.resolution-item,
-.speed-option,
-.sub-item
+
 .player-outer.fullscreen  .resolution-item, .player-outer.fullscreen.theatre  .resolution-item,
 .player-outer.fullscreen .speed-option, .player-outer.fullscreen.theatre .speed-option,
 .player-outer.fullscreen .sub-item, .play-back-speed-outer.fullscreen.theatre .sub-item{

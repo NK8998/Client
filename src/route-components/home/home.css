@@ -3,6 +3,7 @@
     /* background-color: blue; */
     height: fit-content;
     min-width: 0;
+    min-height: 200vh;
 }
 .home.hidden{
     display: none;
@@ -16,16 +17,24 @@
 
 
 }
-.home .grid{
+.grid{
     display: flex;
     padding: 0px 19px;
     gap: 5px;
+    justify-content: center;
+
+}
+.grid.last{
+    justify-content: start;
+}
+.grid.last{
+    margin-left: 2px;
 }
 .browse-skeleton{  
     aspect-ratio: 16 / 9;
     width: var(--skeletonWidth);
+    max-width: 512px;
     /* background-color: purple; */
-    min-width: 0;
 }
 
 .browse-skeleton-inner{
@@ -150,4 +159,11 @@
     max-height: 24px;
     max-width: 24px;
     padding: 2px;
+}
+
+@media(max-width: 704px){
+    .grid.last{
+        justify-content: center;
+        margin-left: 0px;
+    }
 }

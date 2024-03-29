@@ -1,5 +1,5 @@
 import { useEffect, useLayoutEffect } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { fetchWatchData, handleMiniPLayer } from "../store/Slices/watch-slice";
 import { upadteLocationsArr } from "../store/Slices/app-slice";
@@ -7,6 +7,7 @@ import { upadteLocationsArr } from "../store/Slices/app-slice";
 export default function BareWatch({ miniPlayerBoolean }) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const location = useSelector((state) => state.app.location);
 
   useLayoutEffect(() => {
     const url = new URL(window.location.href);
@@ -20,9 +21,11 @@ export default function BareWatch({ miniPlayerBoolean }) {
     // fetch data and store in watchSlice
     dispatch(upadteLocationsArr(currentRoute));
     miniPlayerBoolean.current = false;
-    dispatch(handleMiniPLayer(false));
+    dispatch(handleMiniPLayer(false, currentRoute));
 
-    dispatch(fetchWatchData(videoId, currentRoute));
+    if (location.length === 0) {
+      dispatch(fetchWatchData(videoId, currentRoute, {}));
+    }
   }, []);
   return <div className='bare-hidden-watch'></div>;
 }

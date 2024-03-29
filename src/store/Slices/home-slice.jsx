@@ -39,12 +39,12 @@ export const fetchRecommendedVideos = () => {
     dispatch(updateIsFetching());
 
     const { data, error } = await AxiosFetching("get", "browse", {});
-    console.log("running");
 
     if (error) {
       dispatch(updateLocation(currentRoute));
       dispatch(updateIsFetching());
       dispatch(handleNavigation("/"));
+      return;
       // display error banner
     }
 
@@ -65,14 +65,14 @@ export function updateMaxNums() {
     //   } else {
     //     videoMinWidth = 360;
     //   }
-    videoMinWidth = 330;
-
+    videoMinWidth = 320;
     const shortMinWidth = 210;
-    const width = gridContainerRef.getBoundingClientRect().width;
+    const width = gridContainerRef.getBoundingClientRect().width - 48;
 
     const maxNum = Math.max(1, Math.floor(width / videoMinWidth));
     const maxNumShort = Math.max(1, Math.floor(width / shortMinWidth));
-    const containerWidth = Math.floor(width / maxNum);
+    const gaps = maxNum - 1 * 5;
+    const containerWidth = Math.floor((width - gaps) / maxNum);
     document.documentElement.style.setProperty("--skeletonWidth", `${containerWidth}px`);
 
     const sizeObj = { max_video: maxNum, max_short: maxNumShort };

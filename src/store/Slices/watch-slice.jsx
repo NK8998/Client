@@ -43,7 +43,7 @@ export const { updatePlayingVideo, updateRecommendedVideosWatch, toggleTheatreMo
 export default watchSlice.reducer;
 
 let timeoutRef;
-export const fetchWatchData = (videoId, currentRoute) => {
+export const fetchWatchData = (videoId, currentRoute, data) => {
   return async (dispatch, getState) => {
     if (timeoutRef) {
       clearTimeout(timeoutRef);
@@ -81,29 +81,51 @@ export const fetchWatchData = (videoId, currentRoute) => {
     let playingVideo;
     const formData = new FormData();
     formData.append("videoId", videoId);
-    await AxiosFetching("post", "watch-video", formData).then((response) => {
-      if (response.error) {
-        dispatch(updateIsFetching());
-        dispatch(handleNavigation("/watch"));
-        dispatch(updateLocation(currentRoute));
-        return;
-      }
-      playingVideo = response.data;
+    if (Object.entries(data).length > 0) {
+      playingVideo = data;
       dispatch(updateIsFetching());
-      dispatch(updatePlayingVideo(response.data));
-      if (window.location.pathname.includes("watch")) {
-        dispatch(handleNavigation("/watch"));
-        dispatch(updateLocation(currentRoute));
-      }
-    });
+      dispatch(updatePlayingVideo(data));
+      dispatch(handleNavigation("/watch"));
+      dispatch(updateLocation(currentRoute));
+    } else if (Object.entries(data).length === 0) {
+      await AxiosFetching("post", "watch-video", formData)
+        .then((response) => {
+          playingVideo = response.data;
+          dispatch(updateIsFetching());
+          dispatch(updatePlayingVideo(response.data));
+          if (window.location.pathname.includes("watch")) {
+            dispatch(handleNavigation("/watch"));
+            dispatch(updateLocation(currentRoute));
+          }
+        })
+        .catch((error) => {
+          dispatch(updateIsFetching());
+          console.error(error);
+          // update fetching error and display error component
+        });
+    }
 
-    AxiosFetching("get", "browse", {}).then((response) => {
-      const newVideoObject = { videoId: videoId, recommendations: response.data, videoData: playingVideo };
-      dispatch(updateRecommendedVideosWatch(response.data));
-      dispatch(updateRetrievedVideos(newVideoObject));
-    });
+    console.log("fetching");
+    AxiosFetching("get", "browse", {})
+      .then((response) => {
+        shuffleArray(response.data);
+        const newVideoObject = { videoId: videoId, recommendations: response.data, videoData: playingVideo };
+        dispatch(updateRecommendedVideosWatch(response.data));
+        dispatch(updateRetrievedVideos(newVideoObject));
+      })
+      .catch((error) => {
+        console.error(error);
+        // update fetching error and display error component
+      });
   };
 };
+
+function shuffleArray(array) {
+  for (let i = array.length - 1; i > 0; i--) {
+    let j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+}
 
 export const handleTheatre = (theatreMode) => {
   return (dispatch) => {
@@ -143,7 +165,7 @@ export const handleFullscreen = (fullScreen) => {
 };
 
 let intervalRef;
-export const handleMiniPLayer = (miniPlayer) => {
+export const handleMiniPLayer = (miniPlayer, currentRoute) => {
   return async (dispatch, getState) => {
     await new Promise((resolve, reject) => {
       intervalRef = setInterval(() => {
@@ -164,6 +186,8 @@ export const handleMiniPLayer = (miniPlayer) => {
         dispatch(toggleMiniPlayer(true));
       }
     } else {
+      dispatch(handleNavigation("/watch"));
+      dispatch(updateLocation(currentRoute));
       dispatch(toggleMiniPlayer(false));
     }
     dispatch(updateSettingsShowing(false));

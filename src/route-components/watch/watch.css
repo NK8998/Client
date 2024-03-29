@@ -11,17 +11,25 @@
     width: 100%;
 }
 .columns{
-    margin-top: 20px;
+    margin-top: 30px;
     display: flex;
     gap: 24px;
     width: 100%;
     justify-content: center;
+}
+.columns.theatre,
+.columns.fullscreen{
+    margin-top: 0px;
 }
 .secondary{
     /* padding-left: 24px; */
     min-width: 400px;
     max-width: 400px;
     height: 150vh;
+}
+.secondary.content.fullscreen,
+.secondary.content.theatre{
+    margin-top: 10px;
 }
 .secondary-in-primary{
     width: var(--width);

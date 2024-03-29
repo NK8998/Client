@@ -6,7 +6,8 @@ import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { fetchWatchData } from "../../../../store/Slices/watch-slice";
 
-export default function SecondaryVideoComponent({ duration_timestamp, possible_thumbnail_urls, title, display_name, handle, created_at, video_id }) {
+export default function SecondaryVideoComponent({ data }) {
+  const { duration_timestamp, possible_thumbnail_urls, title, display_name, handle, created_at, video_id } = data;
   const dispatch = useDispatch();
   const views = useMemo(() => {
     return formatCount(generateRandomInteger());
@@ -17,7 +18,11 @@ export default function SecondaryVideoComponent({ duration_timestamp, possible_t
   }, [created_at]);
   return (
     <div className='secondary-skeleton'>
-      <Link to={`/watch?v=${video_id}`} onClick={() => dispatch(fetchWatchData(video_id, `/watch?v=${video_id}`))} className='skeleton-inner-link'>
+      <Link
+        to={`/watch?v=${video_id}`}
+        onClick={() => dispatch(fetchWatchData(video_id, `/watch?v=${video_id}`, data))}
+        className='skeleton-inner-link'
+      >
         <div className='secondary-skeleton-inner'>
           <div className='secondary-skeleton-left'>
             <img src={`${possible_thumbnail_urls["thumbnailUrl-0"]}`} alt='skeleton-thumbnail' className='secondary-skeleton-thumbnail' />
