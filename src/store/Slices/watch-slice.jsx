@@ -14,6 +14,7 @@ const watchSlice = createSlice({
     fullScreen: false,
     miniPlayer: false,
     retrievedVideos: [{ videoId: "", recommendations: [], videoData: {} }],
+    fetchingRecommendations: false,
   },
   reducers: {
     updatePlayingVideo: (state, action) => {
@@ -34,11 +35,21 @@ const watchSlice = createSlice({
     toggleMiniPlayer: (state, action) => {
       state.miniPlayer = action.payload;
     },
+    updatefetchingRecommendations: (state, action) => {
+      state.fetchingRecommendations = !state.fetchingRecommendations;
+    },
   },
 });
 
-export const { updatePlayingVideo, updateRecommendedVideosWatch, toggleTheatreMode, toggleFullScreen, updateRetrievedVideos, toggleMiniPlayer } =
-  watchSlice.actions;
+export const {
+  updatePlayingVideo,
+  updateRecommendedVideosWatch,
+  toggleTheatreMode,
+  toggleFullScreen,
+  updateRetrievedVideos,
+  toggleMiniPlayer,
+  updatefetchingRecommendations,
+} = watchSlice.actions;
 
 export default watchSlice.reducer;
 
@@ -104,14 +115,19 @@ export const fetchWatchData = (videoId, currentRoute, data) => {
           // update fetching error and display error component
         });
     }
-
-    console.log("fetching");
+    const isWatchPage = location.includes("watch");
+    if (!isWatchPage) {
+      dispatch(updatefetchingRecommendations());
+    }
     AxiosFetching("get", "browse", {})
       .then((response) => {
         shuffleArray(response.data);
         const newVideoObject = { videoId: videoId, recommendations: response.data, videoData: playingVideo };
         dispatch(updateRecommendedVideosWatch(response.data));
         dispatch(updateRetrievedVideos(newVideoObject));
+        if (!isWatchPage) {
+          dispatch(updatefetchingRecommendations());
+        }
       })
       .catch((error) => {
         console.error(error);

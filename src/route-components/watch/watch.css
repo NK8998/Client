@@ -27,6 +27,9 @@
     max-width: 400px;
     height: 150vh;
 }
+.secondary-inner.skeleton{
+    opacity: 0;
+}
 .secondary.content.fullscreen,
 .secondary.content.theatre{
     margin-top: 10px;

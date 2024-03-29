@@ -6,6 +6,8 @@ import { useSelector } from "react-redux";
 
 export default function SecondaryContent({ secondaryRefInner, secondaryRefOuter }) {
   const windowWidth = useSelector((state) => state.app.windowWidth);
+  const location = useSelector((state) => state.app.location);
+  const fetchingRecommendations = useSelector((state) => state.watch.fetchingRecommendations);
   useLayoutEffect(() => {
     const secondaryInnerContent = document.querySelector(".secondary-inner");
     if (!secondaryInnerContent || !secondaryRefInner.current || !secondaryRefOuter.current) return;
@@ -19,9 +21,9 @@ export default function SecondaryContent({ secondaryRefInner, secondaryRefOuter 
       secondaryRefInner.current.removeChild(secondaryInnerContent);
       secondaryRefOuter.current.appendChild(secondaryInnerContent);
     }
-  }, [windowWidth]);
+  }, [windowWidth, location]);
   return (
-    <div className='secondary-inner'>
+    <div className={`secondary-inner ${fetchingRecommendations ? "skeleton" : ""}`}>
       <FilterChipSecondary />
       <BrowseSecondaryVideos />
     </div>
