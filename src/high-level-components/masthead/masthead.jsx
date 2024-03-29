@@ -6,6 +6,10 @@ import { Link } from "react-router-dom";
 import { useEffect, useRef } from "react";
 
 export default function MastHead() {
+  const hasAccount = useSelector((state) => state.app.hasAccount);
+  const userData = useSelector((state) => state.app.userData);
+  const { pfp_url } = userData;
+  console.log({ userData }, { hasAccount });
   const dispatch = useDispatch();
   const mastheadRef = useRef();
   const SignIn = () => {
@@ -27,9 +31,13 @@ export default function MastHead() {
         </div>
         <div className='middle'></div>
         <div className='end'>
-          <button type='button' onClick={SignIn}>
-            Sign in
-          </button>
+          {!hasAccount ? (
+            <button type='button' onClick={SignIn}>
+              Sign in
+            </button>
+          ) : (
+            <img src={pfp_url} alt='pfp' />
+          )}
         </div>
       </div>
     </div>

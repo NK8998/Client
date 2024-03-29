@@ -9,7 +9,7 @@ import { fetchWatchData } from "../store/Slices/watch-slice";
 import { useAppNavigation } from "./navigation";
 
 export default function VideoComponent({ data }) {
-  const { duration_timestamp, possible_thumbnail_urls, title, display_name, handle, created_at, video_id } = data;
+  const { duration_timestamp, possible_thumbnail_urls, title, display_name, handle, created_at, video_id, preferred_thumbnail_url } = data;
   const dispatch = useDispatch();
   const handleNavigation = useAppNavigation();
   const views = useMemo(() => {
@@ -24,7 +24,11 @@ export default function VideoComponent({ data }) {
       <div className='browse-skeleton-inner'>
         <Link to={`/watch?v=${video_id}`} onClick={(e) => dispatch(fetchWatchData(video_id, `/watch?v=${video_id}`, data))}>
           <div className='browse-video-upper'>
-            <img src={possible_thumbnail_urls["thumbnailUrl-0"]} alt='thumbnail' className='skeleton-thumbnail' />
+            <img
+              src={preferred_thumbnail_url ? preferred_thumbnail_url : possible_thumbnail_urls["thumbnailUrl-0"]}
+              alt='thumbnail'
+              className='skeleton-thumbnail'
+            />
             <div className='skeleton-timestamp'>
               <p>{removeLeadingZero(duration_timestamp)}</p>
             </div>

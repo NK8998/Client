@@ -6,7 +6,7 @@ import Home from "./route-components/home/home";
 import { Route, Routes } from "react-router-dom";
 import BareHome from "./bare-routes/bare-home";
 import BareWatch from "./bare-routes/bare-watch";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { handleFullscreenChange, handlePopState, handleResize, updateRefs } from "./store/Slices/app-slice";
 import GuideWrapper from "./high-level-components/guide-wrapper/guide-wrapper";
 import Channel from "./route-components/channel/channel";
@@ -18,8 +18,10 @@ import BareLive from "./bare-routes/bare-channel/bare-channel-routes/bare-live/b
 import BarePlaylists from "./bare-routes/bare-channel/bare-channel-routes/bare-playlists/bare-playlists";
 import BareCommunity from "./bare-routes/bare-channel/bare-channel-routes/bare-community/bare-community";
 import MiniPlayer from "./route-components/watch/player/mini-player";
+import { LoadingScreen } from "./loading-screen/loading-screen";
 
 function App() {
+  const credentialsChecked = useSelector((state) => state.app.credentialsChecked);
   const dispatch = useDispatch();
   const homeRef = useRef();
   const watchRef = useRef();
@@ -29,6 +31,7 @@ function App() {
   // all refs should be here to enure they are all called when app loads
 
   useLayoutEffect(() => {
+    if (!credentialsChecked) return;
     const refArray = [
       { route: "/", ref: homeRef.current.id },
       { route: "/watch", ref: watchRef.current.id },
@@ -48,9 +51,9 @@ function App() {
     window.addEventListener("resize", () => {
       dispatch(handleResize());
     });
-  }, []);
+  }, [credentialsChecked]);
 
-  return (
+  return credentialsChecked ? (
     <>
       <MastHead />
       <div className='flex-content'>
@@ -77,6 +80,8 @@ function App() {
         </Route>
       </Routes>
     </>
+  ) : (
+    <LoadingScreen />
   );
 }
 

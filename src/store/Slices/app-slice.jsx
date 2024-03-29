@@ -5,6 +5,9 @@ import { updateMaxNums } from "./home-slice";
 const appSlice = createSlice({
   name: "app",
   initialState: {
+    hasAccount: false,
+    credentialsChecked: false,
+    userData: {},
     isFetching: false,
     refs: [],
     locationsArr: [],
@@ -32,10 +35,29 @@ const appSlice = createSlice({
     upadteLocationsArr: (state, action) => {
       state.locationsArr = [action.payload, ...state.locationsArr];
     },
+    updateCredentialsCheck: (state, action) => {
+      state.credentialsChecked = action.payload;
+    },
+    updateUserData: (state, action) => {
+      state.userData = action.payload;
+    },
+    updateHasAccount: (state, action) => {
+      state.hasAccount = action.payload;
+    },
   },
 });
 
-export const { updateRefs, updateIsFetching, updateLocation, updateWindowWidth, updatePreference, upadteLocationsArr } = appSlice.actions;
+export const {
+  updateRefs,
+  updateIsFetching,
+  updateLocation,
+  updateWindowWidth,
+  updatePreference,
+  upadteLocationsArr,
+  updateCredentialsCheck,
+  updateUserData,
+  updateHasAccount,
+} = appSlice.actions;
 export default appSlice.reducer;
 
 export const handleNavigation = (targetRoute) => {

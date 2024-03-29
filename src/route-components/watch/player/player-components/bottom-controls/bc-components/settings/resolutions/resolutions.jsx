@@ -75,7 +75,7 @@ export const Resolutions = ({ playerRef, checkBufferedOnTrackChange }) => {
   if (!resolutions || resolutions.length === 0) return;
   const allResolutions = [...resolutions, { tag: "auto", supersript: "", height: "auto", width: "auto", framerate: "" }];
   const resolutionsEl = allResolutions.map((res) => {
-    const fps = res.framerate > 30 ? res.framerate : "";
+    const fps = res.framerate > 30 ? Math.round(res.framerate) : "";
     const tagString = `${res.tag}${fps}`;
     let icon;
     if (tagString === resolution && preferredResolution) {
@@ -83,15 +83,10 @@ export const Resolutions = ({ playerRef, checkBufferedOnTrackChange }) => {
     } else if (!preferredResolution && res.tag !== resolution && res.height === "auto") {
       icon = <TickIcon />;
     }
-    const framerate = typeof res.framerate === "number" && res.framerate > 30 ? Math.round(res.framerate) : "";
-
     return (
       <div className='resolution-item' onClick={() => changeResolution(`${res.height}`, res.tag, Math.round(res.framerate))} key={`${res.tag}`}>
         <p className='tick-container'>{icon}</p>
-        <p>
-          {res.tag}
-          {framerate}
-        </p>
+        <p>{tagString}</p>
         <p className='superscript'>{res.supersript}</p>
       </div>
     );
