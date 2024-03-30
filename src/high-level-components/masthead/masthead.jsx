@@ -36,7 +36,7 @@ export default function MastHead() {
               Sign in
             </button>
           ) : (
-            <img src={pfp_url} alt='pfp' />
+            <img src={pfp_url} alt='pfp' className='user-pfp' />
           )}
         </div>
       </div>

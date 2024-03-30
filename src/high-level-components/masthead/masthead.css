@@ -55,3 +55,15 @@
 .start .logo svg{
     fill: white;
 }
+
+.end{
+    display: flex;
+    align-items: center;
+}
+.user-pfp{
+    min-height: 33px;
+    min-width: 33px;
+    max-height: 33px;
+    max-width: 33px;
+    border-radius: 100%;
+}
