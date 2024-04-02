@@ -118,11 +118,9 @@ export const usePlayerClickInteractions = () => {
     timeoutClick.current = setTimeout(() => {
       if (videoRef.paused) {
         videoRef.play();
-        toPlay();
       } else {
         handleMouseMove();
         videoRef.pause();
-        toPause();
       }
     }, 200);
   };

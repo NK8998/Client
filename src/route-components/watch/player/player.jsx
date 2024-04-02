@@ -19,6 +19,7 @@ import { usePlayerStyles } from "./utilities/player-styles";
 import { useFullscreenMode, useMiniPlayermode, useTheatreMode } from "./utilities/player-modes";
 import { PreviewBgSize } from "./utilities/preview-bg-size";
 import PreviewBG from "./player-components/preview-bg/preview-bg";
+import { handleTheatre, toggleTheatreMode } from "../../../store/Slices/watch-slice";
 
 export default function Player({ videoRef, containerRef, miniPlayerBoolean }) {
   const dispatch = useDispatch();
@@ -157,6 +158,11 @@ export default function Player({ videoRef, containerRef, miniPlayerBoolean }) {
       playerRef.current = null;
     }
   }, [playingVideo, video_id]);
+
+  useLayoutEffect(() => {
+    const theatre = JSON.parse(localStorage.getItem("theatreMode"));
+    dispatch(toggleTheatreMode(theatre));
+  }, []);
 
   const attatchPlayer = async () => {
     await detachPlayer();
@@ -310,10 +316,12 @@ export default function Player({ videoRef, containerRef, miniPlayerBoolean }) {
           onProgress={() => updateBufferBar(chapters)}
           onClick={handlePlayState}
           onPlay={(e) => {
+            toPlay();
             dispatch(updatePlay(true));
             updateProgess(e);
           }}
           onPause={() => {
+            toPause();
             dispatch(updatePlay(false));
             clearIntervalProgress();
           }}

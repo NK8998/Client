@@ -148,11 +148,14 @@ export const handleTheatre = (theatreMode) => {
     if (document.fullscreenElement) {
       dispatch(toggleTheatreMode(true));
       dispatch(toggleFullScreen(false));
+      localStorage.setItem("theatreMode", JSON.stringify(true));
     } else {
       if (theatreMode) {
         dispatch(toggleTheatreMode(false));
+        localStorage.setItem("theatreMode", JSON.stringify(false));
       } else {
         dispatch(toggleTheatreMode(true));
+        localStorage.setItem("theatreMode", JSON.stringify(true));
       }
     }
   };

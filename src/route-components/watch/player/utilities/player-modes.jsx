@@ -88,8 +88,6 @@ export const useTheatreMode = () => {
     const secondary = document.querySelector(".secondary.content");
     const columns = document.querySelector(".columns");
 
-    const isWatchpage = location.includes("watch") || window.location.pathname.includes("watch");
-    if (!isWatchpage) return;
     if (!primaryRef || !containerRef) return;
 
     if (Array.from(primaryRef.children).includes(containerRef) && primaryRef && theatreMode) {
