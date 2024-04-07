@@ -9,9 +9,7 @@ export const usePlayerStyles = () => {
   const { aspect_ratio } = playingVideo;
 
   useEffect(() => {
-    setTimeout(() => {
-      applyChapterStyles();
-    }, 40);
+    applyChapterStyles();
   }, [fullScreen]);
 
   function applyChapterStyles() {

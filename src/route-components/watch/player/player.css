@@ -73,6 +73,10 @@
   max-height: 100vh;
   border-radius: 0px;
 }
+.player-outer.fullscreen .player-inner-relative, .player-outer.fullscreen.theatre .player-inner-relative{
+  background-image: linear-gradient(to bottom,rgba(0, 0, 0, 0.712), rgba(0, 0, 0, 0.075),rgba(0, 0, 0, 0), rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.075), rgba(0, 0, 0, 0.712));
+  
+}
 .player-outer.fullscreen  .player-button, .player-outer.fullscreen.theatre  .player-button{
   width: 53px;
   height: 53px;
@@ -84,12 +88,16 @@
 
 .player-outer.fullscreen  .chapters-absolute, .player-outer.fullscreen.theatre  .chapters-absolute{
   bottom: 49px;
+  width: calc(100% - 20px);
+  padding: 0px 10px;
 }
 .player-outer.fullscreen  .bar, .player-outer.fullscreen.theatre  .bar{
   height: 5px;
 }
 .player-outer.fullscreen  .bottom-controls, .player-outer.fullscreen.theatre  .bottom-controls{
   height: 53px;
+  width: calc(100% - 44px);
+  padding: 0px 22px;
 }
 .player-outer.fullscreen  .red-dot, .player-outer.fullscreen.theatre  .red-dot{
   height: 20px;
@@ -486,6 +494,31 @@
 .preview-image-bg.show{
   /* pointer-events: all; */
   visibility: visible;
+}
+.top-video-component.visible{
+  pointer-events: all;
+  opacity: 1;
+}
+.top-video-component{
+  opacity: 0;
+  pointer-events: none;
+  position: absolute;
+  width: calc(100% - 20px);
+  height: fit-content;
+  padding: 10px;
+  left: 0;
+}
+.title-card{
+  font-size: 26px;
+  max-width: 750px;
+  overflow: hidden; 
+  text-overflow: ellipsis; 
+  display: -webkit-box; 
+  -webkit-line-clamp: 1; 
+  -webkit-box-orient: vertical;
+  color: rgba(255, 255, 255, 0.945);
+  margin-left: 10px;
+  margin-top: 10px;
 }
  
 @media(max-width: 65em){

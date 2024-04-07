@@ -19,7 +19,9 @@ import { usePlayerStyles } from "./utilities/player-styles";
 import { useFullscreenMode, useMiniPlayermode, useTheatreMode } from "./utilities/player-modes";
 import { PreviewBgSize } from "./utilities/preview-bg-size";
 import PreviewBG from "./player-components/preview-bg/preview-bg";
-import { handleTheatre, toggleTheatreMode } from "../../../store/Slices/watch-slice";
+import { handleTheatre, toggleTheatreMode, updatePlayingVideo } from "../../../store/Slices/watch-slice";
+import TitleComponent from "./player-components/bottom-controls/bc-components/title-component";
+import TopVideoComponent from "./player-components/bottom-controls/bc-components/title-component";
 
 export default function Player({ videoRef, containerRef, miniPlayerBoolean }) {
   const dispatch = useDispatch();
@@ -80,22 +82,29 @@ export default function Player({ videoRef, containerRef, miniPlayerBoolean }) {
   }, [location, video_id, theatreMode]);
 
   useLayoutEffect(() => {
-    // console.log(location);
     const isWatchpage = location.includes("watch");
-    if (miniPlayerBoolean.current === false) {
-      if (!isWatchpage) {
-        videoRef.current.pause();
-        clearIntervalProgress();
-        detachPlayer();
-        window.removeEventListener("resize", calculateWidth);
-      } else if (isWatchpage && playerRef.current === null) {
-        // console.log("I ran");
-        attatchPlayer();
-        calculateWidth();
-        applyChapterStyles();
-      }
+    console.log(miniPlayer);
+
+    if (miniPlayerBoolean.current === false && isWatchpage === false) {
+      console.log("ran");
+      videoRef.current.pause();
+      clearIntervalProgress();
+      detachPlayer();
+      window.removeEventListener("resize", calculateWidth);
+      dispatch(updatePlayingVideo({}));
     }
   }, [location]);
+
+  useLayoutEffect(() => {
+    const isWatchpage = window.location.pathname.includes("watch");
+
+    if (!isWatchpage && miniPlayer) {
+      clearIntervalProgress();
+      resetBars();
+      calculateWidth();
+      attatchPlayer();
+    }
+  }, [playingVideo]);
 
   useEffect(() => {
     handleHover();
@@ -336,6 +345,7 @@ export default function Player({ videoRef, containerRef, miniPlayerBoolean }) {
           <PreviewBG />
           <Loader spinnerRef={spinnerRef} />
           <div className='player-inner-relative' ref={controlsRef}>
+            <TopVideoComponent />
             <Settings playerRef={playerRef} checkBufferedOnTrackChange={checkBufferedOnTrackChange} />
             <ScrubbingPreviews videoRef={videoRef} />
             <Chapters

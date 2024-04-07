@@ -1,9 +1,10 @@
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { usePlayerStyles } from "./player-styles";
 import { usePlayerMouseMove } from "./player-mouse-interactions";
 import { usePlayerDraggingLogic } from "./player-dragging-logic";
 import { useRef } from "react";
 import { toNormal, toTheatre } from "./gsap-animations";
+import { handleFullscreen, toggleFullScreen } from "../../../../store/Slices/watch-slice";
 
 export const useMiniPlayermode = () => {
   const miniPlayer = useSelector((state) => state.watch.miniPlayer);
@@ -137,6 +138,7 @@ export const useFullscreenMode = () => {
   const theatreMode = useSelector((state) => state.watch.theatreMode);
   const location = useSelector((state) => state.app.location);
   const fullScreen = useSelector((state) => state.watch.fullScreen);
+  const dispatch = useDispatch();
 
   const handleScrollPosition = (e) => {
     const root = document.querySelector("#root");
@@ -219,8 +221,11 @@ export const useFullscreenMode = () => {
       root.addEventListener("scroll", handleScrollPosition);
     } else if (primaryRef && !Array.from(primaryRef.children).includes(containerRef) && !fullScreen) {
       // console.log("exiting fullscreen");
+
       if (document.fullscreenElement) {
-        document.exitFullscreen();
+        setTimeout(() => {
+          dispatch(handleFullscreen(true));
+        }, 200);
       }
       containerRef.classList.remove("fullscreen");
       if (Array.from(expandedContainerRef.children).includes(containerRef) && !theatreMode) {

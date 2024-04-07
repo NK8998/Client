@@ -6,9 +6,9 @@ export const CustomSpeed = ({}) => {
   const dispatch = useDispatch();
   return (
     <div className='custom-speed panel-item'>
-      <div className='custom-speed-upper' onClick={() => dispatch(handleTranslating(1, "custom-speed", "playback-speed-panel"))}>
+      <div className='custom-speed-upper settings-upper' onClick={() => dispatch(handleTranslating(1, "custom-speed", "playback-speed-panel"))}>
         <ArrowLeftButton />
-        <p>Playback speed</p>
+        <p>Custom</p>
       </div>
       <div className='custom-speed-inner'></div>
     </div>

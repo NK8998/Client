@@ -49,6 +49,7 @@ export const {
   updateRetrievedVideos,
   toggleMiniPlayer,
   updatefetchingRecommendations,
+  updateFullSreenTransition,
 } = watchSlice.actions;
 
 export default watchSlice.reducer;
@@ -76,6 +77,7 @@ export const fetchWatchData = (videoId, currentRoute, data) => {
       dispatch(updateRecommendedVideosWatch(currentVideo.recommendations));
       dispatch(updateIsFetching());
 
+      if (miniPlayer) return;
       if (miniPlayer) {
         timeoutRef = setTimeout(() => {
           dispatch(updateLocation(currentRoute));
@@ -96,6 +98,7 @@ export const fetchWatchData = (videoId, currentRoute, data) => {
       playingVideo = data;
       dispatch(updateIsFetching());
       dispatch(updatePlayingVideo(data));
+      if (miniPlayer) return;
       dispatch(handleNavigation("/watch"));
       dispatch(updateLocation(currentRoute));
     } else if (Object.entries(data).length === 0) {
@@ -105,6 +108,7 @@ export const fetchWatchData = (videoId, currentRoute, data) => {
           dispatch(updateIsFetching());
           dispatch(updatePlayingVideo(response.data));
           if (window.location.pathname.includes("watch")) {
+            if (miniPlayer) return;
             dispatch(handleNavigation("/watch"));
             dispatch(updateLocation(currentRoute));
           }
@@ -161,22 +165,30 @@ export const handleTheatre = (theatreMode) => {
   };
 };
 
+let timeout;
 export const handleFullscreen = (fullScreen) => {
   return (dispatch) => {
     const root = document.querySelector("#root");
 
+    if (timeout) {
+      clearTimeout(timeout);
+    }
     if (!root) return;
     if (!fullScreen && window.location.pathname.includes("watch")) {
       root.scrollTo({ top: 0, behavior: "instant" });
       if (!document.fullscreenElement) {
         document.documentElement.requestFullscreen().then(() => {
-          dispatch(toggleFullScreen(true));
+          timeout = setTimeout(() => {
+            dispatch(toggleFullScreen(true));
+          }, 200);
         });
       }
     } else if (fullScreen) {
       if (document.fullscreenElement) {
         document.exitFullscreen().then(() => {
-          dispatch(toggleFullScreen(false));
+          timeout = setTimeout(() => {
+            dispatch(toggleFullScreen(false));
+          }, 200);
         });
       }
     }

@@ -1,6 +1,6 @@
 .settings{
     position: absolute;
-    right: 20px;
+    right: 12px;
     bottom: 70px;
     z-index: 4;
     background-color: rgba(24, 24, 24, 0.897);
@@ -19,6 +19,9 @@
     overflow-x: hidden;
     scrollbar-gutter: stable;
 
+}
+.player-outer.fullscreen .settings, .player-outer.fullscreen.theatre .settings{
+    right: 20px;
 }
 
 .settings.settings-hidden.show, .settings.settings-hidden{
@@ -120,13 +123,17 @@
 
 }
 .player-outer.fullscreen .playback-speed-panel, .player-outer.fullscreen.theatre .playback-speed-panel{
-    width: 280px;
+    width: 320px;
     height: 450px;
+}
+.player-outer.fullscreen .settings-upper, .play-back-speed-outer.fullscreen.theatre .settings-upper{
+    padding: 15px 10px;
+    padding-bottom: 20px;
 }
 
 .player-outer.fullscreen .resolutions-settings, 
 .player-outer.fullscreen.theatre .resolutions-settings{
-    width: 240px;
+    width: 220px;
     height: fit-content;
 
 }
@@ -201,8 +208,7 @@
     height: 20px;
     fill: white;
 }
-.resolutions-upper,
-.custom-speed-upper{
+.settings-upper{
     width: calc(100% - 20px);
     padding: 10px 10px;
     padding-bottom: 15px;
@@ -211,16 +217,7 @@
     gap: 1em;
     border-bottom:  1px solid rgba(199, 199, 199, 0.158);
 }
-.playback-speed-upper,
-.subtitles-panel-upper{
-    width: calc(100% - 20px);
-    padding: 10px 10px;
-    padding-bottom: 15px;
-    display: flex;
-    align-items: center;
-    gap: 1em;
-    border-bottom: 1px solid rgba(199, 199, 199, 0.158);
-}
+
 .playback-speed-upper-left,
 .subtitles-panel-upper-left{
     display: flex;
@@ -229,7 +226,7 @@
 
 }
 .tick-container{
-    min-width: 24px;
+    min-width: 16px;
 }
 .tick-container svg{
     height: 14px;
@@ -245,7 +242,7 @@
 }
 
 .resolutions-settings{
-    width: 230px;
+    width: 260px;
     height: fit-content;
     transition: height 0ms, width 0ms;
 }
@@ -277,17 +274,19 @@
     cursor: pointer;
 }
 
+
 .play-back-speed-outer{
     display: flex;
     align-items: end;
     /* overflow-y: scroll; */
 }
 .playback-speed-panel{
+    width: 260px;
     /* overflow-y: scroll; */
 }
 
 .custom-speed{
-    width: 200px;
+    width: 250px;
     height: 150px;
 }
 .custom-speed svg{

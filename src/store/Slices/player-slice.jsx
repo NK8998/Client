@@ -98,30 +98,32 @@ export const handleTranslating = (panel, currentElement, element) => {
       if (currentElement === element) {
         settingsRef.style.transition = `all 0ms`;
         settingsScrollContainer.style.transition = `all 0ms`;
-      } else if (currentElement !== element) {
-        settingsRef.style.transition = `height 200ms ease, width 200ms ease, opacity 100ms ease`;
-
-        settingsScrollContainer.style.transition = `all 200ms ease`;
       }
+      settingsRef.style.transition = `height 200ms ease, width 200ms ease, opacity 100ms ease`;
+
+      settingsScrollContainer.style.transition = `all 200ms ease`;
+
       settingsRef.style.width = `${width}px`;
       settingsRef.style.height = `${height}px`;
       // settingsScrollContainer.style.width = `${width}px`;
       settingsScrollContainer.style.height = `${height}px`;
 
       settingsScrollContainer.style.transform = `translate(-${targetLeft}px, 0px)`;
-      if (currentElement === element) {
-        const panelEl = document.querySelectorAll(".panel-item");
+      // if (currentElement === element) {
+      //   const panelEl = document.querySelectorAll(".panel-item");
 
-        panelEl.forEach((panelel) => {
-          if (!panelel.classList.contains(element)) {
-            panelel.classList.add("panel-hidden");
-          }
-        });
-      }
+      //   panelEl.forEach((panelel) => {
+      //     if (!panelel.classList.contains(element)) {
+      //       panelel.classList.add("panel-hidden");
+      //     }
+      //   });
+      // }
       timeout2 = setTimeout(() => {
         if (typeof panel !== "number") {
           dispatch(updatePanel(-4));
         }
+        // settingsRef.style.transition = `all 0ms`;
+        // settingsScrollContainer.style.transition = `all 0ms`;
         // const panelEl = document.querySelectorAll(".panel-item");
 
         // panelEl.forEach((panelel) => {
@@ -129,6 +131,8 @@ export const handleTranslating = (panel, currentElement, element) => {
         //     panelel.classList.add("panel-hidden");
         //   }
         // });
+
+        // settingsScrollContainer.style.transform = `translate(-${0}px, 0px)`;
       }, 200);
     }, 5);
   };
@@ -141,7 +145,6 @@ export const handleTranslatingHere = (panel, currentElement, element) => {
 
     settingsScrollContainer.style.transition = `all 0ms`;
     settingsRef.style.transition = `all 0ms`;
-    settingsScrollContainer.style.transform = `translate(-${0}px, 0px)`;
 
     const panelEl = document.querySelectorAll(".panel-item");
 
@@ -158,20 +161,13 @@ export const handleTranslatingHere = (panel, currentElement, element) => {
       const targetEl = document.querySelector(`.${element}`);
       const { width, height } = targetEl.getBoundingClientRect();
       const targetLeft = targetEl.offsetLeft;
-      settingsScrollContainer.style.transform = `translate(-${targetLeft}px, 0px)`;
-      if (currentElement === element) {
-        settingsRef.style.transition = `all 0ms`;
-        settingsScrollContainer.style.transition = `all 0ms`;
-      } else if (currentElement !== element) {
-        settingsRef.style.transition = `height 200ms ease, width 200ms ease, opacity 100ms ease`;
-
-        settingsScrollContainer.style.transition = `all 200ms ease`;
-      }
 
       settingsRef.style.width = `${width}px`;
       settingsRef.style.height = `${height}px`;
       // settingsScrollContainer.style.width = `${width}px`;
       settingsScrollContainer.style.height = `${height}px`;
-    }, 5);
+
+      settingsScrollContainer.style.transform = `translate(-${targetLeft}px, 0px)`;
+    }, 0.2);
   };
 };

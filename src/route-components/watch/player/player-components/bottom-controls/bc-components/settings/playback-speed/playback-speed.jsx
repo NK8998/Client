@@ -19,7 +19,7 @@ export const PlayBackSpeed = ({}) => {
   return (
     <div className='play-back-speed-outer '>
       <div className='playback-speed-panel menu-panel panel-item'>
-        <div className='playback-speed-upper'>
+        <div className='playback-speed-upper settings-upper'>
           <div
             className='playback-speed-upper-left'
             onClick={() => dispatch(handleTranslating(null, "playback-speed-panel", "settings-menu-selector-items"))}

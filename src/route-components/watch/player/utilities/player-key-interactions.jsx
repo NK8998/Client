@@ -75,7 +75,7 @@ export const usePlayerkeyInteractions = () => {
       }
       fullScreenTimeout.current = setTimeout(() => {
         dispatch(handleFullscreen(fullScreen));
-      }, 200);
+      }, 100);
     }
   };
 

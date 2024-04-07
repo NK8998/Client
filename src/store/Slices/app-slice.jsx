@@ -1,5 +1,5 @@
 import { createSlice, current } from "@reduxjs/toolkit";
-import { fetchWatchData, toggleFullScreen } from "./watch-slice";
+import { fetchWatchData, handleFullscreen, toggleFullScreen } from "./watch-slice";
 import { updateMaxNums } from "./home-slice";
 
 const appSlice = createSlice({
@@ -152,16 +152,26 @@ export const handlePopState = () => {
   };
 };
 
+let timeout;
 export const handleFullscreenChange = () => {
+  if (timeout) {
+    clearTimeout(timeout);
+  }
   return (dispatch) => {
     if (window.location.pathname.includes("watch")) {
       if (document.fullscreenElement) {
-        dispatch(toggleFullScreen(true));
+        timeout = setTimeout(() => {
+          dispatch(toggleFullScreen(true));
+        }, 200);
       } else {
-        dispatch(toggleFullScreen(false));
+        timeout = setTimeout(() => {
+          dispatch(toggleFullScreen(false));
+        }, 200);
       }
     } else {
-      dispatch(toggleFullScreen(false));
+      timeout = setTimeout(() => {
+        dispatch(toggleFullScreen(false));
+      }, 200);
     }
   };
 };
