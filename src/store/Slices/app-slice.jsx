@@ -1,5 +1,5 @@
 import { createSlice, current } from "@reduxjs/toolkit";
-import { fetchWatchData, handleFullscreen, toggleFullScreen } from "./watch-slice";
+import { fetchWatchData, handleFullscreen, toggleFullScreen, updateIsTransitioning } from "./watch-slice";
 import { updateMaxNums } from "./home-slice";
 
 const appSlice = createSlice({
@@ -157,6 +157,7 @@ export const handleFullscreenChange = () => {
   if (timeout) {
     clearTimeout(timeout);
   }
+
   return (dispatch) => {
     if (window.location.pathname.includes("watch")) {
       if (document.fullscreenElement) {

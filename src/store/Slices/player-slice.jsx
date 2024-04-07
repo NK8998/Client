@@ -161,13 +161,12 @@ export const handleTranslatingHere = (panel, currentElement, element) => {
       const targetEl = document.querySelector(`.${element}`);
       const { width, height } = targetEl.getBoundingClientRect();
       const targetLeft = targetEl.offsetLeft;
+      settingsScrollContainer.style.transform = `translate(-${targetLeft}px, 0px)`;
 
       settingsRef.style.width = `${width}px`;
       settingsRef.style.height = `${height}px`;
       // settingsScrollContainer.style.width = `${width}px`;
       settingsScrollContainer.style.height = `${height}px`;
-
-      settingsScrollContainer.style.transform = `translate(-${targetLeft}px, 0px)`;
-    }, 0.2);
+    }, 0.3);
   };
 };

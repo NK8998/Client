@@ -69,15 +69,24 @@ export default function Player({ videoRef, containerRef, miniPlayerBoolean }) {
   }, [chapters]);
 
   useEffect(() => {
+    const handlePlayerResizing = () => {
+      if (document.fullscreenElement) {
+        setTimeout(() => {
+          calculateWidth();
+        }, 250);
+      } else {
+        calculateWidth();
+      }
+    };
     const isWatchpage = location.includes("watch") || window.location.pathname.includes("watch");
     if (isWatchpage === false) {
-      window.removeEventListener("resize", calculateWidth);
+      window.removeEventListener("resize", handlePlayerResizing);
     } else if (isWatchpage === true) {
-      window.addEventListener("resize", calculateWidth);
+      window.addEventListener("resize", handlePlayerResizing);
     }
 
     return () => {
-      window.removeEventListener("resize", calculateWidth);
+      window.removeEventListener("resize", handlePlayerResizing);
     };
   }, [location, video_id, theatreMode]);
 

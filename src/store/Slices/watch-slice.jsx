@@ -15,6 +15,7 @@ const watchSlice = createSlice({
     miniPlayer: false,
     retrievedVideos: [{ videoId: "", recommendations: [], videoData: {} }],
     fetchingRecommendations: false,
+    isTransitioning: false,
   },
   reducers: {
     updatePlayingVideo: (state, action) => {
@@ -38,6 +39,9 @@ const watchSlice = createSlice({
     updatefetchingRecommendations: (state, action) => {
       state.fetchingRecommendations = !state.fetchingRecommendations;
     },
+    updateIsTransitioning: (state, action) => {
+      state.isTransitioning = !state.isTransitioning;
+    },
   },
 });
 
@@ -50,6 +54,7 @@ export const {
   toggleMiniPlayer,
   updatefetchingRecommendations,
   updateFullSreenTransition,
+  updateIsTransitioning,
 } = watchSlice.actions;
 
 export default watchSlice.reducer;

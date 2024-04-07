@@ -225,7 +225,7 @@ export const useFullscreenMode = () => {
       if (document.fullscreenElement) {
         setTimeout(() => {
           dispatch(handleFullscreen(true));
-        }, 200);
+        }, 100);
       }
       containerRef.classList.remove("fullscreen");
       if (Array.from(expandedContainerRef.children).includes(containerRef) && !theatreMode) {
