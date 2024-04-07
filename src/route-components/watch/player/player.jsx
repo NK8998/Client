@@ -91,11 +91,10 @@ export default function Player({ videoRef, containerRef, miniPlayerBoolean }) {
   }, [location, video_id, theatreMode]);
 
   useLayoutEffect(() => {
+    // for detaching player when user moves away from the watchpage
     const isWatchpage = location.includes("watch");
-    console.log(miniPlayer);
 
     if (miniPlayerBoolean.current === false && isWatchpage === false) {
-      console.log("ran");
       videoRef.current.pause();
       clearIntervalProgress();
       detachPlayer();
@@ -105,6 +104,7 @@ export default function Player({ videoRef, containerRef, miniPlayerBoolean }) {
   }, [location]);
 
   useLayoutEffect(() => {
+    // for browsing in miniplayer mode
     const isWatchpage = window.location.pathname.includes("watch");
 
     if (!isWatchpage && miniPlayer) {
@@ -114,6 +114,18 @@ export default function Player({ videoRef, containerRef, miniPlayerBoolean }) {
       attatchPlayer();
     }
   }, [playingVideo]);
+
+  useLayoutEffect(() => {
+    // for browsing in the watchpage
+    if (window.location.pathname.includes("watch")) {
+      clearIntervalProgress();
+      resetBars();
+      calculateWidth();
+      attatchPlayer();
+    } else {
+      playerRef.current = null;
+    }
+  }, [playingVideo, video_id]);
 
   useEffect(() => {
     handleHover();
@@ -165,17 +177,6 @@ export default function Player({ videoRef, containerRef, miniPlayerBoolean }) {
       clearIntervalOnTrackChange();
     }
   }, [video_id, location]);
-
-  useLayoutEffect(() => {
-    if (window.location.pathname.includes("watch")) {
-      clearIntervalProgress();
-      resetBars();
-      calculateWidth();
-      attatchPlayer();
-    } else {
-      playerRef.current = null;
-    }
-  }, [playingVideo, video_id]);
 
   useLayoutEffect(() => {
     const theatre = JSON.parse(localStorage.getItem("theatreMode"));

@@ -147,7 +147,7 @@ export const handlePopState = () => {
     const videoId = url.search.split("=")[1];
     const isWatchPage = currentRoute.includes("watch");
     if (isWatchPage) {
-      dispatch(fetchWatchData(videoId, currentRoute));
+      dispatch(fetchWatchData(videoId, currentRoute, {}));
     }
   };
 };
