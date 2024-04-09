@@ -70,7 +70,7 @@ export default function Player({ videoRef, containerRef, miniPlayerBoolean }) {
 
   useEffect(() => {
     const handlePlayerResizing = () => {
-      if (document.fullscreenElement) {
+      if (document.fullscreenElement || fullScreen) {
         setTimeout(() => {
           calculateWidth();
         }, 250);
