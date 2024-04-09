@@ -58,6 +58,10 @@ export default function Chapters({ videoRef, chapterContainerRef, redDotRef, red
     updateRedDot(newTime);
   };
   const handleMouseEnter = () => {
+    const chaptersContainers = document.querySelectorAll(".chapter-padding");
+    chaptersContainers.forEach((chaptersContainer, index) => {
+      chaptersContainer.classList.remove("drag-expand");
+    });
     if (settingsShowing) return;
     const scrubbingPreviewContainer = document.querySelector(".scrubbing-preview-container");
     scrubbingPreviewContainer.classList.add("show");
@@ -75,9 +79,14 @@ export default function Chapters({ videoRef, chapterContainerRef, redDotRef, red
         tabIndex={0}
         onFocus={handleMouseMove}
         onMouseMove={updateScrubbingBar}
+        onTouchMove={(e) => {
+          updateScrubbingBar(e.touches[0]);
+        }}
         onMouseOut={resetDot}
         onMouseDown={startDrag}
         onMouseUp={stopDragging}
+        onTouchStart={startDrag}
+        onTouchEnd={stopDragging}
         onKeyDown={handleKeyDown}
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}

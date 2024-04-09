@@ -50,6 +50,9 @@ export const usePlayerDraggingLogic = () => {
   };
 
   const handleClick = (e) => {
+    if (mouseDownTracker.current) {
+      clearTimeout(mouseDownTracker.current);
+    }
     // checkBufferedOnTrackChange();
     const videoRef = document.querySelector("#html5-player");
     const redDotRef = document.querySelector(".red-dot");
@@ -128,7 +131,11 @@ export const usePlayerDraggingLogic = () => {
     updateRedDot(currentTime);
   };
 
-  const stopDragging = () => {
+  const handleTouchDrag = (e) => {
+    handleDrag(e.touches[0]); // Use the first touch object
+  };
+
+  const stopDragging = (e) => {
     const previewImageBg = document.querySelector(".preview-image-bg");
     const innerChapterContainerRef = document.querySelector(".chapters-container");
     const videoRef = document.querySelector("#html5-player");
@@ -146,11 +153,15 @@ export const usePlayerDraggingLogic = () => {
       videoRef.play();
       toPlay();
     }
+    window.removeEventListener("touchmove", handleTouchDrag);
+    window.removeEventListener("touchend", stopDragging);
+
     window.removeEventListener("mousemove", handleDrag);
     window.removeEventListener("mouseup", stopDragging);
 
     setTimeout(() => {
       const chaptersContainers = document.querySelectorAll(".chapter-padding");
+      if (e.touches) return;
       chaptersContainers.forEach((chaptersContainer, index) => {
         chaptersContainer.classList.remove("drag-expand");
       });
@@ -160,6 +171,7 @@ export const usePlayerDraggingLogic = () => {
     if (hovering === "false") {
       resetDot();
     }
+
     innerChapterContainerRef.classList.remove("drag-expand");
     checkBufferedOnTrackChange();
     checkBuffered();
@@ -168,11 +180,19 @@ export const usePlayerDraggingLogic = () => {
   };
 
   const startDrag = (e) => {
+    const isTouching = e.touches ? e.touches.length > 0 : false;
     const innerChapterContainerRef = document.querySelector(".chapters-container");
     const videoRef = document.querySelector("#html5-player");
     document.documentElement.style.setProperty("--select", "none");
     mouseDownTracker.current = setTimeout(() => {
-      handleDrag(e);
+      if (isTouching) {
+        const style = getComputedStyle(document.documentElement);
+        const currentIndex = parseInt(style.getPropertyValue("--currentChapterIndex").trim());
+        document.documentElement.style.setProperty("--hoverChapterIndex", `${currentIndex}`);
+        handleDrag(e.touches[0]); // Use the first touch object
+      } else {
+        handleDrag(e);
+      }
       videoRef.pause();
       toPause();
       isDragging.current = true;
@@ -180,8 +200,13 @@ export const usePlayerDraggingLogic = () => {
       clearIntervalOnTrackChange();
       videoRef.style.visibility = "hidden";
       innerChapterContainerRef.classList.add("drag-expand");
-      window.addEventListener("mousemove", handleDrag);
-      window.addEventListener("mouseup", stopDragging);
+      if (isTouching) {
+        window.addEventListener("touchmove", handleTouchDrag);
+        window.addEventListener("touchend", stopDragging);
+      } else {
+        window.addEventListener("mousemove", handleDrag);
+        window.addEventListener("mouseup", stopDragging);
+      }
     }, 130);
   };
 

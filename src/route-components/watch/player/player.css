@@ -7,6 +7,7 @@
   border-radius: 12px;
   overflow: hidden;
   outline: none;
+  touch-action: none;
 }
 .player-if.has-content{
   height: var(--height);
@@ -329,6 +330,7 @@
 .progress{
   background-color: red;
   z-index: 4;
+
 }
 .scrubbing{
   background-color: rgba(212, 212, 212, 0.329);
