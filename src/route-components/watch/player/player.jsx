@@ -31,7 +31,7 @@ export default function Player({ videoRef, containerRef, miniPlayerBoolean }) {
   const fullScreen = useSelector((state) => state.watch.fullScreen);
   const miniPlayer = useSelector((state) => state.watch.miniPlayer);
   const settingsShowing = useSelector((state) => state.player.settingsShowing);
-  const { description_string, duration, video_id, mpd_url } = playingVideo;
+  const { description_string, duration, video_id, mpd_url, preferred_thumbnail_url, possible_thumbnail_urls } = playingVideo;
 
   const chapters = useSelector((state) => state.player.chapters);
   const play = useSelector((state) => state.player.play);
@@ -325,6 +325,7 @@ export default function Player({ videoRef, containerRef, miniPlayerBoolean }) {
         onClickCapture={handlePlayerClick}
       >
         <video
+          // poster={preferred_thumbnail_url ? preferred_thumbnail_url : possible_thumbnail_urls && possible_thumbnail_urls["thumbnailUrl-0"]}
           onDoubleClickCapture={handleDoubleClick}
           onDoubleClick={handleDoubleClick}
           ref={videoRef}

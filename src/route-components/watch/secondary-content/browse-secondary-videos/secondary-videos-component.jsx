@@ -7,7 +7,7 @@ import { useDispatch } from "react-redux";
 import { fetchWatchData } from "../../../../store/Slices/watch-slice";
 
 export default function SecondaryVideoComponent({ data }) {
-  const { duration_timestamp, possible_thumbnail_urls, title, display_name, handle, created_at, video_id } = data;
+  const { duration_timestamp, possible_thumbnail_urls, title, display_name, handle, created_at, video_id, preferred_thumbnail_url } = data;
   const dispatch = useDispatch();
   const views = useMemo(() => {
     return formatCount(generateRandomInteger());
@@ -25,7 +25,11 @@ export default function SecondaryVideoComponent({ data }) {
       >
         <div className='secondary-skeleton-inner'>
           <div className='secondary-skeleton-left'>
-            <img src={`${possible_thumbnail_urls["thumbnailUrl-0"]}`} alt='skeleton-thumbnail' className='secondary-skeleton-thumbnail' />
+            <img
+              src={`${preferred_thumbnail_url ? preferred_thumbnail_url : possible_thumbnail_urls["thumbnailUrl-0"]}`}
+              alt='skeleton-thumbnail'
+              className='secondary-skeleton-thumbnail'
+            />
           </div>
           <div className='secondary-skeleton-middle'>
             <p className='secondary-skeleton-title'>{title}</p>
