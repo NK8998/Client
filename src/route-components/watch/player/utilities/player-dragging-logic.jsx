@@ -161,14 +161,13 @@ export const usePlayerDraggingLogic = () => {
 
     setTimeout(() => {
       const chaptersContainers = document.querySelectorAll(".chapter-padding");
-      if (e.touches) return;
       chaptersContainers.forEach((chaptersContainer, index) => {
         chaptersContainer.classList.remove("drag-expand");
       });
     }, 30);
 
     const hovering = style.getPropertyValue("--hovering").trim();
-    if (hovering === "false") {
+    if (hovering === "false" || e.touches) {
       resetDot();
     }
 
