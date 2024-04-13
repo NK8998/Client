@@ -91,11 +91,13 @@ export const usePlayerDraggingLogic = () => {
   };
 
   const handleDrag = (e) => {
+    const chapterTitleContainer = document.querySelector(".chapter-title-container");
     const redDotRef = document.querySelector(".red-dot");
     const style = getComputedStyle(document.documentElement);
     const chaptersContainers = document.querySelectorAll(".chapter-padding");
     const progressBarRefs = document.querySelectorAll(".progress.bar");
     const currentIndex = parseInt(style.getPropertyValue("--hoverChapterIndex").trim());
+    chapterTitleContainer.textContent = chapters[currentIndex].title;
     const chapterDuration = chapters[currentIndex].end - chapters[currentIndex].start;
     const currentChapterLeft = chaptersContainers[currentIndex].getBoundingClientRect().left;
     const currentChapterWidth = chaptersContainers[currentIndex].getBoundingClientRect().width;

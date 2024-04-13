@@ -118,6 +118,7 @@ export function usePlayerScrubbingBarInteractions() {
   const updateScrubbingBar = (e) => {
     const redDotRef = document.querySelector(".red-dot");
     const scrubbingPreviewContainer = document.querySelector(".scrubbing-preview-container");
+    const chapterTitleContainer = document.querySelector(".chapter-title-container");
     if (!settingsShowing) {
       scrubbingPreviewContainer.classList.add("show");
     }
@@ -126,6 +127,7 @@ export function usePlayerScrubbingBarInteractions() {
     document.documentElement.style.setProperty("--hoverChapterIndex", `${hoveringIndex}`);
 
     if (hoveringIndex) {
+      chapterTitleContainer.textContent = chapters[hoveringIndex].title;
       movePreviews(e, hoveringIndex);
     }
 

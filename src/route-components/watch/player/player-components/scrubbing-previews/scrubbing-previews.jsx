@@ -43,7 +43,7 @@ export default function ScrubbingPreviews({ videoRef }) {
         scrubbingImg.current.style.width = `${width}px`;
         scrubbingImg.current.style.height = `${height}px`;
       } else if (!miniPlayer) {
-        const { width, height } = calculateWidthAndHeight(200);
+        const { width, height } = calculateWidthAndHeight(250);
         scrubbingImg.current.style.width = `${width}px`;
         scrubbingImg.current.style.height = `${height}px`;
       }
@@ -57,6 +57,7 @@ export default function ScrubbingPreviews({ videoRef }) {
   return (
     <div className='scrubbing-preview-container' ref={scrubbingContainerRef}>
       <div className='preview-img-container' ref={scrubbingImg}></div>
+      <p className='chapter-title-container'></p>
       <div className='preview-time-container'>
         <p className='preview-time'></p>
       </div>

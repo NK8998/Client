@@ -38,6 +38,15 @@
   font-size: 12px;
   pointer-events: none;
 }
+.chapter-title-container{
+  width: fit-content;
+  text-align: center;
+  margin: auto;
+  padding: 5px;
+  padding-bottom: 0px;
+  font-weight: 500;
+  color: white;
+}
 .player-outer.miniplayer, 
 .player-outer.theatre.miniplayer{
   overflow: unset;
@@ -106,7 +115,7 @@
 }
 .player-outer.fullscreen .red-dot-wrapper, .player-outer.fullscreen.theatre .red-dot-wrapper{
   left: -10px;
-  top: 7.5px;
+  top: 7.3px;
 }
 .player-outer.fullscreen .shaka-text-container, .player-outer.fullscreen.theatre .shaka-text-container{
   font-size: 28px;
@@ -114,6 +123,7 @@
 
 .player-outer.fullscreen .scrubbing-preview-container, .player-outer.fullscreen.theatre .scrubbing-preview-container{
   bottom: 80px;
+  font-size: 16px;
 }
 .player-outer.fullscreen .preview-time, .player-outer.fullscreen.theatre .preview-time{
   font-size: 17px;
@@ -436,6 +446,9 @@
   position: absolute;
   bottom: 75px;
   left: calc(100% - 260px);
+  color: white;
+  font-size: 13.2px;
+  font-weight: 500;
 }
 .scrubbing-preview-container.show{
   opacity: 1;
@@ -448,14 +461,11 @@
   background-color: white;
   
 }
-.preview-time-container{
-  margin-top: 10px;
-}
+
 .preview-time{
   width: fit-content;
   margin: auto;
-  font-size: 12px;
-  color: rgba(255, 255, 255, 0.842);
+  font-weight: 400;
 }
 .preview-image-bg-container{
   pointer-events: none;
