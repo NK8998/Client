@@ -5,6 +5,9 @@
     margin-top: 20px;
 
 }
+.skeleton-inner-link{
+    flex-grow: 1;
+}
 .secondary-skeleton{
     display: flex;
     width: 100%;
