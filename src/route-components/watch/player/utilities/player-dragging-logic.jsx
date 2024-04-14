@@ -174,10 +174,11 @@ export const usePlayerDraggingLogic = () => {
     }
 
     innerChapterContainerRef.classList.remove("drag-expand");
-    checkBufferedOnTrackChange();
-    checkBuffered();
     dispatch(updateBuffering(true));
     dispatch(updateIsdragging(false));
+
+    checkBuffered();
+    checkBufferedOnTrackChange();
   };
 
   const startDrag = (e) => {
@@ -284,7 +285,7 @@ export const usePlayerBufferingState = () => {
       }
       const end = bufferToUse[1];
       if (end > currentTime && end - currentTime >= 0) {
-        if (isDragging === false) {
+        if (!isDragging) {
           previewImageBg.classList.remove("show");
           videoRef.style.visibility = "visible";
         }

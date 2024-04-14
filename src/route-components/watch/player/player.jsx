@@ -70,13 +70,8 @@ export default function Player({ videoRef, containerRef, miniPlayerBoolean }) {
 
   useEffect(() => {
     const handlePlayerResizing = () => {
-      if (document.fullscreenElement || fullScreen) {
-        setTimeout(() => {
-          calculateWidth();
-        }, 250);
-      } else {
-        calculateWidth();
-      }
+      if (document.fullscreenElement || fullScreen) return;
+      calculateWidth();
     };
     const isWatchpage = location.includes("watch") || window.location.pathname.includes("watch");
     if (isWatchpage === false) {

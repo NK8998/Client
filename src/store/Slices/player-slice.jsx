@@ -12,7 +12,7 @@ const playerSlicer = createSlice({
     settingsShowing: false,
     subtitles: "off",
     buffering: false,
-    isDragging: false,
+    isDragging: true,
   },
   reducers: {
     updateResolution: (state, action) => {
