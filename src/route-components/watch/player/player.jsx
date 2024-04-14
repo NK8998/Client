@@ -19,8 +19,7 @@ import { usePlayerStyles } from "./utilities/player-styles";
 import { useFullscreenMode, useMiniPlayermode, useTheatreMode } from "./utilities/player-modes";
 import { PreviewBgSize } from "./utilities/preview-bg-size";
 import PreviewBG from "./player-components/preview-bg/preview-bg";
-import { handleTheatre, toggleTheatreMode, updatePlayingVideo } from "../../../store/Slices/watch-slice";
-import TitleComponent from "./player-components/bottom-controls/bc-components/title-component";
+import { toggleTheatreMode, updatePlayingVideo } from "../../../store/Slices/watch-slice";
 import TopVideoComponent from "./player-components/bottom-controls/bc-components/title-component";
 
 export default function Player({ videoRef, containerRef, miniPlayerBoolean }) {
@@ -30,7 +29,6 @@ export default function Player({ videoRef, containerRef, miniPlayerBoolean }) {
   const theatreMode = useSelector((state) => state.watch.theatreMode);
   const fullScreen = useSelector((state) => state.watch.fullScreen);
   const miniPlayer = useSelector((state) => state.watch.miniPlayer);
-  const settingsShowing = useSelector((state) => state.player.settingsShowing);
   const { description_string, duration, video_id, mpd_url, preferred_thumbnail_url, possible_thumbnail_urls } = playingVideo;
 
   const chapters = useSelector((state) => state.player.chapters);

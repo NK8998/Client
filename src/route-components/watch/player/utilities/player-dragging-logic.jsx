@@ -176,7 +176,6 @@ export const usePlayerDraggingLogic = () => {
     innerChapterContainerRef.classList.remove("drag-expand");
     dispatch(updateBuffering(true));
     dispatch(updateIsdragging(false));
-
     checkBuffered();
     checkBufferedOnTrackChange();
   };

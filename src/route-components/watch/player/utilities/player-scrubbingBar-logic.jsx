@@ -22,11 +22,11 @@ export function usePlayerScrubbingBarInteractions() {
     const clientPosition = cursorPosition - chaptersContainerLeft;
     const percentage = (clientPosition / chaptersContainerWidth) * 100;
     let scrubbingLeft = `calc(${percentage}% - ${scrubbingPreviewContainerWidth / 2}px)`;
-    const boundary = scrubbingPreviewContainerWidth / 2 + 10;
+    const boundary = fullScreen ? scrubbingPreviewContainerWidth / 2 + 20 : scrubbingPreviewContainerWidth / 2 + 10;
     if (clientPosition < boundary) {
-      scrubbingLeft = `calc(0% + 10px)`;
+      scrubbingLeft = `calc(0% + ${fullScreen ? 20 : 10}px)`;
     } else if (chaptersContainerRight - cursorPosition < boundary) {
-      scrubbingLeft = `calc(100% - ${scrubbingPreviewContainerWidth + 10}px)`;
+      scrubbingLeft = `calc(100% - ${scrubbingPreviewContainerWidth + (fullScreen ? 20 : 10)}px)`;
     }
     scrubbingPreviewContainer.style.left = scrubbingLeft;
   };
