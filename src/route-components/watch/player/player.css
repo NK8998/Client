@@ -104,11 +104,7 @@
 .player-outer.fullscreen  .bar, .player-outer.fullscreen.theatre  .bar{
   height: 5px;
 }
-.player-outer.fullscreen  .bottom-controls, .player-outer.fullscreen.theatre  .bottom-controls{
-  height: 53px;
-  width: calc(100% - 44px);
-  padding: 0px 22px;
-}
+
 .player-outer.fullscreen  .red-dot, .player-outer.fullscreen.theatre  .red-dot{
   height: 20px;
   width: 20px;

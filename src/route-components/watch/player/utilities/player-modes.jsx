@@ -53,14 +53,19 @@ export const useMiniPlayermode = () => {
       }
     } else if (miniPlayer) {
       // toggle miniPlayer
+
       if (Array.from(primaryRef.children).includes(containerRef)) {
-        primaryRef.removeChild(containerRef);
-        miniplayerRef.append(containerRef);
-        primaryRef.classList.add("has-content");
+        requestAnimationFrame(() => {
+          primaryRef.removeChild(containerRef);
+          miniplayerRef.append(containerRef);
+          primaryRef.classList.add("has-content");
+        });
       } else if (Array.from(expandedContainerRef.children).includes(containerRef)) {
-        expandedContainerRef.removeChild(containerRef);
-        miniplayerRef.append(containerRef);
-        expandedContainerRef.classList.add("has-content");
+        requestAnimationFrame(() => {
+          expandedContainerRef.removeChild(containerRef);
+          miniplayerRef.append(containerRef);
+          expandedContainerRef.classList.add("has-content");
+        });
       }
       applyChapterStyles();
       updateRedDot("");
@@ -176,7 +181,6 @@ export const useFullscreenMode = () => {
   };
   const toggleFullScreen = () => {
     // console.log("togglefullscreen ran");
-
     const videoRef = document.querySelector("#html5-player");
     const primaryRef = document.querySelector(".player-if");
     const containerRef = document.querySelector(".player-outer");

@@ -210,7 +210,7 @@ export const handleMiniPLayer = (miniPlayer, currentRoute) => {
           resolve(true);
           clearInterval(intervalRef);
         }
-      }, 50);
+      }, 1);
     });
     if (miniPlayer) {
       if (document.fullscreenElement) {

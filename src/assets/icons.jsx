@@ -260,7 +260,7 @@ export const QualityCogButton = () => {
 export const ArrowRightButton = () => {
   return (
     <svg xmlns='http://www.w3.org/2000/svg' height='24' viewBox='0 -960 960 960' width='24'>
-      <path d='m535.847-480-189-189L384-706.153 610.153-480 384-253.847 346.847-291l189-189Z' />
+      <path d='M321-72.348 242.348-151l329-329-329-329L321-887.652 728.652-480 321-72.348Z' />
     </svg>
   );
 };

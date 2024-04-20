@@ -119,7 +119,8 @@
     height: fit-content;
 }
 .player-outer.fullscreen .settings-button, .player-outer.fullscreen.theatre .settings-button{
-    padding: 10px 10px;
+    padding: 10px 14px;
+    width: calc(100% - 28px);
 
 }
 .player-outer.fullscreen .playback-speed-panel, .player-outer.fullscreen.theatre .playback-speed-panel{
@@ -155,6 +156,15 @@
     min-width: 32px;
 }
 
+.player-outer.fullscreen .settings-button-right svg, .player-outer.fullscreen.theatre .settings-button-right svg{
+    min-height: 22px;
+    min-width: 22px;
+}
+
+.player-outer.fullscreen .settings-button-right , .player-outer.fullscreen.theatre .settings-button-right {
+    min-width: 90px;
+}
+
 .player-outer.fullscreen .subtitles-panel, .player-outer.fullscreen.theatre .subtitles-panel {
     width: 310px;
 }
@@ -184,16 +194,14 @@
     background-color: rgba(104, 104, 104, 0.534);
 }
 
-.settings-button svg{
-    min-height: 24px;
-    min-width: 24px;
-    fill: rgba(255, 255, 255, 0.884);
-}
 
 .settings-button-left{
+    min-height: 24px;
+    min-width: 24px;
     display: flex;
     gap: 10px;
     align-items: center;
+    fill: white;
 }
 .settings-button-right{
     font-size: 12px;
@@ -202,11 +210,13 @@
     /* background-color: blue; */
     display: flex;
     align-items: center;
-    justify-content: space-between;
+
 }
-.settings-button-right svg{
-    height: 20px;
+.settings-button .settings-button-right svg{
+    height: 16px;
     fill: white;
+    margin-left: auto;
+    padding-left: 5px;
 }
 .settings-upper{
     width: calc(100% - 20px);
