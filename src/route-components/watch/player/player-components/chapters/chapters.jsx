@@ -79,17 +79,21 @@ export default function Chapters({ videoRef, chapterContainerRef, redDotRef, red
         tabIndex={0}
         onFocus={handleMouseMove}
         onMouseMove={updateScrubbingBar}
+        onMouseOverCapture={updateScrubbingBar}
         onTouchMove={(e) => {
           updateScrubbingBar(e.touches[0]);
         }}
-        onMouseOut={resetDot}
         onMouseDown={startDrag}
         onMouseUp={stopDragging}
         onTouchStart={startDrag}
         onTouchEnd={stopDragging}
         onKeyDown={handleKeyDown}
-        onMouseEnter={handleMouseEnter}
-        onMouseLeave={handleMouseLeave}
+        onMouseOver={handleMouseEnter}
+        onMouseMoveCapture={handleMouseEnter}
+        onMouseLeave={() => {
+          handleMouseLeave();
+          resetDot();
+        }}
       >
         {chapterEls}
         <div ref={redDotWrapperRef} className='red-dot-wrapper'>
