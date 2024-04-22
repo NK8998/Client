@@ -38,10 +38,7 @@ export const SubtitlesMenu = ({}) => {
   const subtitles = useSelector((state) => state.player.subtitles);
 
   return (
-    <div
-      className='subtitles-button settings-button'
-      onClick={() => dispatch(handleTranslating(0, "settings-menu-selector-items", "subtitles-panel"))}
-    >
+    <div className='subtitles-button settings-button' onClick={() => dispatch(handleTranslating(0, "settings-menu-selector-items", "subs-inner"))}>
       <div className='settings-button-left'>
         <SubtitlesButton />
         <p>Subtitles/CC</p>

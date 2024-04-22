@@ -40,7 +40,8 @@ export default function Settings({ playerRef, checkBufferedOnTrackChange }) {
           <div className='settings-menu-selector-items panel-item' ref={mainSettingsRef}>
             <AmbientModeMenu />
             <AnnotationsMenu />
-            {captions_url && <SubtitlesMenu />}
+            {/* {captions_url && <SubtitlesMenu />} */}
+            <SubtitlesMenu />
             <PlayBackMenu />
             <QualityMenu />
           </div>

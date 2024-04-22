@@ -98,10 +98,13 @@ export const Resolutions = ({ playerRef, checkBufferedOnTrackChange }) => {
         className='resolutions-upper settings-upper'
         onClick={() => dispatch(handleTranslating(null, "resolutions-settings", "settings-menu-selector-items"))}
       >
-        <ArrowLeftButton />
-        <p>Quality</p>
+        <div className='settings-upper-left'>
+          <ArrowLeftButton />
+          <p>Quality</p>
+        </div>
+        <p className='custom-handler' onClick={() => dispatch(handleTranslating(1, "playback-speed-panel", "custom-speed"))}></p>
       </div>
-      <div className='resolutions-settings-inner'>{resolutionsEl}</div>
+      <div className='resolutions-settings-inner panel-selector-elements'>{resolutionsEl}</div>
     </div>
   );
 };

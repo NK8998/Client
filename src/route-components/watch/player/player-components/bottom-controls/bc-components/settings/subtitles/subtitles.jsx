@@ -1,6 +1,7 @@
 import { useDispatch, useSelector } from "react-redux";
 import { handleTranslating, updateSubtitles } from "../../../../../../../../store/Slices/player-slice";
 import { ArrowLeftButton, TickIcon } from "../../../../../../../../assets/icons";
+import SubOptions from "./options";
 
 export const Subtitles = () => {
   const dispatch = useDispatch();
@@ -8,7 +9,7 @@ export const Subtitles = () => {
 
   const updateSubs = (sub) => {
     dispatch(updateSubtitles(sub));
-    dispatch(handleTranslating(0, "subtitles-panel", "settings-menu-selector-items"));
+    dispatch(handleTranslating(0, "subs-inner", "settings-menu-selector-items"));
   };
   const subs = ["English(UK)", "English(auto-generated)"];
   const subEls = subs.map((sub, index) => {
@@ -22,18 +23,24 @@ export const Subtitles = () => {
   return (
     <div className='subtitles-panel menu-panel'>
       <div className='subs-inner'>
-        <div className='subtitles-panel-upper'>
-          <div
-            className='subtitles-panel-upper-left'
-            onClick={() => dispatch(handleTranslating(0, "subtitles-panel", "settings-menu-selector-items"))}
-          >
+        <div className='subtitles-panel-upper settings-upper'>
+          <div className='subtitles-panel-upper-left' onClick={() => dispatch(handleTranslating(0, "subs-inner", "settings-menu-selector-items"))}>
             <ArrowLeftButton />
             <p>Subtitles/CC</p>
           </div>
-          <p className='custom-handler options'>options</p>
+          <p className='custom-handler options' onClick={() => dispatch(handleTranslating(0, "subs-inner", "subs-options-styles"))}>
+            options
+          </p>
         </div>
-        <div className='subs-inner'>{subEls}</div>
+        <div className='panel-selector-elements'>{subEls}</div>
+        <div className='settings-lower'>
+          <p> This setting only applies to the current video.</p>
+          <p>
+            Adjust caption visibility in <span>Settings</span> for all videos.
+          </p>
+        </div>
       </div>
+      <SubOptions />
     </div>
   );
 };

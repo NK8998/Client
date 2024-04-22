@@ -21,7 +21,7 @@ export const PlayBackSpeed = ({}) => {
       <div className='playback-speed-panel menu-panel panel-item'>
         <div className='playback-speed-upper settings-upper'>
           <div
-            className='playback-speed-upper-left'
+            className='playback-speed-upper-left settings-upper-left'
             onClick={() => dispatch(handleTranslating(null, "playback-speed-panel", "settings-menu-selector-items"))}
           >
             <ArrowLeftButton />
@@ -31,7 +31,7 @@ export const PlayBackSpeed = ({}) => {
             custom
           </p>
         </div>
-        <div className='playback-speed-panel-options'>{items}</div>
+        <div className='playback-speed-panel-options panel-selector-elements'>{items}</div>
       </div>
       <CustomSpeed />
     </div>

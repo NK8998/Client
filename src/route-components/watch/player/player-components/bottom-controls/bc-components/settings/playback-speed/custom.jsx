@@ -7,8 +7,11 @@ export const CustomSpeed = ({}) => {
   return (
     <div className='custom-speed panel-item'>
       <div className='custom-speed-upper settings-upper' onClick={() => dispatch(handleTranslating(1, "custom-speed", "playback-speed-panel"))}>
-        <ArrowLeftButton />
-        <p>Custom</p>
+        <div className='settings-upper-left'>
+          <ArrowLeftButton />
+          <p>Custom</p>
+        </div>
+        <p></p>
       </div>
       <div className='custom-speed-inner'></div>
     </div>
