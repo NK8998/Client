@@ -215,7 +215,9 @@ export const useFullscreenMode = () => {
       calculateWidth();
 
       applyChapterStyles();
-      updateRedDot("");
+      requestAnimationFrame(() => {
+        updateRedDot("");
+      });
 
       root.classList.add("fullscreen");
       columns.classList.add("fullscreen");

@@ -59,12 +59,9 @@ export const {
 
 export default watchSlice.reducer;
 
-let timeoutRef;
 export const fetchWatchData = (videoId, currentRoute, data) => {
   return async (dispatch, getState) => {
-    if (timeoutRef) {
-      clearTimeout(timeoutRef);
-    }
+    const root = document.querySelector("#root");
     const currentVideoId = getState().watch.playingVideo.videoId;
     const isFetching = getState().app.isFetching;
     const location = getState().app.location;
@@ -83,17 +80,11 @@ export const fetchWatchData = (videoId, currentRoute, data) => {
       dispatch(updateIsFetching());
 
       if (miniPlayer) return;
-      if (miniPlayer) {
-        timeoutRef = setTimeout(() => {
-          dispatch(updateLocation(currentRoute));
+      dispatch(updateLocation(currentRoute));
 
-          dispatch(handleNavigation("/watch"));
-        }, 50);
-      } else {
-        dispatch(updateLocation(currentRoute));
+      dispatch(handleNavigation("/watch"));
+      root.scrollTo({ top: 0, behavior: "instant" });
 
-        dispatch(handleNavigation("/watch"));
-      }
       return;
     }
     let playingVideo;
@@ -106,6 +97,7 @@ export const fetchWatchData = (videoId, currentRoute, data) => {
       if (miniPlayer) return;
       dispatch(handleNavigation("/watch"));
       dispatch(updateLocation(currentRoute));
+      root.scrollTo({ top: 0, behavior: "instant" });
     } else if (Object.entries(data).length === 0) {
       await AxiosFetching("post", "watch-video", formData)
         .then((response) => {
@@ -116,6 +108,7 @@ export const fetchWatchData = (videoId, currentRoute, data) => {
             if (miniPlayer) return;
             dispatch(handleNavigation("/watch"));
             dispatch(updateLocation(currentRoute));
+            root.scrollTo({ top: 0, behavior: "instant" });
           }
         })
         .catch((error) => {
