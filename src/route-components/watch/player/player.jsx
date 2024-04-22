@@ -242,6 +242,7 @@ export default function Player({ videoRef, containerRef, miniPlayerBoolean }) {
 
   const resetBars = () => {
     // console.log("resetting");
+    const redDotWrapperRef = document.querySelector(".red-dot-wrapper");
     const scrubbingBarRefs = document.querySelectorAll(".scrubbing.bar");
     const bufferBarRefs = document.querySelectorAll(".buffer.bar");
     const progressBarRefs = document.querySelectorAll(".progress.bar");
@@ -251,6 +252,7 @@ export default function Player({ videoRef, containerRef, miniPlayerBoolean }) {
         barRef.style.width = `0%`;
       });
     });
+    redDotWrapperRef.style.transform = `translateX(${0}px)`;
   };
 
   const detachPlayer = async () => {

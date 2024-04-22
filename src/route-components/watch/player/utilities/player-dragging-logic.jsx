@@ -29,9 +29,9 @@ export const usePlayerDraggingLogic = () => {
       currentTime = endThreshold <= 0.5 ? chapters[chapters.length - 1].end : videoRef.currentTime;
     }
 
-    const progreeBarRefs = document.querySelectorAll(".progress.bar");
+    const progressBarRefs = document.querySelectorAll(".progress.bar");
     if (currentTime >= chapters[0].start && currentTime <= chapters[chapters.length - 1].end) {
-      progreeBarRefs.forEach((progressBar) => {
+      progressBarRefs.forEach((progressBar) => {
         const curIndex = progressBar.getAttribute("dataIndex");
         const chapter = chapters[curIndex];
 
@@ -56,7 +56,8 @@ export const usePlayerDraggingLogic = () => {
     // checkBufferedOnTrackChange();
     const videoRef = document.querySelector("#html5-player");
     const redDotRef = document.querySelector(".red-dot");
-    const chaptersContainers = document.querySelectorAll(".chapter-padding");
+    const chaptersContainers = document.querySelectorAll(".chapter-hover");
+    const chapterPadding = document.querySelectorAll(".chapter-padding");
     const progressBarRefs = document.querySelectorAll(".progress.bar");
     const style = getComputedStyle(document.documentElement);
     const currentIndex = parseInt(style.getPropertyValue("--hoverChapterIndex").trim());
@@ -78,13 +79,14 @@ export const usePlayerDraggingLogic = () => {
         const curIndex = progressBarRefs[index].getAttribute("dataIndex");
         document.documentElement.style.setProperty("--currentChapterIndex", `${curIndex}`);
         document.documentElement.style.setProperty("--hoverChapterIndex", `${curIndex}`);
-        chaptersContainers[index].classList.add("drag-expand");
+        redDotRef.setAttribute("dataIndex", `${curIndex}`);
+        chapterPadding[index].classList.add("drag-expand");
       } else if (chapter.end < currentTime) {
         progressBarRefs[index].style.width = `100%`;
-        chaptersContainers[index].classList.remove("drag-expand");
+        chapterPadding[index].classList.remove("drag-expand");
       } else {
         progressBarRefs[index].style.width = `0%`;
-        chaptersContainers[index].classList.remove("drag-expand");
+        chapterPadding[index].classList.remove("drag-expand");
       }
     });
     updateRedDot(currentTime);
@@ -93,8 +95,10 @@ export const usePlayerDraggingLogic = () => {
   const handleDrag = (e) => {
     const chapterTitleContainer = document.querySelector(".chapter-title-container");
     const redDotRef = document.querySelector(".red-dot");
+    const redDotWrapperRef = document.querySelector(".red-dot-wrapper");
     const style = getComputedStyle(document.documentElement);
-    const chaptersContainers = document.querySelectorAll(".chapter-padding");
+    const chaptersContainers = document.querySelectorAll(".chapter-hover");
+    const chapterPadding = document.querySelectorAll(".chapter-padding");
     const progressBarRefs = document.querySelectorAll(".progress.bar");
     const currentIndex = parseInt(style.getPropertyValue("--hoverChapterIndex").trim());
     chapterTitleContainer.textContent = chapters[currentIndex].title;
@@ -118,15 +122,16 @@ export const usePlayerDraggingLogic = () => {
         const curIndex = progressBarRefs[index].getAttribute("dataIndex");
         document.documentElement.style.setProperty("--currentChapterIndex", `${curIndex}`);
         document.documentElement.style.setProperty("--hoverChapterIndex", `${curIndex}`);
-
-        chaptersContainers[index].classList.add("drag-expand");
+        redDotRef.setAttribute("dataIndex", `${curIndex}`);
+        redDotWrapperRef.setAttribute("dataIndex", `${curIndex}`);
+        chapterPadding[index].classList.add("drag-expand");
       } else if (chapter.end < currentTime) {
         progressBarRefs[index].style.width = `100%`;
-        chaptersContainers[index].classList.remove("drag-expand");
+        chapterPadding[index].classList.remove("drag-expand");
         // updateRedDot(currentTime);
       } else {
         progressBarRefs[index].style.width = `0%`;
-        chaptersContainers[index].classList.remove("drag-expand");
+        chapterPadding[index].classList.remove("drag-expand");
         // updateRedDot(currentTime);
       }
     });
@@ -161,15 +166,14 @@ export const usePlayerDraggingLogic = () => {
     window.removeEventListener("mousemove", handleDrag);
     window.removeEventListener("mouseup", stopDragging);
 
-    setTimeout(() => {
-      const chaptersContainers = document.querySelectorAll(".chapter-padding");
-      chaptersContainers.forEach((chaptersContainer, index) => {
-        chaptersContainer.classList.remove("drag-expand");
-      });
-    }, 30);
-
     const hovering = style.getPropertyValue("--hovering").trim();
     if (hovering === "false" || e.touches) {
+      setTimeout(() => {
+        const chaptersContainers = document.querySelectorAll(".chapter-padding");
+        chaptersContainers.forEach((chaptersContainer, index) => {
+          chaptersContainer.classList.remove("drag-expand");
+        });
+      }, 30);
       resetDot();
     }
 

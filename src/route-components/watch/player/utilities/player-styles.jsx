@@ -31,6 +31,7 @@ export const usePlayerStyles = () => {
         fullScreen ? (width -= 3) : (width -= 2);
       } else if (chapters.length > 1 && index === chapters.length - 1) {
         width += chapterContainerRefWidth - totalWidth;
+        chapterWidth += chapterContainerRefWidth - totalWidth;
       }
       hoverBars[index].style.width = `${chapterWidth}px`;
       chaptersContainer.style.width = `${width}px`;
@@ -85,6 +86,7 @@ export const usePlayerStyles = () => {
 
     document.documentElement.style.setProperty("--theatreHeight", `${Math.trunc(theatreHeight)}px`);
     document.documentElement.style.setProperty("--theatreWidth", `${Math.trunc(theatreWidth - 1)}px`);
+    document.documentElement.style.setProperty("--fullScreenHeight", `${window.screen.height}px`);
   };
 
   return [applyChapterStyles, calculateWidth];

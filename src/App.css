@@ -37,6 +37,7 @@ body{
     --settingsWidth: 0;
     --settingsScrollHeight: 0;
     --settingsScrollWidth:0;
+    --fullScreenHeight: 0;
 }
 .flex-content{
     display: flex;

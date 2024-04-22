@@ -18,6 +18,7 @@ export const useMiniPlayermode = () => {
     const videoRef = document.querySelector("#html5-player");
     const primaryRef = document.querySelector(".player-if");
     const miniplayerRef = document.querySelector(".mini-player-inner");
+    const miniPlayerOuter = document.querySelector(".mini-player-outer");
     const containerRef = document.querySelector(".player-outer");
     const expandedContainerRef = document.querySelector(".player-expanded-container");
     const controlsRef = document.querySelector(".player-inner-relative");
@@ -39,6 +40,7 @@ export const useMiniPlayermode = () => {
         }
         containerRef.classList.remove("miniplayer");
         videoRef.classList.remove("miniplayer");
+        miniPlayerOuter.style.opacity = `0`;
         // toggle regular
 
         handleMouseOut();
@@ -55,24 +57,23 @@ export const useMiniPlayermode = () => {
       // toggle miniPlayer
 
       if (Array.from(primaryRef.children).includes(containerRef)) {
-        requestAnimationFrame(() => {
-          primaryRef.removeChild(containerRef);
-          miniplayerRef.append(containerRef);
-          primaryRef.classList.add("has-content");
-        });
+        primaryRef.removeChild(containerRef);
+        miniplayerRef.append(containerRef);
+        primaryRef.classList.add("has-content");
       } else if (Array.from(expandedContainerRef.children).includes(containerRef)) {
-        requestAnimationFrame(() => {
-          expandedContainerRef.removeChild(containerRef);
-          miniplayerRef.append(containerRef);
-          expandedContainerRef.classList.add("has-content");
-        });
+        expandedContainerRef.removeChild(containerRef);
+        miniplayerRef.append(containerRef);
+        expandedContainerRef.classList.add("has-content");
       }
-      applyChapterStyles();
-      updateRedDot("");
-      miniplayerRef.classList.add("visible");
+      requestAnimationFrame(() => {
+        applyChapterStyles();
+        updateRedDot("");
+        miniplayerRef.classList.add("visible");
+        miniPlayerOuter.style.opacity = `1`;
 
-      containerRef.classList.add("miniplayer");
-      videoRef.classList.add("miniplayer");
+        containerRef.classList.add("miniplayer");
+        videoRef.classList.add("miniplayer");
+      });
     }
   };
 
@@ -83,6 +84,7 @@ export const useTheatreMode = () => {
   const [startDrag, stopDragging, handleClick, handleDrag, updateRedDot, resetDot, isDragging] = usePlayerDraggingLogic();
   const [applyChapterStyles, calculateWidth] = usePlayerStyles();
   const theatreMode = useSelector((state) => state.watch.theatreMode);
+  const fullScreen = useSelector((state) => state.watch.fullScreen);
   const location = useSelector((state) => state.app.location);
 
   const toggleTheatre = () => {
@@ -225,12 +227,6 @@ export const useFullscreenMode = () => {
       root.addEventListener("scroll", handleScrollPosition);
     } else if (primaryRef && !Array.from(primaryRef.children).includes(containerRef) && !fullScreen) {
       // console.log("exiting fullscreen");
-
-      if (document.fullscreenElement) {
-        setTimeout(() => {
-          dispatch(handleFullscreen(true));
-        }, 100);
-      }
       containerRef.classList.remove("fullscreen");
       if (Array.from(expandedContainerRef.children).includes(containerRef) && !theatreMode) {
         expandedContainerRef.removeChild(containerRef);
@@ -245,7 +241,9 @@ export const useFullscreenMode = () => {
         primaryRef.classList.remove("has-content");
         videoRef.classList.add("theatre");
         containerRef.classList.add("theatre");
+        columns.classList.add("theatre");
         toTheatre();
+        // document.exitFullscreen();
       }
       changeFullscreenStyles();
       calculateWidth();

@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from "react-redux";
-import { handleFullscreen, handleTheatre, updateIsTransitioning } from "../../../../store/Slices/watch-slice";
+import { handleFullscreen, handleTheatre, toggleTheatreMode, updateIsTransitioning } from "../../../../store/Slices/watch-slice";
 import { useRef } from "react";
 import { seekVideo, usePlayerProgressBarLogic } from "./player-progressBar-logic";
 import { usePlayerMouseMove } from "./player-mouse-interactions";
@@ -55,6 +55,7 @@ export const usePlayerkeyInteractions = () => {
       if (theatreTimeOut.current) {
         clearTimeout(theatreTimeOut.current);
       }
+
       theatreTimeOut.current = setTimeout(() => {
         dispatch(handleTheatre(theatreMode));
       }, 400);

@@ -6,8 +6,29 @@
     z-index: 20;
     border-radius: 20px 20px 0px 0px;
     pointer-events: none;
+    opacity: 0;
 
 }
+.mini-player-outer.visible{
+    pointer-events: all;
+    opacity: 1;
+}
+.player-outer.miniplayer .bottom-controls{
+    display: none;
+    background-color: black;
+  }
+  .player-outer.miniplayer .chapters-absolute{
+    bottom: 0px;
+  }
+  .player-outer.miniplayer .player-inner-relative{
+    opacity: 1;
+    transition: background-color 150ms ease;
+    background-color: rgba(0, 0, 0, 0.644);
+    border-radius: 20px 20px 0px 0px;
+  }
+  .player-outer.miniplayer .player-inner-relative.hide{
+    background-color: rgba(0, 0, 0, 0);
+  }
 .player-outer.miniplayer .scrubbing-preview-container{
     bottom: 20px;
 }
@@ -21,14 +42,33 @@
     border-radius: 20px 20px 0px 0px;
     overflow: hidden;
 }
+.player-outer.miniplayer .scrubbing-preview-container p{
+    max-width: 130px;
+    font-size: 14px;
+    overflow: hidden; 
+    text-overflow: ellipsis; 
+    display: -webkit-box; 
+    -webkit-line-clamp: 1; 
+    -webkit-box-orient: vertical;
+  }
 .mini-player-inner{
     /* overflow: hidden; */
     background-color: rgb(22, 22, 22);
-    height: 290px;
+    height: 230px;
     width: 400px;
     opacity: 0;
     border-radius: 20px 20px 0px 0px;
 
+
+}
+.mini-player-upper{
+    height: 230px;
+    background-color: black;
+    border-radius: 20px 20px 0px 0px;
+}
+.mini-player-bottom{
+    height: 60px;
+    background-color: rgb(22, 22, 22);
 
 }
 .mini-player-inner.visible{

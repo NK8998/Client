@@ -97,7 +97,7 @@ export function usePlayerScrubbingBarInteractions() {
   const movePreviews = (e, hoveringIndex) => {
     const previewTime = document.querySelector(".preview-time");
     const scrubbingPreview = document.querySelector(".preview-img-container");
-    const chaptersContainers = document.querySelectorAll(".chapter-padding");
+    const chaptersContainers = document.querySelectorAll(".chapter-hover");
     const chapterDuration = chapters[hoveringIndex].end - chapters[hoveringIndex].start;
     const currentChapterLeft = chaptersContainers[hoveringIndex].getBoundingClientRect().left;
     const currentChapterWidth = chaptersContainers[hoveringIndex].getBoundingClientRect().width;
@@ -116,6 +116,7 @@ export function usePlayerScrubbingBarInteractions() {
   };
 
   const updateScrubbingBar = (e) => {
+    const redDotWrapperRef = document.querySelector(".red-dot-wrapper");
     const redDotRef = document.querySelector(".red-dot");
     const scrubbingPreviewContainer = document.querySelector(".scrubbing-preview-container");
     const chapterTitleContainer = document.querySelector(".chapter-title-container");
@@ -144,6 +145,7 @@ export function usePlayerScrubbingBarInteractions() {
     }
 
     const chaptersContainersRefs = document.querySelectorAll(".chapter-padding");
+    // const chapterPadding = document.querySelectorAll(".chapter-padding");
     const scrubbingBarRefs = document.querySelectorAll(".scrubbing.bar");
 
     chaptersContainersRefs.forEach((chapterContainer, index) => {
@@ -154,10 +156,15 @@ export function usePlayerScrubbingBarInteractions() {
         const chapterWidth = ((e.clientX - left) / (right - left)) * 100;
         scrubbingBarRefs[index].style.width = `${chapterWidth}%`;
         document.documentElement.style.setProperty("--hoverChapterIndex", `${index}`);
+        redDotRef.setAttribute("dataIndex", `${index}`);
+        redDotWrapperRef.setAttribute("dataIndex", `${index}`);
+        chapterContainer.classList.add("drag-expand");
       } else if (right < e.clientX) {
         scrubbingBarRefs[index].style.width = `100%`;
+        chapterContainer.classList.remove("drag-expand");
       } else {
         scrubbingBarRefs[index].style.width = `0%`;
+        chapterContainer.classList.remove("drag-expand");
       }
     });
   };

@@ -156,7 +156,7 @@ export const handleTheatre = (theatreMode) => {
   return (dispatch) => {
     if (document.fullscreenElement) {
       dispatch(toggleTheatreMode(true));
-      dispatch(toggleFullScreen(false));
+      dispatch(handleFullscreen(true));
       localStorage.setItem("theatreMode", JSON.stringify(true));
     } else {
       if (theatreMode) {
@@ -182,7 +182,7 @@ export const handleFullscreen = (fullScreen) => {
     if (!fullScreen && window.location.pathname.includes("watch")) {
       root.scrollTo({ top: 0, behavior: "instant" });
       if (!document.fullscreenElement) {
-        document.documentElement.requestFullscreen().then(() => {
+        root.requestFullscreen().then(() => {
           timeout = setTimeout(() => {
             dispatch(toggleFullScreen(true));
           }, 200);
@@ -214,10 +214,9 @@ export const handleMiniPLayer = (miniPlayer, currentRoute) => {
     });
     if (miniPlayer) {
       if (document.fullscreenElement) {
-        document.exitFullscreen().then(() => {
-          dispatch(toggleFullScreen(false));
-          dispatch(toggleMiniPlayer(true));
-        });
+        dispatch(handleFullscreen(true));
+
+        dispatch(toggleMiniPlayer(true));
       } else {
         dispatch(toggleMiniPlayer(true));
       }

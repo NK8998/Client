@@ -15,13 +15,7 @@ export default function Chapters({ videoRef, chapterContainerRef, redDotRef, red
   const chapterEls = chapters.map((chapter, index) => {
     // const calculatedPercentage = Math.round(((chapter.end - chapter.start) / chapters[chapters.length - 1].end) * 100);
     return (
-      <div
-        className={`chapter-hover ${chapters.length === 1 ? "single" : ""}`}
-        dataindex={index}
-        key={`hover-${chapter.title + index}`}
-        style={{ marginLeft: index === chapters.length - 1 ? "0px" : "0px" }}
-        onClick={handleClick}
-      >
+      <div className={`chapter-hover ${chapters.length === 1 ? "single" : ""}`} dataindex={index} key={`hover-${chapter.title + index}`}>
         <div
           key={`${chapter.title + index}`}
           className={`chapter-padding ${chapters.length === 1 ? "single" : ""}`}
@@ -58,16 +52,18 @@ export default function Chapters({ videoRef, chapterContainerRef, redDotRef, red
     updateRedDot(newTime);
   };
   const handleMouseEnter = () => {
-    const chaptersContainers = document.querySelectorAll(".chapter-padding");
-    chaptersContainers.forEach((chaptersContainer, index) => {
-      chaptersContainer.classList.remove("drag-expand");
-    });
     if (settingsShowing) return;
     const scrubbingPreviewContainer = document.querySelector(".scrubbing-preview-container");
     scrubbingPreviewContainer.classList.add("show");
   };
   const handleMouseLeave = () => {
+    document.documentElement.style.setProperty("--hovering", `false`);
     if (isDragging.current === true) return;
+    resetDot();
+    const chaptersContainers = document.querySelectorAll(".chapter-padding");
+    chaptersContainers.forEach((chaptersContainer, index) => {
+      chaptersContainer.classList.remove("drag-expand");
+    });
     const scrubbingPreviewContainer = document.querySelector(".scrubbing-preview-container");
     scrubbingPreviewContainer.classList.remove("show");
   };
@@ -90,14 +86,12 @@ export default function Chapters({ videoRef, chapterContainerRef, redDotRef, red
         onKeyDown={handleKeyDown}
         onMouseOver={handleMouseEnter}
         onMouseMoveCapture={handleMouseEnter}
-        onMouseLeave={() => {
-          handleMouseLeave();
-          resetDot();
-        }}
+        onMouseLeave={handleMouseLeave}
+        onClick={handleClick}
       >
         {chapterEls}
-        <div ref={redDotWrapperRef} className='red-dot-wrapper'>
-          <div className='red-dot' ref={redDotRef}></div>
+        <div ref={redDotWrapperRef} className='red-dot-wrapper' dataindex={0}>
+          <div className='red-dot' ref={redDotRef} dataindex={0}></div>
         </div>
       </div>
     </div>

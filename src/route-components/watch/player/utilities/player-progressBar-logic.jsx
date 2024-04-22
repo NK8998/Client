@@ -65,6 +65,7 @@ export const usePlayerProgressBarLogic = () => {
   const updateProgressBar = () => {
     const videoRef = document.querySelector(".html5-player");
     const redDotRef = document.querySelector(".red-dot");
+    const redDotWrapperRef = document.querySelector(".red-dot-wrapper");
     const currentTime = videoRef.currentTime;
 
     const progressBarRefs = document.querySelectorAll(".progress.bar");
@@ -74,6 +75,8 @@ export const usePlayerProgressBarLogic = () => {
       const chapter = chapters[curIndex];
       if (chapter.start <= currentTime && chapter.end >= currentTime) {
         document.documentElement.style.setProperty("--currentChapterIndex", `${curIndex}`);
+        redDotRef.setAttribute("dataIndex", `${curIndex}`);
+        redDotWrapperRef.setAttribute("dataIndex", `${curIndex}`);
         const chapterWidth = ((currentTime - chapter.start) / (chapter.end - chapter.start)) * 100;
         progressBar.style.width = `${chapterWidth}%`;
       } else if (chapter.end < currentTime) {

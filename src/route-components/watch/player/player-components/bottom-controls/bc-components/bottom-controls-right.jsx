@@ -11,7 +11,7 @@ import { handleFullscreen, handleMiniPLayer, handleTheatre } from "../../../../.
 import { usePlayerMouseMove } from "../../../utilities/player-mouse-interactions";
 import { useNavigate } from "react-router-dom";
 import { useLayoutEffect, useRef } from "react";
-import { handleTranslating, updateSettingsShowing } from "../../../../../../store/Slices/player-slice";
+import { handleTranslating, handleTranslatingHere, updateSettingsShowing } from "../../../../../../store/Slices/player-slice";
 
 export const BottomControlsRight = ({ miniPlayerBoolean, playerRef }) => {
   const settingsShowing = useSelector((state) => state.player.settingsShowing);
@@ -106,6 +106,7 @@ export const BottomControlsRight = ({ miniPlayerBoolean, playerRef }) => {
   };
 
   const handleSettingsShowing = () => {
+    dispatch(handleTranslatingHere(null, currentPanel, "settings-menu-selector-items"));
     if (settingsShowing) {
       document.removeEventListener("click", removeSettingsOnoutsideClick);
     } else {
@@ -116,11 +117,11 @@ export const BottomControlsRight = ({ miniPlayerBoolean, playerRef }) => {
     settingsClickRegion.classList.toggle("show");
     settings.classList.toggle("show");
     dispatch(updateSettingsShowing(!settingsShowing));
-    if (settingsShowing) {
-      setTimeout(() => {
-        dispatch(handleTranslating(null, currentPanel, "settings-menu-selector-items"));
-      }, 100);
-    }
+    // if (settingsShowing) {
+    //   setTimeout(() => {
+    //     dispatch(handleTranslating(null, currentPanel, "settings-menu-selector-items"));
+    //   }, 100);
+    // }
   };
 
   return (

@@ -19,21 +19,7 @@
   width: var(--theatreWidth);
   max-height: 79.5vh;
 }
-.player-outer.miniplayer .bottom-controls{
-  display: none;
-}
-.player-outer.miniplayer .chapters-absolute{
-  bottom: -7px;
-}
-.player-outer.miniplayer .player-inner-relative{
-  opacity: 1;
-  transition: background-color 150ms ease;
-  background-color: rgba(0, 0, 0, 0.103);
-  border-radius: 20px 20px 0px 0px;
-}
-.player-outer.miniplayer .player-inner-relative.hide{
-  background-color: rgba(0, 0, 0, 0);
-}
+
 .player-outer ::cue{
   font-size: 12px;
   pointer-events: none;
@@ -73,14 +59,15 @@
 .player-outer.theatre{
   width: var(--theatreWidth);
   height: var(--theatreHeight);
+  min-height: var(--theatreHeight);
   max-height: 79.5vh;
   border-radius: 0px;
   overflow: hidden;
 }
 .player-outer.fullscreen, .player-outer.fullscreen.theatre{
   width: 100%;
-  height: 100vh;
-  max-height: 100vh;
+  height: var(--fullScreenHeight);
+  max-height: var(--fullScreenHeight);
   border-radius: 0px;
 }
 .player-outer.fullscreen .player-inner-relative, .player-outer.fullscreen.theatre .player-inner-relative{
@@ -97,11 +84,12 @@
 }
 
 .player-outer.fullscreen  .chapters-absolute, .player-outer.fullscreen.theatre  .chapters-absolute{
-  bottom: 49px;
+  bottom: 55px;
   width: calc(100% - 20px);
   padding: 0px 10px;
 }
-.player-outer.fullscreen  .bar, .player-outer.fullscreen.theatre  .bar{
+.player-outer.fullscreen  .bar, .player-outer.fullscreen.theatre  .bar,
+.player-outer.fullscreen .chapter-padding, .player-outer.fullscreen.theatre .chapter-padding{
   height: 5px;
 }
 
@@ -111,7 +99,7 @@
 }
 .player-outer.fullscreen .red-dot-wrapper, .player-outer.fullscreen.theatre .red-dot-wrapper{
   left: -10px;
-  top: 7.3px;
+  top: 11.5px;
 }
 .player-outer.fullscreen .shaka-text-container, .player-outer.fullscreen.theatre .shaka-text-container{
   font-size: 28px;
@@ -126,11 +114,11 @@
 }
 .player-outer.focus-via-keyboard.fullscreen .chapters-container.single::after, .player-outer.focus-via-keyboard.fullscreen.theatre .chapters-container.single::after{
   height: 13px;
-  bottom: 1px;
+  bottom: -4px;
 }
 .player-outer.focus-via-keyboard.fullscreen .chapters-container::after, .player-outer.focus-via-keyboard.fullscreen.theatre .chapters-container::after{
   height: 15px;
-  bottom: 0px;
+  bottom: -5px;
 }
 .html5-player{
   height: var(--height);
@@ -155,6 +143,7 @@
   max-height: 79.5vh;
   border-radius: 0px;
   height: var(--theatreHeight);
+  min-height: var(--theatreHeight);
   width: var(--theatreWidth);
   background-color: black;
   border-radius: 0px;
@@ -162,8 +151,8 @@
 
 .html5-player.fullscreen, .html5-player.fullscreen.theatre{
   width: 100%;
-  height: 100vh;
-  max-height: 100vh;
+  height: var(--fullScreenHeight);
+  max-height: var(--fullScreenHeight);
   border-radius: 0px;
   background-color: black;
 }
@@ -215,7 +204,7 @@
 .chapters-absolute{
   pointer-events: all;
   position: absolute;
-  bottom: 42px;
+  bottom: 48.5px;
   width: 100%;
   left: 0px;
   display: flex;
@@ -237,8 +226,7 @@
 .player-outer.focus-via-keyboard .chapters-container.single::after{
   box-sizing: content-box;
   height: 9px;
-  bottom: 0px;
-  bottom: 4px;
+  bottom: -3px;
 }
 .chapters-container::after{
   content:' ';
@@ -247,12 +235,13 @@
   width: calc(100% + 2px);
   height: 13px;
   pointer-events: none;
-  bottom: 2px;
+  bottom: -5px;
 
 }
 .chapter-hover{
   height: fit-content;
   /* background-color: blue; */
+  padding-top: 20px;
 }
 .chapter-hover:hover > .chapter-padding > .bar{
   transform: scaleY(3);
@@ -320,8 +309,8 @@
   --height: 10px;
   position: relative;
   pointer-events: all;
-  padding-top: var(--padding);
-  height: var(--height);
+  /* padding-top: var(--padding); */
+  height: 3px;
 }
   
   
@@ -364,9 +353,9 @@
 
 .red-dot-wrapper{
   /* visibility: hidden; */
-  pointer-events: none;
+  /* pointer-events: none; */
   position: absolute;
-  top: 10px;
+  top: 15px;
   left: -6.5px;
   z-index: 5;
 }
