@@ -116,7 +116,6 @@ export function usePlayerScrubbingBarInteractions() {
   };
 
   const updateScrubbingBar = (e) => {
-    const redDotWrapperRef = document.querySelector(".red-dot-wrapper");
     const redDotRef = document.querySelector(".red-dot");
     const scrubbingPreviewContainer = document.querySelector(".scrubbing-preview-container");
     const chapterTitleContainer = document.querySelector(".chapter-title-container");
@@ -124,20 +123,7 @@ export function usePlayerScrubbingBarInteractions() {
       scrubbingPreviewContainer.classList.add("show");
     }
 
-    const hoveringIndex = e.target.getAttribute("dataIndex");
-    // document.documentElement.style.setProperty("--hoverChapterIndex", `${hoveringIndex}`);
-
-    if (hoveringIndex) {
-      chapterTitleContainer.textContent = chapters[hoveringIndex].title;
-      movePreviews(e, hoveringIndex);
-    }
-
     document.documentElement.style.setProperty("--hovering", `true`);
-
-    const style = getComputedStyle(document.documentElement);
-
-    const hoveringChapterIndex = style.getPropertyValue("--hoverChapterIndex").trim();
-    const currentChapterIndex = style.getPropertyValue("--currentChapterIndex").trim();
 
     const chaptersContainersRefs = document.querySelectorAll(".chapter-hover");
     const chapterPadding = document.querySelectorAll(".chapter-padding");
@@ -151,8 +137,8 @@ export function usePlayerScrubbingBarInteractions() {
         const chapterWidth = ((e.clientX - left) / (right - left)) * 100;
         scrubbingBarRefs[index].style.width = `${chapterWidth}%`;
         document.documentElement.style.setProperty("--hoverChapterIndex", `${index}`);
-        // redDotRef.setAttribute("dataIndex", `${index}`);
-        // redDotWrapperRef.setAttribute("dataIndex", `${index}`);
+        chapterTitleContainer.textContent = chapters[index].title;
+        movePreviews(e, index);
         chapterPadding[index].classList.add("drag-expand");
       } else if (right <= e.clientX) {
         scrubbingBarRefs[index].style.width = `100%`;
@@ -162,6 +148,10 @@ export function usePlayerScrubbingBarInteractions() {
         chapterPadding[index].classList.remove("drag-expand");
       }
     });
+    const style = getComputedStyle(document.documentElement);
+
+    const hoveringChapterIndex = style.getPropertyValue("--hoverChapterIndex").trim();
+    const currentChapterIndex = style.getPropertyValue("--currentChapterIndex").trim();
     if (hoveringChapterIndex === currentChapterIndex && chapters.length > 1) {
       redDotRef.style.scale = 1.5;
     } else {

@@ -70,13 +70,13 @@ export const usePlayerProgressBarLogic = () => {
 
     const progressBarRefs = document.querySelectorAll(".progress.bar");
 
-    progressBarRefs.forEach((progressBar) => {
-      const curIndex = progressBar.getAttribute("dataIndex");
-      const chapter = chapters[curIndex];
+    progressBarRefs.forEach((progressBar, index) => {
+      // const curIndex = progressBar.getAttribute("dataIndex");
+      const chapter = chapters[index];
       if (chapter.start <= currentTime && chapter.end > currentTime) {
-        document.documentElement.style.setProperty("--currentChapterIndex", `${curIndex}`);
-        redDotRef.setAttribute("dataIndex", `${curIndex}`);
-        redDotWrapperRef.setAttribute("dataIndex", `${curIndex}`);
+        document.documentElement.style.setProperty("--currentChapterIndex", `${index}`);
+        redDotRef.setAttribute("dataIndex", `${index}`);
+        redDotWrapperRef.setAttribute("dataIndex", `${index}`);
         const chapterWidth = ((currentTime - chapter.start) / (chapter.end - chapter.start)) * 100;
         progressBar.style.width = `${chapterWidth}%`;
       } else if (chapter.end <= currentTime) {
