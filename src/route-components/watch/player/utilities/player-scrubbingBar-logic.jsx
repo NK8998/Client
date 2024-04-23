@@ -125,7 +125,7 @@ export function usePlayerScrubbingBarInteractions() {
     }
 
     const hoveringIndex = e.target.getAttribute("dataIndex");
-    document.documentElement.style.setProperty("--hoverChapterIndex", `${hoveringIndex}`);
+    // document.documentElement.style.setProperty("--hoverChapterIndex", `${hoveringIndex}`);
 
     if (hoveringIndex) {
       chapterTitleContainer.textContent = chapters[hoveringIndex].title;
@@ -138,35 +138,35 @@ export function usePlayerScrubbingBarInteractions() {
 
     const hoveringChapterIndex = style.getPropertyValue("--hoverChapterIndex").trim();
     const currentChapterIndex = style.getPropertyValue("--currentChapterIndex").trim();
-    if (hoveringChapterIndex === currentChapterIndex && chapters.length > 1) {
-      redDotRef.style.scale = 1.5;
-    } else {
-      redDotRef.style.scale = 1;
-    }
 
-    const chaptersContainersRefs = document.querySelectorAll(".chapter-padding");
-    // const chapterPadding = document.querySelectorAll(".chapter-padding");
+    const chaptersContainersRefs = document.querySelectorAll(".chapter-hover");
+    const chapterPadding = document.querySelectorAll(".chapter-padding");
     const scrubbingBarRefs = document.querySelectorAll(".scrubbing.bar");
 
     chaptersContainersRefs.forEach((chapterContainer, index) => {
       const right = chapterContainer.getBoundingClientRect().right;
       const left = chapterContainer.getBoundingClientRect().left;
 
-      if (left <= e.clientX && e.clientX <= right) {
+      if (left <= e.clientX && e.clientX < right) {
         const chapterWidth = ((e.clientX - left) / (right - left)) * 100;
         scrubbingBarRefs[index].style.width = `${chapterWidth}%`;
         document.documentElement.style.setProperty("--hoverChapterIndex", `${index}`);
-        redDotRef.setAttribute("dataIndex", `${index}`);
-        redDotWrapperRef.setAttribute("dataIndex", `${index}`);
-        chapterContainer.classList.add("drag-expand");
-      } else if (right < e.clientX) {
+        // redDotRef.setAttribute("dataIndex", `${index}`);
+        // redDotWrapperRef.setAttribute("dataIndex", `${index}`);
+        chapterPadding[index].classList.add("drag-expand");
+      } else if (right <= e.clientX) {
         scrubbingBarRefs[index].style.width = `100%`;
-        chapterContainer.classList.remove("drag-expand");
+        chapterPadding[index].classList.remove("drag-expand");
       } else {
         scrubbingBarRefs[index].style.width = `0%`;
-        chapterContainer.classList.remove("drag-expand");
+        chapterPadding[index].classList.remove("drag-expand");
       }
     });
+    if (hoveringChapterIndex === currentChapterIndex && chapters.length > 1) {
+      redDotRef.style.scale = 1.5;
+    } else {
+      redDotRef.style.scale = 1;
+    }
   };
   return [updateScrubbingBar, previewCanvas, movePreviews, retrieveCurPalleteAndTile];
 }

@@ -243,14 +243,14 @@
   /* background-color: blue; */
   padding-top: 20px;
 }
-.chapter-hover:hover > .chapter-padding > .bar{
+/* .chapter-hover:hover > .chapter-padding > .bar{
   transform: scaleY(3);
 
 }
 .chapter-hover.single:hover > .chapter-padding > .bar{
   transform: scaleY(1.6);
 
-}
+} */
 .player-outer.focus-via-keyboard .chapters-container:focus::after{
   box-shadow: 0 0 0 2px inset var(--outline-color); /* Adjust the spread-radius to 2px and remove offsets and blur */
 }
