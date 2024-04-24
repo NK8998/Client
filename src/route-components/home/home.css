@@ -33,6 +33,7 @@
 .browse-skeleton{  
     aspect-ratio: 16 / 9;
     width: var(--skeletonWidth);
+    min-width: var(--skeletonWidth);
     max-width: 512px;
     /* background-color: purple; */
 }
@@ -163,6 +164,34 @@
     max-height: 24px;
     max-width: 24px;
     padding: 2px;
+}
+
+.processing-banner-home{
+    position: relative;
+}
+
+.processing-title{
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    position: absolute;
+    color: white;
+    background-color: rgba(0, 0, 0, 0.712);
+    width: 100%;
+    height: 100%;
+    justify-content: center;
+ 
+    
+}
+.processing-banner-home .processing-title{
+    border-radius: 12px;
+}
+.processing-banner-home.home-skeleton .processing-title{
+    bottom: 4px;
+    height: calc(100% - 4px);
+}
+.processing-title svg{
+    fill: white;
 }
 
 @media(max-width: 704px){

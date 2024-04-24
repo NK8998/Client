@@ -21,6 +21,7 @@ import { PreviewBgSize } from "./utilities/preview-bg-size";
 import PreviewBG from "./player-components/preview-bg/preview-bg";
 import { toggleTheatreMode, updatePlayingVideo } from "../../../store/Slices/watch-slice";
 import TopVideoComponent from "./player-components/bottom-controls/bc-components/title-component";
+import { Exclamation } from "../../../assets/icons";
 
 export default function Player({ videoRef, containerRef, miniPlayerBoolean }) {
   const dispatch = useDispatch();
@@ -29,7 +30,7 @@ export default function Player({ videoRef, containerRef, miniPlayerBoolean }) {
   const theatreMode = useSelector((state) => state.watch.theatreMode);
   const fullScreen = useSelector((state) => state.watch.fullScreen);
   const miniPlayer = useSelector((state) => state.watch.miniPlayer);
-  const { description_string, duration, video_id, mpd_url, preferred_thumbnail_url, possible_thumbnail_urls } = playingVideo;
+  const { description_string, duration, video_id, mpd_url } = playingVideo;
 
   const chapters = useSelector((state) => state.player.chapters);
   const play = useSelector((state) => state.player.play);
@@ -350,7 +351,12 @@ export default function Player({ videoRef, containerRef, miniPlayerBoolean }) {
         <div className='player-inner-absolute'>
           <PreviewBG />
           <Loader spinnerRef={spinnerRef} />
-          <div className='player-inner-relative' ref={controlsRef}>
+          <div className={`processing-banner ${mpd_url ? "hide" : ""}`}>
+            <p className='processing-title'>
+              <Exclamation /> Processing...
+            </p>
+          </div>
+          <div className={`player-inner-relative ${!mpd_url ? "processing" : ""}`} ref={controlsRef}>
             <TopVideoComponent />
             <Settings playerRef={playerRef} checkBufferedOnTrackChange={checkBufferedOnTrackChange} />
             <ScrubbingPreviews videoRef={videoRef} />

@@ -73,7 +73,7 @@ export function updateMaxNums() {
     const maxNumShort = Math.max(1, Math.floor(width / shortMinWidth));
     const gaps = maxNum - 1 * 5;
     const containerWidth = Math.floor((width - gaps) / maxNum);
-    document.documentElement.style.setProperty("--skeletonWidth", `${containerWidth}px`);
+    document.documentElement.style.setProperty("--skeletonWidth", `${containerWidth > 512 ? 512 : containerWidth}px`);
 
     const sizeObj = { max_video: maxNum, max_short: maxNumShort };
     dispatch(updateMaxSizes(sizeObj));

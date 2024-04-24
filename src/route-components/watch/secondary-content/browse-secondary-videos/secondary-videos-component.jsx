@@ -1,13 +1,14 @@
 import { useMemo } from "react";
-import { VerticalDots } from "../../../../assets/icons";
+import { Exclamation, VerticalDots } from "../../../../assets/icons";
 import { formatCount, generateRandomInteger } from "../../../../utilities/fomatCount";
 import { getTimeUploaded } from "../../../../utilities/getTimeUploaded";
 import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { fetchWatchData } from "../../../../store/Slices/watch-slice";
+import processingImg from "../../../../assets/processing.jpg";
 
 export default function SecondaryVideoComponent({ data }) {
-  const { duration_timestamp, possible_thumbnail_urls, title, display_name, handle, created_at, video_id, preferred_thumbnail_url } = data;
+  const { mpd_url, duration_timestamp, possible_thumbnail_urls, title, display_name, handle, created_at, video_id, preferred_thumbnail_url } = data;
   const dispatch = useDispatch();
   const views = useMemo(() => {
     return formatCount(generateRandomInteger());
@@ -25,11 +26,30 @@ export default function SecondaryVideoComponent({ data }) {
       >
         <div className='secondary-skeleton-inner'>
           <div className='secondary-skeleton-left'>
-            <img
-              src={`${preferred_thumbnail_url ? preferred_thumbnail_url : possible_thumbnail_urls["thumbnailUrl-0"]}`}
-              alt='skeleton-thumbnail'
-              className='secondary-skeleton-thumbnail'
-            />
+            {!mpd_url ? (
+              <div className='processing-banner-home secondary-skeleton'>
+                <img
+                  src={
+                    preferred_thumbnail_url
+                      ? preferred_thumbnail_url
+                      : possible_thumbnail_urls
+                      ? possible_thumbnail_urls["thumbnailUrl-0"]
+                      : processingImg
+                  }
+                  className='skeleton-thumbnail secondary-skeleton-thumbnail'
+                />
+                <p className='processing-title'>
+                  <Exclamation />
+                  Processing...
+                </p>
+              </div>
+            ) : (
+              <img
+                src={`${preferred_thumbnail_url ? preferred_thumbnail_url : possible_thumbnail_urls["thumbnailUrl-0"]}`}
+                alt='skeleton-thumbnail'
+                className='secondary-skeleton-thumbnail'
+              />
+            )}
           </div>
           <div className='secondary-skeleton-middle'>
             <p className='secondary-skeleton-title'>{title}</p>

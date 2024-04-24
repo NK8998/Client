@@ -2,15 +2,17 @@ import { useMemo } from "react";
 import { formatCount, generateRandomInteger } from "./fomatCount";
 import { getTimeUploaded } from "./getTimeUploaded";
 import { removeLeadingZero } from "./getTimestamp";
-import { VerticalDots } from "../assets/icons";
+import { Exclamation, VerticalDots } from "../assets/icons";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchWatchData } from "../store/Slices/watch-slice";
 import { useAppNavigation } from "./navigation";
+import errorFallback from "../assets/fallback.jpg";
+import processingImg from "../assets/processing.jpg";
 
 export default function VideoComponent({ data }) {
   const miniPlayer = useSelector((state) => state.watch.miniPlayer);
-  const { duration_timestamp, possible_thumbnail_urls, title, display_name, handle, created_at, video_id, preferred_thumbnail_url } = data;
+  const { mpd_url, duration_timestamp, possible_thumbnail_urls, title, display_name, handle, created_at, video_id, preferred_thumbnail_url } = data;
   const dispatch = useDispatch();
   const handleNavigation = useAppNavigation();
   const views = useMemo(() => {
@@ -31,14 +33,38 @@ export default function VideoComponent({ data }) {
           }}
         >
           <div className='browse-video-upper'>
-            <img
-              src={preferred_thumbnail_url ? preferred_thumbnail_url : possible_thumbnail_urls["thumbnailUrl-0"]}
-              alt='thumbnail'
-              className='skeleton-thumbnail'
-            />
-            <div className='skeleton-timestamp'>
-              <p>{removeLeadingZero(duration_timestamp)}</p>
-            </div>
+            {!mpd_url ? (
+              <div className='processing-banner-home home-skeleton'>
+                <img
+                  src={
+                    preferred_thumbnail_url
+                      ? preferred_thumbnail_url
+                      : possible_thumbnail_urls
+                      ? possible_thumbnail_urls["thumbnailUrl-0"]
+                      : processingImg
+                  }
+                  className='skeleton-thumbnail'
+                />
+                <p className='processing-title'>
+                  <Exclamation />
+                  Processing...
+                </p>
+              </div>
+            ) : (
+              <>
+                <img
+                  src={preferred_thumbnail_url ? preferred_thumbnail_url : possible_thumbnail_urls["thumbnailUrl-0"]}
+                  alt='thumbnail'
+                  className='skeleton-thumbnail'
+                  onError={(e) => {
+                    e.target.src = errorFallback;
+                  }}
+                />
+                <div className='skeleton-timestamp'>
+                  <p>{removeLeadingZero(duration_timestamp)}</p>
+                </div>
+              </>
+            )}
           </div>
         </Link>
         <div className='browse-video-lower'>
