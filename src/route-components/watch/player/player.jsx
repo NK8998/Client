@@ -23,13 +23,14 @@ import { toggleTheatreMode, updatePlayingVideo } from "../../../store/Slices/wat
 import TopVideoComponent from "./player-components/bottom-controls/bc-components/title-component";
 import { Exclamation } from "../../../assets/icons";
 
-export default function Player({ videoRef, containerRef, miniPlayerBoolean }) {
+export default function Player({ videoRef, containerRef }) {
   const dispatch = useDispatch();
   const location = useSelector((state) => state.app.location);
   const playingVideo = useSelector((state) => state.watch.playingVideo);
   const theatreMode = useSelector((state) => state.watch.theatreMode);
   const fullScreen = useSelector((state) => state.watch.fullScreen);
   const miniPlayer = useSelector((state) => state.watch.miniPlayer);
+  const miniPlayerBoolean = useSelector((state) => state.watch.miniPlayerBoolean);
   const { description_string, duration, video_id, mpd_url } = playingVideo;
 
   const chapters = useSelector((state) => state.player.chapters);
@@ -88,7 +89,7 @@ export default function Player({ videoRef, containerRef, miniPlayerBoolean }) {
     // for detaching player when user moves away from the watchpage
     const isWatchpage = location.includes("watch");
 
-    if (miniPlayerBoolean.current === false && isWatchpage === false) {
+    if (miniPlayerBoolean === false && isWatchpage === false) {
       videoRef.current.pause();
       clearIntervalProgress();
       detachPlayer();

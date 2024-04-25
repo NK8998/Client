@@ -11,8 +11,10 @@ export const seekVideo = (newTime) => {
 
 export const usePlayerProgressBarLogic = () => {
   const chapters = useSelector((state) => state.player.chapters);
+  const buffering = useSelector((state) => state.player.buffering);
 
   const updateBufferBar = () => {
+    if (buffering) return;
     const videoRef = document.querySelector(".html5-player");
     const buffered = videoRef.buffered;
     const currentTime = videoRef.currentTime;

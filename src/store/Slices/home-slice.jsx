@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { fetchWatchData } from "./watch-slice";
+import { fetchWatchData, handleMiniPLayer } from "./watch-slice";
 import { handleNavigation, updateIsFetching, updateLocation } from "./app-slice";
 import AxiosFetching from "../../utilities/axios-function";
 
@@ -31,9 +31,13 @@ export const fetchRecommendedVideos = () => {
     const currentRoute = window.location.pathname.split("?")[0];
 
     const recommendations = getState().home.recommendedVideos;
+    const miniPlayerBoolean = getState().watch.miniPlayerBoolean;
     if (recommendations.length > 0) {
       dispatch(updateLocation(currentRoute));
       dispatch(handleNavigation("/"));
+      if (miniPlayerBoolean) {
+        dispatch(handleMiniPLayer(true));
+      }
       return;
     }
     dispatch(updateIsFetching());
@@ -51,6 +55,9 @@ export const fetchRecommendedVideos = () => {
     dispatch(updateLocation(currentRoute));
     dispatch(updateIsFetching());
     dispatch(handleNavigation("/"));
+    if (miniPlayerBoolean) {
+      dispatch(handleMiniPLayer(true));
+    }
     dispatch(updateRecommendedVides(data));
   };
 };

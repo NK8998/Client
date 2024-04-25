@@ -1,5 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { handleNavigation, updateIsFetching, updateLocation } from "./app-slice";
+import { handleMiniPLayer } from "./watch-slice";
 
 const channelSlice = createSlice({
   name: "channel",
@@ -61,6 +62,8 @@ let instanceArr = [];
 let currentContentType;
 
 const finalStep = (dispatch, currentChannel, targetRoute, instanceObj, getState) => {
+  const miniPlayerBoolean = getState().watch.miniPlayerBoolean;
+  const location = getState().app.location;
   // const isFetching = getState().app.isFetching;
   // Sort the array based on the difference between Date.now() and the UID of each instance
   instanceArr.sort((a, b) => Math.abs(Date.now() - a.UID) - Math.abs(Date.now() - b.UID));
@@ -71,8 +74,12 @@ const finalStep = (dispatch, currentChannel, targetRoute, instanceObj, getState)
   // Check if the instance for which finalStep is being called is the latest one
   if (instanceObj.UID !== latestInstance.UID) return;
 
+  if (miniPlayerBoolean && location.includes("watch")) {
+    dispatch(handleMiniPLayer(true));
+  }
   dispatch(handleNavigation("/:channel"));
   dispatch(updateLocation(targetRoute));
+
   dispatch(updateCurrentChannel(currentChannel));
   currentContentType = "";
 };

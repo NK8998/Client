@@ -7,7 +7,7 @@ import {
   SmallScreenButton,
   TheatreNormalButton,
 } from "../../../../../../assets/icons";
-import { handleFullscreen, handleMiniPLayer, handleTheatre } from "../../../../../../store/Slices/watch-slice";
+import { handleFullscreen, handleMiniPLayer, handleTheatre, updateMiniPlayerBoolean } from "../../../../../../store/Slices/watch-slice";
 import { usePlayerMouseMove } from "../../../utilities/player-mouse-interactions";
 import { useNavigate } from "react-router-dom";
 import { useLayoutEffect, useRef } from "react";
@@ -30,11 +30,12 @@ export const BottomControlsRight = ({ miniPlayerBoolean, playerRef }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const handleMiniPlayerNavigation = () => {
-    miniPlayerBoolean.current = true;
+    dispatch(updateMiniPlayerBoolean(true));
+    // miniPlayerBoolean.current = true;
     const nonWatchRoute = locationsArr.slice().find((path) => !path.includes("/watch")) || "/";
     // console.log(nonWatchRoute);
     navigate(`${nonWatchRoute}`);
-    dispatch(handleMiniPLayer(true));
+    // dispatch(handleMiniPLayer(true));
   };
 
   const handleKeyUp = (e) => {

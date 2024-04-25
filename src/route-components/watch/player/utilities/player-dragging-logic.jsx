@@ -101,7 +101,6 @@ export const usePlayerDraggingLogic = () => {
     const chapterPadding = document.querySelectorAll(".chapter-padding");
     const progressBarRefs = document.querySelectorAll(".progress.bar");
     const currentIndex = parseInt(style.getPropertyValue("--hoverChapterIndex").trim());
-    chapterTitleContainer.textContent = chapters[currentIndex].title;
     const chapterDuration = chapters[currentIndex].end - chapters[currentIndex].start;
     const currentChapterLeft = chaptersContainers[currentIndex].getBoundingClientRect().left;
     const currentChapterWidth = chaptersContainers[currentIndex].getBoundingClientRect().width;
@@ -116,7 +115,7 @@ export const usePlayerDraggingLogic = () => {
     redDotRef.style.scale = chapters.length === 1 ? 1 : 1.5;
 
     chapters.forEach((chapter, index) => {
-      if (chapter.start <= currentTime && currentTime <= chapter.end) {
+      if (chapter.start <= currentTime && currentTime < chapter.end) {
         const chapterWidth = ((currentTime - chapter.start) / (chapter.end - chapter.start)) * 100;
         progressBarRefs[index].style.width = `${chapterWidth}%`;
         const curIndex = progressBarRefs[index].getAttribute("dataIndex");
@@ -125,7 +124,8 @@ export const usePlayerDraggingLogic = () => {
         redDotRef.setAttribute("dataIndex", `${curIndex}`);
         redDotWrapperRef.setAttribute("dataIndex", `${curIndex}`);
         chapterPadding[index].classList.add("drag-expand");
-      } else if (chapter.end < currentTime) {
+        chapterTitleContainer.textContent = chapters[index].title;
+      } else if (chapter.end <= currentTime) {
         progressBarRefs[index].style.width = `100%`;
         chapterPadding[index].classList.remove("drag-expand");
         // updateRedDot(currentTime);

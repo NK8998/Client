@@ -16,6 +16,7 @@ const watchSlice = createSlice({
     retrievedVideos: [{ videoId: "", recommendations: [], videoData: {} }],
     fetchingRecommendations: false,
     isTransitioning: false,
+    miniPlayerBoolean: false,
   },
   reducers: {
     updatePlayingVideo: (state, action) => {
@@ -42,6 +43,9 @@ const watchSlice = createSlice({
     updateIsTransitioning: (state, action) => {
       state.isTransitioning = !state.isTransitioning;
     },
+    updateMiniPlayerBoolean: (state, action) => {
+      state.miniPlayerBoolean = action.payload;
+    },
   },
 });
 
@@ -55,6 +59,7 @@ export const {
   updatefetchingRecommendations,
   updateFullSreenTransition,
   updateIsTransitioning,
+  updateMiniPlayerBoolean,
 } = watchSlice.actions;
 
 export default watchSlice.reducer;
@@ -84,6 +89,7 @@ export const fetchWatchData = (videoId, currentRoute, data) => {
 
       dispatch(handleNavigation("/watch"));
       root.scrollTo({ top: 0, behavior: "instant" });
+      console.log("video already fetched ran");
 
       return;
     }
@@ -98,6 +104,7 @@ export const fetchWatchData = (videoId, currentRoute, data) => {
       dispatch(handleNavigation("/watch"));
       dispatch(updateLocation(currentRoute));
       root.scrollTo({ top: 0, behavior: "instant" });
+      console.log("pushed forward ran");
     } else if (Object.entries(data).length === 0) {
       await AxiosFetching("post", "watch-video", formData)
         .then((response) => {
@@ -116,6 +123,7 @@ export const fetchWatchData = (videoId, currentRoute, data) => {
           console.error(error);
           // update fetching error and display error component
         });
+      console.log("fetched new ran");
     }
     const isWatchPage = location.includes("watch");
     if (!isWatchPage) {
@@ -196,15 +204,15 @@ export const handleFullscreen = (fullScreen) => {
 let intervalRef;
 export const handleMiniPLayer = (miniPlayer, currentRoute) => {
   return async (dispatch, getState) => {
-    await new Promise((resolve, reject) => {
-      intervalRef = setInterval(() => {
-        const isFetching = getState().app.isFetching;
-        if (!isFetching) {
-          resolve(true);
-          clearInterval(intervalRef);
-        }
-      }, 1);
-    });
+    // await new Promise((resolve, reject) => {
+    //   intervalRef = setInterval(() => {
+    //     const isFetching = getState().app.isFetching;
+    //     if (!isFetching) {
+    //       resolve(true);
+    //       clearInterval(intervalRef);
+    //     }
+    //   }, 1);
+    // });
     if (miniPlayer) {
       if (document.fullscreenElement) {
         dispatch(handleFullscreen(true));

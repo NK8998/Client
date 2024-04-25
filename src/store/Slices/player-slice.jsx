@@ -10,7 +10,7 @@ const playerSlicer = createSlice({
     preferredResolution: false,
     resolution: "144p",
     settingsShowing: false,
-    subtitles: "off",
+    subtitles: "Off",
     buffering: false,
     isDragging: true,
   },
