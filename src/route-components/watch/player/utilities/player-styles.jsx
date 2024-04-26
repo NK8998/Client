@@ -80,8 +80,8 @@ export const usePlayerStyles = () => {
     const calculatedHeight = windowWidth * (1 / newRatio);
     const maxHeight = 0.795 * windowHeight;
     let theatreHeight = Math.trunc(calculatedHeight > maxHeight ? maxHeight : calculatedHeight);
-    if (windowWidth <= 810) {
-      theatreHeight = Math.trunc(0.55 * windowHeight);
+    if (theatreHeight < 0.55 * window.screen.height) {
+      theatreHeight = Math.trunc(0.55 * window.screen.height);
     }
 
     document.documentElement.style.setProperty("--theatreHeight", `${Math.trunc(theatreHeight)}px`);

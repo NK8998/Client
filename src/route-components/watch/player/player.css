@@ -110,6 +110,7 @@
   font-size: 16px;
 }
 .player-outer.fullscreen .preview-time, .player-outer.fullscreen.theatre .preview-time{
+  margin-top: 5px;
   font-size: 17px;
 }
 .player-outer.focus-via-keyboard.fullscreen .chapters-container.single::after, .player-outer.focus-via-keyboard.fullscreen.theatre .chapters-container.single::after{
@@ -137,7 +138,7 @@
 
 .html5-player::-webkit-media-controls {
     display: none;
-  }
+}
 
 .html5-player.theatre{
   max-height: 79.5vh;

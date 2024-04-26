@@ -74,11 +74,11 @@ export function updateMaxNums() {
     //   }
     videoMinWidth = 320;
     const shortMinWidth = 210;
-    const width = gridContainerRef.getBoundingClientRect().width - 48;
+    const width = gridContainerRef.getBoundingClientRect().width - 38;
 
     const maxNum = Math.max(1, Math.floor(width / videoMinWidth));
     const maxNumShort = Math.max(1, Math.floor(width / shortMinWidth));
-    const gaps = maxNum - 1 * 5;
+    const gaps = (maxNum - 1) * 5;
     const containerWidth = Math.floor((width - gaps) / maxNum);
     document.documentElement.style.setProperty("--skeletonWidth", `${containerWidth > 512 ? 512 : containerWidth}px`);
 
