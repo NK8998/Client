@@ -141,6 +141,7 @@ export const fetchWatchData = (videoId, currentRoute, data) => {
       })
       .catch((error) => {
         console.error(error);
+        dispatch(updatefetchingRecommendations());
         // update fetching error and display error component
       });
   };

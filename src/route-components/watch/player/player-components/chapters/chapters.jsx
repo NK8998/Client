@@ -13,16 +13,9 @@ export default function Chapters({ videoRef, chapterContainerRef, redDotRef, red
   const [startDrag, stopDragging, handleClick, handleDrag, updateRedDot, resetDot, isDragging] = usePlayerDraggingLogic();
 
   const chapterEls = chapters.map((chapter, index) => {
-    // const calculatedPercentage = Math.round(((chapter.end - chapter.start) / chapters[chapters.length - 1].end) * 100);
     return (
       <div className={`chapter-hover ${chapters.length === 1 ? "single" : ""}`} dataindex={index} key={`hover-${chapter.title + index}`}>
-        <div
-          key={`${chapter.title + index}`}
-          className={`chapter-padding ${chapters.length === 1 ? "single" : ""}`}
-          dataindex={index}
-
-          // style={{ width: index === 0 ? `${calculatedPercentage}%` : `calc(${calculatedPercentage}% - 2px)` }}
-        >
+        <div key={`${chapter.title + index}`} className={`chapter-padding ${chapters.length === 1 ? "single" : ""}`} dataindex={index}>
           <div className='grey-bg bar' dataindex={index}></div>
           <div className='scrubbing bar' dataindex={index}></div>
           <div className='buffer bar' dataindex={index}></div>

@@ -30,7 +30,7 @@ function extractChapters(inputString) {
   return matches;
 }
 
-function createSegments(matches, totalTime) {
+function createSegments(matches, totalTime, liveDynamicDuration) {
   // Initialize an empty array to store the segments
   let segmentObjs = [];
 

@@ -31,7 +31,7 @@ export default function Player({ videoRef, containerRef }) {
   const fullScreen = useSelector((state) => state.watch.fullScreen);
   const miniPlayer = useSelector((state) => state.watch.miniPlayer);
   const miniPlayerBoolean = useSelector((state) => state.watch.miniPlayerBoolean);
-  const { description_string, duration, video_id, mpd_url } = playingVideo;
+  const { description_string, duration, video_id, mpd_url, isLive } = playingVideo;
 
   const chapters = useSelector((state) => state.player.chapters);
   const play = useSelector((state) => state.player.play);
@@ -58,6 +58,7 @@ export default function Player({ videoRef, containerRef }) {
   const attempts = useRef(0);
 
   useEffect(() => {
+    if (isLive) return;
     const generatedChapters = generateChapters(description_string, duration);
 
     dispatch(updateChapters(generatedChapters));
@@ -328,7 +329,7 @@ export default function Player({ videoRef, containerRef }) {
           ref={videoRef}
           className={`html5-player`}
           id='html5-player'
-          onTimeUpdate={checkBuffered}
+          onTimeUpdate={checkBuffered} // continue updating the chapters
           // onWaiting={handleTracksChanged}
           onProgress={() => updateBufferBar(chapters)}
           onClick={handlePlayState}
