@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { handleNavigation, updateIsFetching, updateLocation } from "./app-slice";
 import { useNavigate } from "react-router-dom";
-import { updateSettingsShowing } from "./player-slice";
+import { updateIsdragging, updateSettingsShowing } from "./player-slice";
 import AxiosFetching from "../../utilities/axios-function";
 
 // store each retrieved video and its recommendations in an array
@@ -182,10 +182,10 @@ export const handleFullscreen = (fullScreen) => {
     }
     if (!root) return;
     if (!fullScreen && window.location.pathname.includes("watch")) {
-      root.scrollTo({ top: 0, behavior: "instant" });
       if (!document.fullscreenElement) {
         root.requestFullscreen().then(() => {
           timeout = setTimeout(() => {
+            root.scrollTo({ top: 0, behavior: "instant" });
             dispatch(toggleFullScreen(true));
           }, 200);
         });
@@ -226,6 +226,7 @@ export const handleMiniPLayer = (miniPlayer, currentRoute) => {
       dispatch(handleNavigation("/watch"));
       dispatch(updateLocation(currentRoute));
       dispatch(toggleMiniPlayer(false));
+      dispatch(updateIsdragging(true));
     }
     dispatch(updateSettingsShowing(false));
   };
