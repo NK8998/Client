@@ -31,6 +31,7 @@ export default function Player({ videoRef, containerRef }) {
   const fullScreen = useSelector((state) => state.watch.fullScreen);
   const miniPlayer = useSelector((state) => state.watch.miniPlayer);
   const miniPlayerBoolean = useSelector((state) => state.watch.miniPlayerBoolean);
+  const buffering = useSelector((state) => state.player.buffering);
   const { description_string, duration, video_id, mpd_url, isLive } = playingVideo;
 
   const chapters = useSelector((state) => state.player.chapters);
@@ -271,7 +272,6 @@ export default function Player({ videoRef, containerRef }) {
   };
 
   const updateProgess = (e) => {
-    toPlay();
     if (intervalRef.current) {
       clearInterval(intervalRef.current);
     }
@@ -284,10 +284,17 @@ export default function Player({ videoRef, containerRef }) {
   };
 
   const clearIntervalProgress = () => {
-    toPause();
     clearInterval(intervalRef.current);
     clearIntervalOnTrackChange();
   };
+
+  useEffect(() => {
+    if (buffering) {
+      clearInterval(intervalRef.current);
+    } else {
+      updateProgess();
+    }
+  }, [buffering]);
 
   const handleContextMenu = (e) => {
     // e.preventDefault();
@@ -331,7 +338,7 @@ export default function Player({ videoRef, containerRef }) {
           id='html5-player'
           onTimeUpdate={checkBuffered} // continue updating the chapters
           // onWaiting={handleTracksChanged}
-          onProgress={() => updateBufferBar(chapters)}
+          onProgress={updateBufferBar}
           onClick={handlePlayState}
           onPlay={(e) => {
             toPlay();

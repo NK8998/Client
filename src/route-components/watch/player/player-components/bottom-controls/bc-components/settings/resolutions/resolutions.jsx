@@ -1,7 +1,7 @@
 import { useDispatch, useSelector } from "react-redux";
 import { ArrowLeftButton, TickIcon } from "../../../../../../../../assets/icons";
 import { useState } from "react";
-import { handleTranslating, updatePreferredRes, updateResolution } from "../../../../../../../../store/Slices/player-slice";
+import { handleTranslating, updateBuffering, updatePreferredRes, updateResolution } from "../../../../../../../../store/Slices/player-slice";
 
 export const Resolutions = ({ playerRef, checkBufferedOnTrackChange }) => {
   const playingVideo = useSelector((state) => state.watch.playingVideo);
@@ -21,6 +21,7 @@ export const Resolutions = ({ playerRef, checkBufferedOnTrackChange }) => {
   };
 
   function changeResolution(resolution, tag, framerate) {
+    console.log(resolution);
     if (resolution === currentRes) return;
     setCurrentRes(resolution);
 
@@ -67,6 +68,7 @@ export const Resolutions = ({ playerRef, checkBufferedOnTrackChange }) => {
         const tagString = `${tag}${framerate > 30 ? framerate : ""}`;
         dispatch(updateResolution(tagString));
         checkBufferedOnTrackChange();
+        dispatch(updateBuffering(true));
         resetGreyBars();
       }
     }
