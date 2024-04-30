@@ -75,16 +75,16 @@
   
 }
 .player-outer.fullscreen  .player-button, .player-outer.fullscreen.theatre  .player-button{
-  width: 53px;
-  height: 53px;
+  width: 54px;
+  height: 54px;
   margin-top: 0px;
 }
 .player-outer.fullscreen  .player-button svg, .player-outer.fullscreen.theatre  .player-button svg{
-  height: 53px;
+  height: 54px;
 }
 
 .player-outer.fullscreen  .chapters-absolute, .player-outer.fullscreen.theatre  .chapters-absolute{
-  bottom: 55px;
+  bottom: 54px;
   width: calc(100% - 20px);
   padding: 0px 10px;
 }

@@ -1,6 +1,7 @@
 .bottom-controls-left,
 .bottom-controls-right{
     display: flex;
+    align-items: center;
 
 }
 .bottom-controls-right{
@@ -13,7 +14,7 @@
     width: calc(100% - 28px);
     padding: 0px 14px;
     /* background: burlywood; */
-    height: 46px;
+    height: 48px;
     display: flex;
     justify-content: space-between;
     pointer-events: all;
@@ -21,7 +22,7 @@
   }
 
   .player-outer.fullscreen  .bottom-controls, .player-outer.fullscreen.theatre  .bottom-controls{
-    height: 53px;
+    height: 54px;
     width: calc(100% - 44px);
     padding: 0px 22px;
   }
@@ -58,7 +59,7 @@
     background-color: transparent;
     border: none;
     outline: none;
-    margin-top: -2px;
+    margin-top: 0px;
     position: relative;
     z-index: 10;
     display: grid;
@@ -180,13 +181,13 @@ form.volume-slider{
   margin-left: 4px;
   color: rgba(255, 255, 255, 0.76);
   height: calc(100% - 10px);
-  margin-top: 3px;
+  margin-top: 0px;
 
 
 }
 .player-outer.fullscreen .time-container, .player-outer.fullscreen.theatre .time-container{
   font-size: 19px;
-  margin-top: 6px;
+  /* margin-top: 6px; */
 }
 
 @media(max-width: 35em){
