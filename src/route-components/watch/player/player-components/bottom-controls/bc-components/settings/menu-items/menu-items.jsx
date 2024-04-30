@@ -85,7 +85,7 @@ export const QualityMenu = ({}) => {
         <p>Quality</p>
       </div>
       <div className='settings-button-right'>
-        {preferredResolution ? <p>{resolution}</p> : <p>Auto({resolution})</p>}
+        {preferredResolution ? <p>{resolution}</p> : <p>Auto ({resolution})</p>}
         <ArrowRightButton />
       </div>
     </div>

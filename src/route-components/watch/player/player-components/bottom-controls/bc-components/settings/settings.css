@@ -149,11 +149,11 @@
     gap: 20px;
 }
 .player-outer.fullscreen .settings-button-right, .player-outer.fullscreen.theatre .settings-button-right {
-    font-size: 15px;
+    /* font-size: 15px; */
 }
 .player-outer.fullscreen .settings-button svg, .player-outer.fullscreen.theatre .settings-button svg{
-    min-height: 32px;
-    min-width: 32px;
+    min-height: 36px;
+    min-width: 36px;
 }
 
 .player-outer.fullscreen .settings-button-right svg, .player-outer.fullscreen.theatre .settings-button-right svg{
@@ -213,7 +213,7 @@
     fill: white;
 }
 .settings-button-right{
-    font-size: 12px;
+    /* font-size: 12px; */
     font-weight: 400;
     min-width: 70px;
     /* background-color: blue; */

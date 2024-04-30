@@ -47,14 +47,19 @@ export const usePlayerProgressBarLogic = () => {
       }
       if (!bufferToUse) return;
       const bufferBarRefs = document.querySelectorAll(".buffer.bar");
+      const chapterContainers = document.querySelectorAll(".chapter-hover");
+      const chapterPadding = document.querySelectorAll(".chapter-padding");
 
       bufferBarRefs.forEach((bufferBar) => {
         const index = bufferBar.getAttribute("dataIndex"); // get the data-index attribute
         const chapter = chapters[index]; // find the corresponding chapter
 
         if (chapter.start <= bufferToUse[1] && chapter.end >= bufferToUse[1]) {
-          const chapterWidth = ((bufferToUse[1] - chapter.start) / (chapter.end - chapter.start)) * 100;
-          bufferBar.style.width = `${chapterWidth}%`;
+          const ratio = (bufferToUse[1] - chapter.start) / (chapter.end - chapter.start);
+          const { width } = chapterContainers[index].getBoundingClientRect();
+          const chapterPaddingWidth = chapterPadding[index].getBoundingClientRect().width;
+          const widthInPixels = width * ratio;
+          bufferBar.style.width = `${Math.min(widthInPixels, chapterPaddingWidth)}px`;
         } else if (chapter.end < bufferToUse[1]) {
           bufferBar.style.width = `100%`;
         } else {
@@ -71,16 +76,21 @@ export const usePlayerProgressBarLogic = () => {
     const currentTime = videoRef.currentTime;
 
     const progressBarRefs = document.querySelectorAll(".progress.bar");
+    const chapterContainers = document.querySelectorAll(".chapter-hover");
+    const chapterPadding = document.querySelectorAll(".chapter-padding");
 
     progressBarRefs.forEach((progressBar, index) => {
       // const curIndex = progressBar.getAttribute("dataIndex");
       const chapter = chapters[index];
-      if (chapter.start <= currentTime && chapter.end > currentTime) {
+      if (chapter.start <= currentTime && currentTime < chapter.end) {
         document.documentElement.style.setProperty("--currentChapterIndex", `${index}`);
         redDotRef.setAttribute("dataIndex", `${index}`);
         redDotWrapperRef.setAttribute("dataIndex", `${index}`);
-        const chapterWidth = ((currentTime - chapter.start) / (chapter.end - chapter.start)) * 100;
-        progressBar.style.width = `${chapterWidth}%`;
+        const ratio = (currentTime - chapter.start) / (chapter.end - chapter.start);
+        const { width } = chapterContainers[index].getBoundingClientRect();
+        const chapterPaddingWidth = chapterPadding[index].getBoundingClientRect().width;
+        const widthInPixels = width * ratio;
+        progressBar.style.width = `${Math.min(widthInPixels, chapterPaddingWidth)}px`;
       } else if (chapter.end <= currentTime) {
         progressBar.style.width = `100%`;
       } else {

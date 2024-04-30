@@ -18,28 +18,23 @@ export const usePlayerDraggingLogic = () => {
 
   const updateRedDot = (currentTimeTracker) => {
     const videoRef = document.querySelector("#html5-player");
+    const duration = videoRef.duration;
     const redDotWrapperRef = document.querySelector(".red-dot-wrapper");
     const innerChapterContainerRef = document.querySelector(".chapters-container");
     if (chapters.length === 0) return;
-    const endThreshold = Math.abs(videoRef.currentTime - chapters[chapters.length - 1].end);
     let currentTime;
     if (typeof currentTimeTracker === "number") {
       currentTime = currentTimeTracker;
     } else {
-      currentTime = endThreshold <= 0.5 ? chapters[chapters.length - 1].end : videoRef.currentTime;
+      currentTime = videoRef.currentTime;
     }
 
-    const progressBarRefs = document.querySelectorAll(".progress.bar");
-    if (currentTime >= chapters[0].start && currentTime <= chapters[chapters.length - 1].end) {
-      progressBarRefs.forEach((progressBar) => {
-        const curIndex = progressBar.getAttribute("dataIndex");
-        const chapter = chapters[curIndex];
-
-        if (chapter.start <= currentTime && chapter.end >= currentTime) {
-          const position = progressBar.getBoundingClientRect().right - innerChapterContainerRef.getBoundingClientRect().left;
-          redDotWrapperRef.style.transform = `translateX(${position}px)`;
-        }
-      });
+    if (currentTime >= 0 && currentTime <= duration) {
+      const progressBarRefs = document.querySelectorAll(".progress.bar");
+      const style = getComputedStyle(document.documentElement);
+      const currentIndex = parseInt(style.getPropertyValue("--currentChapterIndex").trim());
+      const position = progressBarRefs[currentIndex].getBoundingClientRect().right - innerChapterContainerRef.getBoundingClientRect().left;
+      redDotWrapperRef.style.transform = `translateX(${position}px)`;
     } else if (currentTime < chapters[0].start) {
       const position = 0;
       redDotWrapperRef.style.transform = `translateX(${position}px)`;
@@ -54,34 +49,36 @@ export const usePlayerDraggingLogic = () => {
       clearTimeout(mouseDownTracker.current);
     }
     // checkBufferedOnTrackChange();
+    const chapterContainers = document.querySelectorAll(".chapter-hover");
     const videoRef = document.querySelector("#html5-player");
     const redDotRef = document.querySelector(".red-dot");
-    const chaptersContainers = document.querySelectorAll(".chapter-hover");
     const chapterPadding = document.querySelectorAll(".chapter-padding");
     const progressBarRefs = document.querySelectorAll(".progress.bar");
     const style = getComputedStyle(document.documentElement);
     const currentIndex = parseInt(style.getPropertyValue("--hoverChapterIndex").trim());
     const chapterDuration = chapters[currentIndex].end - chapters[currentIndex].start;
-    const currentChapterLeft = chaptersContainers[currentIndex].getBoundingClientRect().left;
-    const currentChapterWidth = chaptersContainers[currentIndex].getBoundingClientRect().width;
-    const position = e.clientX - currentChapterLeft;
-    const ratio = position / currentChapterWidth;
+    const { left, right, width } = chapterContainers[currentIndex].getBoundingClientRect();
+    const position = e.clientX - left;
+    const ratio = position / width;
     const timeOffset = ratio * chapterDuration;
     const currentTime = chapters[currentIndex].start + timeOffset;
     videoRef.currentTime = currentTime;
+
     // console.log(currentTime);
 
     redDotRef.style.scale = chapters.length === 1 ? 1 : 1.5;
     chapters.forEach((chapter, index) => {
-      if (chapter.start <= currentTime && currentTime <= chapter.end) {
-        const chapterWidth = ((currentTime - chapter.start) / (chapter.end - chapter.start)) * 100;
-        progressBarRefs[index].style.width = `${chapterWidth}%`;
+      if (chapter.start <= currentTime && currentTime < chapter.end) {
+        const chapterPaddingLeft = chapterPadding[index].getBoundingClientRect().left;
+        const chapterPaddingWidth = chapterPadding[index].getBoundingClientRect().width;
+        const position = e.clientX - chapterPaddingLeft;
+        progressBarRefs[index].style.width = `${Math.min(Math.max(position, 0), chapterPaddingWidth)}px`;
         const curIndex = progressBarRefs[index].getAttribute("dataIndex");
         document.documentElement.style.setProperty("--currentChapterIndex", `${curIndex}`);
         document.documentElement.style.setProperty("--hoverChapterIndex", `${curIndex}`);
         redDotRef.setAttribute("dataIndex", `${curIndex}`);
         chapterPadding[index].classList.add("drag-expand");
-      } else if (chapter.end < currentTime) {
+      } else if (chapter.end <= currentTime) {
         progressBarRefs[index].style.width = `100%`;
         chapterPadding[index].classList.remove("drag-expand");
       } else {
@@ -89,23 +86,25 @@ export const usePlayerDraggingLogic = () => {
         chapterPadding[index].classList.remove("drag-expand");
       }
     });
+
     updateRedDot(currentTime);
   };
 
   const handleDrag = (e) => {
+    const videoRef = document.querySelector("#html5-player");
+    const duration = videoRef.duration;
     const chapterTitleContainer = document.querySelector(".chapter-title-container");
     const redDotRef = document.querySelector(".red-dot");
     const redDotWrapperRef = document.querySelector(".red-dot-wrapper");
     const style = getComputedStyle(document.documentElement);
-    const chaptersContainers = document.querySelectorAll(".chapter-hover");
+    const chapterContainers = document.querySelectorAll(".chapter-hover");
     const chapterPadding = document.querySelectorAll(".chapter-padding");
     const progressBarRefs = document.querySelectorAll(".progress.bar");
     const currentIndex = parseInt(style.getPropertyValue("--hoverChapterIndex").trim());
     const chapterDuration = chapters[currentIndex].end - chapters[currentIndex].start;
-    const currentChapterLeft = chaptersContainers[currentIndex].getBoundingClientRect().left;
-    const currentChapterWidth = chaptersContainers[currentIndex].getBoundingClientRect().width;
-    const position = e.clientX - currentChapterLeft;
-    const ratio = position / currentChapterWidth;
+    const { left, right, width } = chapterContainers[currentIndex].getBoundingClientRect();
+    const position = e.clientX - left;
+    const ratio = position / width;
     const timeOffset = ratio * chapterDuration;
     const currentTime = Math.min(Math.max(chapters[currentIndex].start + timeOffset, 0), duration);
     previewCanvas(currentTime);
@@ -113,11 +112,12 @@ export const usePlayerDraggingLogic = () => {
     currentTimeTracker.current = currentTime;
 
     redDotRef.style.scale = chapters.length === 1 ? 1 : 1.5;
-
     chapters.forEach((chapter, index) => {
       if (chapter.start <= currentTime && currentTime < chapter.end) {
-        const chapterWidth = ((currentTime - chapter.start) / (chapter.end - chapter.start)) * 100;
-        progressBarRefs[index].style.width = `${chapterWidth}%`;
+        const chapterPaddingLeft = chapterPadding[index].getBoundingClientRect().left;
+        const chapterPaddingWidth = chapterPadding[index].getBoundingClientRect().width;
+        const position = e.clientX - chapterPaddingLeft;
+        progressBarRefs[index].style.width = `${Math.min(Math.max(position, 0), chapterPaddingWidth)}px`;
         const curIndex = progressBarRefs[index].getAttribute("dataIndex");
         document.documentElement.style.setProperty("--currentChapterIndex", `${curIndex}`);
         document.documentElement.style.setProperty("--hoverChapterIndex", `${curIndex}`);

@@ -11,7 +11,7 @@ export const Subtitles = () => {
     dispatch(updateSubtitles(sub));
     dispatch(handleTranslating(0, "subs-inner", "settings-menu-selector-items"));
   };
-  const subs = ["English(UK)", "English(auto-generated)"];
+  const subs = ["English (UK)", "English (auto-generated)"];
   const subEls = subs.map((sub, index) => {
     return (
       <div className='sub-item' onClick={() => updateSubs(sub)} key={`${sub}-${index}`}>

@@ -134,8 +134,10 @@ export function usePlayerScrubbingBarInteractions() {
       const left = chapterContainer.getBoundingClientRect().left;
 
       if (left <= e.clientX && e.clientX < right) {
-        const chapterWidth = ((e.clientX - left) / (right - left)) * 100;
-        scrubbingBarRefs[index].style.width = `${chapterWidth}%`;
+        const chapterPaddingLeft = chapterPadding[index].getBoundingClientRect().left;
+        const chapterPaddingWidth = chapterPadding[index].getBoundingClientRect().width;
+        const chapterWidth = e.clientX - chapterPaddingLeft;
+        scrubbingBarRefs[index].style.width = `${Math.min(chapterWidth, chapterPaddingWidth)}px`;
         document.documentElement.style.setProperty("--hoverChapterIndex", `${index}`);
         chapterTitleContainer.textContent = chapters[index].title;
         movePreviews(e, index);

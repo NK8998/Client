@@ -59,11 +59,13 @@ export default function Player({ videoRef, containerRef }) {
   const attempts = useRef(0);
 
   useEffect(() => {
-    if (isLive) return;
-    const generatedChapters = generateChapters(description_string, duration);
-
-    dispatch(updateChapters(generatedChapters));
     dispatch(updatePreferredRes(false));
+    if (isLive) {
+      dispatch(updateChapters([{ start: 0, title: "", end: 50 }]));
+    } else {
+      const generatedChapters = generateChapters(description_string, duration);
+      dispatch(updateChapters(generatedChapters));
+    }
   }, [playingVideo]);
 
   useEffect(() => {
