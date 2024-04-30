@@ -14,7 +14,7 @@
     width: calc(100% - 28px);
     padding: 0px 14px;
     /* background: burlywood; */
-    height: 48px;
+    height: 47px;
     display: flex;
     justify-content: space-between;
     pointer-events: all;
@@ -72,6 +72,7 @@
 
   .player-button.play-pause{
     width: 45px;
+    /* transform: scale(0.95); */
   }
 .player-button.miniplayer svg{
   height: 40px;

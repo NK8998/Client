@@ -291,7 +291,7 @@ export default function Player({ videoRef, containerRef }) {
   useEffect(() => {
     if (buffering) {
       clearInterval(intervalRef.current);
-    } else {
+    } else if (!buffering && play) {
       updateProgess();
     }
   }, [buffering]);

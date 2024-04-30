@@ -205,7 +205,7 @@
 .chapters-absolute{
   pointer-events: all;
   position: absolute;
-  bottom: 48.5px;
+  bottom: 47px;
   width: 100%;
   left: 0px;
   display: flex;
