@@ -327,12 +327,14 @@
 .progress{
   background-color: red;
   z-index: 4;
+  
 
 }
 .scrubbing{
   background-color: rgba(212, 212, 212, 0.329);
   z-index: 3;
   visibility: hidden;
+ 
 }
 .buffer{
   background-color: rgba(212, 212, 212, 0.582);
@@ -342,6 +344,7 @@
   background-color: rgba(212, 212, 212, 0.178);
   z-index: 1;
   width: 100%;
+  
 }
 .red-dot{
   height: 13px;

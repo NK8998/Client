@@ -28,7 +28,7 @@ export const usePlayerStyles = () => {
       let chapterWidth = width;
 
       if (chapters.length > 1 && index !== chapters.length - 1) {
-        fullScreen ? (width -= 3) : (width -= 2);
+        fullScreen ? (width = Math.max(width - 3, 1)) : (width = Math.max(width - 2, 1));
       } else if (chapters.length > 1 && index === chapters.length - 1) {
         width += chapterContainerRefWidth - totalWidth;
         chapterWidth += chapterContainerRefWidth - totalWidth;

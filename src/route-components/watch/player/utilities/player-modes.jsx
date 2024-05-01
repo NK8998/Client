@@ -4,7 +4,7 @@ import { usePlayerMouseMove } from "./player-mouse-interactions";
 import { usePlayerDraggingLogic } from "./player-dragging-logic";
 import { useRef } from "react";
 import { toNormal, toTheatre } from "./gsap-animations";
-import { handleFullscreen, toggleFullScreen } from "../../../../store/Slices/watch-slice";
+import { usePlayerProgressBarLogic } from "./player-progressBar-logic";
 
 export const useMiniPlayermode = () => {
   const miniPlayer = useSelector((state) => state.watch.miniPlayer);
@@ -13,6 +13,7 @@ export const useMiniPlayermode = () => {
   const [applyChapterStyles, calculateWidth] = usePlayerStyles();
   const [handleMouseMove, handleMouseOut] = usePlayerMouseMove();
   const [startDrag, stopDragging, handleClick, handleDrag, updateRedDot, resetDot, isDragging] = usePlayerDraggingLogic();
+  const [updateBufferBar, updateProgressBar] = usePlayerProgressBarLogic();
 
   const toggleMiniPlayer = () => {
     const videoRef = document.querySelector("#html5-player");
@@ -34,6 +35,7 @@ export const useMiniPlayermode = () => {
         if (theatreMode) {
           primaryRef.classList.remove("has-content");
           expandedContainerRef.append(containerRef);
+          toTheatre();
         } else {
           primaryRef.append(containerRef);
           expandedContainerRef.classList.remove("has-content");
@@ -48,6 +50,8 @@ export const useMiniPlayermode = () => {
         layoutShiftRef.current = setTimeout(() => {
           calculateWidth();
           applyChapterStyles();
+          updateBufferBar();
+          updateProgressBar();
           updateRedDot("");
           controlsRef.classList.remove("transition");
           handleMouseMove();
@@ -65,14 +69,16 @@ export const useMiniPlayermode = () => {
         miniplayerRef.append(containerRef);
         expandedContainerRef.classList.add("has-content");
       }
-      requestAnimationFrame(() => {
-        applyChapterStyles();
-        updateRedDot("");
-        miniplayerRef.classList.add("visible");
-        miniPlayerOuter.style.opacity = `1`;
+      applyChapterStyles();
+      miniplayerRef.classList.add("visible");
+      miniPlayerOuter.style.opacity = `1`;
 
-        containerRef.classList.add("miniplayer");
-        videoRef.classList.add("miniplayer");
+      containerRef.classList.add("miniplayer");
+      videoRef.classList.add("miniplayer");
+      updateBufferBar();
+      updateProgressBar();
+      requestAnimationFrame(() => {
+        updateRedDot("");
       });
     }
   };
@@ -84,6 +90,7 @@ export const useTheatreMode = () => {
   const [startDrag, stopDragging, handleClick, handleDrag, updateRedDot, resetDot, isDragging] = usePlayerDraggingLogic();
   const [applyChapterStyles, calculateWidth] = usePlayerStyles();
   const theatreMode = useSelector((state) => state.watch.theatreMode);
+  const [updateBufferBar, updateProgressBar] = usePlayerProgressBarLogic();
   const fullScreen = useSelector((state) => state.watch.fullScreen);
   const location = useSelector((state) => state.app.location);
 
@@ -113,6 +120,8 @@ export const useTheatreMode = () => {
       containerRef.classList.add("theatre");
       applyChapterStyles();
       calculateWidth();
+      updateBufferBar();
+      updateProgressBar();
 
       updateRedDot("");
       toTheatre();
@@ -130,7 +139,8 @@ export const useTheatreMode = () => {
       secondary.classList.remove("theatre");
       applyChapterStyles();
       calculateWidth();
-
+      updateBufferBar();
+      updateProgressBar();
       updateRedDot("");
       toNormal();
     }
@@ -142,6 +152,7 @@ export const useTheatreMode = () => {
 export const useFullscreenMode = () => {
   const [startDrag, stopDragging, handleClick, handleDrag, updateRedDot, resetDot, isDragging] = usePlayerDraggingLogic();
   const [applyChapterStyles, calculateWidth] = usePlayerStyles();
+  const [updateBufferBar, updateProgressBar] = usePlayerProgressBarLogic();
   const theatreMode = useSelector((state) => state.watch.theatreMode);
   const location = useSelector((state) => state.app.location);
   const fullScreen = useSelector((state) => state.watch.fullScreen);
@@ -215,6 +226,8 @@ export const useFullscreenMode = () => {
       calculateWidth();
 
       applyChapterStyles();
+      updateProgressBar();
+      updateBufferBar();
       requestAnimationFrame(() => {
         updateRedDot("");
       });
@@ -250,6 +263,8 @@ export const useFullscreenMode = () => {
       changeFullscreenStyles();
       calculateWidth();
       applyChapterStyles();
+      updateProgressBar();
+      updateBufferBar();
       updateRedDot("");
     }
   };
