@@ -163,13 +163,6 @@ export default function Player({ videoRef, containerRef }) {
     toggleFullScreen();
   }, [fullScreen]);
 
-  // useEffect(() => {
-  //   requestAnimationFrame(()=>{
-  //     updateBufferBar();
-  //     updateProgressBar()
-  //   })
-  // }, [fullScreen, theatreMode, miniPlayer]);
-
   useLayoutEffect(() => {
     toggleMiniPlayer();
   }, [miniPlayer, theatreMode, fullScreen]);
