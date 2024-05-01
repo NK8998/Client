@@ -43,8 +43,8 @@
 .html5-player.miniplayer,
 .html5-player.theatre.miniplayer{
   width: 400px;
-  height: 230px;
-  border-radius: 20px 20px 0px 0px;
+  height: 225px;
+  border-radius: 12px 12px 0px 0px;
   background-color: black;
   pointer-events: all;
   min-height: unset;

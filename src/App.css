@@ -23,6 +23,8 @@ body{
 
 :root{
     --skeletonWidth: 0px;
+    --thumbnailSkeletonWidth: 0px;
+    --thumbnailSkeletonHeight:0px;
     --theatreWidth: 0;
     --theatreHeight: 0;
     --hovering:false;

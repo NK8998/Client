@@ -81,6 +81,11 @@ export function updateMaxNums() {
     const gaps = (maxNum - 1) * 5;
     const containerWidth = Math.floor((width - gaps) / maxNum);
     document.documentElement.style.setProperty("--skeletonWidth", `${containerWidth > 512 ? 512 : containerWidth}px`);
+    const thumbnailSkeletonWidth = containerWidth > 512 ? 512 - 10 : containerWidth - 10;
+    const thumbnailSkeletonHeight = (thumbnailSkeletonWidth * 9) / 16;
+
+    document.documentElement.style.setProperty("--thumbnailSkeletonWidth", `${thumbnailSkeletonWidth}px`);
+    document.documentElement.style.setProperty("--thumbnailSkeletonHeight", `${thumbnailSkeletonHeight}px`);
 
     const sizeObj = { max_video: maxNum, max_short: maxNumShort };
     dispatch(updateMaxSizes(sizeObj));

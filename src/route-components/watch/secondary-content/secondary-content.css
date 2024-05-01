@@ -12,6 +12,10 @@
     display: flex;
     width: 100%;
 }
+.secondary-skeleton-left{
+    min-height: 94px;
+    max-height: 94px;
+}
 .secondary-skeleton-inner{
     display: flex;
     gap: 8px;
