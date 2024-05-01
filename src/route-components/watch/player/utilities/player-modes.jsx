@@ -226,9 +226,10 @@ export const useFullscreenMode = () => {
       calculateWidth();
 
       applyChapterStyles();
-      updateProgressBar();
-      updateBufferBar();
+
       requestAnimationFrame(() => {
+        updateProgressBar();
+        updateBufferBar();
         updateRedDot("");
       });
 

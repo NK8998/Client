@@ -1,7 +1,7 @@
 .settings{
     position: absolute;
     right: 12px;
-    bottom: 70px;
+    bottom: 60px;
     z-index: 4;
     background-color: rgba(24, 24, 24, 0.897);
     height: fit-content;
@@ -111,8 +111,8 @@
 }
 .player-outer.fullscreen  .settings, .player-outer.fullscreen.theatre  .settings{
     transition: all 0ms ;
-    font-size: 18px;
-    bottom:80px;
+    font-size: 19px;
+    bottom: 74px;
 }
 .player-outer.fullscreen .settings-menu-selector-items, .player-outer.fullscreen.theatre .settings-menu-selector-items{
     width: fit-content;
@@ -120,7 +120,8 @@
 }
 .player-outer.fullscreen .settings-button, .player-outer.fullscreen.theatre .settings-button{
     padding: 10px 14px;
-    width: calc(100% - 28px);
+    min-width: calc(100% - 28px);
+    width: fit-content;
 
 }
 .player-outer.fullscreen .playback-speed-panel, .player-outer.fullscreen.theatre .playback-speed-panel{
@@ -180,8 +181,8 @@
 
 .settings-menu-selector-items{
     scrollbar-gutter: stable;
-    max-width: 450px;
-    min-width: 280px;
+    /* max-width: 450px; */
+    /* min-width: 280px; */
     height: fit-content;
     width: fit-content;
 
@@ -191,8 +192,8 @@
 } */
 
 .settings-button{
-   
-    width: calc(100% - 20px);
+    min-width: calc(100% - 20px);
+    width: fit-content;
     display: flex;
     justify-content: space-between;
     padding: 8px 10px;
@@ -208,17 +209,20 @@
     min-height: 24px;
     min-width: 24px;
     display: flex;
-    gap: 10px;
+    gap: 12px;
     align-items: center;
     fill: white;
 }
 .settings-button-right{
+    width: fit-content;
     /* font-size: 12px; */
     font-weight: 400;
     min-width: 70px;
     /* background-color: blue; */
     display: flex;
     align-items: center;
+    width: fit-content;
+    flex-grow: 1;
 
 }
 .settings-button .settings-button-right svg{
@@ -230,6 +234,8 @@
 .settings-button-right p{
     min-width: 50px;
     text-align: right;
+    flex-grow: 1;
+    font-weight: 400;
 }
 .settings-upper{
     width: calc(100% - 25px);
