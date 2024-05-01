@@ -249,6 +249,8 @@ export const usePlayerBufferingState = () => {
     const videoRef = document.querySelector("#html5-player");
     const spinnerRef = document.querySelector(".player-spinner");
     const previewImageBg = document.querySelector(".preview-image-bg");
+    const previewImageBgContainer = document.querySelector(".preview-bg-relative");
+
     if (!videoRef) return;
     const video = videoRef;
     const currentTime = video.currentTime;
@@ -290,6 +292,7 @@ export const usePlayerBufferingState = () => {
       if (end > currentTime && end - currentTime >= 0) {
         if (!isDragging) {
           previewImageBg.classList.remove("show");
+          previewImageBgContainer.classList.remove("darken");
           videoRef.style.visibility = "visible";
         }
         spinnerRef.classList.remove("visible");

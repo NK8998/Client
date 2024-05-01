@@ -8,7 +8,6 @@ export function usePlayerScrubbingBarInteractions() {
   const { extraction_and_palette, palette_urls, aspect_ratio, duration } = playingVideo;
   const settingsShowing = useSelector((state) => state.player.settingsShowing);
   const theatreMode = useSelector((state) => state.watch.theatreMode);
-  const miniPlayer = useSelector((state) => state.watch.miniPlayer);
   const fullScreen = useSelector((state) => state.watch.fullScreen);
 
   const updatePreviewLeft = (e) => {
@@ -59,8 +58,10 @@ export function usePlayerScrubbingBarInteractions() {
 
   const previewCanvas = (currentTime) => {
     const playerOuter = document.querySelector(".player-outer");
+    const previewImageBgContainer = document.querySelector(".preview-bg-relative");
     const previewImageBg = document.querySelector(".preview-image-bg");
     previewImageBg.classList.add("show");
+    previewImageBgContainer.classList.add("darken");
     let height;
     let width;
 
