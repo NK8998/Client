@@ -1,4 +1,4 @@
-function convertToSeconds(timeString) {
+export function convertToSeconds(timeString) {
   if (timeString.split(":").length < 3) {
     timeString = `0:${timeString}`;
   }

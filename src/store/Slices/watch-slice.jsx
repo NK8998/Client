@@ -8,7 +8,7 @@ import AxiosFetching from "../../utilities/axios-function";
 const watchSlice = createSlice({
   name: "watch",
   initialState: {
-    playingVideo: { videoId: "", aspectRatio: 16 / 9, url: "", descriptionString: "", duration: 0 },
+    playingVideo: { videoId: "", aspectRatio: 16 / 9, url: "", descriptionString: "", duration: 0, title: "" },
     recommendations: [],
     theatreMode: false,
     fullScreen: false,

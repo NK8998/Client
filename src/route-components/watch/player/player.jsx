@@ -32,6 +32,7 @@ export default function Player({ videoRef, containerRef }) {
   const miniPlayer = useSelector((state) => state.watch.miniPlayer);
   const miniPlayerBoolean = useSelector((state) => state.watch.miniPlayerBoolean);
   const buffering = useSelector((state) => state.player.buffering);
+  const urlTime = useSelector((state) => state.player.urlTime);
   const { description_string, duration, video_id, mpd_url, isLive } = playingVideo;
 
   const chapters = useSelector((state) => state.player.chapters);
@@ -70,7 +71,12 @@ export default function Player({ videoRef, containerRef }) {
 
   useEffect(() => {
     applyChapterStyles();
-  }, [chapters]);
+    const videoRef = document.querySelector("#html5-player");
+    if (urlTime && videoRef) {
+      videoRef.currentTime = urlTime;
+      updateProgressBar();
+    }
+  }, [chapters, urlTime]);
 
   useEffect(() => {
     const handlePlayerResizing = () => {
@@ -79,12 +85,13 @@ export default function Player({ videoRef, containerRef }) {
       updateBufferBar();
       updateProgressBar();
     };
-    const isWatchpage = location.includes("watch") || window.location.pathname.includes("watch");
-    if (isWatchpage === false) {
-      window.removeEventListener("resize", handlePlayerResizing);
-    } else if (isWatchpage === true) {
-      window.addEventListener("resize", handlePlayerResizing);
-    }
+    // const isWatchpage = location.includes("watch") || window.location.pathname.includes("watch");
+    // if (isWatchpage === false) {
+    //   window.removeEventListener("resize", handlePlayerResizing);
+    // } else if (isWatchpage === true) {
+    //   window.addEventListener("resize", handlePlayerResizing);
+    // }
+    window.addEventListener("resize", handlePlayerResizing);
 
     return () => {
       window.removeEventListener("resize", handlePlayerResizing);
@@ -147,12 +154,13 @@ export default function Player({ videoRef, containerRef }) {
   };
 
   useEffect(() => {
-    const isWatchpage = location.includes("watch") || window.location.pathname.includes("watch");
-    if (isWatchpage) {
-      window.addEventListener("resize", updateStyles);
-    } else if (!isWatchpage) {
-      window.removeEventListener("resize", updateStyles);
-    }
+    // const isWatchpage = location.includes("watch") || window.location.pathname.includes("watch");
+    // if (isWatchpage) {
+    //   window.addEventListener("resize", updateStyles);
+    // } else if (!isWatchpage) {
+    //   window.removeEventListener("resize", updateStyles);
+    // }
+    window.addEventListener("resize", updateStyles);
 
     return () => {
       window.removeEventListener("resize", updateStyles);

@@ -1,8 +1,9 @@
 import { useEffect, useLayoutEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { fetchWatchData, handleMiniPLayer, updateMiniPlayerBoolean } from "../store/Slices/watch-slice";
 import { upadteLocationsArr } from "../store/Slices/app-slice";
+import { updateUrlTime } from "../store/Slices/player-slice";
 
 export default function BareWatch({}) {
   const dispatch = useDispatch();
@@ -13,7 +14,12 @@ export default function BareWatch({}) {
   useLayoutEffect(() => {
     const url = new URL(window.location.href);
     const currentRoute = url.pathname;
-    const videoId = url.search.split("=")[1];
+    const params = new URLSearchParams(window.location.search);
+    const videoId = params.get("v");
+    const time = params.get("t");
+    if (time) {
+      dispatch(updateUrlTime(time));
+    }
 
     if (!videoId) {
       navigate("/");

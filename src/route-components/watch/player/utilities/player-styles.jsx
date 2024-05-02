@@ -52,7 +52,7 @@ export const usePlayerStyles = () => {
     const aspectRatio = aspect_ratio > 1.1 ? aspect_ratio : 16 / 9;
     const windowWidth = root.clientWidth;
     const windowHeight = window.innerHeight;
-    const gaps = window.innerWidth >= 1040 ? 74 : 46;
+    const gaps = window.innerWidth >= 1040 ? 64 : 46;
     const maxVideoHeight = (73.5 * window.innerHeight) / 100;
     const remainingSpace = windowWidth - (gaps + secondaryRefWidth);
     // const aspect_ratio = wideScreen ? 1920 / 1080 : 16 / 9;

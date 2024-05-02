@@ -19,6 +19,7 @@ export const usePlayerProgressBarLogic = () => {
     const buffered = videoRef.buffered;
     const currentTime = videoRef.currentTime;
 
+    if (chapters.length === 0 || !chapters) return;
     if (buffered.length > 0) {
       const bufferGroups = [];
       let currentGroup = [buffered.start(0), buffered.end(0)];
@@ -79,6 +80,7 @@ export const usePlayerProgressBarLogic = () => {
     const chapterContainers = document.querySelectorAll(".chapter-hover");
     const chapterPadding = document.querySelectorAll(".chapter-padding");
 
+    if (chapters.length === 0 || !chapters) return;
     progressBarRefs.forEach((progressBar, index) => {
       // const curIndex = progressBar.getAttribute("dataIndex");
       const chapter = chapters[index];
