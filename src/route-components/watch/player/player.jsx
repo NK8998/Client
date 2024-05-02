@@ -82,8 +82,8 @@ export default function Player({ videoRef, containerRef }) {
     const handlePlayerResizing = () => {
       if (document.fullscreenElement || fullScreen) return;
       calculateWidth();
-      updateBufferBar();
-      updateProgressBar();
+      // updateBufferBar();
+      // updateProgressBar();
     };
     // const isWatchpage = location.includes("watch") || window.location.pathname.includes("watch");
     // if (isWatchpage === false) {

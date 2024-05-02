@@ -4,18 +4,22 @@ import { Link } from "react-router-dom";
 import { convertToSeconds } from "../../player/player-components/chapters/chaptersGen";
 import { usePlayerProgressBarLogic } from "../../player/utilities/player-progressBar-logic";
 import { usePlayerBufferingState, usePlayerDraggingLogic } from "../../player/utilities/player-dragging-logic";
-import { useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { formatCount, generateRandomInteger } from "../../../../utilities/fomatCount";
 import UploderDetails from "../lower-interactions/uploader-details";
 import { DateFormatter } from "../../../../utilities/date-formatter";
+import UserRoleInfo from "./user-role-info";
 
 export default function Description() {
   const { description_string, video_id, created_at } = useSelector((state) => state.watch.playingVideo);
+  const location = useSelector((state) => state.app.location);
+  const fullScreen = useSelector((state) => state.watch.fullScreen);
   const [updateBufferBar, updateProgressBar] = usePlayerProgressBarLogic();
   const [startDrag, stopDragging, handleClick, handleDrag, updateRedDot, resetDot, isDragging] = usePlayerDraggingLogic();
   const [checkBufferedOnTrackChange, checkBuffered, clearIntervalOnTrackChange] = usePlayerBufferingState();
   const [showMore, setShowMore] = useState(false);
   const lastFoldedLine = useRef();
+  const showMoreButton = useRef();
 
   const handleChapterClick = (e, time) => {
     e.preventDefault();
@@ -28,6 +32,34 @@ export default function Description() {
     checkBufferedOnTrackChange();
   };
 
+  useEffect(() => {
+    if (showMore) {
+      showMoreButton.current.style.left = `${0}px`;
+      return;
+    }
+    if (lastFoldedLine.current && showMoreButton.current) {
+      const width = lastFoldedLine.current.clientWidth - showMoreButton.current.clientWidth;
+      showMoreButton.current.style.left = `${width}px`;
+    }
+  }, [location, video_id, showMore, fullScreen]);
+
+  useEffect(() => {
+    const recalculatePosition = () => {
+      if (showMore) return;
+      const width = lastFoldedLine.current.clientWidth - showMoreButton.current.clientWidth;
+
+      requestAnimationFrame(() => {
+        showMoreButton.current.style.left = `${width}px`;
+      });
+    };
+
+    window.addEventListener("resize", recalculatePosition);
+
+    return () => {
+      window.removeEventListener("resize", recalculatePosition);
+    };
+  }, [location, showMore, fullScreen]);
+
   const processString = (string) => {
     const cleanString = DOMPurify.sanitize(string);
     // Split the string into lines
@@ -38,9 +70,6 @@ export default function Description() {
       // Split the line into parts by the time format
       let parts = line.split(/(\b\d{1,2}:\d{2}\b)/g);
 
-      if (index === 3) {
-        lastFoldedLine.current = line.length;
-      }
       // Process each part
       let processedParts = parts.map((part, index) => {
         // If the part is a time format, wrap it in a Link component
@@ -64,7 +93,12 @@ export default function Description() {
 
       // Join the processed parts back into a line, and wrap the line in a <p> tag
       return (
-        <span key={index} style={{ display: index >= 4 && !showMore ? "none" : "block" }}>
+        <span
+          key={index}
+          style={{ display: index > 0 && !showMore ? "none" : "" }}
+          className={`formatted-string-span ${index === 0 && !showMore ? "fold" : ""}`}
+          ref={index === 0 ? lastFoldedLine : null}
+        >
           {processedParts}
         </span>
       );
@@ -74,6 +108,7 @@ export default function Description() {
   };
 
   const processedLines = processString(description_string || "");
+
   const handleFormattedStringClick = () => {
     if (showMore) return;
     setShowMore(true);
@@ -81,10 +116,13 @@ export default function Description() {
   const views = useMemo(() => {
     return generateRandomInteger();
   }, [video_id]);
-  console.log(lastFoldedLine.current);
 
   return (
-    <div className='description' style={{ cursor: showMore ? "unset" : "pointer" }} onClick={handleFormattedStringClick}>
+    <div
+      className={`description ${showMore ? "expanded" : "folded"}`}
+      style={{ cursor: showMore ? "unset" : "pointer" }}
+      onClick={handleFormattedStringClick}
+    >
       <div className='description-upper'>
         <p>{showMore ? views : formatCount(views)} views </p>
         <p> {DateFormatter(created_at)}</p>
@@ -96,12 +134,14 @@ export default function Description() {
         {showMore && (
           <div className='description-lower-uploader-details'>
             <UploderDetails />
+            <UserRoleInfo />
           </div>
         )}
         <span
-          className='show-formatted-string'
+          ref={showMoreButton}
+          className={`show-formatted-string ${!showMore ? "box-shadow" : ""}`}
           onClick={() => setShowMore(false)}
-          style={{ pointerEvents: showMore ? "all" : "none", left: showMore ? "0px" : lastFoldedLine.current }}
+          style={{ pointerEvents: showMore ? "all" : "none" }}
         >
           {!showMore ? "...more" : "Show less"}
         </span>
