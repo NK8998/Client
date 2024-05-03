@@ -14,6 +14,7 @@ const appSlice = createSlice({
     location: "",
     windowWidth: window.innerWidth,
     prefersMini: false,
+    debounceTime: 200,
   },
   reducers: {
     updateRefs: (state, action) => {
@@ -88,9 +89,9 @@ export const handleNavigation = (targetRoute) => {
 
 export const handleNavResize = () => {
   return (dispatch, getState) => {
-    const windowWidth = window.innerWidth;
     const location = getState().app.location;
     const isWatchPage = location.includes("watch");
+    const windowWidth = getState().app.windowWidth;
 
     const leftNavMain = document.querySelector(".leftnav-wrapper");
     if (!leftNavMain) return;
@@ -124,9 +125,11 @@ const addRemoveWatchPageStyle = () => {
 
 export const handleResize = () => {
   return (dispatch) => {
+    const root = document.querySelector("#root");
     const windowWidth = window.innerWidth;
     const leftNavMain = document.querySelector(".leftnav-wrapper");
-    if (!leftNavMain) return;
+    if (!leftNavMain || !root) return;
+    root.style.width = `${windowWidth}px`;
 
     if (windowWidth >= 1344) {
       leftNavMain.classList.remove("show-not-watch");

@@ -22,6 +22,7 @@ import PreviewBG from "./player-components/preview-bg/preview-bg";
 import { toggleTheatreMode, updatePlayingVideo } from "../../../store/Slices/watch-slice";
 import TopVideoComponent from "./player-components/bottom-controls/bc-components/title-component";
 import { Exclamation } from "../../../assets/icons";
+import { debounce } from "lodash";
 
 export default function Player({ videoRef, containerRef }) {
   const dispatch = useDispatch();
@@ -32,7 +33,7 @@ export default function Player({ videoRef, containerRef }) {
   const miniPlayer = useSelector((state) => state.watch.miniPlayer);
   const miniPlayerBoolean = useSelector((state) => state.watch.miniPlayerBoolean);
   const buffering = useSelector((state) => state.player.buffering);
-  const urlTime = useSelector((state) => state.player.urlTime);
+  const debounceTime = useSelector((state) => state.app.debounceTime);
   const { description_string, duration, video_id, mpd_url, isLive } = playingVideo;
 
   const chapters = useSelector((state) => state.player.chapters);
@@ -99,7 +100,6 @@ export default function Player({ videoRef, containerRef }) {
       videoRef.current.pause();
       clearIntervalProgress();
       detachPlayer();
-      window.removeEventListener("resize", calculateWidth);
       dispatch(updatePlayingVideo({}));
     }
   }, [location]);

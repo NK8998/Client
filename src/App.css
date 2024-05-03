@@ -10,6 +10,7 @@
 }
 body{
     width: 100vw;
+    background-color: rgb(14, 14, 14);
 }
 #root.fullscreen::-webkit-scrollbar{
     display: none;

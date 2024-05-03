@@ -8,6 +8,7 @@ export default function SecondaryContent({ secondaryRefInner, secondaryRefOuter 
   const windowWidth = useSelector((state) => state.app.windowWidth);
   const location = useSelector((state) => state.app.location);
   const fetchingRecommendations = useSelector((state) => state.watch.fetchingRecommendations);
+
   useLayoutEffect(() => {
     const secondaryInnerContent = document.querySelector(".secondary-inner");
     if (!secondaryInnerContent || !secondaryRefInner.current || !secondaryRefOuter.current) return;

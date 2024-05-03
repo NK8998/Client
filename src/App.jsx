@@ -19,6 +19,7 @@ import BarePlaylists from "./bare-routes/bare-channel/bare-channel-routes/bare-p
 import BareCommunity from "./bare-routes/bare-channel/bare-channel-routes/bare-community/bare-community";
 import MiniPlayer from "./route-components/watch/player/mini-player";
 import { LoadingScreen } from "./loading-screen/loading-screen";
+import { debounce } from "lodash";
 
 function App() {
   const credentialsChecked = useSelector((state) => state.app.credentialsChecked);
@@ -48,9 +49,11 @@ function App() {
       dispatch(handlePopState());
     });
 
-    window.addEventListener("resize", () => {
+    const handleResizing = () => {
       dispatch(handleResize());
-    });
+    };
+
+    window.addEventListener("resize", handleResizing);
   }, [credentialsChecked]);
 
   return credentialsChecked ? (
