@@ -7,6 +7,7 @@ export const usePlayerStyles = () => {
   const miniPlayer = useSelector((state) => state.watch.miniPlayer);
   const chapters = useSelector((state) => state.player.chapters);
   const fullScreen = useSelector((state) => state.watch.fullScreen);
+  const theatreMode = useSelector((state) => state.watch.theatreMode);
   const { aspect_ratio } = playingVideo;
 
   useEffect(() => {
@@ -74,8 +75,10 @@ export const usePlayerStyles = () => {
 
     // console.log({ remainingSpace });
     // console.log({ videoHeight, videoWidth });
+
     document.documentElement.style.setProperty("--height", `${Math.round(videoHeight)}px`);
     document.documentElement.style.setProperty("--width", `${Math.round(videoWidth)}px`);
+
     const newRatio = 16 / 9;
     const theatreWidth = windowWidth;
     const calculatedHeight = windowWidth * (1 / newRatio);
@@ -87,6 +90,7 @@ export const usePlayerStyles = () => {
 
     document.documentElement.style.setProperty("--theatreHeight", `${Math.trunc(theatreHeight)}px`);
     document.documentElement.style.setProperty("--theatreWidth", `${Math.trunc(theatreWidth - 1)}px`);
+
     document.documentElement.style.setProperty("--fullScreenHeight", `${window.screen.height}px`);
   };
 

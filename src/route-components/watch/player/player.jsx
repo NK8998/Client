@@ -73,25 +73,23 @@ export default function Player({ videoRef, containerRef }) {
     applyChapterStyles();
   }, [chapters]);
 
+  const updateStyles = () => {
+    if (document.fullscreenElement || fullScreen) return;
+    calculateWidth();
+
+    applyChapterStyles();
+    updateBufferBar();
+    updateProgressBar();
+    updateRedDot("");
+  };
+
   useEffect(() => {
-    const handlePlayerResizing = () => {
-      if (document.fullscreenElement || fullScreen) return;
-      calculateWidth();
-      // updateBufferBar();
-      // updateProgressBar();
-    };
-    // const isWatchpage = location.includes("watch") || window.location.pathname.includes("watch");
-    // if (isWatchpage === false) {
-    //   window.removeEventListener("resize", handlePlayerResizing);
-    // } else if (isWatchpage === true) {
-    //   window.addEventListener("resize", handlePlayerResizing);
-    // }
-    window.addEventListener("resize", handlePlayerResizing);
+    window.addEventListener("resize", updateStyles);
 
     return () => {
-      window.removeEventListener("resize", handlePlayerResizing);
+      window.removeEventListener("resize", updateStyles);
     };
-  }, [location, video_id, theatreMode]);
+  }, [location, video_id, theatreMode, chapters]);
 
   useLayoutEffect(() => {
     // for detaching player when user moves away from the watchpage
@@ -140,27 +138,6 @@ export default function Player({ videoRef, containerRef }) {
       window.removeEventListener("keyup", handleKeyUp);
     };
   }, [play, theatreMode, fullScreen, location]);
-
-  const updateStyles = () => {
-    applyChapterStyles();
-    updateBufferBar();
-    updateProgressBar();
-    updateRedDot("");
-  };
-
-  useEffect(() => {
-    // const isWatchpage = location.includes("watch") || window.location.pathname.includes("watch");
-    // if (isWatchpage) {
-    //   window.addEventListener("resize", updateStyles);
-    // } else if (!isWatchpage) {
-    //   window.removeEventListener("resize", updateStyles);
-    // }
-    window.addEventListener("resize", updateStyles);
-
-    return () => {
-      window.removeEventListener("resize", updateStyles);
-    };
-  }, [location, video_id, theatreMode, chapters]);
 
   useLayoutEffect(() => {
     toggleTheatre();

@@ -18,7 +18,6 @@ export default function Description() {
   const [startDrag, stopDragging, handleClick, handleDrag, updateRedDot, resetDot, isDragging] = usePlayerDraggingLogic();
   const [checkBufferedOnTrackChange, checkBuffered, clearIntervalOnTrackChange] = usePlayerBufferingState();
   const [showMore, setShowMore] = useState(false);
-  const lastFoldedLine = useRef();
   const showMoreButton = useRef();
 
   const handleChapterClick = (e, time) => {
@@ -32,33 +31,12 @@ export default function Description() {
     checkBufferedOnTrackChange();
   };
 
-  useEffect(() => {
-    if (showMore) {
-      showMoreButton.current.style.left = `${0}px`;
-      return;
-    }
-    if (lastFoldedLine.current && showMoreButton.current) {
-      const width = Math.max(lastFoldedLine.current.clientWidth - showMoreButton.current.clientWidth, 5);
-      showMoreButton.current.style.left = `${width}px`;
-    }
-  }, [location, video_id, showMore, fullScreen]);
-
-  useEffect(() => {
-    const recalculatePosition = () => {
-      if (showMore) return;
-      const width = Math.max(lastFoldedLine.current.clientWidth - showMoreButton.current.clientWidth, 5);
-
-      requestAnimationFrame(() => {
-        showMoreButton.current.style.left = `${width}px`;
-      });
-    };
-
-    window.addEventListener("resize", recalculatePosition);
-
-    return () => {
-      window.removeEventListener("resize", recalculatePosition);
-    };
-  }, [location, showMore, fullScreen]);
+  const recalculatePosition = () => {
+    const lastFoldedLine = document.querySelector(".formatted-string-span.fold");
+    if (!lastFoldedLine) return;
+    const width = Math.max(lastFoldedLine.clientWidth - showMoreButton.current.clientWidth, 5);
+    showMoreButton.current.style.left = `${width}px`;
+  };
 
   const processString = (string) => {
     const cleanString = DOMPurify.sanitize(string);
@@ -97,7 +75,6 @@ export default function Description() {
           key={index}
           style={{ display: index > 0 && !showMore ? "none" : "" }}
           className={`formatted-string-span ${index === 0 && !showMore ? "fold" : ""}`}
-          ref={index === 0 ? lastFoldedLine : null}
         >
           {processedParts}
         </span>
@@ -108,6 +85,22 @@ export default function Description() {
   };
 
   const processedLines = processString(description_string || "");
+
+  useEffect(() => {
+    recalculatePosition();
+
+    window.addEventListener("resize", recalculatePosition);
+
+    return () => {
+      window.removeEventListener("resize", recalculatePosition);
+    };
+  }, [location, fullScreen, processedLines]);
+
+  useEffect(() => {
+    if (showMore) {
+      showMoreButton.current.style.left = `${0}px`;
+    }
+  }, [showMore]);
 
   const handleFormattedStringClick = () => {
     if (showMore) return;
