@@ -51,6 +51,7 @@ export const usePlayerProgressBarLogic = () => {
       const chapterContainers = document.querySelectorAll(".chapter-hover");
       const chapterPadding = document.querySelectorAll(".chapter-padding");
 
+      if (!bufferBarRefs || !chapterContainers || !chapterPadding) return;
       bufferBarRefs.forEach((bufferBar) => {
         const index = bufferBar.getAttribute("dataIndex"); // get the data-index attribute
         const chapter = chapters[index]; // find the corresponding chapter
@@ -80,7 +81,7 @@ export const usePlayerProgressBarLogic = () => {
     const chapterContainers = document.querySelectorAll(".chapter-hover");
     const chapterPadding = document.querySelectorAll(".chapter-padding");
 
-    if (chapters.length === 0 || !chapters) return;
+    if (chapters.length === 0 || !chapters || !progressBarRefs || !chapterContainers || !chapterPadding) return;
     progressBarRefs.forEach((progressBar, index) => {
       // const curIndex = progressBar.getAttribute("dataIndex");
       const chapter = chapters[index];

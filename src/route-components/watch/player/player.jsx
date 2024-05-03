@@ -71,12 +71,7 @@ export default function Player({ videoRef, containerRef }) {
 
   useEffect(() => {
     applyChapterStyles();
-    const videoRef = document.querySelector("#html5-player");
-    if (urlTime && videoRef) {
-      videoRef.currentTime = urlTime;
-      updateProgressBar();
-    }
-  }, [chapters, urlTime]);
+  }, [chapters]);
 
   useEffect(() => {
     const handlePlayerResizing = () => {
@@ -244,6 +239,12 @@ export default function Player({ videoRef, containerRef }) {
         .then(() => {
           console.log("The video has been loaded!");
           handlePlayState();
+          const videoRef = document.querySelector("#html5-player");
+          if (videoRef) {
+            const params = new URLSearchParams(window.location.search);
+            const time = params.get("t") || 0;
+            videoRef.currentTime = time;
+          }
         })
         .catch(onError);
     } else {
@@ -329,6 +330,15 @@ export default function Player({ videoRef, containerRef }) {
   const handlePlayerBlur = (e) => {
     containerRef.current.classList.remove("focus-via-keyboard");
   };
+
+  const handleTimeUpdate = () => {
+    const videoRef = document.querySelector("#html5-player");
+    if (videoRef.paused) {
+      updateProgressBar();
+      updateRedDot();
+    }
+    checkBuffered();
+  };
   return (
     <>
       <div
@@ -350,7 +360,7 @@ export default function Player({ videoRef, containerRef }) {
           ref={videoRef}
           className={`html5-player`}
           id='html5-player'
-          onTimeUpdate={checkBuffered} // continue updating the chapters
+          onTimeUpdate={handleTimeUpdate} // continue updating the chapters
           // onWaiting={handleTracksChanged}
           onProgress={updateBufferBar}
           onClick={handlePlayState}

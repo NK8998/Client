@@ -38,7 +38,7 @@ export default function Description() {
       return;
     }
     if (lastFoldedLine.current && showMoreButton.current) {
-      const width = lastFoldedLine.current.clientWidth - showMoreButton.current.clientWidth;
+      const width = Math.max(lastFoldedLine.current.clientWidth - showMoreButton.current.clientWidth, 5);
       showMoreButton.current.style.left = `${width}px`;
     }
   }, [location, video_id, showMore, fullScreen]);
@@ -46,7 +46,7 @@ export default function Description() {
   useEffect(() => {
     const recalculatePosition = () => {
       if (showMore) return;
-      const width = lastFoldedLine.current.clientWidth - showMoreButton.current.clientWidth;
+      const width = Math.max(lastFoldedLine.current.clientWidth - showMoreButton.current.clientWidth, 5);
 
       requestAnimationFrame(() => {
         showMoreButton.current.style.left = `${width}px`;

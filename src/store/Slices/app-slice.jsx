@@ -1,5 +1,5 @@
-import { createSlice, current } from "@reduxjs/toolkit";
-import { fetchWatchData, handleFullscreen, toggleFullScreen, updateIsTransitioning } from "./watch-slice";
+import { createSlice } from "@reduxjs/toolkit";
+import { fetchWatchData, toggleFullScreen } from "./watch-slice";
 import { updateMaxNums } from "./home-slice";
 
 const appSlice = createSlice({
@@ -146,7 +146,6 @@ export const handlePopState = () => {
     const currentRoute = url.pathname;
     const params = new URLSearchParams(window.location.search);
     const videoId = params.get("v");
-    const time = params.get("t");
     const isWatchPage = currentRoute.includes("watch");
     if (isWatchPage) {
       dispatch(fetchWatchData(videoId, currentRoute, {}));
