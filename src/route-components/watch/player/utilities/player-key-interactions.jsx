@@ -58,7 +58,7 @@ export const usePlayerkeyInteractions = () => {
 
       theatreTimeOut.current = setTimeout(() => {
         dispatch(handleTheatre(theatreMode));
-      }, 400);
+      }, 130);
     } else if (key === " ") {
       e.preventDefault();
 

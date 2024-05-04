@@ -106,7 +106,7 @@ export function usePlayerScrubbingBarInteractions() {
     const ratio = position / currentChapterWidth;
     const timeOffset = ratio * chapterDuration;
     const currentTime = Math.min(Math.max(chapters[hoveringIndex].start + timeOffset, 0), duration);
-    const timeStamp = getTimeStamp(Math.trunc(currentTime));
+    const timeStamp = getTimeStamp(Math.round(currentTime));
     previewTime.textContent = timeStamp;
     const width = scrubbingPreview.clientWidth;
     const height = scrubbingPreview.clientHeight;

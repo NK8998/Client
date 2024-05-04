@@ -19,7 +19,7 @@ export const BottomControlsLeft = ({ handlePlayState }) => {
     const timeContainer = document.querySelector(".time-left-container");
     const currentTime = videoRef.currentTime;
 
-    const timeStamp = getTimeStamp(parseInt(currentTime));
+    const timeStamp = getTimeStamp(Math.round(currentTime));
     timeContainer.textContent = timeStamp;
   };
 
