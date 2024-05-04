@@ -37,7 +37,7 @@
 .secondary-in-primary{
     width: var(--width);
 }
- 
+
 @media(max-width: 65em){
     .secondary{
         display: none

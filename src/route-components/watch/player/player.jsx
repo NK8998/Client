@@ -74,17 +74,17 @@ export default function Player({ videoRef, containerRef }) {
     applyChapterStyles();
   }, [chapters]);
 
-  const updateStyles = () => {
-    if (document.fullscreenElement || fullScreen) return;
-    calculateWidth();
-
-    applyChapterStyles();
-    updateBufferBar();
-    updateProgressBar();
-    updateRedDot("");
-  };
-
   useEffect(() => {
+    const updateStyles = () => {
+      if (document.fullscreenElement || fullScreen) return;
+      calculateWidth();
+
+      applyChapterStyles();
+      updateBufferBar();
+      updateProgressBar();
+      updateRedDot("");
+    };
+
     window.addEventListener("resize", updateStyles);
 
     return () => {

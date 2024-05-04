@@ -7,7 +7,7 @@ import {
   SmallScreenButton,
   TheatreNormalButton,
 } from "../../../../../../assets/icons";
-import { handleFullscreen, handleMiniPLayer, handleTheatre, updateMiniPlayerBoolean } from "../../../../../../store/Slices/watch-slice";
+import { handleFullscreen, handleTheatre, updateMiniPlayerBoolean } from "../../../../../../store/Slices/watch-slice";
 import { usePlayerMouseMove } from "../../../utilities/player-mouse-interactions";
 import { useNavigate } from "react-router-dom";
 import { useLayoutEffect, useRef } from "react";
@@ -19,7 +19,7 @@ export const BottomControlsRight = ({ miniPlayerBoolean, playerRef }) => {
   const theatreMode = useSelector((state) => state.watch.theatreMode);
   const miniPlayer = useSelector((state) => state.watch.miniPlayer);
   const playingVideo = useSelector((state) => state.watch.playingVideo);
-  const locationsArr = useSelector((state) => state.app.locationsArr);
+  const lastVisited = useSelector((state) => state.app.lastVisited);
   const isFetching = useSelector((state) => state.app.isFetching);
   const currentPanel = useSelector((state) => state.player.currentPanel);
   const location = useSelector((state) => state.app.location);
@@ -29,12 +29,11 @@ export const BottomControlsRight = ({ miniPlayerBoolean, playerRef }) => {
   const timeoutRef = useRef();
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
   const handleMiniPlayerNavigation = () => {
     dispatch(updateMiniPlayerBoolean(true));
     // miniPlayerBoolean.current = true;
-    const nonWatchRoute = locationsArr.slice().find((path) => !path.includes("/watch")) || "/";
-    // console.log(nonWatchRoute);
-    navigate(`${nonWatchRoute}`);
+    navigate(`${lastVisited}`);
     // dispatch(handleMiniPLayer(true));
   };
 
@@ -65,7 +64,7 @@ export const BottomControlsRight = ({ miniPlayerBoolean, playerRef }) => {
     return () => {
       window.removeEventListener("keyup", handleKeyUp);
     };
-  }, [miniPlayer, locationsArr, isFetching]);
+  }, [miniPlayer, lastVisited, isFetching]);
 
   const toggleCaptions = () => {
     if (!captions_url) return;

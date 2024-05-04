@@ -2,7 +2,7 @@ import { useLayoutEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { fetchWatchData, handleMiniPLayer, updateMiniPlayerBoolean } from "../store/Slices/watch-slice";
-import { upadteLocationsArr } from "../store/Slices/app-slice";
+import { updateLastVisited } from "../store/Slices/app-slice";
 
 export default function BareWatch({}) {
   const dispatch = useDispatch();
@@ -21,7 +21,7 @@ export default function BareWatch({}) {
       return;
     }
     // fetch data and store in watchSlice
-    dispatch(upadteLocationsArr(currentRoute));
+    // dispatch(updateLastVisited(currentRoute));
     if (miniPlayer) {
       dispatch(handleMiniPLayer(false, currentRoute));
     }

@@ -10,7 +10,7 @@ const appSlice = createSlice({
     userData: {},
     isFetching: false,
     refs: [],
-    locationsArr: [],
+    lastVisited: "",
     location: "",
     windowWidth: window.innerWidth,
     prefersMini: false,
@@ -33,8 +33,8 @@ const appSlice = createSlice({
     updatePreference: (state, action) => {
       state.prefersMini = !state.prefersMini;
     },
-    upadteLocationsArr: (state, action) => {
-      state.locationsArr = [action.payload, ...state.locationsArr];
+    updateLastVisited: (state, action) => {
+      state.lastVisited = action.payload;
     },
     updateCredentialsCheck: (state, action) => {
       state.credentialsChecked = action.payload;
@@ -54,7 +54,7 @@ export const {
   updateLocation,
   updateWindowWidth,
   updatePreference,
-  upadteLocationsArr,
+  updateLastVisited,
   updateCredentialsCheck,
   updateUserData,
   updateHasAccount,

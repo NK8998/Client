@@ -14,6 +14,7 @@ export default function Description() {
   const { description_string, video_id, created_at } = useSelector((state) => state.watch.playingVideo);
   const location = useSelector((state) => state.app.location);
   const fullScreen = useSelector((state) => state.watch.fullScreen);
+  const miniPlayer = useSelector((state) => state.watch.miniPlayer);
   const [updateBufferBar, updateProgressBar] = usePlayerProgressBarLogic();
   const [startDrag, stopDragging, handleClick, handleDrag, updateRedDot, resetDot, isDragging] = usePlayerDraggingLogic();
   const [checkBufferedOnTrackChange, checkBuffered, clearIntervalOnTrackChange] = usePlayerBufferingState();
@@ -94,13 +95,15 @@ export default function Description() {
     return () => {
       window.removeEventListener("resize", recalculatePosition);
     };
-  }, [location, fullScreen, processedLines]);
+  }, [location, fullScreen, processedLines, miniPlayer]);
 
   useEffect(() => {
     if (showMore) {
       showMoreButton.current.style.left = `${0}px`;
+    } else {
+      recalculatePosition();
     }
-  }, [showMore]);
+  }, [showMore, fullScreen, miniPlayer, processedLines]);
 
   const handleFormattedStringClick = () => {
     if (showMore) return;
