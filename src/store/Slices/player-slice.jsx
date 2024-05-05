@@ -147,3 +147,41 @@ export const handleTranslatingHere = (panel, currentElement, element) => {
     });
   };
 };
+
+export const toggleCaptions = (playerRef, captions_url) => {
+  if (!captions_url) return;
+  const tracks = playerRef.current.getTextTracks();
+  const hasCaptions = tracks.some((track) => track.kind === "subtitles");
+  const captionsButton = document.querySelector(".player-button.captions");
+  captionsButton.classList.toggle("captions-on");
+
+  if (!hasCaptions) {
+    playerRef.current
+      .addTextTrackAsync(captions_url, "en", "subtitles", "text/vtt")
+      .then(function () {
+        console.log("Subtitle track added");
+      })
+      .catch(function (error) {
+        console.error("Error adding subtitle track:", error);
+      });
+  }
+
+  const visibility = playerRef.current.isTextTrackVisible();
+  playerRef.current.setTextTrackVisibility(!visibility);
+};
+
+export const removeCaptions = (playerRef) => {
+  // Reset the captions
+  if (playerRef.current) {
+    const tracks = playerRef.current.getTextTracks();
+    console.log(tracks);
+    tracks.forEach((track) => {
+      if (track.kind === "subtitles") {
+        track.active = false;
+      }
+      console.log("tracks removed");
+    });
+    // Set text track visibility to false
+    playerRef.current.setTextTrackVisibility(false);
+  }
+};

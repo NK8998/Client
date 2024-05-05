@@ -10,10 +10,10 @@ import {
 import { handleFullscreen, handleTheatre, updateMiniPlayerBoolean } from "../../../../../../store/Slices/watch-slice";
 import { usePlayerMouseMove } from "../../../utilities/player-mouse-interactions";
 import { useNavigate } from "react-router-dom";
-import { useLayoutEffect, useRef } from "react";
-import { handleTranslating, handleTranslatingHere, updateSettingsShowing } from "../../../../../../store/Slices/player-slice";
+import { useEffect, useLayoutEffect, useRef } from "react";
+import { handleTranslating, handleTranslatingHere, toggleCaptions, updateSettingsShowing } from "../../../../../../store/Slices/player-slice";
 
-export const BottomControlsRight = ({ miniPlayerBoolean, playerRef }) => {
+export const BottomControlsRight = ({ playerRef }) => {
   const settingsShowing = useSelector((state) => state.player.settingsShowing);
   const fullScreen = useSelector((state) => state.watch.fullScreen);
   const theatreMode = useSelector((state) => state.watch.theatreMode);
@@ -67,28 +67,6 @@ export const BottomControlsRight = ({ miniPlayerBoolean, playerRef }) => {
     };
   }, [miniPlayer, lastVisited, isFetching]);
 
-  const toggleCaptions = () => {
-    if (!captions_url) return;
-    // Assuming player is an instance of shaka.Player
-    const tracks = playerRef.current.getTextTracks();
-    const hasCaptions = tracks.some((track) => track.kind === "subtitles");
-    captionsRef.current.classList.toggle("captions-on");
-
-    if (!hasCaptions) {
-      playerRef.current
-        .addTextTrackAsync(captions_url, "en", "subtitles", "text/vtt")
-        .then(function () {
-          console.log("Subtitle track added");
-        })
-        .catch(function (error) {
-          console.error("Error adding subtitle track:", error);
-        });
-    }
-
-    const visibility = playerRef.current.isTextTrackVisible();
-    playerRef.current.setTextTrackVisibility(!visibility);
-  };
-
   const removeSettingsOnoutsideClick = (e) => {
     const element = e.target;
 
@@ -132,7 +110,7 @@ export const BottomControlsRight = ({ miniPlayerBoolean, playerRef }) => {
         className={`player-button captions ${captions_url ? "has-captions" : ""}`}
         ref={captionsRef}
         onFocus={handleMouseMove}
-        onClick={toggleCaptions}
+        onClick={() => toggleCaptions(playerRef, captions_url)}
       >
         <CaptionsButton />
       </button>

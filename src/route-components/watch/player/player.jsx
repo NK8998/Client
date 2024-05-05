@@ -10,7 +10,7 @@ import { usePlayerProgressBarLogic } from "./utilities/player-progressBar-logic"
 import { usePlayerMouseMove } from "./utilities/player-mouse-interactions";
 import Loader from "./utilities/loader";
 import ScrubbingPreviews from "./player-components/scrubbing-previews/scrubbing-previews";
-import { updateChapters, updatePlay, updatePreferredRes, updateResolution } from "../../../store/Slices/player-slice";
+import { removeCaptions, toggleCaptions, updateChapters, updatePlay, updatePreferredRes, updateResolution } from "../../../store/Slices/player-slice";
 import Settings from "./player-components/bottom-controls/bc-components/settings/settings";
 import { usePlayerScrubbingBarInteractions } from "./utilities/player-scrubbingBar-logic";
 import { usePlayerBufferingState, usePlayerDraggingLogic } from "./utilities/player-dragging-logic";
@@ -35,7 +35,7 @@ export default function Player({ videoRef, containerRef }) {
   const miniPlayerBoolean = useSelector((state) => state.watch.miniPlayerBoolean);
   const buffering = useSelector((state) => state.player.buffering);
   const debounceTime = useSelector((state) => state.app.debounceTime);
-  const { description_string, duration, video_id, mpd_url, isLive } = playingVideo;
+  const { description_string, duration, video_id, mpd_url, isLive, captions_url } = playingVideo;
 
   const chapters = useSelector((state) => state.player.chapters);
   const play = useSelector((state) => state.player.play);
@@ -50,7 +50,7 @@ export default function Player({ videoRef, containerRef }) {
   const [toggleFullScreen] = useFullscreenMode();
   const [handleDoubleClick, handlePlayState] = usePlayerClickInteractions();
   const [checkBufferedOnTrackChange, checkBuffered, clearIntervalOnTrackChange] = usePlayerBufferingState();
-  const playerRef = useRef();
+  const playerRef = useRef(null);
   const redDotRef = useRef();
   const redDotWrapperRef = useRef();
   const chapterContainerRef = useRef();
@@ -177,7 +177,9 @@ export default function Player({ videoRef, containerRef }) {
       playerRef.current.attach(videoRef.current);
 
       const videoContainer = document.querySelector(".captions-container-relative");
+
       const ui = new shaka.ui.Overlay(playerRef.current, videoContainer, videoRef.current);
+
       playerRef.current.configure({
         manifest: {
           dash: {
@@ -197,10 +199,10 @@ export default function Player({ videoRef, containerRef }) {
 
       playerRef.current.addEventListener("trackschanged", () => {
         console.log("Tracks have been loaded!");
-        const tracksInfo = playerRef.current.getVariantTracks();
-        const tracks = tracksInfo.map((track) => {
-          return track.height;
-        });
+        // const tracksInfo = playerRef.current.getVariantTracks();
+        // const tracks = tracksInfo.map((track) => {
+        //   return track.height;
+        // });
       });
 
       playerRef.current.addEventListener("adaptation", (value) => {
@@ -254,10 +256,18 @@ export default function Player({ videoRef, containerRef }) {
 
   const detachPlayer = async () => {
     // console.log("run");
-    if (playerRef.current) {
+    const captionsContainer = document.querySelector(".captions-container-relative");
+    if (captionsContainer) {
+      while (captionsContainer.firstChild) {
+        captionsContainer.removeChild(captionsContainer.firstChild);
+      }
+    }
+
+    if (playerRef.current !== null) {
       if (timeIntervalRef.current) {
         clearInterval(timeIntervalRef.current);
       }
+
       clearIntervalProgress();
       await playerRef.current.unload();
       playerRef.current = null;
