@@ -31,6 +31,8 @@ export default function SecondaryContent({ secondaryRefInner, secondaryRefOuter 
       }
     };
 
+    handleResizing();
+
     window.addEventListener("resize", handleResizing);
 
     return () => {

@@ -14,7 +14,6 @@ export default function Description() {
   const { description_string, video_id, created_at } = useSelector((state) => state.watch.playingVideo);
   const location = useSelector((state) => state.app.location);
   const fullScreen = useSelector((state) => state.watch.fullScreen);
-  const miniPlayer = useSelector((state) => state.watch.miniPlayer);
   const [updateBufferBar, updateProgressBar] = usePlayerProgressBarLogic();
   const [startDrag, stopDragging, handleClick, handleDrag, updateRedDot, resetDot, isDragging] = usePlayerDraggingLogic();
   const [checkBufferedOnTrackChange, checkBuffered, clearIntervalOnTrackChange] = usePlayerBufferingState();
@@ -31,12 +30,40 @@ export default function Description() {
     updateRedDot();
     checkBufferedOnTrackChange();
   };
-
   const recalculatePosition = () => {
-    const lastFoldedLine = document.querySelector(".formatted-string-span.fold");
-    if (!lastFoldedLine) return;
-    const width = Math.max(lastFoldedLine.clientWidth - showMoreButton.current.clientWidth, 5);
-    showMoreButton.current.style.left = `${width}px`;
+    const lines = document.querySelectorAll(".formatted-string-span");
+    if (lines === null || lines === undefined) return;
+
+    let lastWidth = 0;
+    let cumulativeHeight = 0;
+    let foldIndex = null;
+
+    lines.forEach((line, index) => {
+      const lineHeight = line.getBoundingClientRect().height;
+      cumulativeHeight = cumulativeHeight + lineHeight;
+
+      if (cumulativeHeight >= 50 && foldIndex === null) {
+        foldIndex = index;
+        line.classList.add("fold");
+        lastWidth = line.getBoundingClientRect().width;
+      } else if (foldIndex !== null || showMore) {
+        if (foldIndex < index && !showMore) {
+          line.classList.add("hidden");
+        } else if (showMore) {
+          line.classList.remove("hidden");
+        }
+      }
+    });
+
+    if (showMore) {
+      lines.forEach((line) => {
+        line.classList.remove("fold");
+      });
+    }
+
+    const width = Math.max(lastWidth - showMoreButton.current.clientWidth, 5);
+
+    showMoreButton.current.style.left = `${showMore ? 0 : width}px`;
   };
 
   const processString = (string) => {
@@ -56,7 +83,7 @@ export default function Description() {
           const timeInSeconds = convertToSeconds(part);
           return (
             <Link
-              key={index}
+              key={`${index}-${video_id}-formatted-part-span`}
               to={`/watch?v=${video_id}&t=${timeInSeconds}`}
               className='time-marker-link'
               onClick={(e) => handleChapterClick(e, timeInSeconds)}
@@ -72,11 +99,7 @@ export default function Description() {
 
       // Join the processed parts back into a line, and wrap the line in a <p> tag
       return (
-        <span
-          key={index}
-          style={{ display: index > 0 && !showMore ? "none" : "" }}
-          className={`formatted-string-span ${index === 0 && !showMore ? "fold" : ""}`}
-        >
+        <span key={`${index}-string-span-${video_id}`} className={`formatted-string-span`}>
           {processedParts}
         </span>
       );
@@ -95,15 +118,7 @@ export default function Description() {
     return () => {
       window.removeEventListener("resize", recalculatePosition);
     };
-  }, [location, fullScreen, processedLines, miniPlayer]);
-
-  useEffect(() => {
-    if (showMore) {
-      showMoreButton.current.style.left = `${0}px`;
-    } else {
-      recalculatePosition();
-    }
-  }, [showMore, fullScreen, miniPlayer, processedLines]);
+  }, [location, fullScreen, processedLines, showMore]);
 
   const handleFormattedStringClick = () => {
     if (showMore) return;

@@ -98,6 +98,9 @@
     -webkit-line-clamp: 3; 
     -webkit-box-orient: vertical;
 }
+.formatted-string-span.hidden{
+    display: none;
+}
 
 .time-marker-link{
     color: #3ea6ff;
@@ -110,7 +113,7 @@
 }
 .show-formatted-string{
     /* padding: 5px; */
-    padding-top: 4px;
+    padding-top: 0px;
     cursor: pointer;
     position: absolute;
     bottom: 0px;

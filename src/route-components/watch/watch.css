@@ -1,7 +1,7 @@
 .watch-flexy{
     width: 100%;    
     /* background-color: red; */
-    min-height: calc(100dvh - 40px);
+    min-height: calc(100vh - 40px);
     height: fit-content;
 }
 .watch-flexy.hidden{
