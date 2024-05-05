@@ -198,7 +198,7 @@
     fill: white;
 }
 
-@media(max-width: 704px){
+@media(max-width: 692px){
     .grid.last,
     .grid{
         justify-content: center;

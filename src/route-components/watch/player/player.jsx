@@ -310,7 +310,7 @@ export default function Player({ videoRef, containerRef }) {
 
   const handleTimeUpdate = () => {
     const videoRef = document.querySelector("#html5-player");
-    if (videoRef.paused) {
+    if (videoRef.paused && isDragging.current === false) {
       updateProgressBar();
       updateRedDot();
     }
