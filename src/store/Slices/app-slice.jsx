@@ -75,14 +75,14 @@ export const handleNavigation = (targetRoute) => {
 
     // Get a reference to the actual DOM node
     const currentDOMNode = document.getElementById(currentRoute.ref);
-    // currentDOMNode.removeAttribute("hidden");
+    currentDOMNode.removeAttribute("hidden");
     currentDOMNode.classList.remove("hidden");
 
     refs.map((ref) => {
       if (ref.route !== targetRoute) {
         // Get a reference to the actual DOM node
         const domNode = document.getElementById(ref.ref);
-        // domNode.setAttribute("hidden", "");
+        domNode.setAttribute("hidden", "");
         domNode.classList.add("hidden");
       }
     });
