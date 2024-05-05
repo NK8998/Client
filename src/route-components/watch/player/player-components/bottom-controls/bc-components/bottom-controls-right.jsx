@@ -45,6 +45,7 @@ export const BottomControlsRight = ({ miniPlayerBoolean, playerRef }) => {
       clearTimeout(timeoutRef.current);
     }
     timeoutRef.current = setTimeout(() => {
+      if (!miniPlayer && !window.location.pathname.includes("watch")) return;
       const key = e.key.toLowerCase();
 
       if (key === "i") {
@@ -57,7 +58,7 @@ export const BottomControlsRight = ({ miniPlayerBoolean, playerRef }) => {
           navigate(`/watch?v=${video_id}`);
         }
       }
-    }, 400);
+    }, 130);
   };
   useLayoutEffect(() => {
     window.addEventListener("keyup", handleKeyUp);

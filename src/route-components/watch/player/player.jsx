@@ -23,6 +23,7 @@ import { toggleTheatreMode, updatePlayingVideo } from "../../../store/Slices/wat
 import TopVideoComponent from "./player-components/bottom-controls/bc-components/title-component";
 import { Exclamation } from "../../../assets/icons";
 import { debounce } from "lodash";
+import { getTimeStamp } from "../../../utilities/getTimestamp";
 
 export default function Player({ videoRef, containerRef }) {
   const dispatch = useDispatch();
@@ -76,7 +77,7 @@ export default function Player({ videoRef, containerRef }) {
 
   useEffect(() => {
     const updateStyles = () => {
-      if (document.fullscreenElement || fullScreen) return;
+      if (document.fullscreenElement) return;
       calculateWidth();
 
       applyChapterStyles();
@@ -310,10 +311,12 @@ export default function Player({ videoRef, containerRef }) {
 
   const handleTimeUpdate = () => {
     const videoRef = document.querySelector("#html5-player");
+
     if (videoRef.paused && isDragging.current === false) {
       updateProgressBar();
       updateRedDot();
     }
+
     checkBuffered();
   };
   return (

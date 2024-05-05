@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { toPause, toPlay } from "./gsap-animations";
 import { usePlayerScrubbingBarInteractions } from "./player-scrubbingBar-logic";
 import { updateBuffering, updateIsdragging } from "../../../../store/Slices/player-slice";
+import { getTimeStamp } from "../../../../utilities/getTimestamp";
 
 export const usePlayerDraggingLogic = () => {
   const mouseDownTracker = useRef();
@@ -49,6 +50,7 @@ export const usePlayerDraggingLogic = () => {
       clearTimeout(mouseDownTracker.current);
     }
     // checkBufferedOnTrackChange();
+    const timeContainer = document.querySelector(".time-left-container");
     const chapterContainers = document.querySelectorAll(".chapter-hover");
     const videoRef = document.querySelector("#html5-player");
     const redDotRef = document.querySelector(".red-dot");
@@ -77,6 +79,7 @@ export const usePlayerDraggingLogic = () => {
         document.documentElement.style.setProperty("--currentChapterIndex", `${curIndex}`);
         document.documentElement.style.setProperty("--hoverChapterIndex", `${curIndex}`);
         redDotRef.setAttribute("dataIndex", `${curIndex}`);
+        timeContainer.textContent = getTimeStamp(Math.round(currentTime));
         chapterPadding[index].classList.add("drag-expand");
       } else if (chapter.end <= currentTime) {
         progressBarRefs[index].style.width = `100%`;
@@ -92,6 +95,7 @@ export const usePlayerDraggingLogic = () => {
 
   const handleDrag = (e) => {
     const videoRef = document.querySelector("#html5-player");
+    const timeContainer = document.querySelector(".time-left-container");
     const duration = videoRef.duration;
     const chapterTitleContainer = document.querySelector(".chapter-title-container");
     const redDotRef = document.querySelector(".red-dot");
@@ -107,6 +111,7 @@ export const usePlayerDraggingLogic = () => {
     const ratio = position / width;
     const timeOffset = ratio * chapterDuration;
     const currentTime = Math.min(Math.max(chapters[currentIndex].start + timeOffset, 0), duration);
+
     previewCanvas(currentTime);
     movePreviews(e, currentIndex);
     currentTimeTracker.current = currentTime;
@@ -125,6 +130,7 @@ export const usePlayerDraggingLogic = () => {
         redDotWrapperRef.setAttribute("dataIndex", `${curIndex}`);
         chapterPadding[index].classList.add("drag-expand");
         chapterTitleContainer.textContent = chapters[index].title;
+        timeContainer.textContent = getTimeStamp(Math.round(currentTime));
       } else if (chapter.end <= currentTime) {
         progressBarRefs[index].style.width = `100%`;
         chapterPadding[index].classList.remove("drag-expand");
@@ -135,6 +141,7 @@ export const usePlayerDraggingLogic = () => {
         // updateRedDot(currentTime);
       }
     });
+
     updateRedDot(currentTime);
   };
 

@@ -7,6 +7,7 @@ import { useSelector } from "react-redux";
 
 export const BottomControlsLeft = ({ handlePlayState }) => {
   const playingVideo = useSelector((state) => state.watch.playingVideo);
+  const isDragging = useSelector((state) => state.player.isDragging);
   const { duration_timestamp } = playingVideo;
   const [handleMouseMove] = usePlayerMouseMove();
   const handleMouseLeaveControlsLeft = (e) => {
@@ -15,6 +16,7 @@ export const BottomControlsLeft = ({ handlePlayState }) => {
   };
 
   const updateTime = () => {
+    if (isDragging) return;
     const videoRef = document.querySelector("#html5-player");
     const timeContainer = document.querySelector(".time-left-container");
     const currentTime = videoRef.currentTime;
@@ -31,7 +33,7 @@ export const BottomControlsLeft = ({ handlePlayState }) => {
     return () => {
       videoRef.removeEventListener("timeupdate", updateTime);
     };
-  }, [playingVideo]);
+  }, [playingVideo, isDragging]);
   return (
     <div className='bottom-controls-left' onMouseLeave={handleMouseLeaveControlsLeft}>
       <button type='button' className={`player-button play-pause`} onClick={handlePlayState} onFocus={handleMouseMove}>

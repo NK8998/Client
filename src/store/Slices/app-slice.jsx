@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { fetchWatchData, toggleFullScreen } from "./watch-slice";
+import { fetchWatchData, handleFullscreen, toggleFullScreen } from "./watch-slice";
 import { updateMaxNums } from "./home-slice";
 
 const appSlice = createSlice({
@@ -66,7 +66,7 @@ export const handleNavigation = (targetRoute) => {
     if (!targetRoute.includes("watch")) {
       if (document.fullscreenElement) {
         document.exitFullscreen().then(() => {
-          dispatch(toggleFullScreen(false));
+          dispatch(handleFullscreen(true));
         });
       }
     }
@@ -75,12 +75,14 @@ export const handleNavigation = (targetRoute) => {
 
     // Get a reference to the actual DOM node
     const currentDOMNode = document.getElementById(currentRoute.ref);
+    currentDOMNode.removeAttribute("hidden");
     currentDOMNode.classList.remove("hidden");
 
     refs.map((ref) => {
       if (ref.route !== targetRoute) {
         // Get a reference to the actual DOM node
         const domNode = document.getElementById(ref.ref);
+        domNode.setAttribute("hidden", "");
         domNode.classList.add("hidden");
       }
     });

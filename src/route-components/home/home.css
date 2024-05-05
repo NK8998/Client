@@ -7,6 +7,7 @@
 }
 .home.hidden{
     display: none;
+
 }
 .grid-container{
     display: flex;
