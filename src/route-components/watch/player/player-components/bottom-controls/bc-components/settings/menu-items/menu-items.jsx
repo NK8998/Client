@@ -36,12 +36,15 @@ export const AnnotationsMenu = ({}) => {
 export const SubtitlesMenu = ({}) => {
   const dispatch = useDispatch();
   const subtitles = useSelector((state) => state.player.subtitles);
+  const { captions_url } = useSelector((state) => state.watch.playingVideo);
 
   return (
     <div className='subtitles-button settings-button' onClick={() => dispatch(handleTranslating(0, "settings-menu-selector-items", "subs-inner"))}>
       <div className='settings-button-left'>
         <SubtitlesButton />
-        <p>Subtitles/CC</p>
+        <p>
+          Subtitles/CC <span> ({captions_url.length})</span>
+        </p>
       </div>
       <div className='settings-button-right'>
         <p>{subtitles}</p>

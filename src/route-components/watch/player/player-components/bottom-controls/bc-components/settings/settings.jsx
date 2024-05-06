@@ -33,6 +33,14 @@ export default function Settings({ playerRef, checkBufferedOnTrackChange }) {
     dispatch(handleTranslatingHere(panel, currentPanel, currentPanel));
   }, [fullScreen]);
 
+  useLayoutEffect(() => {
+    if (captions_url) {
+      dispatch(handleTranslatingHere(null, currentPanel, currentPanel));
+    } else {
+      dispatch(handleTranslatingHere(0, "subs-inner", "settings-menu-selector-items"));
+    }
+  }, [playingVideo]);
+
   return (
     <>
       <div className={`settings ${!location.includes("watch") ? "settings-hidden" : ""}`} ref={settingsRef}>
@@ -40,8 +48,8 @@ export default function Settings({ playerRef, checkBufferedOnTrackChange }) {
           <div className='settings-menu-selector-items panel-item' ref={mainSettingsRef}>
             <AmbientModeMenu />
             <AnnotationsMenu />
-            {/* {captions_url && <SubtitlesMenu />} */}
-            <SubtitlesMenu />
+            {captions_url && <SubtitlesMenu />}
+            {/* <SubtitlesMenu /> */}
             <PlayBackMenu />
             <QualityMenu />
           </div>

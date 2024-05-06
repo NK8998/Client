@@ -99,7 +99,7 @@
   transition: transform 250ms ease;
   transform-origin: center center;
   margin-left: 11px;
-  height: 4px;
+  height: 3px;
 
 }
 .player-button.captions.captions-on::after{

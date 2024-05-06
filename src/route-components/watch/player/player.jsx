@@ -10,7 +10,14 @@ import { usePlayerProgressBarLogic } from "./utilities/player-progressBar-logic"
 import { usePlayerMouseMove } from "./utilities/player-mouse-interactions";
 import Loader from "./utilities/loader";
 import ScrubbingPreviews from "./player-components/scrubbing-previews/scrubbing-previews";
-import { removeCaptions, toggleCaptions, updateChapters, updatePlay, updatePreferredRes, updateResolution } from "../../../store/Slices/player-slice";
+import {
+  handleTranslatingHere,
+  toggleCaptions,
+  updateChapters,
+  updatePlay,
+  updatePreferredRes,
+  updateResolution,
+} from "../../../store/Slices/player-slice";
 import Settings from "./player-components/bottom-controls/bc-components/settings/settings";
 import { usePlayerScrubbingBarInteractions } from "./utilities/player-scrubbingBar-logic";
 import { usePlayerBufferingState, usePlayerDraggingLogic } from "./utilities/player-dragging-logic";
@@ -22,8 +29,6 @@ import PreviewBG from "./player-components/preview-bg/preview-bg";
 import { toggleTheatreMode, updatePlayingVideo } from "../../../store/Slices/watch-slice";
 import TopVideoComponent from "./player-components/bottom-controls/bc-components/title-component";
 import { Exclamation } from "../../../assets/icons";
-import { debounce } from "lodash";
-import { getTimeStamp } from "../../../utilities/getTimestamp";
 
 export default function Player({ videoRef, containerRef }) {
   const dispatch = useDispatch();
@@ -34,7 +39,7 @@ export default function Player({ videoRef, containerRef }) {
   const miniPlayer = useSelector((state) => state.watch.miniPlayer);
   const miniPlayerBoolean = useSelector((state) => state.watch.miniPlayerBoolean);
   const buffering = useSelector((state) => state.player.buffering);
-  const debounceTime = useSelector((state) => state.app.debounceTime);
+  const subtitles = useSelector((state) => state.player.subtitles);
   const { description_string, duration, video_id, mpd_url, isLive, captions_url } = playingVideo;
 
   const chapters = useSelector((state) => state.player.chapters);
@@ -217,6 +222,10 @@ export default function Player({ videoRef, containerRef }) {
       playerRef.current
         .load(manifestUri)
         .then(() => {
+          if (subtitles !== "Off" && captions_url) {
+            dispatch(toggleCaptions(playerRef, captions_url[0].url, captions_url[0].language));
+          }
+
           console.log("The video has been loaded!");
           handlePlayState();
           const videoRef = document.querySelector("#html5-player");

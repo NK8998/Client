@@ -148,26 +148,33 @@ export const handleTranslatingHere = (panel, currentElement, element) => {
   };
 };
 
-export const toggleCaptions = (playerRef, captions_url) => {
-  if (!captions_url) return;
-  const tracks = playerRef.current.getTextTracks();
-  const hasCaptions = tracks.some((track) => track.kind === "subtitles");
-  const captionsButton = document.querySelector(".player-button.captions");
-  captionsButton.classList.toggle("captions-on");
+export const toggleCaptions = (playerRef, captions_url, subLanguage = "English (auto-generated)") => {
+  return (dispatch, getState) => {
+    if (!captions_url) return;
+    const tracks = playerRef.current.getTextTracks();
+    const hasCaptions = tracks.some((track) => track.kind === "subtitles");
+    const captionsButton = document.querySelector(".player-button.captions");
+    captionsButton.classList.toggle("captions-on");
 
-  if (!hasCaptions) {
-    playerRef.current
-      .addTextTrackAsync(captions_url, "en", "subtitles", "text/vtt")
-      .then(function () {
-        console.log("Subtitle track added");
-      })
-      .catch(function (error) {
-        console.error("Error adding subtitle track:", error);
-      });
-  }
+    if (!hasCaptions) {
+      playerRef.current
+        .addTextTrackAsync(captions_url, "en", "subtitles", "text/vtt")
+        .then(function () {
+          console.log("Subtitle track added");
+        })
+        .catch(function (error) {
+          console.error("Error adding subtitle track:", error);
+        });
+    }
 
-  const visibility = playerRef.current.isTextTrackVisible();
-  playerRef.current.setTextTrackVisibility(!visibility);
+    const visibility = playerRef.current.isTextTrackVisible();
+    playerRef.current.setTextTrackVisibility(!visibility);
+    if (visibility) {
+      dispatch(updateSubtitles("Off"));
+    } else {
+      dispatch(updateSubtitles(subLanguage));
+    }
+  };
 };
 
 export const removeCaptions = (playerRef) => {

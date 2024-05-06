@@ -44,9 +44,10 @@ export const BottomControlsRight = ({ playerRef }) => {
     if (timeoutRef.current) {
       clearTimeout(timeoutRef.current);
     }
+    const key = e.key.toLowerCase();
+
     timeoutRef.current = setTimeout(() => {
       if (!miniPlayer && !window.location.pathname.includes("watch")) return;
-      const key = e.key.toLowerCase();
 
       if (key === "i") {
         if (!miniPlayer) {
@@ -59,13 +60,19 @@ export const BottomControlsRight = ({ playerRef }) => {
         }
       }
     }, 130);
+
+    if (key === "c") {
+      if (!captions_url) return;
+      dispatch(toggleCaptions(playerRef, captions_url[0].url, captions_url[0].language));
+      dispatch(handleTranslatingHere(null, currentPanel, currentPanel));
+    }
   };
   useLayoutEffect(() => {
     window.addEventListener("keyup", handleKeyUp);
     return () => {
       window.removeEventListener("keyup", handleKeyUp);
     };
-  }, [miniPlayer, lastVisited, isFetching]);
+  }, [miniPlayer, lastVisited, isFetching, currentPanel, video_id]);
 
   const removeSettingsOnoutsideClick = (e) => {
     const element = e.target;
@@ -79,7 +86,7 @@ export const BottomControlsRight = ({ playerRef }) => {
       dispatch(updateSettingsShowing(false));
       setTimeout(() => {
         dispatch(handleTranslating(null, currentPanel, "settings-menu-selector-items"));
-      }, 100);
+      }, 210);
       handleMouseOut();
     }
   };
@@ -96,11 +103,6 @@ export const BottomControlsRight = ({ playerRef }) => {
     settingsClickRegion.classList.toggle("show");
     settings.classList.toggle("show");
     dispatch(updateSettingsShowing(!settingsShowing));
-    // if (settingsShowing) {
-    //   setTimeout(() => {
-    //     dispatch(handleTranslating(null, currentPanel, "settings-menu-selector-items"));
-    //   }, 100);
-    // }
   };
 
   return (
@@ -110,7 +112,10 @@ export const BottomControlsRight = ({ playerRef }) => {
         className={`player-button captions ${captions_url ? "has-captions" : ""}`}
         ref={captionsRef}
         onFocus={handleMouseMove}
-        onClick={() => toggleCaptions(playerRef, captions_url)}
+        onClick={() => {
+          if (!captions_url) return;
+          dispatch(toggleCaptions(playerRef, captions_url[0].url, captions_url[0].language));
+        }}
       >
         <CaptionsButton />
       </button>

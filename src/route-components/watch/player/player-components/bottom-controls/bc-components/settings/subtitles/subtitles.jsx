@@ -1,22 +1,26 @@
 import { useDispatch, useSelector } from "react-redux";
-import { handleTranslating, updateSubtitles } from "../../../../../../../../store/Slices/player-slice";
+import { handleTranslating, toggleCaptions, updateSubtitles } from "../../../../../../../../store/Slices/player-slice";
 import { ArrowLeftButton, TickIcon } from "../../../../../../../../assets/icons";
 import SubOptions from "./options";
 
-export const Subtitles = () => {
+export const Subtitles = ({ playerRef }) => {
   const dispatch = useDispatch();
   const subtitles = useSelector((state) => state.player.subtitles);
+  const { captions_url } = useSelector((state) => state.watch.playingVideo);
 
-  const updateSubs = (sub) => {
-    dispatch(updateSubtitles(sub));
+  const updateSubs = (url, language) => {
+    dispatch(updateSubtitles(language));
     dispatch(handleTranslating(0, "subs-inner", "settings-menu-selector-items"));
+    if (subtitles !== "Off") return;
+    dispatch(toggleCaptions(playerRef, url, language));
   };
-  const subs = ["English (UK)", "English (auto-generated)"];
-  const subEls = subs.map((sub, index) => {
+  if (!captions_url) return <></>;
+
+  const subEls = captions_url.map((sub, index) => {
     return (
-      <div className='sub-item' onClick={() => updateSubs(sub)} key={`${sub}-${index}`}>
-        <p className='tick-container'>{subtitles === sub && <TickIcon />}</p>
-        <p>{sub}</p>
+      <div className='sub-item' onClick={() => updateSubs(sub.url, sub.language)} key={`${sub.language}-${index}`}>
+        <p className='tick-container'>{subtitles === sub.language && <TickIcon />}</p>
+        <p>{sub.language}</p>
       </div>
     );
   });

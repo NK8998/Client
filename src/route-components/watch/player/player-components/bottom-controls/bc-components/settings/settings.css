@@ -119,7 +119,7 @@
     height: fit-content;
 }
 .player-outer.fullscreen .settings-button, .player-outer.fullscreen.theatre .settings-button{
-    padding: 8px 14px;
+    padding: 7px 14px;
     min-width: calc(100% - 28px);
     width: fit-content;
 

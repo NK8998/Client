@@ -6,7 +6,7 @@ import { Subtitles } from "./subtitles/subtitles";
 export const PanelHandler = ({ playerRef, checkBufferedOnTrackChange }) => {
   const panel = useSelector((state) => state.player.panel);
   const panels = [
-    { panel: 0, component: <Subtitles /> },
+    { panel: 0, component: <Subtitles playerRef={playerRef} /> },
     { panel: 1, component: <PlayBackSpeed /> },
     {
       panel: 2,
