@@ -64,7 +64,7 @@ export const {
 
 export default watchSlice.reducer;
 
-export const fetchWatchData = (videoId, currentRoute, data) => {
+export const fetchWatchData = (videoId, currentRoute, data = {}) => {
   return async (dispatch, getState) => {
     const root = document.querySelector("#root");
     const currentVideoId = getState().watch.playingVideo.videoId;
