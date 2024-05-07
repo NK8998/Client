@@ -6,15 +6,11 @@ export const usePlayerStyles = () => {
   const playingVideo = useSelector((state) => state.watch.playingVideo);
   const miniPlayer = useSelector((state) => state.watch.miniPlayer);
   const chapters = useSelector((state) => state.player.chapters);
-  const fullScreen = useSelector((state) => state.watch.fullScreen);
   const theatreMode = useSelector((state) => state.watch.theatreMode);
   const { aspect_ratio } = playingVideo;
 
-  useEffect(() => {
-    applyChapterStyles();
-  }, [fullScreen]);
-
   function applyChapterStyles() {
+    const fullScreen = document.fullscreenElement !== null;
     const chaptersContainers = document.querySelectorAll(".chapter-padding");
     const hoverBars = document.querySelectorAll(".chapter-hover");
     const innerChapterContainerRef = document.querySelector(".chapters-container");
@@ -41,12 +37,12 @@ export const usePlayerStyles = () => {
   }
 
   const calculateWidth = () => {
-    const root = document.querySelector("#root");
+    const app = document.querySelector(".app");
     const secondaryRef = document.querySelector(".secondary.content");
-    if (!root || !secondaryRef) return;
+    if (!app || !secondaryRef) return;
 
     const aspectRatio = aspect_ratio > 1.1 ? aspect_ratio : 16 / 9;
-    const windowWidth = root.clientWidth;
+    const windowWidth = app.clientWidth;
     const windowHeight = window.innerHeight;
     const gaps = window.innerWidth >= 1041 ? 64 : 46;
     const maxVideoHeight = (73.5 * window.innerHeight) / 100;
@@ -89,6 +85,7 @@ export const usePlayerStyles = () => {
     document.documentElement.style.setProperty("--theatreWidth", `${Math.trunc(theatreWidth - 1)}px`);
 
     document.documentElement.style.setProperty("--fullScreenHeight", `${window.screen.height}px`);
+    document.documentElement.style.setProperty("--fullScreenWidth", `${window.screen.width}px`);
   };
 
   return [applyChapterStyles, calculateWidth];

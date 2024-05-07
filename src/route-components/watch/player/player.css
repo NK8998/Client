@@ -2,7 +2,8 @@
   --outline-color: rgb(47, 127, 247);
   height: var(--height);
   width: var(--width);
-  max-height: 73.5vh;
+  max-height: var(--height);
+  max-width:var(--width) ;
   position: relative;
   border-radius: 12px;
   overflow: hidden;
@@ -12,14 +13,22 @@
 .player-if.has-content{
   height: var(--height);
   width: var(--width);
-  max-height: 73.5vh;
+  max-width: var(--width);
+  max-height: var(--height);
+ 
 }
 .player-expanded-container.has-content{
   height: var(--theatreHeight);
   width: var(--theatreWidth);
-  max-height: 79.5vh;
+  max-width: var(--theatreWidth);
+  min-height: var(--theatreHeight);
 }
-
+.player-expanded-container.has-content.fullscreen{
+  height: var(--fullScreenHeight);
+  width: var(--fullScreenWidth);
+  max-height: var(--fullScreenHeight);
+  min-height: var(--fullScreenHeight);
+}
 .player-outer ::cue{
   font-size: 12px;
   pointer-events: none;
@@ -44,10 +53,10 @@
 .html5-player.theatre.miniplayer{
   width: 400px;
   height: 225px;
+  min-height: 225px;
   border-radius: 12px 12px 0px 0px;
   background-color: black;
   pointer-events: all;
-  min-height: unset;
 }
 .player-outer.miniplayer::-webkit-scrollbar, 
 .player-outer.theatre.miniplayer::-webkit-scrollbar,
@@ -60,14 +69,17 @@
   width: var(--theatreWidth);
   height: var(--theatreHeight);
   min-height: var(--theatreHeight);
-  max-height: 79.5vh;
+  max-width: var(--theatreWidth);
+  max-height: var(--theatreHeight);
   border-radius: 0px;
   overflow: hidden;
 }
 .player-outer.fullscreen, .player-outer.fullscreen.theatre{
-  width: 100%;
+  width: var(--fullScreenWidth);
   height: var(--fullScreenHeight);
   max-height: var(--fullScreenHeight);
+  max-width: var(--fullScreenWidth);
+  min-width: var(--fullScreenWidth);
   border-radius: 0px;
 }
 .player-outer.fullscreen .player-inner-relative, .player-outer.fullscreen.theatre .player-inner-relative{
@@ -124,11 +136,11 @@
 .html5-player{
   height: var(--height);
   width: var(--width);
-
+  max-width: var(--width);
+  max-height: var(--height);
   border-radius: 12px;
   /* overflow: hidden; */
   width: 100%;
-  max-height: 73.5vh;
     
 }
 .player-expanded-container{
@@ -136,24 +148,29 @@
 
 }
 
+.player-expanded-container.has-content
+
 .html5-player::-webkit-media-controls {
     display: none;
 }
 
 .html5-player.theatre{
-  max-height: 79.5vh;
+  max-height: var(--theatreHeight);
   border-radius: 0px;
   height: var(--theatreHeight);
   min-height: var(--theatreHeight);
   width: var(--theatreWidth);
+  max-width: unset;
   background-color: black;
   border-radius: 0px;
 }
 
 .html5-player.fullscreen, .html5-player.fullscreen.theatre{
-  width: 100%;
+  width: var(--fullScreenWidth);
   height: var(--fullScreenHeight);
   max-height: var(--fullScreenHeight);
+  min-height: var(--fullScreenHeight);
+  max-width: var(--fullScreenWidth);
   border-radius: 0px;
   background-color: black;
 }
@@ -527,13 +544,13 @@
   margin-top: 10px;
 }
  
-@media(max-width: 65em){
+@container(max-width: 65em){
     .player-outer.theatre, .html5-player.theatre{
         min-height: 55vh;
     }
 }
 
-@media(max-width: 35em){
+@container(max-width: 35em){
   .chapters-absolute{
     bottom: 42px;
   }

@@ -29,6 +29,7 @@ import PreviewBG from "./player-components/preview-bg/preview-bg";
 import { toggleTheatreMode, updatePlayingVideo } from "../../../store/Slices/watch-slice";
 import TopVideoComponent from "./player-components/bottom-controls/bc-components/title-component";
 import { Exclamation } from "../../../assets/icons";
+import { debounce } from "lodash";
 
 export default function Player({ videoRef, containerRef }) {
   const dispatch = useDispatch();
@@ -40,6 +41,7 @@ export default function Player({ videoRef, containerRef }) {
   const miniPlayerBoolean = useSelector((state) => state.watch.miniPlayerBoolean);
   const buffering = useSelector((state) => state.player.buffering);
   const subtitles = useSelector((state) => state.player.subtitles);
+  const windowWidth = useSelector((state) => state.app.windowWidth);
   const { description_string, duration, video_id, mpd_url, isLive, captions_url } = playingVideo;
 
   const chapters = useSelector((state) => state.player.chapters);
@@ -80,24 +82,28 @@ export default function Player({ videoRef, containerRef }) {
     applyChapterStyles();
   }, [chapters]);
 
+  const updateStyles = () => {
+    calculateWidth();
+
+    applyChapterStyles();
+    updateBufferBar();
+    updateProgressBar();
+    updateRedDot("");
+  };
+
   useEffect(() => {
-    const updateStyles = () => {
-      if (document.fullscreenElement) return;
-      calculateWidth();
+    updateStyles();
+  }, [windowWidth, location]);
 
-      applyChapterStyles();
-      updateBufferBar();
-      updateProgressBar();
-      updateRedDot("");
-    };
+  useEffect(() => {
+    const debouncedVer = debounce(updateStyles, 200);
 
-    window.addEventListener("resize", updateStyles);
+    window.addEventListener("resize", debouncedVer);
 
     return () => {
-      window.removeEventListener("resize", updateStyles);
+      window.removeEventListener("resize", debouncedVer);
     };
-  }, [location, video_id, theatreMode, chapters]);
-
+  }, [location, windowWidth, chapters, video_id, fullScreen, theatreMode]);
   useLayoutEffect(() => {
     // for detaching player when user moves away from the watchpage
     const isWatchpage = location.includes("watch");

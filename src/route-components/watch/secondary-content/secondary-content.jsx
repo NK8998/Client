@@ -3,10 +3,10 @@ import BrowseSecondaryVideos from "./browse-secondary-videos/browse-secondary-vi
 import FilterChipSecondary from "./filter-chip-secondary/filter-chip-secondary";
 import "./secondary-content.css";
 import { useSelector } from "react-redux";
-import { debounce } from "lodash";
 
 export default function SecondaryContent({ secondaryRefInner, secondaryRefOuter }) {
   const location = useSelector((state) => state.app.location);
+  const windowWidth = useSelector((state) => state.app.windowWidth);
   const fetchingRecommendations = useSelector((state) => state.watch.fetchingRecommendations);
 
   useLayoutEffect(() => {
@@ -33,12 +33,12 @@ export default function SecondaryContent({ secondaryRefInner, secondaryRefOuter 
 
     handleResizing();
 
-    window.addEventListener("resize", handleResizing);
+    // window.addEventListener("resize", handleResizing);
 
-    return () => {
-      window.removeEventListener("resize", handleResizing);
-    };
-  }, [location]);
+    // return () => {
+    //   window.removeEventListener("resize", handleResizing);
+    // };
+  }, [location, windowWidth]);
   return (
     <div className={`secondary-inner ${fetchingRecommendations ? "skeleton" : ""}`}>
       <FilterChipSecondary />

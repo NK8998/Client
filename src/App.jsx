@@ -53,11 +53,15 @@ function App() {
       dispatch(handleResize());
     };
 
-    window.addEventListener("resize", handleResizing);
+    handleResizing();
+
+    const debouncedVar = debounce(handleResizing, 200);
+
+    window.addEventListener("resize", debouncedVar);
   }, [credentialsChecked]);
 
   return credentialsChecked ? (
-    <>
+    <div className='app'>
       <MastHead />
       <div className='flex-content'>
         <GuideWrapper />
@@ -82,7 +86,7 @@ function App() {
           <Route path='*' element={<BareFeatured />} />
         </Route>
       </Routes>
-    </>
+    </div>
   ) : (
     <LoadingScreen />
   );

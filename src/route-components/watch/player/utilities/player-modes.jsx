@@ -43,6 +43,7 @@ export const useMiniPlayermode = () => {
         containerRef.classList.remove("miniplayer");
         videoRef.classList.remove("miniplayer");
         miniPlayerOuter.style.opacity = `0`;
+        miniPlayerOuter.classList.remove("visible");
         // toggle regular
 
         handleMouseOut();
@@ -71,6 +72,7 @@ export const useMiniPlayermode = () => {
       }
       applyChapterStyles();
       miniplayerRef.classList.add("visible");
+      miniPlayerOuter.classList.add("visible");
       miniPlayerOuter.style.opacity = `1`;
 
       containerRef.classList.add("miniplayer");
@@ -169,6 +171,7 @@ export const useFullscreenMode = () => {
   };
 
   const changeFullscreenStyles = () => {
+    const expandedContainerRef = document.querySelector(".player-expanded-container");
     const videoRef = document.querySelector("#html5-player");
     const containerRef = document.querySelector(".player-outer");
     const masthead = document.querySelector(".masthead-outer");
@@ -177,6 +180,7 @@ export const useFullscreenMode = () => {
     const guideWrapper = document.querySelector(".guide-wrapper");
     const secondary = document.querySelector(".secondary.content");
     const columns = document.querySelector(".columns");
+    const app = document.querySelector(".app");
 
     if (!guideWrapper || !flexContent || !root || !masthead || !containerRef) return;
 
@@ -190,6 +194,9 @@ export const useFullscreenMode = () => {
     guideWrapper.classList.remove("fullscreen");
     secondary.classList.remove("fullscreen");
     columns.classList.remove("fullscreen");
+    expandedContainerRef.classList.remove("fullscreen");
+    app.classList.remove("fullscreen");
+
     root.removeEventListener("scroll", handleScrollPosition);
   };
   const toggleFullScreen = () => {
@@ -202,6 +209,7 @@ export const useFullscreenMode = () => {
     if (!primaryRef || !containerRef) return;
     const masthead = document.querySelector(".masthead-outer");
     const root = document.querySelector("#root");
+    const app = document.querySelector(".app");
     const flexContent = document.querySelector(".flex-content");
     const guideWrapper = document.querySelector(".guide-wrapper");
     const secondary = document.querySelector(".secondary.content");
@@ -213,7 +221,8 @@ export const useFullscreenMode = () => {
     }
 
     if (primaryRef && fullScreen) {
-      expandedContainerRef.classList.remove("has-content");
+      expandedContainerRef.classList.add("has-content");
+      expandedContainerRef.classList.add("fullscreen");
 
       if (Array.from(primaryRef.children).includes(containerRef)) {
         primaryRef.removeChild(containerRef);
@@ -223,10 +232,10 @@ export const useFullscreenMode = () => {
 
       videoRef.classList.add("fullscreen");
       containerRef.classList.add("fullscreen");
+
       calculateWidth();
 
       applyChapterStyles();
-
       requestAnimationFrame(() => {
         updateProgressBar();
         updateBufferBar();
@@ -239,6 +248,7 @@ export const useFullscreenMode = () => {
       masthead.classList.add("fullscreen");
       guideWrapper.classList.add("fullscreen");
       secondary.classList.add("fullscreen");
+      app.classList.add("fullscreen");
 
       root.addEventListener("scroll", handleScrollPosition);
     } else if (primaryRef && !Array.from(primaryRef.children).includes(containerRef) && !fullScreen) {

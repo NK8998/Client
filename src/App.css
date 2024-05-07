@@ -4,18 +4,32 @@
     user-select: var(--select);
     max-height: 100vh ;
     min-height: 100vh;
-    overflow-y: scroll;
+    overflow-y: hidden;
     overflow-x: hidden;
 
+
 }
+#root{
+}
+
+
+
+.app{
+    overflow-y: scroll;
+    overflow-x: hidden;
+}
+
 body{
-    width: 100vw;
-    background-color: rgb(14, 14, 14);
+    /* width: 100vw; */
+    overflow-x: hidden;
+    container-type: inline-size;
 }
-#root.fullscreen::-webkit-scrollbar{
+#root.fullscreen::-webkit-scrollbar,
+.app.fullscreen::-webkit-scrollbar{
     display: none;
 }
-#root.fullscreen{
+#root.fullscreen,
+.app.fullscreen{
     scrollbar-width: none; /* for Firefox */
     overflow-y: scroll;
 }
@@ -41,6 +55,7 @@ body{
     --settingsScrollHeight: 0;
     --settingsScrollWidth:0;
     --fullScreenHeight: 0;
+    --fullScreenWidth: 0;
 }
 .flex-content{
     display: flex;

@@ -9,11 +9,13 @@ import { formatCount, generateRandomInteger } from "../../../../utilities/fomatC
 import UploderDetails from "../lower-interactions/uploader-details";
 import { DateFormatter } from "../../../../utilities/date-formatter";
 import UserRoleInfo from "./user-role-info";
+import { debounce } from "lodash";
 
 export default function Description() {
   const { description_string, video_id, created_at } = useSelector((state) => state.watch.playingVideo);
   const location = useSelector((state) => state.app.location);
   const fullScreen = useSelector((state) => state.watch.fullScreen);
+  const windowWidth = useSelector((state) => state.app.windowWidth);
   const [updateBufferBar, updateProgressBar] = usePlayerProgressBarLogic();
   const [startDrag, stopDragging, handleClick, handleDrag, updateRedDot, resetDot, isDragging] = usePlayerDraggingLogic();
   const [checkBufferedOnTrackChange, checkBuffered, clearIntervalOnTrackChange] = usePlayerBufferingState();
@@ -112,13 +114,12 @@ export default function Description() {
 
   useEffect(() => {
     recalculatePosition();
-
-    window.addEventListener("resize", recalculatePosition);
-
+    const debouncedVer = debounce(recalculatePosition, 200);
+    window.addEventListener("resize", debouncedVer);
     return () => {
-      window.removeEventListener("resize", recalculatePosition);
+      window.removeEventListener("resize", debouncedVer);
     };
-  }, [location, fullScreen, processedLines, showMore]);
+  }, [location, fullScreen, processedLines, showMore, windowWidth]);
 
   const handleFormattedStringClick = () => {
     if (showMore) return;

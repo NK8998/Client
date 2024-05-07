@@ -1,7 +1,7 @@
 .watch-flexy{
     width: 100%;    
     /* background-color: red; */
-    min-height: calc(100vh - 40px);
+    /* min-height: calc(100vh - 40px); */
     height: fit-content;
 }
 .watch-flexy.hidden{
@@ -38,7 +38,7 @@
     width: var(--width);
 }
 
-@media(max-width: 65em){
+@container(max-width: 65em){
     .secondary{
         display: none
     }

@@ -127,11 +127,19 @@ const addRemoveWatchPageStyle = () => {
 
 export const handleResize = () => {
   return (dispatch) => {
-    const root = document.querySelector("#root");
+    const app = document.querySelector(".app");
+    const body = document.body;
     const windowWidth = window.innerWidth;
     const leftNavMain = document.querySelector(".leftnav-wrapper");
-    if (!leftNavMain || !root) return;
+    if (!app || !body) return;
+    app.style.width = `${windowWidth}px`;
+    app.style.maxWidth = `${windowWidth}px`;
     root.style.width = `${windowWidth}px`;
+    root.style.maxWidth = `${windowWidth}px`;
+    body.style.width = `${windowWidth}px`;
+    body.style.maxWidth = `${windowWidth}px`;
+
+    if (!leftNavMain) return;
 
     if (windowWidth >= 1344) {
       leftNavMain.classList.remove("show-not-watch");

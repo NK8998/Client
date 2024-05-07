@@ -191,7 +191,7 @@ form.volume-slider{
   /* margin-top: 6px; */
 }
 
-@media(max-width: 35em){
+@container(max-width: 35em){
   .bottom-controls{
     height: 40px;
   }
