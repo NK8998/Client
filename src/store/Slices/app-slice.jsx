@@ -125,19 +125,23 @@ const addRemoveWatchPageStyle = () => {
   }
 };
 
+const updateStyles = (element, width, height) => {
+  element.style.width = `${width}px`;
+  element.style.height = `${height}px`;
+  element.style.maxWidth = `${width}px`;
+  element.style.maxHeight = `${height}px`;
+};
+
 export const handleResize = () => {
   return (dispatch) => {
     const app = document.querySelector(".app");
     const body = document.body;
     const windowWidth = window.innerWidth;
+    const windowHeight = window.innerHeight;
     const leftNavMain = document.querySelector(".leftnav-wrapper");
     if (!app || !body) return;
-    app.style.width = `${windowWidth}px`;
-    app.style.maxWidth = `${windowWidth}px`;
-    root.style.width = `${windowWidth}px`;
-    root.style.maxWidth = `${windowWidth}px`;
-    body.style.width = `${windowWidth}px`;
-    body.style.maxWidth = `${windowWidth}px`;
+    updateStyles(body, windowWidth, windowHeight);
+    updateStyles(app, windowWidth, windowHeight);
 
     if (!leftNavMain) return;
 
