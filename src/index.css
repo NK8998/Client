@@ -20,6 +20,7 @@
 }
 html{
   background-color: rgb(14, 14, 14);
+  overflow: hidden;
 
 }
 #root{

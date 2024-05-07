@@ -195,7 +195,8 @@ form.volume-slider{
   .bottom-controls{
     height: 40px;
   }
+  .player-button.player-button.play-pause,
   .player-button{
-    width: 40px;
+    width: 35px;
   }
 }

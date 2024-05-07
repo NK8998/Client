@@ -4,8 +4,8 @@
     user-select: var(--select);
     max-height: 100vh ;
     min-height: 100vh;
-    overflow-y: hidden;
-    overflow-x: hidden;
+    overflow: hidden;
+
 
 
 }
@@ -17,11 +17,12 @@
 .app{
     overflow-y: scroll;
     overflow-x: hidden;
+
 }
 
 body{
     /* width: 100vw; */
-    overflow-x: hidden;
+    overflow: hidden;
     container-type: inline-size;
 }
 #root.fullscreen::-webkit-scrollbar,
@@ -32,6 +33,7 @@ body{
 .app.fullscreen{
     scrollbar-width: none; /* for Firefox */
     overflow-y: scroll;
+    overflow-x: hidden;
 }
 
 
@@ -73,4 +75,5 @@ body{
     /* background-color: blue; */
     width: 100%;
     min-width: 0;
+    
 }
