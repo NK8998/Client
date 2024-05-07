@@ -161,9 +161,9 @@ export const useFullscreenMode = () => {
   const dispatch = useDispatch();
 
   const handleScrollPosition = (e) => {
-    const root = document.querySelector("#root");
+    const app = document.querySelector(".app");
     const masthead = document.querySelector(".masthead-outer");
-    if (root.scrollTop > 6) {
+    if (app.scrollTop > 6) {
       masthead.classList.add("visible");
     } else {
       masthead.classList.remove("visible");

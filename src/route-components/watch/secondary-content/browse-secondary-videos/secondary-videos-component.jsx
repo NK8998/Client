@@ -29,6 +29,7 @@ export default function SecondaryVideoComponent({ data }) {
             {!mpd_url ? (
               <div className='processing-banner-home secondary-skeleton'>
                 <img
+                  loading='lazy'
                   src={
                     preferred_thumbnail_url
                       ? preferred_thumbnail_url
@@ -45,6 +46,7 @@ export default function SecondaryVideoComponent({ data }) {
               </div>
             ) : (
               <img
+                loading='lazy'
                 src={`${preferred_thumbnail_url ? preferred_thumbnail_url : possible_thumbnail_urls["thumbnailUrl-0"]}`}
                 alt='skeleton-thumbnail'
                 className='secondary-skeleton-thumbnail'

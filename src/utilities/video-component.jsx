@@ -36,6 +36,7 @@ export default function VideoComponent({ data }) {
             {!mpd_url ? (
               <div className='processing-banner-home home-skeleton'>
                 <img
+                  loading='lazy'
                   src={
                     preferred_thumbnail_url
                       ? preferred_thumbnail_url
@@ -53,6 +54,7 @@ export default function VideoComponent({ data }) {
             ) : (
               <>
                 <img
+                  loading='lazy'
                   src={preferred_thumbnail_url ? preferred_thumbnail_url : possible_thumbnail_urls["thumbnailUrl-0"]}
                   alt='thumbnail'
                   className='skeleton-thumbnail'

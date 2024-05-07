@@ -66,7 +66,7 @@ export default watchSlice.reducer;
 
 export const fetchWatchData = (videoId, currentRoute, data = {}) => {
   return async (dispatch, getState) => {
-    const root = document.querySelector("#root");
+    const app = document.querySelector(".app");
     const currentVideoId = getState().watch.playingVideo.videoId;
     const isFetching = getState().app.isFetching;
     const location = getState().app.location;
@@ -88,7 +88,7 @@ export const fetchWatchData = (videoId, currentRoute, data = {}) => {
       dispatch(updateLocation(currentRoute));
 
       dispatch(handleNavigation("/watch"));
-      root.scrollTo({ top: 0, behavior: "instant" });
+      app.scrollTo({ top: 0, behavior: "instant" });
       console.log("video already fetched ran");
 
       return;
@@ -103,19 +103,23 @@ export const fetchWatchData = (videoId, currentRoute, data = {}) => {
       if (miniPlayer) return;
       dispatch(handleNavigation("/watch"));
       dispatch(updateLocation(currentRoute));
-      root.scrollTo({ top: 0, behavior: "instant" });
+      app.scrollTo({ top: 0, behavior: "instant" });
       console.log("pushed forward ran");
     } else if (Object.entries(data).length === 0) {
       await AxiosFetching("post", "watch-video", formData)
         .then((response) => {
-          playingVideo = response.data;
-          dispatch(updateIsFetching());
-          dispatch(updatePlayingVideo(response.data));
-          if (window.location.pathname.includes("watch")) {
-            if (miniPlayer) return;
-            dispatch(handleNavigation("/watch"));
-            dispatch(updateLocation(currentRoute));
-            root.scrollTo({ top: 0, behavior: "instant" });
+          if (response.data) {
+            playingVideo = response.data;
+            dispatch(updateIsFetching());
+            dispatch(updatePlayingVideo(response.data));
+            if (window.location.pathname.includes("watch")) {
+              if (miniPlayer) return;
+              dispatch(handleNavigation("/watch"));
+              dispatch(updateLocation(currentRoute));
+              app.scrollTo({ top: 0, behavior: "instant" });
+            }
+          } else {
+            // display error banner
           }
         })
         .catch((error) => {
@@ -131,12 +135,14 @@ export const fetchWatchData = (videoId, currentRoute, data = {}) => {
     }
     AxiosFetching("get", "browse", {})
       .then((response) => {
-        shuffleArray(response.data);
-        const newVideoObject = { videoId: videoId, recommendations: response.data, videoData: playingVideo };
-        dispatch(updateRecommendedVideosWatch(response.data));
-        dispatch(updateRetrievedVideos(newVideoObject));
-        if (!isWatchPage) {
-          dispatch(updatefetchingRecommendations());
+        if (response.data) {
+          shuffleArray(response.data);
+          const newVideoObject = { videoId: videoId, recommendations: response.data, videoData: playingVideo };
+          dispatch(updateRecommendedVideosWatch(response.data));
+          dispatch(updateRetrievedVideos(newVideoObject));
+          if (!isWatchPage) {
+            dispatch(updatefetchingRecommendations());
+          }
         }
       })
       .catch((error) => {
@@ -176,6 +182,7 @@ let timeout;
 export const handleFullscreen = (fullScreen) => {
   return (dispatch) => {
     const root = document.querySelector("#root");
+    const app = document.querySelector(".app");
 
     if (timeout) {
       clearTimeout(timeout);
@@ -185,7 +192,7 @@ export const handleFullscreen = (fullScreen) => {
       if (!document.fullscreenElement) {
         root.requestFullscreen().then(() => {
           timeout = setTimeout(() => {
-            root.scrollTo({ top: 0, behavior: "instant" });
+            app.scrollTo({ top: 0, behavior: "instant" });
             dispatch(toggleFullScreen(true));
           }, 300);
         });
