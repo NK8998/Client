@@ -34,11 +34,7 @@ export default function Settings({ playerRef, checkBufferedOnTrackChange }) {
   }, [fullScreen]);
 
   useLayoutEffect(() => {
-    if (captions_url) {
-      dispatch(handleTranslatingHere(null, currentPanel, currentPanel));
-    } else {
-      dispatch(handleTranslatingHere(0, "subs-inner", "settings-menu-selector-items"));
-    }
+    dispatch(handleTranslatingHere(panel, currentPanel, currentPanel));
   }, [playingVideo]);
 
   return (

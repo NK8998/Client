@@ -154,7 +154,6 @@ export const toggleCaptions = (playerRef, captions_url, subLanguage = "English (
     const tracks = playerRef.current.getTextTracks();
     const hasCaptions = tracks.some((track) => track.kind === "subtitles");
     const captionsButton = document.querySelector(".player-button.captions");
-    captionsButton.classList.toggle("captions-on");
 
     if (!hasCaptions) {
       playerRef.current
@@ -171,9 +170,14 @@ export const toggleCaptions = (playerRef, captions_url, subLanguage = "English (
     playerRef.current.setTextTrackVisibility(!visibility);
     if (visibility) {
       dispatch(updateSubtitles("Off"));
+      captionsButton.classList.remove("captions-on");
     } else {
       dispatch(updateSubtitles(subLanguage));
+      captionsButton.classList.add("captions-on");
     }
+    const panel = getState().player.panel;
+    const currentPanel = getState().player.currentPanel;
+    dispatch(handleTranslatingHere(panel, currentPanel, currentPanel));
   };
 };
 
