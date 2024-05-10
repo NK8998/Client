@@ -108,6 +108,7 @@ export const usePlayerClickInteractions = () => {
     if (timeoutClick.current) {
       clearTimeout(timeoutClick.current);
     }
+    if (!window.location.pathname.includes("watch")) return;
 
     dispatch(handleFullscreen(fullScreen));
   };
