@@ -197,7 +197,7 @@ export const useFullscreenMode = () => {
     expandedContainerRef.classList.remove("fullscreen");
     app.classList.remove("fullscreen");
 
-    root.removeEventListener("scroll", handleScrollPosition);
+    app.removeEventListener("scroll", handleScrollPosition);
   };
   const toggleFullScreen = () => {
     // console.log("togglefullscreen ran");
@@ -250,7 +250,7 @@ export const useFullscreenMode = () => {
       secondary.classList.add("fullscreen");
       app.classList.add("fullscreen");
 
-      root.addEventListener("scroll", handleScrollPosition);
+      app.addEventListener("scroll", handleScrollPosition);
     } else if (primaryRef && !Array.from(primaryRef.children).includes(containerRef) && !fullScreen) {
       // console.log("exiting fullscreen");
       containerRef.classList.remove("fullscreen");

@@ -5,6 +5,7 @@ import { PanelHandler } from "./panel-handler";
 import { useLayoutEffect, useRef } from "react";
 import { AmbientModeMenu, AnnotationsMenu, PlayBackMenu, QualityMenu, SubtitlesMenu } from "./menu-items/menu-items";
 import { handleTranslatingHere } from "../../../../../../../store/Slices/player-slice";
+import { debounce } from "lodash";
 
 export default function Settings({ playerRef, checkBufferedOnTrackChange }) {
   const dispatch = useDispatch();
@@ -34,7 +35,21 @@ export default function Settings({ playerRef, checkBufferedOnTrackChange }) {
   }, [fullScreen]);
 
   useLayoutEffect(() => {
-    dispatch(handleTranslatingHere(panel, currentPanel, currentPanel));
+    const resizeEvent = () => {
+      dispatch(handleTranslatingHere(panel, currentPanel, currentPanel));
+    };
+
+    const debouncedVer = debounce(resizeEvent, 200);
+
+    window.addEventListener("resize", debouncedVer);
+
+    return () => {
+      window.removeEventListener("resize", debouncedVer);
+    };
+  }, [playingVideo, panel, currentPanel]);
+
+  useLayoutEffect(() => {
+    dispatch(handleTranslatingHere(null, currentPanel, "settings-menu-selector-items"));
   }, [playingVideo]);
 
   return (

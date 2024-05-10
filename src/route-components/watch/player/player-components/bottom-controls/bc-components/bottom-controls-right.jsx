@@ -105,6 +105,7 @@ export const BottomControlsRight = ({ playerRef }) => {
     settingsClickRegion.classList.toggle("show");
     settings.classList.toggle("show");
     dispatch(updateSettingsShowing(!settingsShowing));
+    handleMouseMove();
   };
 
   return (

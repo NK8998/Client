@@ -5,7 +5,7 @@ import { handleTranslating } from "../../../../../../../../store/Slices/player-s
 export default function SubOptions() {
   const dispatch = useDispatch();
   return (
-    <div className='subs-options-styles'>
+    <div className='subs-options-styles panel-item'>
       <div className='subtitles-panel-upper settings-upper'>
         <div className='subtitles-panel-upper-left' onClick={() => dispatch(handleTranslating(0, "subs-options-styles", "subs-inner"))}>
           <ArrowLeftButton />

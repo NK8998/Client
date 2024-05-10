@@ -11,14 +11,20 @@ export const Subtitles = ({ playerRef }) => {
   const updateSubs = (url, language) => {
     dispatch(updateSubtitles(language));
     dispatch(handleTranslating(0, "subs-inner", "settings-menu-selector-items"));
-    if (subtitles !== "Off") return;
+    if (subtitles === language) return;
     dispatch(toggleCaptions(playerRef, url, language));
   };
   if (!captions_url) return <></>;
+  const offObj = { url: "Off", language: "Off" };
+  const captionItems = [offObj, ...captions_url];
 
-  const subEls = captions_url.map((sub, index) => {
+  const subEls = captionItems.map((sub, index) => {
     return (
-      <div className='sub-item' onClick={() => updateSubs(sub.url, sub.language)} key={`${sub.language}-${index}`}>
+      <div
+        className={`sub-item ${sub.language === "Off" && subtitles === "Off" ? "hide" : ""}`}
+        onClick={() => updateSubs(sub.url, sub.language)}
+        key={`${sub.language}-${index}`}
+      >
         <p className='tick-container'>{subtitles === sub.language && <TickIcon />}</p>
         <p>{sub.language}</p>
       </div>
@@ -26,9 +32,12 @@ export const Subtitles = ({ playerRef }) => {
   });
   return (
     <div className='subtitles-panel menu-panel'>
-      <div className='subs-inner'>
+      <div className='subs-inner panel-item'>
         <div className='subtitles-panel-upper settings-upper'>
-          <div className='subtitles-panel-upper-left' onClick={() => dispatch(handleTranslating(0, "subs-inner", "settings-menu-selector-items"))}>
+          <div
+            className='subtitles-panel-upper-left settings-upper-left'
+            onClick={() => dispatch(handleTranslating(0, "subs-inner", "settings-menu-selector-items"))}
+          >
             <ArrowLeftButton />
             <p>Subtitles/CC</p>
           </div>

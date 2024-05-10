@@ -21,7 +21,7 @@ export default function SecondaryVideoComponent({ data }) {
     <div className='secondary-skeleton'>
       <Link
         to={`/watch?v=${video_id}`}
-        onClick={() => dispatch(fetchWatchData(video_id, `/watch?v=${video_id}`, data))}
+        onClick={() => dispatch(fetchWatchData(video_id, `/watch?v=${video_id}`, {}))}
         className='skeleton-inner-link'
       >
         <div className='secondary-skeleton-inner'>

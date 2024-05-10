@@ -29,7 +29,7 @@ export default function VideoComponent({ data }) {
           to={`/watch?v=${video_id}`}
           onClick={(e) => {
             miniPlayer && e.preventDefault();
-            dispatch(fetchWatchData(video_id, `/watch?v=${video_id}`, data));
+            dispatch(fetchWatchData(video_id, `/watch?v=${video_id}`, {}));
           }}
         >
           <div className='browse-video-upper'>
@@ -76,7 +76,7 @@ export default function VideoComponent({ data }) {
               to={`/watch?v=${video_id}`}
               onClick={(e) => {
                 miniPlayer && e.preventDefault();
-                dispatch(fetchWatchData(video_id, `/watch?v=${video_id}`, data));
+                dispatch(fetchWatchData(video_id, `/watch?v=${video_id}`, {}));
               }}
               className='skeleton-title'
             >

@@ -42,6 +42,8 @@ export default function Player({ videoRef, containerRef }) {
   const buffering = useSelector((state) => state.player.buffering);
   const subtitles = useSelector((state) => state.player.subtitles);
   const windowWidth = useSelector((state) => state.app.windowWidth);
+  const currentPanel = useSelector((state) => state.player.currentPanel);
+  const panel = useSelector((state) => state.player.panel);
   const { description_string, duration, video_id, mpd_url, isLive, captions_url } = playingVideo;
 
   const chapters = useSelector((state) => state.player.chapters);
@@ -230,6 +232,7 @@ export default function Player({ videoRef, containerRef }) {
         .then(() => {
           if (subtitles !== "Off" && captions_url) {
             dispatch(toggleCaptions(playerRef, captions_url[0].url, captions_url[0].language));
+            // dispatch(handleTranslatingHere(panel, currentPanel, currentPanel));
           }
 
           console.log("The video has been loaded!");

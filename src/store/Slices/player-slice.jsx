@@ -115,7 +115,7 @@ export const handleTranslating = (panel, currentElement, element) => {
   };
 };
 
-export const handleTranslatingHere = (panel, currentElement, element) => {
+export const handleTranslatingHere = (panel = 0, currentElement, element = "settings-menu-selector-items") => {
   return (dispatch) => {
     const settingsRef = document.querySelector(".settings");
     const settingsScrollContainer = document.querySelector(".settings-inner");
@@ -151,11 +151,10 @@ export const handleTranslatingHere = (panel, currentElement, element) => {
 export const toggleCaptions = (playerRef, captions_url, subLanguage = "English (auto-generated)") => {
   return (dispatch, getState) => {
     if (!captions_url) return;
-    const tracks = playerRef.current.getTextTracks();
-    const hasCaptions = tracks.some((track) => track.kind === "subtitles");
+
     const captionsButton = document.querySelector(".player-button.captions");
 
-    if (!hasCaptions) {
+    if (captions_url !== "Off") {
       playerRef.current
         .addTextTrackAsync(captions_url, "en", "subtitles", "text/vtt")
         .then(function () {
@@ -168,16 +167,13 @@ export const toggleCaptions = (playerRef, captions_url, subLanguage = "English (
 
     const visibility = playerRef.current.isTextTrackVisible();
     playerRef.current.setTextTrackVisibility(!visibility);
-    if (visibility) {
+    if (visibility || captions_url === "Off") {
       dispatch(updateSubtitles("Off"));
       captionsButton.classList.remove("captions-on");
     } else {
       dispatch(updateSubtitles(subLanguage));
       captionsButton.classList.add("captions-on");
     }
-    const panel = getState().player.panel;
-    const currentPanel = getState().player.currentPanel;
-    dispatch(handleTranslatingHere(panel, currentPanel, currentPanel));
   };
 };
 
