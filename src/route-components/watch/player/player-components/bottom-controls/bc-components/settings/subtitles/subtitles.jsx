@@ -20,11 +20,7 @@ export const Subtitles = ({ playerRef }) => {
 
   const subEls = captionItems.map((sub, index) => {
     return (
-      <div
-        className={`sub-item ${sub.language === "Off" && subtitles === "Off" ? "hide" : ""}`}
-        onClick={() => updateSubs(sub.url, sub.language)}
-        key={`${sub.language}-${index}`}
-      >
+      <div className={`sub-item `} onClick={() => updateSubs(sub.url, sub.language)} key={`${sub.language}-${index}`}>
         <p className='tick-container'>{subtitles === sub.language && <TickIcon />}</p>
         <p>{sub.language}</p>
       </div>
