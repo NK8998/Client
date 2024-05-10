@@ -7,7 +7,7 @@ import { getTimeStamp } from "../../../../utilities/getTimestamp";
 
 export const usePlayerDraggingLogic = () => {
   const mouseDownTracker = useRef();
-  const isDragging = useRef(0);
+  const isDragging = useRef(false);
   const currentTimeTracker = useRef(0);
   const chapters = useSelector((state) => state.player.chapters);
   const play = useSelector((state) => state.player.play);

@@ -22,6 +22,7 @@ export const BottomControlsRight = ({ playerRef }) => {
   const lastVisited = useSelector((state) => state.app.lastVisited);
   const isFetching = useSelector((state) => state.app.isFetching);
   const currentPanel = useSelector((state) => state.player.currentPanel);
+  const miniPlayerBoolean = useSelector((state) => state.watch.miniPlayerBoolean);
   const location = useSelector((state) => state.app.location);
   const captionsRef = useRef();
   const [handleMouseMove, handleMouseOut] = usePlayerMouseMove();
@@ -72,7 +73,7 @@ export const BottomControlsRight = ({ playerRef }) => {
     return () => {
       window.removeEventListener("keyup", handleKeyUp);
     };
-  }, [miniPlayer, lastVisited, isFetching, currentPanel, video_id]);
+  }, [miniPlayer, lastVisited, isFetching, currentPanel, video_id, miniPlayerBoolean]);
 
   const removeSettingsOnoutsideClick = (e) => {
     const element = e.target;
@@ -92,6 +93,7 @@ export const BottomControlsRight = ({ playerRef }) => {
   };
 
   const handleSettingsShowing = () => {
+    if (miniPlayerBoolean) return;
     dispatch(handleTranslatingHere(null, currentPanel, "settings-menu-selector-items"));
     if (settingsShowing) {
       document.removeEventListener("click", removeSettingsOnoutsideClick);

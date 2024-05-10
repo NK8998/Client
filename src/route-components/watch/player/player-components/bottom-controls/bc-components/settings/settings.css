@@ -306,7 +306,11 @@
     background-color: rgba(104, 104, 104, 0.534);
     cursor: pointer;
 }
-
+.resolution-inner-indicator{
+    font-weight: 400;
+    color: rgba(184, 184, 184, 0.856);
+    font-size: 12px;
+}
 
 .play-back-speed-outer{
     display: flex;

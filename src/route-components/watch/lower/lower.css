@@ -73,7 +73,7 @@
     background-color: rgb(41, 41, 41);
     margin-top: 12px;
     border-radius: 12px;
-    font-size: 14px;
+    font-size: 14.4px;
     font-weight: 400;
     letter-spacing: 0px;
     color: white;
@@ -107,7 +107,7 @@
 }
 
 .formatted-string span{
-    min-height: 1em;
+    min-height: 17px;
     display: block;
     width: fit-content;
 }
@@ -119,6 +119,9 @@
     bottom: 0px;
     font-weight: 600;
     background-color: rgb(41, 41, 41);
+}
+.formatted-hyper-links{
+    color: #3ea6ff;
 }
 .show-formatted-string.box-shadow{
     box-shadow: -15px 0px 6px 1px  rgb(41, 41, 41);

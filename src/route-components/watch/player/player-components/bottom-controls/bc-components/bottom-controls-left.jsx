@@ -1,13 +1,15 @@
-import { useLayoutEffect } from "react";
+import { useEffect, useLayoutEffect } from "react";
 import { ForwardButton, PlayPauseButton } from "../../../../../../assets/icons";
 import { usePlayerMouseMove } from "../../../utilities/player-mouse-interactions";
 import VolumeSlider from "./slider";
 import { getTimeStamp, removeLeadingZero } from "../../../../../../utilities/getTimestamp";
 import { useSelector } from "react-redux";
+import { usePlayerDraggingLogic } from "../../../utilities/player-dragging-logic";
 
 export const BottomControlsLeft = ({ handlePlayState }) => {
   const playingVideo = useSelector((state) => state.watch.playingVideo);
-  const isDragging = useSelector((state) => state.player.isDragging);
+  const [startDrag, stopDragging, handleClick, handleDrag, updateRedDot, resetDot, isDragging] = usePlayerDraggingLogic();
+
   const { duration_timestamp } = playingVideo;
   const [handleMouseMove] = usePlayerMouseMove();
   const handleMouseLeaveControlsLeft = (e) => {
@@ -16,7 +18,7 @@ export const BottomControlsLeft = ({ handlePlayState }) => {
   };
 
   const updateTime = () => {
-    if (isDragging) return;
+    if (isDragging.current === true) return;
     const videoRef = document.querySelector("#html5-player");
     const timeContainer = document.querySelector(".time-left-container");
     const currentTime = videoRef.currentTime;
@@ -34,6 +36,7 @@ export const BottomControlsLeft = ({ handlePlayState }) => {
       videoRef.removeEventListener("timeupdate", updateTime);
     };
   }, [playingVideo, isDragging]);
+
   return (
     <div className='bottom-controls-left' onMouseLeave={handleMouseLeaveControlsLeft}>
       <button type='button' className={`player-button play-pause`} onClick={handlePlayState} onFocus={handleMouseMove}>

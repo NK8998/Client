@@ -238,6 +238,7 @@ export default function Player({ videoRef, containerRef }) {
           if (videoRef) {
             const params = new URLSearchParams(window.location.search);
             const time = params.get("t") || 0;
+            console.log(time);
             videoRef.currentTime = time;
           }
         })
@@ -248,7 +249,10 @@ export default function Player({ videoRef, containerRef }) {
 
     function onError(error) {
       console.error("Error code", error.code, "object", error);
-      if (attempts.current > 2) return;
+      if (attempts.current > 2) {
+        // alert user his browser can't play the content based on error.code
+        return;
+      }
       attatchPlayer();
       attempts.current += 1;
     }
@@ -260,11 +264,9 @@ export default function Player({ videoRef, containerRef }) {
     const scrubbingBarRefs = document.querySelectorAll(".scrubbing.bar");
     const bufferBarRefs = document.querySelectorAll(".buffer.bar");
     const progressBarRefs = document.querySelectorAll(".progress.bar");
-    const arr = [{ ref: scrubbingBarRefs }, { ref: bufferBarRefs }, { ref: progressBarRefs }];
-    arr.forEach((barRefs) => {
-      barRefs.ref.forEach((barRef) => {
-        barRef.style.width = `0%`;
-      });
+    const arr = [...scrubbingBarRefs, ...bufferBarRefs, ...progressBarRefs];
+    arr.forEach((barRef) => {
+      barRef.style.width = `0%`;
     });
     redDotWrapperRef.style.transform = `translateX(${0}px)`;
   };
@@ -336,6 +338,7 @@ export default function Player({ videoRef, containerRef }) {
 
   const handleTimeUpdate = () => {
     const videoRef = document.querySelector("#html5-player");
+    if (!videoRef) return;
 
     if (videoRef.paused && isDragging.current === false) {
       updateProgressBar();
@@ -344,6 +347,7 @@ export default function Player({ videoRef, containerRef }) {
 
     checkBuffered();
   };
+
   return (
     <>
       <div

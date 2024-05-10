@@ -33,54 +33,58 @@ export default function Description() {
     checkBufferedOnTrackChange();
   };
   const recalculatePosition = () => {
-    const lines = document.querySelectorAll(".formatted-string-span");
-    if (lines === null || lines === undefined) return;
+    requestAnimationFrame(() => {
+      const lines = document.querySelectorAll(".formatted-string-span");
+      if (lines === null || lines === undefined) return;
 
-    let lastWidth = 0;
-    let cumulativeHeight = 0;
-    let foldIndex = null;
-
-    lines.forEach((line, index) => {
-      const lineHeight = line.getBoundingClientRect().height;
-      cumulativeHeight = cumulativeHeight + lineHeight;
-
-      if (cumulativeHeight >= 50 && foldIndex === null) {
-        foldIndex = index;
-        line.classList.add("fold");
-        lastWidth = line.getBoundingClientRect().width;
-      } else if (foldIndex !== null || showMore) {
-        if (foldIndex < index && !showMore) {
-          line.classList.add("hidden");
-        } else if (showMore) {
-          line.classList.remove("hidden");
-        }
-      }
-    });
-
-    if (showMore) {
       lines.forEach((line) => {
         line.classList.remove("fold");
+        line.classList.remove("hidden");
       });
-    }
 
-    const width = Math.max(lastWidth - showMoreButton.current.clientWidth, 5);
+      let lastWidth = 0;
+      let cumulativeHeight = 0;
+      let foldIndex = null;
 
-    showMoreButton.current.style.left = `${showMore ? 0 : width}px`;
+      lines.forEach((line, index) => {
+        const lineHeight = Math.max(line.getBoundingClientRect().height, 17);
+        cumulativeHeight = cumulativeHeight + lineHeight;
+
+        if (cumulativeHeight >= 50 && foldIndex === null) {
+          foldIndex = index;
+          line.classList.add("fold");
+          lastWidth = line.getBoundingClientRect().width;
+        } else if (foldIndex !== null && index > foldIndex) {
+          if (!showMore) {
+            line.classList.remove("fold");
+            line.classList.add("hidden");
+          } else if (showMore) {
+            line.classList.remove("hidden");
+          }
+        }
+      });
+
+      if (showMore) {
+        lines.forEach((line) => {
+          line.classList.remove("fold");
+          line.classList.remove("hidden");
+        });
+      }
+
+      const width = Math.max(lastWidth - showMoreButton.current.clientWidth, 5);
+
+      showMoreButton.current.style.left = `${showMore ? 0 : width}px`;
+    });
   };
 
   const processString = (string) => {
     const cleanString = DOMPurify.sanitize(string);
-    // Split the string into lines
     let lines = cleanString.split("\n");
 
-    // Process each line
     let processedLines = lines.map((line, index) => {
-      // Split the line into parts by the time format
-      let parts = line.split(/(\b\d{1,2}:\d{2}\b)/g);
+      let parts = line.split(/(\b\d{1,2}:\d{2}\b)|(https?:\/\/[^\s]+)/g);
 
-      // Process each part
       let processedParts = parts.map((part, index) => {
-        // If the part is a time format, wrap it in a Link component
         if (/\b\d{1,2}:\d{2}\b/.test(part)) {
           const timeInSeconds = convertToSeconds(part);
           return (
@@ -93,13 +97,17 @@ export default function Description() {
               {part}
             </Link>
           );
+        } else if (/https?:\/\/[^\s]+/.test(part)) {
+          return (
+            <a key={`${index}-formatted-hyper-links`} href={part} target='_blank' rel='noopener noreferrer' className='formatted-hyper-links'>
+              {part}
+            </a>
+          );
         }
 
-        // Otherwise, return the part as is
         return part;
       });
 
-      // Join the processed parts back into a line, and wrap the line in a <p> tag
       return (
         <span key={`${index}-string-span-${video_id}`} className={`formatted-string-span`}>
           {processedParts}
