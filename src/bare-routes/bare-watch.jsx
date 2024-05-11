@@ -2,13 +2,14 @@ import { useLayoutEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { fetchWatchData, handleMiniPLayer, updateMiniPlayerBoolean } from "../store/Slices/watch-slice";
-import { updateLastVisited } from "../store/Slices/app-slice";
+import { Helmet } from "react-helmet";
 
 export default function BareWatch({}) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const location = useSelector((state) => state.app.location);
   const miniPlayer = useSelector((state) => state.watch.miniPlayer);
+  const { title, description_string } = useSelector((state) => state.watch.playingVideo);
 
   useLayoutEffect(() => {
     const url = new URL(window.location.href);
@@ -31,5 +32,14 @@ export default function BareWatch({}) {
       dispatch(fetchWatchData(videoId, currentRoute, {}));
     }
   }, []);
-  return <div className='bare-hidden-watch'></div>;
+  return (
+    <div className='bare-hidden-watch'>
+      <Helmet>
+        <meta charSet='utf-8' />
+        <title>{title}</title>
+        <link rel='canonical' href='http://mysite.com/example' />
+        <meta name='description' content={description_string} />
+      </Helmet>
+    </div>
+  );
 }

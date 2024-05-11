@@ -131,6 +131,7 @@ export default function Player({ videoRef, containerRef }) {
   }, [playingVideo]);
 
   useLayoutEffect(() => {
+    attempts.current = 0;
     // for browsing in the watchpage
     if (window.location.pathname.includes("watch")) {
       clearIntervalProgress();
@@ -183,6 +184,7 @@ export default function Player({ videoRef, containerRef }) {
   const attatchPlayer = async () => {
     await detachPlayer();
     const manifestUri = mpd_url || "";
+
     if (manifestUri.length === 0 || !manifestUri.includes("http") || !videoRef.current) return;
     shaka.polyfill.installAll();
     if (shaka.Player.isBrowserSupported()) {
@@ -238,10 +240,11 @@ export default function Player({ videoRef, containerRef }) {
           console.log("The video has been loaded!");
           handlePlayState();
           const videoRef = document.querySelector("#html5-player");
+          videoRef.classList.remove("transition");
+
           if (videoRef) {
             const params = new URLSearchParams(window.location.search);
             const time = params.get("t") || 0;
-            console.log(time);
             videoRef.currentTime = time;
           }
         })
@@ -250,10 +253,11 @@ export default function Player({ videoRef, containerRef }) {
       console.error("Shaka Player is not supported on this browser.");
     }
 
-    function onError(error) {
+    async function onError(error) {
       console.error("Error code", error.code, "object", error);
       if (attempts.current > 2) {
         // alert user his browser can't play the content based on error.code
+
         return;
       }
       attatchPlayer();
@@ -276,6 +280,8 @@ export default function Player({ videoRef, containerRef }) {
 
   const detachPlayer = async () => {
     // console.log("run");
+    const videoRef = document.querySelector("#html5-player");
+    videoRef.classList.add("transition");
     const captionsContainer = document.querySelector(".captions-container-relative");
     if (captionsContainer) {
       while (captionsContainer.firstChild) {
@@ -290,7 +296,7 @@ export default function Player({ videoRef, containerRef }) {
 
       clearIntervalProgress();
       await playerRef.current.unload();
-      playerRef.current = null;
+      // playerRef.current = null;
     }
   };
 

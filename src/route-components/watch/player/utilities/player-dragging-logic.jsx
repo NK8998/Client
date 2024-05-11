@@ -64,6 +64,7 @@ export const usePlayerDraggingLogic = () => {
     const ratio = position / width;
     const timeOffset = ratio * chapterDuration;
     const currentTime = chapters[currentIndex].start + timeOffset;
+    videoRef.currentTime = currentTime;
 
     // console.log(currentTime);
 
@@ -88,7 +89,6 @@ export const usePlayerDraggingLogic = () => {
         chapterPadding[index].classList.remove("drag-expand");
       }
     });
-    videoRef.currentTime = currentTime;
 
     updateRedDot(currentTime);
   };
@@ -206,8 +206,10 @@ export const usePlayerDraggingLogic = () => {
         const style = getComputedStyle(document.documentElement);
         const currentIndex = parseInt(style.getPropertyValue("--currentChapterIndex").trim());
         document.documentElement.style.setProperty("--hoverChapterIndex", `${currentIndex}`);
-        handleDrag(e.touches[0]); // Use the first touch object
+        handleClick(e.touches[0]); // Use the first touch object
+        handleDrag(e.touches[0]);
       } else {
+        handleClick(e);
         handleDrag(e);
       }
       videoRef.pause();
