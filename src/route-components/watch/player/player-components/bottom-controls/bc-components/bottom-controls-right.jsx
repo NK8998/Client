@@ -47,10 +47,9 @@ export const BottomControlsRight = ({ playerRef }) => {
     }
     const key = e.key.toLowerCase();
 
-    timeoutRef.current = setTimeout(() => {
+    if (key === "i") {
       if (!miniPlayer && !window.location.pathname.includes("watch")) return;
-
-      if (key === "i") {
+      timeoutRef.current = setTimeout(() => {
         if (!miniPlayer) {
           handleMiniPlayerNavigation();
           if (settingsShowing) {
@@ -59,10 +58,8 @@ export const BottomControlsRight = ({ playerRef }) => {
         } else {
           navigate(`/watch?v=${video_id}`);
         }
-      }
-    }, 130);
-
-    if (key === "c") {
+      }, 130);
+    } else if (key === "c") {
       if (!captions_url) return;
       dispatch(toggleCaptions(playerRef, captions_url[0].url, captions_url[0].language));
       dispatch(handleTranslatingHere(null, currentPanel, currentPanel));
@@ -73,7 +70,7 @@ export const BottomControlsRight = ({ playerRef }) => {
     return () => {
       window.removeEventListener("keyup", handleKeyUp);
     };
-  }, [miniPlayer, lastVisited, isFetching, currentPanel, video_id, miniPlayerBoolean]);
+  }, [miniPlayer, lastVisited, isFetching, currentPanel, video_id, miniPlayerBoolean, settingsShowing]);
 
   const removeSettingsOnoutsideClick = (e) => {
     const element = e.target;
@@ -105,7 +102,6 @@ export const BottomControlsRight = ({ playerRef }) => {
     settingsClickRegion.classList.toggle("show");
     settings.classList.toggle("show");
     dispatch(updateSettingsShowing(!settingsShowing));
-    handleMouseMove();
   };
 
   return (

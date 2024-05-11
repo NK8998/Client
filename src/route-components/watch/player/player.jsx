@@ -232,7 +232,7 @@ export default function Player({ videoRef, containerRef }) {
         .then(() => {
           if (subtitles !== "Off" && captions_url) {
             dispatch(toggleCaptions(playerRef, captions_url[0].url, captions_url[0].language));
-            // dispatch(handleTranslatingHere(panel, currentPanel, currentPanel));
+            dispatch(handleTranslatingHere(panel, currentPanel, currentPanel));
           }
 
           console.log("The video has been loaded!");

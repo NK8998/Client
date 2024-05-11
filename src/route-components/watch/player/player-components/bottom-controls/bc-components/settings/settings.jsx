@@ -49,7 +49,11 @@ export default function Settings({ playerRef, checkBufferedOnTrackChange }) {
   }, [playingVideo, panel, currentPanel]);
 
   useLayoutEffect(() => {
-    dispatch(handleTranslatingHere(null, currentPanel, "settings-menu-selector-items"));
+    if (!captions_url) {
+      dispatch(handleTranslatingHere(null, currentPanel, "settings-menu-selector-items"));
+    } else {
+      dispatch(handleTranslatingHere(panel, currentPanel, currentPanel));
+    }
   }, [playingVideo]);
 
   return (

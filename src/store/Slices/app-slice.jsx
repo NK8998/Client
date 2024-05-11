@@ -1,6 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { fetchWatchData, handleFullscreen, toggleFullScreen } from "./watch-slice";
 import { updateMaxNums } from "./home-slice";
+import { updateSettingsShowing } from "./player-slice";
 
 const appSlice = createSlice({
   name: "app",
@@ -69,6 +70,7 @@ export const handleNavigation = (targetRoute) => {
           dispatch(handleFullscreen(true));
         });
       }
+      dispatch(updateSettingsShowing(false));
     }
     const refs = getState().app.refs;
     const currentRoute = refs.find((ref) => ref.route === targetRoute);

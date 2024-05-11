@@ -64,9 +64,6 @@ export const usePlayerDraggingLogic = () => {
     const ratio = position / width;
     const timeOffset = ratio * chapterDuration;
     const currentTime = chapters[currentIndex].start + timeOffset;
-    if (typeof currentTime === "number") {
-      videoRef.currentTime = currentTime;
-    }
 
     // console.log(currentTime);
 
@@ -91,6 +88,7 @@ export const usePlayerDraggingLogic = () => {
         chapterPadding[index].classList.remove("drag-expand");
       }
     });
+    videoRef.currentTime = currentTime;
 
     updateRedDot(currentTime);
   };
@@ -194,11 +192,11 @@ export const usePlayerDraggingLogic = () => {
   };
 
   const startDrag = (e) => {
-    if (e.touches) {
-      handleClick(e.touches[0]);
-    } else {
-      handleClick(e);
-    }
+    // if (e.touches) {
+    //   handleClick(e.touches[0]);
+    // } else {
+    //   handleClick(e);
+    // }
     const isTouching = e.touches ? e.touches.length > 0 : false;
     const innerChapterContainerRef = document.querySelector(".chapters-container");
     const videoRef = document.querySelector("#html5-player");
@@ -226,7 +224,7 @@ export const usePlayerDraggingLogic = () => {
         window.addEventListener("mousemove", handleDrag);
         window.addEventListener("mouseup", stopDragging);
       }
-    }, 130);
+    }, 140);
   };
 
   const resetDot = () => {

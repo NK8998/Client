@@ -147,11 +147,10 @@
   background-color: black;
 
 }
-
-.player-expanded-container.has-content
-
 .html5-player::-webkit-media-controls {
     display: none;
+    opacity: 0;
+    visibility: hidden;
 }
 
 .html5-player.theatre{
