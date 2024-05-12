@@ -1,6 +1,6 @@
 import * as Slider from "@radix-ui/react-slider";
 import { usePlayerMouseMove } from "../../../utilities/player-mouse-interactions";
-import { useRef, useState } from "react";
+import { useLayoutEffect, useRef, useState } from "react";
 import { VolumeHighButton, VolumeLowButton, VolumeMuteButton } from "../../../../../../assets/icons";
 
 export default function VolumeSlider({}) {
@@ -19,6 +19,15 @@ export default function VolumeSlider({}) {
     currentVolume.current = volume;
     videoRef.volume = volume;
   };
+
+  useLayoutEffect(() => {
+    const videoRef = document.querySelector("#html5-player");
+    if (!videoRef) return;
+
+    videoRef.addEventListener("volumechange", (e) => {
+      setVolume(e.target.volume);
+    });
+  }, []);
 
   let volumeIcon = <></>;
   if (volume >= 0.5) {

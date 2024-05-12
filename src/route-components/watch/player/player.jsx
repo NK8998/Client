@@ -392,7 +392,7 @@ export default function Player({ videoRef, containerRef }) {
           controls={false}
           onContextMenuCapture={handleContextMenu}
           onEnded={toPause}
-          onSeeked={handleSeeking}
+          onSeeking={handleSeeking}
         ></video>
         <div className='captions-container-abolute'>
           <div className='captions-container-relative'></div>
