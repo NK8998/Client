@@ -24,7 +24,6 @@ import { usePlayerBufferingState, usePlayerDraggingLogic } from "./utilities/pla
 import { usePlayerClickInteractions, usePlayerkeyInteractions } from "./utilities/player-key-interactions";
 import { usePlayerStyles } from "./utilities/player-styles";
 import { useFullscreenMode, useMiniPlayermode, useTheatreMode } from "./utilities/player-modes";
-import { PreviewBgSize } from "./utilities/preview-bg-size";
 import PreviewBG from "./player-components/preview-bg/preview-bg";
 import { toggleTheatreMode, updatePlayingVideo } from "../../../store/Slices/watch-slice";
 import TopVideoComponent from "./player-components/bottom-controls/bc-components/title-component";
@@ -345,16 +344,13 @@ export default function Player({ videoRef, containerRef }) {
     containerRef.current.classList.remove("focus-via-keyboard");
   };
 
-  const handleTimeUpdate = () => {
-    const videoRef = document.querySelector("#html5-player");
-    if (!videoRef) return;
+  const handleSeeking = () => {
+    updateProgressBar();
+    updateRedDot();
+  };
 
-    if (videoRef.paused && isDragging.current === false) {
-      updateProgressBar();
-      updateRedDot();
-    }
-
-    checkBuffered();
+  const updateDurtion = () => {
+    // continue updating the chapters for live content
   };
 
   return (
@@ -378,8 +374,9 @@ export default function Player({ videoRef, containerRef }) {
           ref={videoRef}
           className={`html5-player`}
           id='html5-player'
-          onTimeUpdate={handleTimeUpdate} // continue updating the chapters
+          onTimeUpdate={checkBuffered}
           // onWaiting={handleTracksChanged}
+          onDurationChange={updateDurtion}
           onProgress={updateBufferBar}
           onClick={handlePlayState}
           onPlay={(e) => {
@@ -394,7 +391,8 @@ export default function Player({ videoRef, containerRef }) {
           }}
           controls={false}
           onContextMenuCapture={handleContextMenu}
-          onEnded={() => toPause()}
+          onEnded={toPause}
+          onSeeked={handleSeeking}
         ></video>
         <div className='captions-container-abolute'>
           <div className='captions-container-relative'></div>
@@ -422,7 +420,6 @@ export default function Player({ videoRef, containerRef }) {
           </div>
         </div>
       </div>
-      <PreviewBgSize />
     </>
   );
 }
