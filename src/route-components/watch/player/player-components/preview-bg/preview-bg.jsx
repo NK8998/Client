@@ -1,6 +1,7 @@
 import { useLayoutEffect, useRef } from "react";
 import { useSelector } from "react-redux";
 import { usePlayerScrubbingBarInteractions } from "../../utilities/player-scrubbingBar-logic";
+import { debounce } from "lodash";
 
 export default function PreviewBG() {
   const fullScreen = useSelector((state) => state.watch.fullScreen);
@@ -28,27 +29,16 @@ export default function PreviewBG() {
   };
 
   useLayoutEffect(() => {
-    if (timeoutRef2.current) {
-      clearTimeout(timeoutRef2.current);
-    }
-    timeoutRef2.current = setTimeout(() => {
-      calculateDimensions();
-    }, 5);
+    const debouncedVer = debounce(calculateDimensions, 5);
+    debouncedVer();
   }, [fullScreen, theatreMode, miniPlayer]);
 
   useLayoutEffect(() => {
-    const callerFunc = () => {
-      if (timeoOutRef.current) {
-        clearTimeout(timeoOutRef.current);
-      }
-      timeoOutRef.current = setTimeout(() => {
-        calculateDimensions();
-      }, 5);
-    };
-    window.addEventListener("resize", callerFunc);
+    const debouncedVer = debounce(calculateDimensions, 200);
+    window.addEventListener("resize", debouncedVer);
 
     return () => {
-      window.removeEventListener("resize", callerFunc);
+      window.removeEventListener("resize", debouncedVer);
     };
   }, [buffering, fullScreen]);
   return (

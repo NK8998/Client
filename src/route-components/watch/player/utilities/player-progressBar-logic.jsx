@@ -56,6 +56,8 @@ export const usePlayerProgressBarLogic = () => {
         const index = bufferBar.getAttribute("dataIndex"); // get the data-index attribute
         const chapter = chapters[index]; // find the corresponding chapter
 
+        if (!chapter) return;
+
         if (chapter.start <= bufferToUse[1] && chapter.end >= bufferToUse[1]) {
           const ratio = (bufferToUse[1] - chapter.start) / (chapter.end - chapter.start);
           const { width } = chapterContainers[index].getBoundingClientRect();
@@ -85,6 +87,7 @@ export const usePlayerProgressBarLogic = () => {
     progressBarRefs.forEach((progressBar, index) => {
       // const curIndex = progressBar.getAttribute("dataIndex");
       const chapter = chapters[index];
+      if (!chapter) return;
       if (chapter.start <= currentTime && currentTime < chapter.end) {
         document.documentElement.style.setProperty("--currentChapterIndex", `${index}`);
         redDotRef.setAttribute("dataIndex", `${index}`);

@@ -87,9 +87,11 @@ export default function Player({ videoRef, containerRef }) {
     calculateWidth();
 
     applyChapterStyles();
-    updateBufferBar();
-    updateProgressBar();
-    updateRedDot("");
+    requestAnimationFrame(() => {
+      updateBufferBar();
+      updateProgressBar();
+      updateRedDot();
+    });
   };
 
   useEffect(() => {
@@ -326,7 +328,7 @@ export default function Player({ videoRef, containerRef }) {
 
   const handleContextMenu = (e) => {
     // e.preventDefault();
-    handleHover();
+    // handleHover();
   };
 
   const handlePlayerClick = () => {
@@ -345,6 +347,7 @@ export default function Player({ videoRef, containerRef }) {
   };
 
   const handleSeeking = () => {
+    if (isDragging.current === true) return;
     updateProgressBar();
     updateRedDot();
   };
@@ -390,7 +393,6 @@ export default function Player({ videoRef, containerRef }) {
             clearIntervalProgress();
           }}
           controls={false}
-          onContextMenuCapture={handleContextMenu}
           onEnded={toPause}
           onSeeking={handleSeeking}
         ></video>

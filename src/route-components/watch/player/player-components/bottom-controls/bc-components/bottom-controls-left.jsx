@@ -28,6 +28,15 @@ export const BottomControlsLeft = ({ handlePlayState }) => {
   };
 
   useLayoutEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const time = params.get("t") || 0;
+
+    const timeContainer = document.querySelector(".time-left-container");
+    if (!timeContainer) return;
+
+    const timeStamp = getTimeStamp(Math.round(time));
+    timeContainer.textContent = timeStamp;
+
     const videoRef = document.querySelector("#html5-player");
 
     videoRef.addEventListener("timeupdate", updateTime);
