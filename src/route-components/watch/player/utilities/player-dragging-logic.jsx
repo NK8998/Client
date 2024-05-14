@@ -37,7 +37,7 @@ export const usePlayerDraggingLogic = () => {
       const currentIndex = parseInt(style.getPropertyValue("--currentChapterIndex").trim());
       let progressBarRight = progressBarRefs[currentIndex]?.getBoundingClientRect().right;
       if (!progressBarRight) {
-        progressBarRight = innerChapterContainerRef.getBoundingClientRect().right;
+        progressBarRight = progressBarRefs[0]?.getBoundingClientRect().right;
       }
       const position = progressBarRight - innerChapterContainerRef.getBoundingClientRect().left;
       redDotWrapperRef.style.transform = `translateX(${position}px)`;
