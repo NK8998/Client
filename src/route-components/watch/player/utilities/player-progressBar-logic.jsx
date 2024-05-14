@@ -1,3 +1,4 @@
+import { useRef } from "react";
 import { useSelector } from "react-redux";
 
 export const handleFocusingElements = (isFocusing) => {
@@ -11,15 +12,13 @@ export const seekVideo = (newTime) => {
 
 export const usePlayerProgressBarLogic = () => {
   const chapters = useSelector((state) => state.player.chapters);
-  const buffering = useSelector((state) => state.player.buffering);
 
   const updateBufferBar = () => {
-    if (buffering) return;
     const videoRef = document.querySelector(".html5-player");
     const buffered = videoRef.buffered;
     const currentTime = videoRef.currentTime;
 
-    if (chapters.length === 0 || !chapters) return;
+    let bufferToUse = [0, 0];
     if (buffered.length > 0) {
       const bufferGroups = [];
       let currentGroup = [buffered.start(0), buffered.end(0)];
@@ -39,38 +38,37 @@ export const usePlayerProgressBarLogic = () => {
       bufferGroups.push(currentGroup);
 
       // Determine buffer range to use based on currentTime
-      let bufferToUse;
+
       for (const group of bufferGroups) {
         if (currentTime >= group[0] && currentTime <= group[1]) {
           bufferToUse = group;
           break;
         }
       }
-      if (!bufferToUse) return;
-      const bufferBarRefs = document.querySelectorAll(".buffer.bar");
-      const chapterContainers = document.querySelectorAll(".chapter-hover");
-      const chapterPadding = document.querySelectorAll(".chapter-padding");
-
-      if (!bufferBarRefs || !chapterContainers || !chapterPadding) return;
-      bufferBarRefs.forEach((bufferBar) => {
-        const index = bufferBar.getAttribute("dataIndex"); // get the data-index attribute
-        const chapter = chapters[index]; // find the corresponding chapter
-
-        if (!chapter) return;
-
-        if (chapter.start <= bufferToUse[1] && chapter.end >= bufferToUse[1]) {
-          const ratio = (bufferToUse[1] - chapter.start) / (chapter.end - chapter.start);
-          const { width } = chapterContainers[index].getBoundingClientRect();
-          const chapterPaddingWidth = chapterPadding[index].getBoundingClientRect().width;
-          const widthInPixels = width * ratio;
-          bufferBar.style.width = `${Math.min(widthInPixels, chapterPaddingWidth)}px`;
-        } else if (chapter.end < bufferToUse[1]) {
-          bufferBar.style.width = `100%`;
-        } else {
-          bufferBar.style.width = `0%`;
-        }
-      });
     }
+
+    // if (!bufferToUse) return;
+    const bufferBarRefs = document.querySelectorAll(".buffer.bar");
+    const chapterContainers = document.querySelectorAll(".chapter-hover");
+    const chapterPadding = document.querySelectorAll(".chapter-padding");
+
+    if (!bufferBarRefs || !chapterContainers || !chapterPadding) return;
+    bufferBarRefs.forEach((bufferBar) => {
+      const index = bufferBar.getAttribute("dataIndex"); // get the data-index attribute
+      const chapter = chapters[index]; // find the corresponding chapter
+      if (!chapter) return;
+      if (chapter.start <= bufferToUse[1] && chapter.end >= bufferToUse[1]) {
+        const ratio = (bufferToUse[1] - chapter.start) / (chapter.end - chapter.start);
+        const { width } = chapterContainers[index].getBoundingClientRect();
+        const chapterPaddingWidth = chapterPadding[index].getBoundingClientRect().width;
+        const widthInPixels = width * ratio;
+        bufferBar.style.width = `${Math.min(widthInPixels, chapterPaddingWidth)}px`;
+      } else if (chapter.end < bufferToUse[1]) {
+        bufferBar.style.width = `100%`;
+      } else {
+        bufferBar.style.width = `0%`;
+      }
+    });
   };
 
   const updateProgressBar = () => {

@@ -77,9 +77,10 @@ export const useMiniPlayermode = () => {
 
       containerRef.classList.add("miniplayer");
       videoRef.classList.add("miniplayer");
-      updateBufferBar();
-      updateProgressBar();
+
       requestAnimationFrame(() => {
+        updateBufferBar();
+        updateProgressBar();
         updateRedDot("");
       });
     }

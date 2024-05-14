@@ -35,7 +35,11 @@ export const usePlayerDraggingLogic = () => {
       const progressBarRefs = document.querySelectorAll(".progress.bar");
       const style = getComputedStyle(document.documentElement);
       const currentIndex = parseInt(style.getPropertyValue("--currentChapterIndex").trim());
-      const position = progressBarRefs[currentIndex].getBoundingClientRect().right - innerChapterContainerRef.getBoundingClientRect().left;
+      let progressBarRight = progressBarRefs[currentIndex]?.getBoundingClientRect().right;
+      if (!progressBarRight) {
+        progressBarRight = innerChapterContainerRef.getBoundingClientRect().right;
+      }
+      const position = progressBarRight - innerChapterContainerRef.getBoundingClientRect().left;
       redDotWrapperRef.style.transform = `translateX(${position}px)`;
     } else if (currentTime < chapters[0].start) {
       const position = 0;

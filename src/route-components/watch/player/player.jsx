@@ -135,6 +135,7 @@ export default function Player({ videoRef, containerRef }) {
     attempts.current = 0;
     // for browsing in the watchpage
     if (window.location.pathname.includes("watch")) {
+      resetBars();
       clearIntervalProgress();
       resetBars();
       calculateWidth();
@@ -307,7 +308,9 @@ export default function Player({ videoRef, containerRef }) {
     }
     intervalRef.current = setInterval(() => {
       // console.log("running");
-      updateBufferBar();
+      if (!buffering) {
+        updateBufferBar();
+      }
       updateProgressBar();
       updateRedDot("");
     }, 60);
