@@ -24,7 +24,6 @@ export const usePlayerDraggingLogic = () => {
     const duration = videoRef.duration;
     const redDotWrapperRef = document.querySelector(".red-dot-wrapper");
     const innerChapterContainerRef = document.querySelector(".chapters-container");
-    if (chapters.length === 0) return;
     let currentTime;
     if (typeof currentTimeTracker === "number") {
       currentTime = currentTimeTracker;

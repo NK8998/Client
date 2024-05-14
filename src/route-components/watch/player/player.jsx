@@ -347,7 +347,7 @@ export default function Player({ videoRef, containerRef }) {
   };
 
   const handleSeeking = () => {
-    if (isDragging.current === true) return;
+    if (isDragging.current === true || buffering) return;
     updateProgressBar();
     updateRedDot();
   };
