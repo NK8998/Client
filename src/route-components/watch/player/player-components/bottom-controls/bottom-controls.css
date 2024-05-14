@@ -102,6 +102,9 @@
   height: 3px;
 
 }
+.player-outer.fullscreen .player-button.captions::after{
+  height: 4px;
+}
 .player-button.captions.captions-on::after{
   transform: scaleX(1);
   
@@ -190,6 +193,44 @@ form.volume-slider{
   font-size: 19px;
   /* margin-top: 6px; */
 }
+
+.player-button.cog{
+  position: relative;
+}
+
+.quality-badge{
+  position: absolute;
+  background-color: #f00;
+  height: 9px;
+  width: 13px;
+  right: 2px;
+  top: 9px;
+  font-size: 6.8px;
+  color: rgb(250, 250, 250);
+  line-height: normal;
+  letter-spacing: .8px;
+  pointer-events: none;
+
+
+}
+.quality-badge.hide{
+  opacity: 0;
+}
+.quality-badge svg{
+  height: 100%;
+  width: 100%;
+}
+
+.player-outer.fullscreen .quality-badge, .player-outer.fullscreen.theatre .quality-badge{
+  height: 18px;
+  width: 26px;
+  right: 0px;
+  top: 7px;
+} 
+.player-outer.fullscreen .quality-badge svg, .player-outer.fullscreen.theatre .quality-badge svg{
+  height: 100%;
+  width: 100%;
+} 
 
 @container(max-width: 35em){
   .bottom-controls{

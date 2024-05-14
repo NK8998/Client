@@ -225,6 +225,41 @@ export const CogButton = () => {
   );
 };
 
+export const QulityBadge4K = () => {
+  return (
+    <svg xmlns='http://www.w3.org/2000/svg' width='100%' height='100%' viewBox='0 0 13 9' version='1.1'>
+      <path
+        fillRule='evenodd'
+        fillOpacity='0.6471'
+        fill='#000'
+        d='M10,4 L11,4 L11,5 L10,5 L10,4 Z M10,7 L11,7 L11,8 L10,8 L10,7 Z M8,5 L10,5 L10,6 L8,6 L8,5 Z M7,7 L8,7 L8,8 L7,8 L7,7 Z M5,6 L6,6 L6,7 L5,7 L5,6 Z M4,7 L5,7 L5,8 L4,8 L4,7 Z M2,6 L4,6 L4,7 L2,7 L2,6 Z M3,4 L4,4 L4,5 L3,5 L3,4 Z'
+      />
+      <path
+        fillRule='evenodd'
+        fill='#fff'
+        d='M11,5 L11,7 L10,7 L10,6 L10,5 L11,5 Z M10,5 L8,5 L8,6 L8,7 L7,7 L7,2 L8,2 L8,4 L10,4 L10,5 Z M4,4 L3,4 L3,5 L4,5 L4,4 Z M4,7 L4,6 L2,6 L2,4 L3,4 L3,3 L4,3 L4,2 L5,2 L5,5 L6,5 L6,6 L5,6 L5,7 L4,7 Z M10,2 L11,2 L11,4 L10,4 L10,2 Z'
+      />
+    </svg>
+  );
+};
+
+export const QualityBadgeHD = () => {
+  return (
+    <svg xmlns='http://www.w3.org/2000/svg' width='100%' height='100%' viewBox='0 0 13 9' version='1.1'>
+      <path
+        fillRule='evenodd'
+        fillOpacity='0.6471'
+        fill='#000'
+        d='M5,7 L6,7 L6,8 L5,8 L5,7 Z M10,3 L10,4 L8,4 L8,3 L10,3 Z M3,6 L3,5 L5,5 L5,6 L3,6 Z M2,7 L3,7 L3,8 L2,8 L2,7 Z M7,7 L10,7 L10,8 L7,8 L7,7 Z M10,6 L11,6 L11,7 L10,7 L10,6 Z'
+      />
+      <path
+        fillRule='evenodd'
+        fill='#fff'
+        d='M5,7 L5,6 L5,5 L3,5 L3,6 L3,7 L2,7 L2,2 L3,2 L3,4 L5,4 L5,2 L6,2 L6,7 L5,7 Z M11,6 L10,6 L10,7 L7,7 L7,2 L10,2 L10,3 L11,3 L11,6 Z M10,4 L10,3 L8,3 L8,4 L8,6 L10,6 L10,4 Z'
+      />
+    </svg>
+  );
+};
 export const AmbientModeButton = () => {
   return (
     <svg height='24' viewBox='0 0 24 24' width='24'>

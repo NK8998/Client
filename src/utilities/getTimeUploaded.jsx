@@ -36,3 +36,16 @@ export function getTimeUploaded(uploadTime) {
     return time + `${time > 1 ? " years ago" : "year ago"}`;
   }
 }
+
+export const isLessThanAweekOld = (uploadTime) => {
+  const currentTime = new Date(); // Current time
+  const uploadedAt = new Date(uploadTime); // Uploaded time
+
+  const timeDiff = Math.abs(currentTime - uploadedAt); // Time difference in milliseconds
+  const week = 7 * 24 * 60 * 60 * 1000;
+  if (timeDiff < week) {
+    return true;
+  }
+
+  return false;
+};

@@ -1,7 +1,7 @@
 import { useMemo } from "react";
 import { Exclamation, VerticalDots } from "../../../../assets/icons";
 import { formatCount, generateRandomInteger } from "../../../../utilities/fomatCount";
-import { getTimeUploaded } from "../../../../utilities/getTimeUploaded";
+import { getTimeUploaded, isLessThanAweekOld } from "../../../../utilities/getTimeUploaded";
 import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { fetchWatchData } from "../../../../store/Slices/watch-slice";
@@ -17,6 +17,7 @@ export default function SecondaryVideoComponent({ data }) {
   const timeUploaded = useMemo(() => {
     return getTimeUploaded(created_at);
   }, [created_at]);
+
   return (
     <div className='secondary-skeleton'>
       <Link
@@ -57,9 +58,12 @@ export default function SecondaryVideoComponent({ data }) {
             <p className='secondary-skeleton-title'>{title}</p>
             <p className='secondary-skeleton-owner'>{display_name}</p>
             <div className='secondary-skeleton-metrics'>
-              <p className='secondary-skeleton-views'>{views} views</p>
+              <p className='secondary-skeleton-views'>
+                <span>{views}</span> views
+              </p>
               <p className='secondary-skeleton-uploaded-at'>{timeUploaded}</p>
             </div>
+            {isLessThanAweekOld(created_at) && <p className='enticer-banner'>New</p>}
           </div>
         </div>
       </Link>

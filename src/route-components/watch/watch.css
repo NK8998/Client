@@ -13,7 +13,7 @@
 .columns{
     margin-top: 26px;
     display: flex;
-    gap: 24px;
+    gap: 26px;
     width: 100%;
     justify-content: center;
 }

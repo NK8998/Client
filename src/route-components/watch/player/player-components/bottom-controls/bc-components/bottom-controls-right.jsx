@@ -4,6 +4,8 @@ import {
   CogButton,
   FullscreenButton,
   MiniPlayerButton,
+  QualityBadgeHD,
+  QulityBadge4K,
   SmallScreenButton,
   TheatreNormalButton,
 } from "../../../../../../assets/icons";
@@ -23,7 +25,8 @@ export const BottomControlsRight = ({ playerRef }) => {
   const isFetching = useSelector((state) => state.app.isFetching);
   const currentPanel = useSelector((state) => state.player.currentPanel);
   const miniPlayerBoolean = useSelector((state) => state.watch.miniPlayerBoolean);
-  const location = useSelector((state) => state.app.location);
+  const resolution = useSelector((state) => state.player.resolution);
+  const res = parseInt(resolution.split("p")[0]);
   const captionsRef = useRef();
   const [handleMouseMove, handleMouseOut] = usePlayerMouseMove();
   const { video_id, captions_url } = playingVideo;
@@ -118,7 +121,11 @@ export const BottomControlsRight = ({ playerRef }) => {
       >
         <CaptionsButton />
       </button>
-      <button type='button' className='player-button cog' onFocus={handleMouseMove} onClick={handleSettingsShowing}>
+      <button type='button' className={`player-button cog`} onFocus={handleMouseMove} onClick={handleSettingsShowing}>
+        <span className={`quality-badge ${res < 1080 ? "hide" : ""}`}>
+          {res === 2160 && <QulityBadge4K />}
+          {res >= 1080 && res < 2160 && <QualityBadgeHD />}
+        </span>
         <CogButton />
       </button>
       {!fullScreen && (

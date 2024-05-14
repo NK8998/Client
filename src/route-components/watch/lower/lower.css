@@ -1,5 +1,5 @@
 .lower{
-    padding-top: 16px;
+    padding-top: 15px;
 }
 
 .video-title{
@@ -10,6 +10,7 @@
     display: -webkit-box; 
     -webkit-line-clamp: 2; 
     -webkit-box-orient: vertical;
+    color: white;
 
 }
 
@@ -21,6 +22,7 @@
 
 .lower-interctions-left{
     display: flex;
+    gap: 20px;
 }
 
 .uploader-details{
@@ -30,7 +32,7 @@
 }
 
 .uploder-detils-right{
-    width: 180px;
+    width: fit-content;
 }
 
 .uploader-pfp{
