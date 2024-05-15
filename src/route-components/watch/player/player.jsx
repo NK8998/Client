@@ -311,8 +311,15 @@ export default function Player({ videoRef, containerRef }) {
       if (!buffering) {
         updateBufferBar();
       }
-      updateProgressBar();
-      updateRedDot("");
+      const playerInnerRelative = document.querySelector(".player-inner-relative");
+      const isWatchpage = window.location.pathname.includes("watch");
+      if (!playerInnerRelative.classList.contains("hide") && isWatchpage) {
+        updateProgressBar();
+        updateRedDot();
+      } else if (!isWatchpage) {
+        updateProgressBar();
+        updateRedDot();
+      }
     }, 60);
   };
 
