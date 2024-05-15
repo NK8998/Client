@@ -37,6 +37,7 @@
     min-width: var(--skeletonWidth);
     max-width: var(--skeletonWidth);
     /* background-color: purple; */
+    filter: brightness(105%);
 }
 
 .browse-skeleton-inner{
