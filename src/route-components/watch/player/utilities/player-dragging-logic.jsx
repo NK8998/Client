@@ -65,8 +65,10 @@ export const usePlayerDraggingLogic = () => {
     const position = e.clientX - left;
     const ratio = position / width;
     const timeOffset = ratio * chapterDuration;
-    const currentTime = chapters[currentIndex].start + timeOffset;
-    if (currentTime === NaN) return;
+    let currentTime = chapters[currentIndex].start + timeOffset;
+    if (currentTime === NaN) {
+      currentTime = 0;
+    }
     videoRef.currentTime = currentTime;
     redDotRef.style.scale = chapters.length === 1 ? 1 : 1.5;
     timeContainer.textContent = getTimeStamp(Math.round(currentTime));
@@ -91,8 +93,10 @@ export const usePlayerDraggingLogic = () => {
     const position = e.clientX - left;
     const ratio = position / width;
     const timeOffset = ratio * chapterDuration;
-    const currentTime = Math.min(Math.max(chapters[currentIndex].start + timeOffset, 0), duration);
-    if (currentTime === NaN) return;
+    let currentTime = Math.min(Math.max(chapters[currentIndex].start + timeOffset, 0), duration);
+    if (currentTime === NaN) {
+      currentTime = 0;
+    }
 
     previewCanvas(currentTime);
     movePreviews(e, currentIndex);
