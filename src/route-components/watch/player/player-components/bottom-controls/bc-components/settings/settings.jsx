@@ -13,6 +13,7 @@ export default function Settings({ playerRef, checkBufferedOnTrackChange }) {
   const { captions_url } = playingVideo;
   const location = useSelector((state) => state.app.location);
   const fullScreen = useSelector((state) => state.watch.fullScreen);
+  const theatreMode = useSelector((state) => state.watch.theatreMode);
   const currentPanel = useSelector((state) => state.player.currentPanel);
   const panel = useSelector((state) => state.player.panel);
   const settingsRef = useRef();
@@ -32,7 +33,7 @@ export default function Settings({ playerRef, checkBufferedOnTrackChange }) {
 
   useLayoutEffect(() => {
     dispatch(handleTranslatingHere(panel, currentPanel, currentPanel));
-  }, [fullScreen]);
+  }, [fullScreen, theatreMode]);
 
   useLayoutEffect(() => {
     const resizeEvent = () => {

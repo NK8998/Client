@@ -39,6 +39,10 @@ export function usePlayerMouseMove() {
   };
 
   const handleMouseOut = () => {
+    const style = getComputedStyle(document.documentElement);
+    const hovering = style.getPropertyValue("--hovering").trim();
+
+    if (hovering === "true") return;
     const videoContainer = document.querySelector(".captions-container-relative");
 
     const controlsRef = document.querySelector(".player-inner-relative");
