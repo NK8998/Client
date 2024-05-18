@@ -12,8 +12,6 @@ export const usePlayerDraggingLogic = () => {
   const currentTimeTracker = useRef(0);
   const chapters = useSelector((state) => state.player.chapters);
   const play = useSelector((state) => state.player.play);
-  const playingVideo = useSelector((state) => state.watch.playingVideo);
-  const { duration } = playingVideo;
   const [updateScrubbingBar, previewCanvas, movePreviews] = usePlayerScrubbingBarInteractions();
   const [checkBufferedOnTrackChange, checkBuffered, clearIntervalOnTrackChange] = usePlayerBufferingState();
   const [updateBufferBar, updateProgressBar] = usePlayerProgressBarLogic();
@@ -21,7 +19,7 @@ export const usePlayerDraggingLogic = () => {
 
   const updateRedDot = (currentTimeTracker) => {
     const videoRef = document.querySelector("#html5-player");
-    const duration = videoRef.duration;
+    const duration = chapters[chapters.length - 1].end;
     const redDotWrapperRef = document.querySelector(".red-dot-wrapper");
     const innerChapterContainerRef = document.querySelector(".chapters-container");
     let currentTime;
@@ -66,8 +64,8 @@ export const usePlayerDraggingLogic = () => {
     const ratio = position / width;
     const timeOffset = ratio * chapterDuration;
     let currentTime = chapters[currentIndex].start + timeOffset;
-    if (currentTime === NaN) {
-      currentTime = 0;
+    if (isNaN(currentTime)) {
+      return;
     }
     videoRef.currentTime = currentTime;
     redDotRef.style.scale = chapters.length === 1 ? 1 : 1.5;
@@ -77,9 +75,8 @@ export const usePlayerDraggingLogic = () => {
   };
 
   const handleDrag = (e) => {
-    const videoRef = document.querySelector("#html5-player");
     const timeContainer = document.querySelector(".time-left-container");
-    const duration = videoRef.duration;
+    const duration = chapters[chapters.length - 1].end;
     const chapterTitleContainer = document.querySelector(".chapter-title-container");
     const redDotRef = document.querySelector(".red-dot");
     const redDotWrapperRef = document.querySelector(".red-dot-wrapper");
@@ -89,13 +86,13 @@ export const usePlayerDraggingLogic = () => {
     const progressBarRefs = document.querySelectorAll(".progress.bar");
     const currentIndex = parseInt(style.getPropertyValue("--hoverChapterIndex").trim());
     const chapterDuration = chapters[currentIndex].end - chapters[currentIndex].start;
-    const { left, right, width } = chapterContainers[currentIndex].getBoundingClientRect();
+    const { left, width } = chapterContainers[currentIndex].getBoundingClientRect();
     const position = e.clientX - left;
     const ratio = position / width;
     const timeOffset = ratio * chapterDuration;
     let currentTime = Math.min(Math.max(chapters[currentIndex].start + timeOffset, 0), duration);
-    if (currentTime === NaN) {
-      currentTime = 0;
+    if (isNaN(currentTime)) {
+      return;
     }
 
     previewCanvas(currentTime);
