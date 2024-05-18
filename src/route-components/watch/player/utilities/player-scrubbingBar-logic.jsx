@@ -5,7 +5,7 @@ import { getTimeStamp } from "../../../../utilities/getTimestamp";
 export function usePlayerScrubbingBarInteractions() {
   const chapters = useSelector((state) => state.player.chapters);
   const playingVideo = useSelector((state) => state.watch.playingVideo);
-  const { extraction_and_palette, palette_urls, aspect_ratio, duration } = playingVideo;
+  const { extraction_and_palette, video_id, aspect_ratio, duration } = playingVideo;
   const settingsShowing = useSelector((state) => state.player.settingsShowing);
   const theatreMode = useSelector((state) => state.watch.theatreMode);
   const fullScreen = useSelector((state) => state.watch.fullScreen);
@@ -42,8 +42,10 @@ export function usePlayerScrubbingBarInteractions() {
     const elapsedTimeWithinCurrentPallete = currentTime - currentPallete * timePerPallete;
 
     const currentTile = Math.floor(elapsedTimeWithinCurrentPallete / extractionRate) + 1;
+    const batchNum = `${currentPallete + 1}`.padStart(3, 0);
+    const backgroundPallete = `https://d38x8ofmpjmibw.cloudfront.net/${video_id}/palletes/batch_${batchNum}_palette.jpeg`;
 
-    const backgroundPallete = palette_urls[`palleteUrl-${currentPallete}`];
+    // const backgroundPallete = palette_urls[`palleteUrl-${currentPallete}`];
 
     const offsetX = ((currentTile - 1) % paletteSize) * width;
     const offsetY = Math.floor((currentTile - 1) / paletteSize) * height;
