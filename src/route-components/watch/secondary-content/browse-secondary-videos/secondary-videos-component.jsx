@@ -6,6 +6,7 @@ import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { fetchWatchData } from "../../../../store/Slices/watch-slice";
 import processingImg from "../../../../assets/processing.jpg";
+import { removeLeadingZero } from "../../../../utilities/getTimestamp";
 
 export default function SecondaryVideoComponent({ data }) {
   const { mpd_url, duration_timestamp, possible_thumbnail_urls, title, display_name, handle, created_at, video_id, preferred_thumbnail_url } = data;
@@ -46,12 +47,15 @@ export default function SecondaryVideoComponent({ data }) {
                 </p>
               </div>
             ) : (
-              <img
-                loading='lazy'
-                src={`${preferred_thumbnail_url ? preferred_thumbnail_url : possible_thumbnail_urls["thumbnailUrl-0"]}`}
-                alt='skeleton-thumbnail'
-                className='secondary-skeleton-thumbnail'
-              />
+              <>
+                <img
+                  loading='lazy'
+                  src={`${preferred_thumbnail_url ? preferred_thumbnail_url : possible_thumbnail_urls["thumbnailUrl-0"]}`}
+                  alt='skeleton-thumbnail'
+                  className='secondary-skeleton-thumbnail'
+                />
+                <div className='skeleton-timestamp duration-timestamp'>{removeLeadingZero(duration_timestamp)}</div>
+              </>
             )}
           </div>
           <div className='secondary-skeleton-middle'>

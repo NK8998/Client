@@ -45,7 +45,7 @@ export const usePlayerStyles = () => {
     const windowWidth = app.clientWidth;
     const windowHeight = window.innerHeight;
     const gaps = window.innerWidth >= 1041 ? 80 : 46;
-    const maxVideoHeight = (73.5 * window.innerHeight) / 100;
+    const maxVideoHeight = (73.9 * window.innerHeight) / 100;
     const secondaryRefWidth = window.innerWidth >= 1041 ? 400 : 0;
 
     const remainingSpace = windowWidth - (gaps + secondaryRefWidth);
