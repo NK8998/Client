@@ -223,14 +223,14 @@ export default function Player({ videoRef, containerRef }) {
         // });
       });
 
-      playerRef.current.addEventListener("buffering", (event) => {
-        const isBuffering = event.buffering;
-        if (isBuffering) {
-          dispatch(updateBuffering(true));
-        } else if (!isBuffering) {
-          dispatch(updateBuffering(true));
-        }
-      });
+      // playerRef.current.addEventListener("buffering", (event) => {
+      //   const isBuffering = event.buffering;
+      //   if (isBuffering) {
+      //     dispatch(updateBuffering(true));
+      //   } else if (!isBuffering) {
+      //     dispatch(updateBuffering(true));
+      //   }
+      // });
       playerRef.current.addEventListener("adaptation", (value) => {
         const newTrack = value.newTrack.height;
         const { resolutions } = playingVideo;
