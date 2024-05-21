@@ -175,6 +175,9 @@ export const usePlayerDraggingLogic = () => {
   };
 
   const startDrag = (e) => {
+    if (mouseDownTracker.current) {
+      clearTimeout(mouseDownTracker.current);
+    }
     const isTouching = e.touches ? e.touches.length > 0 : false;
     const innerChapterContainerRef = document.querySelector(".chapters-container");
     const videoRef = document.querySelector("#html5-player");

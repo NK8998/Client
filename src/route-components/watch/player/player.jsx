@@ -80,7 +80,7 @@ export default function Player({ videoRef, containerRef }) {
     }
   }, [playingVideo]);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     applyChapterStyles();
   }, [chapters]);
 
@@ -413,7 +413,7 @@ export default function Player({ videoRef, containerRef }) {
           }}
           controls={false}
           onEnded={toPause}
-          onSeeking={handleSeeking}
+          onSeeked={handleSeeking}
         ></video>
         <div className='captions-container-abolute'>
           <div className='captions-container-relative'></div>
