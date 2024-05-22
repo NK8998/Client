@@ -23,6 +23,7 @@ import { debounce } from "lodash";
 
 function App() {
   const credentialsChecked = useSelector((state) => state.app.credentialsChecked);
+  const debounceTime = useSelector((state) => state.app.debounceTime);
   const dispatch = useDispatch();
   const homeRef = useRef();
   const watchRef = useRef();
@@ -55,7 +56,7 @@ function App() {
 
     handleResizing();
 
-    const debouncedVar = debounce(handleResizing, 200);
+    const debouncedVar = debounce(handleResizing, debounceTime);
 
     window.addEventListener("resize", debouncedVar);
   }, [credentialsChecked]);

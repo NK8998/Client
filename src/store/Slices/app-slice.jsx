@@ -15,7 +15,7 @@ const appSlice = createSlice({
     location: "",
     windowWidth: window.innerWidth,
     prefersMini: false,
-    debounceTime: 200,
+    debounceTime: 100,
   },
   reducers: {
     updateRefs: (state, action) => {

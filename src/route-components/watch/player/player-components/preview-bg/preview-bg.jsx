@@ -9,6 +9,7 @@ export default function PreviewBG() {
   const miniPlayer = useSelector((state) => state.watch.miniPlayer);
   const playingVideo = useSelector((state) => state.watch.playingVideo);
   const buffering = useSelector((state) => state.player.buffering);
+  const debounceTime = useSelector((state) => state.app.debounceTime);
   const [updateScrubbingBar, previewCanvas, movePreviews, retrieveCurPalleteAndTile] = usePlayerScrubbingBarInteractions();
   const { aspect_ratio } = playingVideo;
 
@@ -34,7 +35,7 @@ export default function PreviewBG() {
   }, [fullScreen, theatreMode, miniPlayer]);
 
   useLayoutEffect(() => {
-    const debouncedVer = debounce(calculateDimensions, 200);
+    const debouncedVer = debounce(calculateDimensions, debounceTime);
     window.addEventListener("resize", debouncedVer);
 
     return () => {

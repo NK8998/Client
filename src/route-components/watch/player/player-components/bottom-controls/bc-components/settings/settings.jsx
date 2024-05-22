@@ -16,6 +16,7 @@ export default function Settings({ playerRef, checkBufferedOnTrackChange }) {
   const theatreMode = useSelector((state) => state.watch.theatreMode);
   const currentPanel = useSelector((state) => state.player.currentPanel);
   const panel = useSelector((state) => state.player.panel);
+  const debounceTime = useSelector((state) => state.app.debounceTime);
   const settingsRef = useRef();
   const settingsScrollContainer = useRef();
   const mainSettingsRef = useRef();
@@ -40,7 +41,7 @@ export default function Settings({ playerRef, checkBufferedOnTrackChange }) {
       dispatch(handleTranslatingHere(panel, currentPanel, currentPanel));
     };
 
-    const debouncedVer = debounce(resizeEvent, 200);
+    const debouncedVer = debounce(resizeEvent, debounceTime);
 
     window.addEventListener("resize", debouncedVer);
 

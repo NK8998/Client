@@ -13,6 +13,7 @@ import { debounce } from "lodash";
 
 export default function Description() {
   const { description_string, video_id, created_at } = useSelector((state) => state.watch.playingVideo);
+  const debounceTime = useSelector((state) => state.app.debounceTime);
   const location = useSelector((state) => state.app.location);
   const fullScreen = useSelector((state) => state.watch.fullScreen);
   const windowWidth = useSelector((state) => state.app.windowWidth);
@@ -125,7 +126,7 @@ export default function Description() {
 
   useEffect(() => {
     recalculatePosition();
-    const debouncedVer = debounce(recalculatePosition, 200);
+    const debouncedVer = debounce(recalculatePosition, debounceTime);
     window.addEventListener("resize", debouncedVer);
     return () => {
       window.removeEventListener("resize", debouncedVer);

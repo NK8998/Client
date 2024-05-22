@@ -44,6 +44,7 @@ export default function Player({ videoRef, containerRef }) {
   const windowWidth = useSelector((state) => state.app.windowWidth);
   const currentPanel = useSelector((state) => state.player.currentPanel);
   const panel = useSelector((state) => state.player.panel);
+  const debounceTime = useSelector((state) => state.app.debounceTime);
   const { description_string, duration, video_id, mpd_url, isLive, captions_url } = playingVideo;
 
   const chapters = useSelector((state) => state.player.chapters);
@@ -100,7 +101,7 @@ export default function Player({ videoRef, containerRef }) {
   }, [windowWidth, location]);
 
   useEffect(() => {
-    const debouncedVer = debounce(updateStyles, 200);
+    const debouncedVer = debounce(updateStyles, debounceTime);
 
     window.addEventListener("resize", debouncedVer);
 

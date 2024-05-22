@@ -192,9 +192,9 @@ export const handleFullscreen = (fullScreen) => {
       if (!document.fullscreenElement) {
         root.requestFullscreen().then(() => {
           timeout = setTimeout(() => {
-            app.scrollTo({ top: 0, behavior: "instant" });
             dispatch(toggleFullScreen(true));
-          }, 300);
+            app.scrollTo({ top: 0, behavior: "instant" });
+          }, 70);
         });
       }
     } else if (fullScreen) {
@@ -202,7 +202,7 @@ export const handleFullscreen = (fullScreen) => {
         document.exitFullscreen().then(() => {
           timeout = setTimeout(() => {
             dispatch(toggleFullScreen(false));
-          }, 300);
+          }, 70);
         });
       }
     }
