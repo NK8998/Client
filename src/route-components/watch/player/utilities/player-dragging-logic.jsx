@@ -188,8 +188,10 @@ export const usePlayerDraggingLogic = () => {
         const style = getComputedStyle(document.documentElement);
         const currentIndex = parseInt(style.getPropertyValue("--currentChapterIndex").trim());
         document.documentElement.style.setProperty("--hoverChapterIndex", `${currentIndex}`);
-        handleDrag(e.touches[0]);
+        handleClick(e.touches[0]);
+        handleDrag(e.touches);
       } else {
+        handleClick(e);
         handleDrag(e);
       }
       videoRef.pause();

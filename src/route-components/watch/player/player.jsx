@@ -122,6 +122,22 @@ export default function Player({ videoRef, containerRef }) {
   }, [location]);
 
   useLayoutEffect(() => {
+    const videoRef = document.querySelector("#html5-player");
+
+    const handleSeeking = () => {
+      updateProgressBar();
+      updateRedDot();
+      videoRef.removeEventListener("seeking", handleSeeking);
+    };
+
+    videoRef.addEventListener("seeking", handleSeeking);
+
+    return () => {
+      videoRef.removeEventListener("seeking", handleSeeking);
+    };
+  }, [chapters]);
+
+  useLayoutEffect(() => {
     // for browsing in miniplayer mode
     const isWatchpage = window.location.pathname.includes("watch");
 
@@ -368,8 +384,8 @@ export default function Player({ videoRef, containerRef }) {
 
   const handleSeeking = () => {
     if (isDragging.current === true || buffering) return;
-    updateProgressBar();
-    updateRedDot();
+    // updateProgressBar();
+    // updateRedDot();
   };
 
   const updateDurtion = () => {
