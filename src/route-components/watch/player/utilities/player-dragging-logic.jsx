@@ -14,10 +14,8 @@ export const usePlayerDraggingLogic = () => {
   const [checkBufferedOnTrackChange, checkBuffered, clearIntervalOnTrackChange] = usePlayerBufferingState();
   const [updateBufferBar, updateProgressBar] = usePlayerProgressBarLogic();
   const dispatch = useDispatch();
-  const curTime = useRef(Date.now());
   const timeDelay = 140;
   const wasPlaying = useRef(false);
-  const timeoutRef2 = useRef();
 
   const updateRedDot = (currentTimeTracker) => {
     const videoRef = document.querySelector("#html5-player");
@@ -159,7 +157,8 @@ export const usePlayerDraggingLogic = () => {
     const style = getComputedStyle(document.documentElement);
     const hovering = style.getPropertyValue("--hovering").trim();
     const dragTime = parseFloat(style.getPropertyValue("--dragTime").trim());
-    const timeDiff = Date.now() - curTime.current < timeDelay;
+    const curTime = parseInt(style.getPropertyValue("--curTime").trim());
+    const timeDiff = Date.now() - curTime < timeDelay;
     document.documentElement.style.setProperty("--select", "");
 
     scrubbingPreviewContainer.classList.remove("show");
@@ -200,6 +199,7 @@ export const usePlayerDraggingLogic = () => {
     const innerChapterContainerRef = document.querySelector(".chapters-container");
     const videoRef = document.querySelector("#html5-player");
     document.documentElement.style.setProperty("--select", "none");
+    document.documentElement.style.setProperty("--curTime", `${Date.now()}`);
     if (isTouching) {
       handleClick(e.touches[0]);
     } else {
@@ -207,28 +207,23 @@ export const usePlayerDraggingLogic = () => {
     }
 
     wasPlaying.current = !videoRef.paused;
-
-    curTime.current = Date.now();
+    const currentTime = videoRef.currentTime;
     addEventListeners();
+
+    videoRef.pause();
+    dispatch(updatePlay(false));
+    isDragging.current = true;
+    dispatch(updateIsdragging(true));
+
+    const style = getComputedStyle(document.documentElement);
+    const currentIndex = parseInt(style.getPropertyValue("--currentChapterIndex").trim());
+    document.documentElement.style.setProperty("--hoverChapterIndex", `${currentIndex}`);
+
+    clearIntervalOnTrackChange();
+    innerChapterContainerRef.classList.add("drag-expand");
     mouseDownTracker.current = setTimeout(() => {
-      videoRef.pause();
-      dispatch(updatePlay(false));
-      isDragging.current = true;
-      dispatch(updateIsdragging(true));
-
-      if (isTouching) {
-        handleDrag(e.touches);
-
-        const style = getComputedStyle(document.documentElement);
-        const currentIndex = parseInt(style.getPropertyValue("--currentChapterIndex").trim());
-        document.documentElement.style.setProperty("--hoverChapterIndex", `${currentIndex}`);
-      } else {
-        handleDrag(e);
-      }
-
-      clearIntervalOnTrackChange();
+      previewCanvas(currentTime);
       videoRef.style.visibility = "hidden";
-      innerChapterContainerRef.classList.add("drag-expand");
     }, timeDelay);
   };
 

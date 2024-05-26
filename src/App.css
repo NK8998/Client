@@ -60,6 +60,7 @@ body{
     --fullScreenHeight: 0;
     --fullScreenWidth: 0;
     --dragTime: 0;
+    --curTime: 0;
 }
 .flex-content{
     display: flex;

@@ -54,7 +54,7 @@ export default function Description() {
         if (index === 0) {
           line.classList.add("first");
         }
-        if (cumulativeHeight >= 54 && foldIndex === null) {
+        if (cumulativeHeight >= 50 && foldIndex === null) {
           foldIndex = index;
           line.classList.add("fold");
           lastWidth = line.getBoundingClientRect().width;
