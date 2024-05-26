@@ -59,6 +59,7 @@ body{
     --settingsScrollWidth:0;
     --fullScreenHeight: 0;
     --fullScreenWidth: 0;
+    --dragTime: 0;
 }
 .flex-content{
     display: flex;

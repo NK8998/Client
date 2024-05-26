@@ -15,14 +15,14 @@ const highVolumePoints =
 export function toPlay() {
   gsap.to("#svg-play-pause", {
     attr: { d: playPoints },
-    duration: 0.2,
+    duration: 0.4,
   });
 }
 
 export function toPause() {
   gsap.to("#svg-play-pause", {
     attr: { d: pausePoints },
-    duration: 0.2,
+    duration: 0.4,
   });
 }
 

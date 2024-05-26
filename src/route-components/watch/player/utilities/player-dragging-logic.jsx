@@ -2,20 +2,22 @@ import { useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { toPause, toPlay } from "./gsap-animations";
 import { usePlayerScrubbingBarInteractions } from "./player-scrubbingBar-logic";
-import { updateBuffering, updateIsdragging } from "../../../../store/Slices/player-slice";
+import { updateBuffering, updateIsdragging, updatePlay } from "../../../../store/Slices/player-slice";
 import { getTimeStamp } from "../../../../utilities/getTimestamp";
 import { usePlayerProgressBarLogic } from "./player-progressBar-logic";
 
 export const usePlayerDraggingLogic = () => {
   const mouseDownTracker = useRef();
   const isDragging = useRef(false);
-  const currentTimeTracker = useRef(0);
   const chapters = useSelector((state) => state.player.chapters);
-  const play = useSelector((state) => state.player.play);
   const [updateScrubbingBar, previewCanvas, movePreviews] = usePlayerScrubbingBarInteractions();
   const [checkBufferedOnTrackChange, checkBuffered, clearIntervalOnTrackChange] = usePlayerBufferingState();
   const [updateBufferBar, updateProgressBar] = usePlayerProgressBarLogic();
   const dispatch = useDispatch();
+  const curTime = useRef(Date.now());
+  const timeDelay = 140;
+  const wasPlaying = useRef(false);
+  const timeoutRef2 = useRef();
 
   const updateRedDot = (currentTimeTracker) => {
     const videoRef = document.querySelector("#html5-player");
@@ -49,10 +51,8 @@ export const usePlayerDraggingLogic = () => {
   };
 
   const handleClick = (e) => {
-    if (mouseDownTracker.current) {
-      clearTimeout(mouseDownTracker.current);
-    }
     const timeContainer = document.querySelector(".time-left-container");
+    const duration = chapters[chapters.length - 1].end;
     const chapterContainers = document.querySelectorAll(".chapter-hover");
     const videoRef = document.querySelector("#html5-player");
     const redDotRef = document.querySelector(".red-dot");
@@ -63,11 +63,12 @@ export const usePlayerDraggingLogic = () => {
     const position = e.clientX - left;
     const ratio = position / width;
     const timeOffset = ratio * chapterDuration;
-    let currentTime = chapters[currentIndex].start + timeOffset;
+    const currentTime = Math.min(Math.max(chapters[currentIndex].start + timeOffset, 0), duration);
     if (isNaN(currentTime)) {
       return;
     }
     videoRef.currentTime = currentTime;
+    document.documentElement.style.setProperty("--dragTime", `${currentTime}`);
     redDotRef.style.scale = chapters.length === 1 ? 1 : 1.5;
     timeContainer.textContent = getTimeStamp(Math.round(currentTime));
     updateProgressBar();
@@ -90,14 +91,14 @@ export const usePlayerDraggingLogic = () => {
     const position = e.clientX - left;
     const ratio = position / width;
     const timeOffset = ratio * chapterDuration;
-    let currentTime = Math.min(Math.max(chapters[currentIndex].start + timeOffset, 0), duration);
+    const currentTime = Math.min(Math.max(chapters[currentIndex].start + timeOffset, 0), duration);
     if (isNaN(currentTime)) {
       return;
     }
+    document.documentElement.style.setProperty("--dragTime", `${currentTime}`);
 
     previewCanvas(currentTime);
     movePreviews(e, currentIndex);
-    currentTimeTracker.current = currentTime;
 
     redDotRef.style.scale = chapters.length === 1 ? 1 : 1.5;
     chapters.forEach((chapter, index) => {
@@ -116,14 +117,19 @@ export const usePlayerDraggingLogic = () => {
         timeContainer.textContent = getTimeStamp(Math.round(currentTime));
       } else if (chapter.end <= currentTime) {
         progressBarRefs[index].style.width = `100%`;
+        if (currentIndex - index === 0) return;
+
         chapterPadding[index].classList.remove("drag-expand");
         // updateRedDot(currentTime);
       } else {
         progressBarRefs[index].style.width = `0%`;
+        if (currentIndex - index === 0) return;
+
         chapterPadding[index].classList.remove("drag-expand");
         // updateRedDot(currentTime);
       }
     });
+    // chapterPadding[currentIndex].classList.add("drag-expand");
 
     updateRedDot(currentTime);
   };
@@ -132,82 +138,98 @@ export const usePlayerDraggingLogic = () => {
     handleDrag(e.touches[0]); // Use the first touch object
   };
 
+  const removeEventListeners = () => {
+    window.removeEventListener("mousemove", handleDrag);
+    window.removeEventListener("mouseup", stopDragging);
+    window.removeEventListener("touchmove", handleTouchDrag);
+    window.removeEventListener("touchend", stopDragging);
+  };
+
+  const addEventListeners = () => {
+    window.addEventListener("mousemove", handleDrag);
+    window.addEventListener("mouseup", stopDragging);
+    window.addEventListener("touchmove", handleTouchDrag);
+    window.addEventListener("touchend", stopDragging);
+  };
+
   const stopDragging = (e) => {
-    const previewImageBg = document.querySelector(".preview-image-bg");
     const innerChapterContainerRef = document.querySelector(".chapters-container");
     const videoRef = document.querySelector("#html5-player");
     const scrubbingPreviewContainer = document.querySelector(".scrubbing-preview-container");
-
-    document.documentElement.style.setProperty("--select", "");
     const style = getComputedStyle(document.documentElement);
-    if (mouseDownTracker.current) {
-      clearTimeout(mouseDownTracker.current);
-    }
-    videoRef.currentTime = currentTimeTracker.current;
-    isDragging.current = false;
-    scrubbingPreviewContainer.classList.remove("show");
-    if (play) {
-      videoRef.play();
-      toPlay();
-    }
-    window.removeEventListener("touchmove", handleTouchDrag);
-    window.removeEventListener("touchend", stopDragging);
-
-    window.removeEventListener("mousemove", handleDrag);
-    window.removeEventListener("mouseup", stopDragging);
-
     const hovering = style.getPropertyValue("--hovering").trim();
+    const dragTime = parseFloat(style.getPropertyValue("--dragTime").trim());
+    const timeDiff = Date.now() - curTime.current < timeDelay;
+    document.documentElement.style.setProperty("--select", "");
+
+    scrubbingPreviewContainer.classList.remove("show");
+
+    if (mouseDownTracker.current && timeDiff) {
+      clearTimeout(mouseDownTracker.current);
+    } else if (!timeDiff) {
+      videoRef.currentTime = dragTime;
+    }
+
+    if (wasPlaying.current === true) {
+      videoRef.play();
+      dispatch(updatePlay(true));
+    }
+    isDragging.current = false;
+
     if (hovering === "false" || e.touches) {
-      setTimeout(() => {
-        const chaptersContainers = document.querySelectorAll(".chapter-padding");
-        chaptersContainers.forEach((chaptersContainer, index) => {
-          chaptersContainer.classList.remove("drag-expand");
-        });
-      }, 30);
+      const chaptersContainers = document.querySelectorAll(".chapter-padding");
+      chaptersContainers.forEach((chaptersContainer, index) => {
+        chaptersContainer.classList.remove("drag-expand");
+      });
+
       resetDot();
     }
 
     innerChapterContainerRef.classList.remove("drag-expand");
+
     dispatch(updateBuffering(true));
     dispatch(updateIsdragging(false));
     checkBuffered();
     checkBufferedOnTrackChange();
+
+    removeEventListeners();
   };
 
   const startDrag = (e) => {
-    if (mouseDownTracker.current) {
-      clearTimeout(mouseDownTracker.current);
-    }
     const isTouching = e.touches ? e.touches.length > 0 : false;
     const innerChapterContainerRef = document.querySelector(".chapters-container");
     const videoRef = document.querySelector("#html5-player");
     document.documentElement.style.setProperty("--select", "none");
+    if (isTouching) {
+      handleClick(e.touches[0]);
+    } else {
+      handleClick(e);
+    }
+
+    wasPlaying.current = !videoRef.paused;
+
+    curTime.current = Date.now();
+    addEventListeners();
     mouseDownTracker.current = setTimeout(() => {
+      videoRef.pause();
+      dispatch(updatePlay(false));
       isDragging.current = true;
+      dispatch(updateIsdragging(true));
+
       if (isTouching) {
+        handleDrag(e.touches);
+
         const style = getComputedStyle(document.documentElement);
         const currentIndex = parseInt(style.getPropertyValue("--currentChapterIndex").trim());
         document.documentElement.style.setProperty("--hoverChapterIndex", `${currentIndex}`);
-        handleClick(e.touches[0]);
-        handleDrag(e.touches);
       } else {
-        handleClick(e);
         handleDrag(e);
       }
-      videoRef.pause();
-      toPause();
-      dispatch(updateIsdragging(true));
+
       clearIntervalOnTrackChange();
       videoRef.style.visibility = "hidden";
       innerChapterContainerRef.classList.add("drag-expand");
-      if (isTouching) {
-        window.addEventListener("touchmove", handleTouchDrag);
-        window.addEventListener("touchend", stopDragging);
-      } else {
-        window.addEventListener("mousemove", handleDrag);
-        window.addEventListener("mouseup", stopDragging);
-      }
-    }, 140);
+    }, timeDelay);
   };
 
   const resetDot = () => {
@@ -216,7 +238,7 @@ export const usePlayerDraggingLogic = () => {
     redDotRef.style.scale = 0;
   };
 
-  return [startDrag, stopDragging, handleClick, handleDrag, updateRedDot, resetDot, isDragging];
+  return [startDrag, stopDragging, handleClick, handleDrag, updateRedDot, resetDot, isDragging, removeEventListeners];
 };
 
 export const usePlayerBufferingState = () => {

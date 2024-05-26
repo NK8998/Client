@@ -114,7 +114,7 @@
 }
 .player-outer.fullscreen .red-dot-wrapper, .player-outer.fullscreen.theatre .red-dot-wrapper{
   left: -10px;
-  top: 11.5px;
+  top: 12px;
 }
 .player-outer.fullscreen .shaka-text-container, .player-outer.fullscreen.theatre .shaka-text-container{
   font-size: 28px;
@@ -521,7 +521,7 @@
   visibility: hidden;
   background-repeat: no-repeat;
   opacity: 1;
-  transition: opacity 300ms ease;
+  transition: opacity 150ms ease ;
 
 }
 

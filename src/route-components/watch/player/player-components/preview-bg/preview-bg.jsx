@@ -13,9 +13,6 @@ export default function PreviewBG() {
   const [updateScrubbingBar, previewCanvas, movePreviews, retrieveCurPalleteAndTile] = usePlayerScrubbingBarInteractions();
   const { aspect_ratio } = playingVideo;
 
-  const timeoOutRef = useRef();
-  const timeoutRef2 = useRef();
-
   const calculateDimensions = () => {
     if (!buffering) return;
     const previewImageBg = document.querySelector(".preview-image-bg");

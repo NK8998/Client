@@ -80,7 +80,7 @@ export default function Chapters({ videoRef, chapterContainerRef, redDotRef, red
         onMouseOver={handleMouseEnter}
         onMouseMoveCapture={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
-        onClick={handleClick}
+        // onClick={handleClick}
       >
         {chapterEls}
         <div ref={redDotWrapperRef} className='red-dot-wrapper' dataindex={0}>
