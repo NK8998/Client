@@ -508,8 +508,8 @@
   width: var(--theatreWidth);
 }
 .player-outer.fullscreen .preview-image-bg-container, .player-outer.fullscreen.theatre .preview-image-bg-container{
-  height: var(--theatreHeight);
-  width: var(--theatreWidth);
+  height: var(--fullScreenHeight);
+  width: var(--fullScreenWidth);
 }
 .preview-image-bg{
   position: absolute;
@@ -521,7 +521,7 @@
   visibility: hidden;
   background-repeat: no-repeat;
   opacity: 1;
-  transition: opacity 150ms ease ;
+  transition: opacity 300ms ease ;
 
 }
 

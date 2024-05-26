@@ -13,7 +13,7 @@ export const usePlayerDraggingLogic = () => {
   const [checkBufferedOnTrackChange, checkBuffered, clearIntervalOnTrackChange] = usePlayerBufferingState();
   const [updateBufferBar, updateProgressBar] = usePlayerProgressBarLogic();
   const dispatch = useDispatch();
-  const timeDelay = 150;
+  const timeDelay = 180;
   const wasPlaying = useRef(false);
 
   const updateRedDot = (currentTimeTracker) => {
@@ -159,7 +159,6 @@ export const usePlayerDraggingLogic = () => {
     scrubbingPreviewContainer.classList.remove("show");
 
     if (mouseDownTracker.current && timeDiff) {
-      checkBuffered();
       clearTimeout(mouseDownTracker.current);
     }
     videoRef.currentTime = dragTime;
@@ -210,19 +209,17 @@ export const usePlayerDraggingLogic = () => {
     videoRef.pause();
     const currentTime = videoRef.currentTime;
 
-    isDragging.current = true;
-    dispatch(updateIsdragging(true));
-
     const style = getComputedStyle(document.documentElement);
     const currentIndex = parseInt(style.getPropertyValue("--currentChapterIndex").trim());
     document.documentElement.style.setProperty("--hoverChapterIndex", `${currentIndex}`);
 
     clearIntervalOnTrackChange();
     innerChapterContainerRef.classList.add("drag-expand");
-
+    isDragging.current = true;
+    dispatch(updateIsdragging(true));
     mouseDownTracker.current = setTimeout(() => {
-      previewCanvas(currentTime);
       videoRef.style.visibility = "hidden";
+      previewCanvas(currentTime);
     }, timeDelay);
   };
 

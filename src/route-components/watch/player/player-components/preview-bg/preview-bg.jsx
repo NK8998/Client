@@ -32,13 +32,13 @@ export default function PreviewBG() {
   }, [fullScreen, theatreMode, miniPlayer]);
 
   useLayoutEffect(() => {
-    const debouncedVer = debounce(calculateDimensions, debounceTime);
+    const debouncedVer = debounce(calculateDimensions, debounceTime + 5);
     window.addEventListener("resize", debouncedVer);
 
     return () => {
       window.removeEventListener("resize", debouncedVer);
     };
-  }, [buffering, fullScreen]);
+  }, [buffering, fullScreen, theatreMode, miniPlayer]);
   return (
     <div className='preview-image-bg-container'>
       <div className='preview-bg-relative'>
