@@ -1,5 +1,6 @@
 import { useRef } from "react";
 import { useSelector } from "react-redux";
+import { getTimeStamp } from "../../../../utilities/getTimestamp";
 
 export const handleFocusingElements = (isFocusing) => {
   isFocusing.current = !isFocusing.current;
@@ -71,11 +72,18 @@ export const usePlayerProgressBarLogic = () => {
     });
   };
 
-  const updateProgressBar = () => {
+  const updateProgressBar = (curTime) => {
     const videoRef = document.querySelector(".html5-player");
     const redDotRef = document.querySelector(".red-dot");
     const redDotWrapperRef = document.querySelector(".red-dot-wrapper");
-    const currentTime = videoRef.currentTime;
+    const timeContainer = document.querySelector(".time-left-container");
+    let currentTime = videoRef.currentTime;
+    if (curTime && !isNaN(curTime) && typeof curTime === "number") {
+      currentTime = curTime;
+      videoRef.currentTime = curTime;
+    }
+    const timeStamp = getTimeStamp(Math.round(currentTime));
+    timeContainer.textContent = timeStamp;
 
     const progressBarRefs = document.querySelectorAll(".progress.bar");
     const chapterContainers = document.querySelectorAll(".chapter-hover");

@@ -73,9 +73,9 @@ export default function Chapters({ videoRef, chapterContainerRef, redDotRef, red
           updateScrubbingBar(e.touches[0]);
         }}
         onMouseDown={startDrag}
-        onMouseUp={stopDragging}
+        // onMouseUp={stopDragging}
         onTouchStart={startDrag}
-        onTouchEnd={stopDragging}
+        // onTouchEnd={stopDragging}
         onKeyDown={handleKeyDown}
         onMouseOver={handleMouseEnter}
         onMouseMoveCapture={handleMouseEnter}

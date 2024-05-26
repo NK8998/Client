@@ -17,16 +17,6 @@ export const BottomControlsLeft = ({ handlePlayState }) => {
     volumeForm.classList.remove("show");
   };
 
-  const updateTime = () => {
-    if (isDragging.current === true) return;
-    const videoRef = document.querySelector("#html5-player");
-    const timeContainer = document.querySelector(".time-left-container");
-    const currentTime = videoRef.currentTime;
-
-    const timeStamp = getTimeStamp(Math.round(currentTime));
-    timeContainer.textContent = timeStamp;
-  };
-
   useLayoutEffect(() => {
     const params = new URLSearchParams(window.location.search);
     const time = params.get("t") || 0;
@@ -36,15 +26,7 @@ export const BottomControlsLeft = ({ handlePlayState }) => {
 
     const timeStamp = getTimeStamp(Math.round(time));
     timeContainer.textContent = timeStamp;
-
-    const videoRef = document.querySelector("#html5-player");
-
-    videoRef.addEventListener("timeupdate", updateTime);
-
-    return () => {
-      videoRef.removeEventListener("timeupdate", updateTime);
-    };
-  }, [playingVideo, isDragging]);
+  }, [playingVideo, location]);
 
   return (
     <div className='bottom-controls-left' onMouseLeave={handleMouseLeaveControlsLeft}>
