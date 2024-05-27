@@ -80,7 +80,7 @@ export const usePlayerProgressBarLogic = () => {
     let currentTime = videoRef.currentTime;
     if (curTime && !isNaN(curTime) && typeof curTime === "number") {
       currentTime = curTime;
-      // videoRef.currentTime = curTime;
+      videoRef.currentTime = curTime;
     }
     const timeStamp = getTimeStamp(Math.round(currentTime));
     timeContainer.textContent = timeStamp;

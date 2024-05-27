@@ -13,7 +13,7 @@ export const usePlayerDraggingLogic = () => {
   const [checkBufferedOnTrackChange, checkBuffered, clearIntervalOnTrackChange] = usePlayerBufferingState();
   const [updateBufferBar, updateProgressBar] = usePlayerProgressBarLogic();
   const dispatch = useDispatch();
-  const timeDelay = 180;
+  const timeDelay = 220;
   const wasPlaying = useRef(false);
 
   const updateRedDot = (currentTimeTracker) => {
@@ -64,8 +64,6 @@ export const usePlayerDraggingLogic = () => {
     }
     document.documentElement.style.setProperty("--dragTime", `${currentTime}`);
     redDotRef.style.scale = chapters.length === 1 ? 1 : 1.5;
-    updateProgressBar(currentTime);
-    updateRedDot(currentTime);
   };
 
   const handleDrag = (e) => {
@@ -146,6 +144,12 @@ export const usePlayerDraggingLogic = () => {
   };
 
   const stopDragging = (e) => {
+    removeEventListeners();
+    dispatch(updateBuffering(true));
+    dispatch(updateIsdragging(false));
+    isDragging.current = false;
+    checkBuffered();
+    checkBufferedOnTrackChange();
     const innerChapterContainerRef = document.querySelector(".chapters-container");
     const videoRef = document.querySelector("#html5-player");
     const scrubbingPreviewContainer = document.querySelector(".scrubbing-preview-container");
@@ -153,7 +157,7 @@ export const usePlayerDraggingLogic = () => {
     const hovering = style.getPropertyValue("--hovering").trim();
     const dragTime = parseFloat(style.getPropertyValue("--dragTime").trim());
     const curTime = parseInt(style.getPropertyValue("--curTime").trim());
-    const timeDiff = Date.now() - curTime < timeDelay;
+    const timeDiff = Date.now() - curTime <= timeDelay;
     document.documentElement.style.setProperty("--select", "");
 
     scrubbingPreviewContainer.classList.remove("show");
@@ -161,33 +165,21 @@ export const usePlayerDraggingLogic = () => {
     if (mouseDownTracker.current && timeDiff) {
       clearTimeout(mouseDownTracker.current);
     }
+
     videoRef.currentTime = dragTime;
-    // updateProgressBar(dragTime);
-    // updateRedDot(dragTime);
 
     if (wasPlaying.current === true) {
       videoRef.play();
       dispatch(updatePlay(true));
     }
-    isDragging.current = false;
-
     if (hovering === "false" || e.touches) {
-      const chaptersContainers = document.querySelectorAll(".chapter-padding");
-      chaptersContainers.forEach((chaptersContainer, index) => {
-        chaptersContainer.classList.remove("drag-expand");
+      document.querySelectorAll(".chapter-padding.drag-expand").forEach((el) => {
+        el.classList.remove("drag-expand");
       });
-
       resetDot();
     }
 
     innerChapterContainerRef.classList.remove("drag-expand");
-
-    dispatch(updateBuffering(true));
-    dispatch(updateIsdragging(false));
-    checkBuffered();
-    checkBufferedOnTrackChange();
-
-    removeEventListeners();
   };
 
   const startDrag = (e) => {
@@ -197,6 +189,7 @@ export const usePlayerDraggingLogic = () => {
     const videoRef = document.querySelector("#html5-player");
     document.documentElement.style.setProperty("--select", "none");
     document.documentElement.style.setProperty("--curTime", `${Date.now()}`);
+
     addEventListeners(isTouching);
 
     if (isTouching) {
@@ -204,12 +197,14 @@ export const usePlayerDraggingLogic = () => {
     } else {
       handleClick(e);
     }
+    const style = getComputedStyle(document.documentElement);
+    const dragTime = parseFloat(style.getPropertyValue("--dragTime").trim());
+    updateProgressBar(dragTime);
+    updateRedDot(dragTime);
 
     wasPlaying.current = !videoRef.paused;
     videoRef.pause();
     const currentTime = videoRef.currentTime;
-
-    const style = getComputedStyle(document.documentElement);
     const currentIndex = parseInt(style.getPropertyValue("--currentChapterIndex").trim());
     document.documentElement.style.setProperty("--hoverChapterIndex", `${currentIndex}`);
 
