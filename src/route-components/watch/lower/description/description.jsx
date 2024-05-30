@@ -152,9 +152,9 @@ export default function Description() {
         <p> {DateFormatter(created_at)}</p>
       </div>
       <div className='description-lower'>
-        <p className='formatted-string' style={{ pointerEvents: showMore ? "all" : "none" }}>
+        <span className='formatted-string' style={{ pointerEvents: showMore ? "all" : "none" }}>
           {processedLines}
-        </p>
+        </span>
         {showMore && (
           <div className='description-lower-uploader-details'>
             <UploderDetails />

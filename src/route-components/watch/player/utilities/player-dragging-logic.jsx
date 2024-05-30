@@ -148,7 +148,6 @@ export const usePlayerDraggingLogic = () => {
     dispatch(updateBuffering(true));
     dispatch(updateIsdragging(false));
     isDragging.current = false;
-    checkBuffered();
     checkBufferedOnTrackChange();
     const innerChapterContainerRef = document.querySelector(".chapters-container");
     const videoRef = document.querySelector("#html5-player");
