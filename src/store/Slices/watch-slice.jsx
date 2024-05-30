@@ -202,7 +202,7 @@ export const handleFullscreen = (fullScreen) => {
         document.exitFullscreen().then(() => {
           timeout = setTimeout(() => {
             dispatch(toggleFullScreen(false));
-          }, 70);
+          }, 150);
         });
       }
     }

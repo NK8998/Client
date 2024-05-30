@@ -76,15 +76,18 @@ export const usePlayerkeyInteractions = () => {
       }
       fullScreenTimeout.current = setTimeout(() => {
         dispatch(handleFullscreen(fullScreen));
-      }, 100);
+      }, 50);
     }
   };
 
   const handleKeyUp = (e) => {
     const videoRef = document.querySelector("#html5-player");
-    focusViaKeyBoard.current = true;
     const isWatchpage = location.includes("watch") || window.location.pathname.includes("watch");
     const key = e.key.toLowerCase();
+
+    if (key === "tab") {
+      focusViaKeyBoard.current = true;
+    }
 
     if (key === " ") {
       !isHolding.current && handlePlayState();
@@ -112,6 +115,7 @@ export const usePlayerClickInteractions = () => {
 
     dispatch(handleFullscreen(fullScreen));
   };
+
   const handlePlayState = () => {
     const videoRef = document.querySelector("#html5-player");
     if (timeoutClick.current) {
