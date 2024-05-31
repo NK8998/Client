@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { usePlayerScrubbingBarInteractions } from "./player-scrubbingBar-logic";
 import { updateBuffering, updateIsdragging, updatePlay } from "../../../../store/Slices/player-slice";
@@ -87,8 +87,12 @@ export const usePlayerDraggingLogic = () => {
       return;
     }
     document.documentElement.style.setProperty("--dragTime", `${currentTime}`);
+    const curTime = parseInt(style.getPropertyValue("--curTime").trim());
+    const timeDiff = Date.now() - curTime > timeDelay;
 
-    previewCanvas(currentTime);
+    if (timeDiff) {
+      previewCanvas(currentTime);
+    }
     movePreviews(e, currentIndex);
 
     redDotRef.style.scale = chapters.length === 1 ? 1 : 1.5;
@@ -166,6 +170,8 @@ export const usePlayerDraggingLogic = () => {
     }
 
     videoRef.currentTime = dragTime;
+    updateProgressBar(dragTime);
+    updateRedDot(dragTime);
 
     if (wasPlaying.current === true) {
       videoRef.play();
@@ -190,19 +196,21 @@ export const usePlayerDraggingLogic = () => {
     document.documentElement.style.setProperty("--curTime", `${Date.now()}`);
 
     addEventListeners(isTouching);
+    wasPlaying.current = !videoRef.paused;
+
+    videoRef.pause();
 
     if (isTouching) {
       handleClick(e.touches[0]);
     } else {
       handleClick(e);
     }
+
     const style = getComputedStyle(document.documentElement);
     const dragTime = parseFloat(style.getPropertyValue("--dragTime").trim());
     updateProgressBar(dragTime);
     updateRedDot(dragTime);
 
-    wasPlaying.current = !videoRef.paused;
-    videoRef.pause();
     const currentTime = videoRef.currentTime;
     const currentIndex = parseInt(style.getPropertyValue("--currentChapterIndex").trim());
     document.documentElement.style.setProperty("--hoverChapterIndex", `${currentIndex}`);

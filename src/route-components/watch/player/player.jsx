@@ -149,6 +149,17 @@ export default function Player({ videoRef, containerRef }) {
     }
   }, [playingVideo, video_id]);
 
+  useLayoutEffect(() => {
+    const videoRef = document.querySelector(".html5-player");
+    if (videoRef) {
+      const params = new URLSearchParams(window.location.search);
+      const time = params.get("t") || 0;
+      if (time === 0) {
+        videoRef.currentTime = 0;
+      }
+    }
+  }, [playingVideo]);
+
   useEffect(() => {
     handleHover();
     window.addEventListener("keydown", handleKeyPress);

@@ -24,6 +24,7 @@ export default function PreviewBG() {
     const currentTime = videoRef.currentTime;
 
     previewCanvas(currentTime);
+    console.log("I ran in calculateDimensions function");
   };
 
   useLayoutEffect(() => {

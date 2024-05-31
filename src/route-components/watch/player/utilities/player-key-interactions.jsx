@@ -69,14 +69,6 @@ export const usePlayerkeyInteractions = () => {
         videoRef.playbackRate = 2;
         isHolding.current = true;
       }, 250);
-    } else if (key === "f") {
-      if (!isWatchpage) return;
-      if (fullScreenTimeout.current) {
-        clearTimeout(fullScreenTimeout.current);
-      }
-      fullScreenTimeout.current = setTimeout(() => {
-        dispatch(handleFullscreen(fullScreen));
-      }, 50);
     }
   };
 
@@ -87,14 +79,15 @@ export const usePlayerkeyInteractions = () => {
 
     if (key === "tab") {
       focusViaKeyBoard.current = true;
-    }
-
-    if (key === " ") {
+    } else if (key === " ") {
       !isHolding.current && handlePlayState();
       videoRef.playbackRate = 1;
       clearTimeout(timeoutRef2.current);
       timeoutRef2.current = null;
       isHolding.current = false;
+    } else if (key === "f") {
+      if (!isWatchpage) return;
+      dispatch(handleFullscreen(fullScreen));
     }
   };
 

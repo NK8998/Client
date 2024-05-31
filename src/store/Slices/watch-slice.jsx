@@ -194,7 +194,7 @@ export const handleFullscreen = (fullScreen) => {
           timeout = setTimeout(() => {
             dispatch(toggleFullScreen(true));
             app.scrollTo({ top: 0, behavior: "instant" });
-          }, 70);
+          }, 150);
         });
       }
     } else if (fullScreen) {
