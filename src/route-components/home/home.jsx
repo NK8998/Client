@@ -4,7 +4,7 @@ import "./home.css";
 
 export default function Home({ homeRef }) {
   return (
-    <div className='home hidden' ref={homeRef} id='home'>
+    <div className='home' ref={homeRef} id='home' hidden={true}>
       <FilterChipBar />
       <BrowseVideos />
     </div>

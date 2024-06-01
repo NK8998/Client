@@ -18,7 +18,7 @@ export default function Channel({ channelRef }) {
   const timeoutRef = useRef();
 
   if (!location || !currentChannel) {
-    return <div className='channel-content hidden' ref={channelRef} id='channel'></div>;
+    return <div className='channel-content' ref={channelRef} id='channel' hidden={true}></div>;
   }
 
   const tabComponentObjects = [
@@ -44,7 +44,7 @@ export default function Channel({ channelRef }) {
   };
 
   return (
-    <div className='channel-content hidden' ref={channelRef} id='channel'>
+    <div className='channel-content' ref={channelRef} id='channel' hidden={true}>
       <div className='route-buttons'>
         <button onClick={() => handleNavigation(`/${currentChannel}/featured`)}>home</button>
         <button onClick={() => handleNavigation(`/${currentChannel}/videos`)}>videos</button>

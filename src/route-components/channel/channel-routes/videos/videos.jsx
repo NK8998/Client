@@ -14,10 +14,10 @@ export default function Videos() {
     <div className='videos-content dynamic-tab-content'>
       <div className='board'></div>
       <Link
-        to={"/watch?v=A9Bmny46rj2"}
+        to={"/watch?v=A9Bmny46rj2i"}
         onClick={(e) => {
           miniPlayer && e.preventDefault();
-          dispatch(fetchWatchData("A9Bmny46rj2", "/watch?v=A9Bmny46rj2", {}));
+          dispatch(fetchWatchData("A9Bmny46rj2i", "/watch?v=A9Bmny46rj2i", {}));
         }}
       >
         <div className='press me'>press me</div>
