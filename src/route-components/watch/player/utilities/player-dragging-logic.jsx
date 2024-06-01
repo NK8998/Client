@@ -64,6 +64,8 @@ export const usePlayerDraggingLogic = () => {
     }
     document.documentElement.style.setProperty("--dragTime", `${currentTime}`);
     redDotRef.style.scale = chapters.length === 1 ? 1 : 1.5;
+    updateProgressBar(currentTime);
+    updateRedDot(currentTime);
   };
 
   const handleDrag = (e) => {
@@ -95,7 +97,6 @@ export const usePlayerDraggingLogic = () => {
     }
     movePreviews(e, currentIndex);
 
-    redDotRef.style.scale = chapters.length === 1 ? 1 : 1.5;
     chapters.forEach((chapter, index) => {
       if (chapter.start <= currentTime && currentTime < chapter.end) {
         const chapterPaddingLeft = chapterPadding[index].getBoundingClientRect().left;
@@ -126,6 +127,7 @@ export const usePlayerDraggingLogic = () => {
     });
 
     updateRedDot(currentTime);
+    redDotRef.style.scale = chapters.length === 1 ? 1 : 1.5;
   };
 
   const handleTouchDrag = (e) => {
@@ -168,8 +170,8 @@ export const usePlayerDraggingLogic = () => {
     if (mouseDownTracker.current && timeDiff) {
       clearTimeout(mouseDownTracker.current);
     }
-
     videoRef.currentTime = dragTime;
+
     updateProgressBar(dragTime);
     updateRedDot(dragTime);
 
@@ -177,6 +179,7 @@ export const usePlayerDraggingLogic = () => {
       videoRef.play();
       dispatch(updatePlay(true));
     }
+
     if (hovering === "false" || e.touches) {
       document.querySelectorAll(".chapter-padding.drag-expand").forEach((el) => {
         el.classList.remove("drag-expand");
@@ -194,6 +197,7 @@ export const usePlayerDraggingLogic = () => {
     const videoRef = document.querySelector("#html5-player");
     document.documentElement.style.setProperty("--select", "none");
     document.documentElement.style.setProperty("--curTime", `${Date.now()}`);
+    const style = getComputedStyle(document.documentElement);
 
     addEventListeners(isTouching);
     wasPlaying.current = !videoRef.paused;
@@ -205,11 +209,6 @@ export const usePlayerDraggingLogic = () => {
     } else {
       handleClick(e);
     }
-
-    const style = getComputedStyle(document.documentElement);
-    const dragTime = parseFloat(style.getPropertyValue("--dragTime").trim());
-    updateProgressBar(dragTime);
-    updateRedDot(dragTime);
 
     const currentTime = videoRef.currentTime;
     const currentIndex = parseInt(style.getPropertyValue("--currentChapterIndex").trim());

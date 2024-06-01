@@ -51,6 +51,7 @@ export default function Chapters({ videoRef, chapterContainerRef, redDotRef, red
   };
   const handleMouseLeave = () => {
     document.documentElement.style.setProperty("--hovering", `false`);
+
     if (isDragging.current === true) return;
     resetDot();
     const chaptersContainers = document.querySelectorAll(".chapter-padding");
@@ -73,14 +74,11 @@ export default function Chapters({ videoRef, chapterContainerRef, redDotRef, red
           updateScrubbingBar(e.touches[0]);
         }}
         onMouseDown={startDrag}
-        // onMouseUp={stopDragging}
         onTouchStart={startDrag}
-        // onTouchEnd={stopDragging}
         onKeyDown={handleKeyDown}
         onMouseOver={handleMouseEnter}
         onMouseMoveCapture={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
-        // onClick={handleClick}
       >
         {chapterEls}
         <div ref={redDotWrapperRef} className='red-dot-wrapper' dataindex={0}>

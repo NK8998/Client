@@ -563,7 +563,7 @@
 
 @container(max-width: 35em){
   .chapters-absolute{
-    bottom: 42px;
+    bottom: 40px;
   }
   .scrubbing-preview-container{
     bottom: 55px;
