@@ -72,7 +72,7 @@ export default watchSlice.reducer;
 export const fetchWatchData = (videoId, currentRoute, data = {}) => {
   return async (dispatch, getState) => {
     const app = document.querySelector(".app");
-    const currentVideoId = getState().watch.playingVideo.videoId;
+    const currentVideoId = getState().watch.playingVideo.video_id;
     const isFetching = getState().app.isFetching;
     const location = getState().app.location;
     const miniPlayer = getState().watch.miniPlayer;
@@ -121,8 +121,9 @@ export const fetchWatchData = (videoId, currentRoute, data = {}) => {
               dispatch(updateNotFound(false));
               playingVideo = response.data.video;
               dispatch(updatePlayingVideo(response.data.video));
-            } else {
+            } else if (!response.data.video) {
               dispatch(updateNotFound(true));
+              dispatch(updatePlayingVideo({ video_id: videoId, aspect_ratio: 16 / 9, mpd_url: "" }));
             }
 
             if (window.location.pathname.includes("watch")) {

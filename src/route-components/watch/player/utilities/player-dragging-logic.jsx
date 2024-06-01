@@ -51,7 +51,6 @@ export const usePlayerDraggingLogic = () => {
     const style = getComputedStyle(document.documentElement);
     const duration = chapters[chapters.length - 1].end;
     const chapterContainers = document.querySelectorAll(".chapter-hover");
-    const redDotRef = document.querySelector(".red-dot");
     const currentIndex = parseInt(style.getPropertyValue("--hoverChapterIndex").trim());
     const chapterDuration = chapters[currentIndex].end - chapters[currentIndex].start;
     const { left, width } = chapterContainers[currentIndex].getBoundingClientRect();
@@ -63,9 +62,6 @@ export const usePlayerDraggingLogic = () => {
       return;
     }
     document.documentElement.style.setProperty("--dragTime", `${currentTime}`);
-    redDotRef.style.scale = chapters.length === 1 ? 1 : 1.5;
-    updateProgressBar(currentTime);
-    updateRedDot(currentTime);
   };
 
   const handleDrag = (e) => {
@@ -88,7 +84,6 @@ export const usePlayerDraggingLogic = () => {
     if (isNaN(currentTime)) {
       return;
     }
-    document.documentElement.style.setProperty("--dragTime", `${currentTime}`);
     const curTime = parseInt(style.getPropertyValue("--curTime").trim());
     const timeDiff = Date.now() - curTime > timeDelay;
 
@@ -116,18 +111,17 @@ export const usePlayerDraggingLogic = () => {
         if (currentIndex - index === 0) return;
 
         chapterPadding[index].classList.remove("drag-expand");
-        // updateRedDot(currentTime);
       } else {
         progressBarRefs[index].style.width = `0%`;
         if (currentIndex - index === 0) return;
 
         chapterPadding[index].classList.remove("drag-expand");
-        // updateRedDot(currentTime);
       }
     });
 
     updateRedDot(currentTime);
     redDotRef.style.scale = chapters.length === 1 ? 1 : 1.5;
+    document.documentElement.style.setProperty("--dragTime", `${currentTime}`);
   };
 
   const handleTouchDrag = (e) => {
@@ -150,11 +144,6 @@ export const usePlayerDraggingLogic = () => {
   };
 
   const stopDragging = (e) => {
-    removeEventListeners();
-    dispatch(updateBuffering(true));
-    dispatch(updateIsdragging(false));
-    isDragging.current = false;
-    checkBufferedOnTrackChange();
     const innerChapterContainerRef = document.querySelector(".chapters-container");
     const videoRef = document.querySelector("#html5-player");
     const scrubbingPreviewContainer = document.querySelector(".scrubbing-preview-container");
@@ -163,6 +152,7 @@ export const usePlayerDraggingLogic = () => {
     const dragTime = parseFloat(style.getPropertyValue("--dragTime").trim());
     const curTime = parseInt(style.getPropertyValue("--curTime").trim());
     const timeDiff = Date.now() - curTime <= timeDelay;
+
     document.documentElement.style.setProperty("--select", "");
 
     scrubbingPreviewContainer.classList.remove("show");
@@ -172,14 +162,6 @@ export const usePlayerDraggingLogic = () => {
     }
     videoRef.currentTime = dragTime;
 
-    updateProgressBar(dragTime);
-    updateRedDot(dragTime);
-
-    if (wasPlaying.current === true) {
-      videoRef.play();
-      dispatch(updatePlay(true));
-    }
-
     if (hovering === "false" || e.touches) {
       document.querySelectorAll(".chapter-padding.drag-expand").forEach((el) => {
         el.classList.remove("drag-expand");
@@ -188,6 +170,15 @@ export const usePlayerDraggingLogic = () => {
     }
 
     innerChapterContainerRef.classList.remove("drag-expand");
+    removeEventListeners();
+    dispatch(updateBuffering(true));
+    dispatch(updateIsdragging(false));
+    isDragging.current = false;
+    checkBufferedOnTrackChange();
+    if (wasPlaying.current === true) {
+      videoRef.play();
+      dispatch(updatePlay(true));
+    }
   };
 
   const startDrag = (e) => {
@@ -198,26 +189,25 @@ export const usePlayerDraggingLogic = () => {
     document.documentElement.style.setProperty("--select", "none");
     document.documentElement.style.setProperty("--curTime", `${Date.now()}`);
     const style = getComputedStyle(document.documentElement);
-
-    addEventListeners(isTouching);
+    isDragging.current = true;
+    dispatch(updateIsdragging(true));
+    clearIntervalOnTrackChange();
     wasPlaying.current = !videoRef.paused;
-
     videoRef.pause();
 
+    addEventListeners(isTouching);
+
     if (isTouching) {
-      handleClick(e.touches[0]);
+      handleDrag(e.touches[0]);
     } else {
-      handleClick(e);
+      handleDrag(e);
     }
 
     const currentTime = videoRef.currentTime;
     const currentIndex = parseInt(style.getPropertyValue("--currentChapterIndex").trim());
     document.documentElement.style.setProperty("--hoverChapterIndex", `${currentIndex}`);
 
-    clearIntervalOnTrackChange();
     innerChapterContainerRef.classList.add("drag-expand");
-    isDragging.current = true;
-    dispatch(updateIsdragging(true));
     mouseDownTracker.current = setTimeout(() => {
       videoRef.style.visibility = "hidden";
       previewCanvas(currentTime);

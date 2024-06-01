@@ -30,6 +30,7 @@ import { toggleTheatreMode, updatePlayingVideo } from "../../../store/Slices/wat
 import TopVideoComponent from "./player-components/bottom-controls/bc-components/title-component";
 import { Exclamation } from "../../../assets/icons";
 import { debounce } from "lodash";
+import PlayerBanner from "./player-components/player-banner/player-banner";
 
 export default function Player({ videoRef, containerRef }) {
   const dispatch = useDispatch();
@@ -46,13 +47,14 @@ export default function Player({ videoRef, containerRef }) {
   const panel = useSelector((state) => state.player.panel);
   const debounceTime = useSelector((state) => state.app.debounceTime);
   const { description_string, duration, video_id, mpd_url, isLive, captions_url } = playingVideo;
+  const isDragging = useSelector((state) => state.player.isDragging);
 
   const chapters = useSelector((state) => state.player.chapters);
   const play = useSelector((state) => state.player.play);
   const [handleMouseMove, handleHover, handleMouseOut] = usePlayerMouseMove();
   const [updateBufferBar, updateProgressBar] = usePlayerProgressBarLogic();
   const [updateScrubbingBar, previewCanvas, movePreviews] = usePlayerScrubbingBarInteractions();
-  const [startDrag, stopDragging, handleClick, handleDrag, updateRedDot, resetDot, isDragging] = usePlayerDraggingLogic();
+  const [startDrag, stopDragging, handleClick, handleDrag, updateRedDot, resetDot] = usePlayerDraggingLogic();
   const [handleKeyPress, handleKeyUp, focusViaKeyBoard] = usePlayerkeyInteractions();
   const [applyChapterStyles, calculateWidth] = usePlayerStyles();
   const [toggleMiniPlayer] = useMiniPlayermode();
@@ -343,7 +345,7 @@ export default function Player({ videoRef, containerRef }) {
         updateProgressBar();
         updateRedDot();
       }
-    }, 60);
+    }, 80);
   };
 
   const clearIntervalProgress = () => {
@@ -352,12 +354,11 @@ export default function Player({ videoRef, containerRef }) {
   };
 
   useEffect(() => {
-    if (buffering) {
-      clearInterval(intervalRef.current);
-    } else if (!buffering && play) {
+    if (play) {
+      clearIntervalProgress();
       updateProgess();
     }
-  }, [buffering]);
+  }, [isDragging, play]);
 
   const handleContextMenu = (e) => {
     // e.preventDefault();
@@ -380,7 +381,7 @@ export default function Player({ videoRef, containerRef }) {
   };
 
   const handleSeeking = () => {
-    if (isDragging.current === true || buffering) return;
+    // if (isDragging.current === true || buffering) return;
     updateProgressBar();
     updateRedDot();
   };
@@ -418,7 +419,7 @@ export default function Player({ videoRef, containerRef }) {
           onPlay={(e) => {
             toPlay();
             dispatch(updatePlay(true));
-            updateProgess(e);
+            updateProgess();
           }}
           onPause={() => {
             toPause();
@@ -426,7 +427,11 @@ export default function Player({ videoRef, containerRef }) {
             clearIntervalProgress();
           }}
           controls={false}
-          onEnded={toPause}
+          onEnded={() => {
+            updateProgressBar();
+            updateRedDot();
+            updateBufferBar();
+          }}
           onSeeking={handleSeeking}
         ></video>
         <div className='captions-container-abolute'>
@@ -435,11 +440,7 @@ export default function Player({ videoRef, containerRef }) {
         <div className='player-inner-absolute'>
           <PreviewBG />
           <Loader spinnerRef={spinnerRef} />
-          <div className={`processing-banner ${mpd_url ? "hide" : ""}`}>
-            <p className='processing-title'>
-              <Exclamation /> Processing...
-            </p>
-          </div>
+          <PlayerBanner />
           <div className={`player-inner-relative ${!mpd_url ? "processing" : ""}`} ref={controlsRef}>
             <TopVideoComponent />
             <Settings playerRef={playerRef} checkBufferedOnTrackChange={checkBufferedOnTrackChange} />

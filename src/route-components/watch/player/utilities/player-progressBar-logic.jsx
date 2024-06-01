@@ -13,7 +13,6 @@ export const seekVideo = (newTime) => {
 
 export const usePlayerProgressBarLogic = () => {
   const chapters = useSelector((state) => state.player.chapters);
-
   const updateBufferBar = () => {
     const videoRef = document.querySelector(".html5-player");
     const buffered = videoRef.buffered;
@@ -80,7 +79,6 @@ export const usePlayerProgressBarLogic = () => {
     let currentTime = videoRef.currentTime;
     if (curTime && !isNaN(curTime) && typeof curTime === "number") {
       currentTime = curTime;
-      // videoRef.currentTime = curTime;
     }
     const timeStamp = getTimeStamp(Math.round(currentTime));
     timeContainer.textContent = timeStamp;

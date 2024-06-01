@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { fetchWatchData, handleFullscreen, toggleFullScreen } from "./watch-slice";
+import { fetchWatchData, handleFullscreen, toggleFullScreen, updateNotFound } from "./watch-slice";
 import { updateMaxNums } from "./home-slice";
 import { updateSettingsShowing } from "./player-slice";
 
@@ -65,6 +65,7 @@ export default appSlice.reducer;
 export const handleNavigation = (targetRoute) => {
   return (dispatch, getState) => {
     if (!targetRoute.includes("watch")) {
+      dispatch(updateNotFound(false));
       if (document.fullscreenElement) {
         document.exitFullscreen().then(() => {
           dispatch(handleFullscreen(true));

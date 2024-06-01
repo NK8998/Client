@@ -16,6 +16,7 @@ import { useEffect, useLayoutEffect, useRef } from "react";
 import { handleTranslating, handleTranslatingHere, toggleCaptions, updateSettingsShowing } from "../../../../../../store/Slices/player-slice";
 
 export const BottomControlsRight = ({ playerRef }) => {
+  const notFound = useSelector((state) => state.watch.notFound);
   const settingsShowing = useSelector((state) => state.player.settingsShowing);
   const fullScreen = useSelector((state) => state.watch.fullScreen);
   const theatreMode = useSelector((state) => state.watch.theatreMode);
@@ -51,6 +52,7 @@ export const BottomControlsRight = ({ playerRef }) => {
     const key = e.key.toLowerCase();
 
     if (key === "i") {
+      if (notFound) return;
       if (!miniPlayer && !window.location.pathname.includes("watch")) return;
       timeoutRef.current = setTimeout(() => {
         if (!miniPlayer) {
@@ -73,7 +75,7 @@ export const BottomControlsRight = ({ playerRef }) => {
     return () => {
       window.removeEventListener("keyup", handleKeyUp);
     };
-  }, [miniPlayer, lastVisited, isFetching, currentPanel, video_id, miniPlayerBoolean, settingsShowing]);
+  }, [miniPlayer, lastVisited, isFetching, currentPanel, video_id, miniPlayerBoolean, settingsShowing, notFound]);
 
   const removeSettingsOnoutsideClick = (e) => {
     const element = e.target;
