@@ -22,8 +22,6 @@ export const usePlayerkeyInteractions = () => {
   const [handleDoubleClick, handlePlayState] = usePlayerClickInteractions();
   const [startDrag, stopDragging, handleClick, handleDrag, updateRedDot, resetDot, isDragging] = usePlayerDraggingLogic();
   const [checkBufferedOnTrackChange, checkBuffered] = usePlayerBufferingState();
-  const newTime = useRef(0);
-  const timeoutRef3 = useRef();
   const wasPlaying = useRef(false);
 
   const handleKeyPress = (e) => {
@@ -35,18 +33,16 @@ export const usePlayerkeyInteractions = () => {
     const key = e.key.toLowerCase();
     const timeStep = 5;
     wasPlaying.current = !videoRef.paused;
+    const currentTime = videoRef.currentTime;
 
     if (key === "arrowleft") {
-      if (timeoutRef3.current) {
-        clearTimeout(timeoutRef3.current);
-      }
-
-      newTime.current = newTime.current - timeStep;
+      dispatch(updateSeeking(true));
+      seekVideo(currentTime - timeStep);
+      checkBuffered();
     } else if (key === "arrowright") {
-      if (timeoutRef3.current) {
-        clearTimeout(timeoutRef3.current);
-      }
-      newTime.current = newTime.current + timeStep;
+      dispatch(updateSeeking(true));
+      seekVideo(currentTime + timeStep);
+      checkBuffered();
     } else if (key === "t") {
       if (!isWatchpage) return;
       if (theatreTimeOut.current) {
@@ -73,15 +69,7 @@ export const usePlayerkeyInteractions = () => {
     const videoRef = document.querySelector("#html5-player");
     const isWatchpage = location.includes("watch") || window.location.pathname.includes("watch");
     const key = e.key.toLowerCase();
-    const currentTime = videoRef.currentTime;
-
-    if (key === "arrowleft" || key === "arrowright") {
-      timeoutRef3.current = setTimeout(() => {
-        dispatch(updateSeeking(true));
-        seekVideo(newTime.current + currentTime);
-        newTime.current = 0;
-      }, 170);
-    } else if (key === "tab") {
+    if (key === "tab") {
       focusViaKeyBoard.current = true;
     } else if (key === " ") {
       !isHolding.current && handlePlayState();
