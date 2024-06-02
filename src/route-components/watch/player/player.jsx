@@ -129,7 +129,7 @@ export default function Player({ videoRef, containerRef }) {
 
     if (!isWatchpage && miniPlayer) {
       clearIntervalProgress();
-      resetBars();
+
       calculateWidth();
       attatchPlayer();
     }
@@ -141,9 +141,7 @@ export default function Player({ videoRef, containerRef }) {
     attempts.current = 0;
     // for browsing in the watchpage
     if (window.location.pathname.includes("watch")) {
-      resetBars();
       clearIntervalProgress();
-      resetBars();
       calculateWidth();
       attatchPlayer();
     } else {
@@ -292,19 +290,6 @@ export default function Player({ videoRef, containerRef }) {
     }
   };
 
-  const resetBars = () => {
-    // console.log("resetting");
-    const redDotWrapperRef = document.querySelector(".red-dot-wrapper");
-    const scrubbingBarRefs = document.querySelectorAll(".scrubbing.bar");
-    const bufferBarRefs = document.querySelectorAll(".buffer.bar");
-    const progressBarRefs = document.querySelectorAll(".progress.bar");
-    const arr = [...scrubbingBarRefs, ...bufferBarRefs, ...progressBarRefs];
-    arr.forEach((barRef) => {
-      barRef.style.width = `0%`;
-    });
-    redDotWrapperRef.style.transform = `translateX(${0}px)`;
-  };
-
   const detachPlayer = async () => {
     // console.log("run");
     const videoRef = document.querySelector("#html5-player");
@@ -336,16 +321,10 @@ export default function Player({ videoRef, containerRef }) {
       if (!buffering) {
         updateBufferBar();
       }
-      const playerInnerRelative = document.querySelector(".player-inner-relative");
-      const isWatchpage = window.location.pathname.includes("watch");
-      if (!playerInnerRelative.classList.contains("hide") && isWatchpage) {
-        updateProgressBar();
-        updateRedDot();
-      } else if (!isWatchpage) {
-        updateProgressBar();
-        updateRedDot();
-      }
-    }, 80);
+
+      updateProgressBar();
+      updateRedDot();
+    }, 100);
   };
 
   const clearIntervalProgress = () => {
@@ -380,10 +359,27 @@ export default function Player({ videoRef, containerRef }) {
     containerRef.current.classList.remove("focus-via-keyboard");
   };
 
+  const styleTimeout = useRef();
   const handleSeeking = () => {
-    // if (isDragging.current === true || buffering) return;
+    if (styleTimeout.current) {
+      clearTimeout(styleTimeout.current);
+    }
+    const redDotWrapperRef = document.querySelector(".red-dot-wrapper");
+    const progressBarRefs = document.querySelectorAll(".progress.bar");
+
+    progressBarRefs.forEach((bar) => {
+      bar.style.transition = `transform 0ms cubic-bezier(0.075, 0.82, 0.165, 1)`;
+    });
+    redDotWrapperRef.style.transition = `transform 0ms cubic-bezier(0.075, 0.82, 0.165, 1)`;
     updateProgressBar();
     updateRedDot();
+
+    styleTimeout.current = setTimeout(() => {
+      progressBarRefs.forEach((bar) => {
+        bar.style.transition = `transform 100ms cubic-bezier(0.075, 0.82, 0.165, 1)`;
+      });
+      redDotWrapperRef.style.transition = `transform 100ms cubic-bezier(0.075, 0.82, 0.165, 1)`;
+    }, 50);
   };
 
   const updateDurtion = () => {

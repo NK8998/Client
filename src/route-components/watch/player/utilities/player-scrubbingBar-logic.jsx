@@ -140,16 +140,17 @@ export function usePlayerScrubbingBarInteractions() {
         const chapterPaddingLeft = chapterPadding[index].getBoundingClientRect().left;
         const chapterPaddingWidth = chapterPadding[index].getBoundingClientRect().width;
         const chapterWidth = e.clientX - chapterPaddingLeft;
-        scrubbingBarRefs[index].style.width = `${Math.min(chapterWidth, chapterPaddingWidth)}px`;
+        const newRatio = Math.max(Math.min(chapterWidth / chapterPaddingWidth, 1), 0);
+        scrubbingBarRefs[index].style.transform = `scaleX(${newRatio})`;
         document.documentElement.style.setProperty("--hoverChapterIndex", `${index}`);
         chapterTitleContainer.textContent = chapters[index].title;
         movePreviews(e, index);
         chapterPadding[index].classList.add("drag-expand");
       } else if (right <= e.clientX) {
-        scrubbingBarRefs[index].style.width = `100%`;
+        scrubbingBarRefs[index].style.transform = `scaleX(${1})`;
         chapterPadding[index].classList.remove("drag-expand");
       } else {
-        scrubbingBarRefs[index].style.width = `0%`;
+        scrubbingBarRefs[index].style.transform = `scaleX(${0})`;
         chapterPadding[index].classList.remove("drag-expand");
       }
     });

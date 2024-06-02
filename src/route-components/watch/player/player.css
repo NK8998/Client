@@ -103,7 +103,6 @@
   width: calc(100% - 20px);
   padding: 0px 10px;
 }
-.player-outer.fullscreen  .bar, .player-outer.fullscreen.theatre  .bar,
 .player-outer.fullscreen .chapter-padding, .player-outer.fullscreen.theatre .chapter-padding{
   height: 5px;
 }
@@ -260,12 +259,7 @@
   bottom: -5px;
 
 }
-.chapter-hover{
-  height: fit-content;
-  /* background-color: blue; */
-  padding-top: 20px;
 
-}
 /* .chapter-hover:hover > .chapter-padding > .bar{
   transform: scaleY(3);
 
@@ -312,21 +306,36 @@
 }
 
   
-.chapters-container:hover .bar, .chapters-container.drag-expand .bar{
-  transform: scaleY(1.6);
-  
+.chapters-container:hover .chapter-padding, .chapters-container.drag-expand .chapter-padding{
+  transform: scaleY(1.7);
 }
+
+.chapters-container.drag-expand .chapter-padding.drag-expand,
+.chapters-container:hover .chapter-padding.drag-expand{
+  transform: scaleY(3);
+
+}
+
+.chapters-container.single.drag-expand .chapter-padding.drag-expand,
+.chapters-container.single:hover .chapter-padding.drag-expand{
+  transform: scaleY(1.7);
+
+}
+
 .chapters-container:hover .scrubbing{
   visibility: visible;
 }
-.chapter-padding:hover > .bar, .chapter-padding.drag-expand > .bar{
-  transform: scaleY(3);
-  
+
+.chapter-hover{
+  height: 3px;
+  /* background-color: blue; */
+  padding-top: 20px;
+
+
 }
-  
-.chapter-padding.single:hover > .bar, .chapter-padding.single.drag-expand > .bar{
-  transform: scaleY(1.7);
-}
+
+
+
 .chapter-padding{
   --padding: 15px;
   --height: 10px;
@@ -334,37 +343,57 @@
   pointer-events: all;
   /* padding-top: var(--padding); */
   height: 3px;
+  transition: transform 150ms ease;
 }
+
+/* .chapter-hover:hover .chapter-padding.drag-expand,
+.chapter-hover:hover .chapter-padding,
+.chapter-hover:hover > .chapter-padding.drag-expand{
+  transform: scaleY(3);
+}
+
+.chapter-hover.single:hover .chapter-padding.single, 
+.chapter-hover.single:hover .chapter-padding.single.drag-expand,
+.chapter-hover.single:hover > .chapter-padding.single.drag-expand:hover,
+.chapter-padding.single.drag-expand{
+  transform: scaleY(1.7);
+} */
   
   
 .bar{
-  /* width: 100%; */
-  height: 3px;
+  left: 0px;
+  width: 100%;
+  height: 100%;
   position: absolute;
   pointer-events: none;
-  transition: transform 150ms ease;
+  transform-origin: 0 0;
+  /* transition: height 150ms ease;  */
 }
   
 .progress{
   background-color: red;
   z-index: 4;
-  
+  transition: transform 100ms cubic-bezier(0.075, 0.82, 0.165, 1);
+  /* opacity: 0; */
 
 }
 .scrubbing{
   background-color: rgba(212, 212, 212, 0.329);
   z-index: 3;
   visibility: hidden;
+  transition: transform 0ms cubic-bezier(0.075, 0.82, 0.165, 1);
  
 }
 .buffer{
   background-color: rgba(212, 212, 212, 0.582);
   z-index: 2;
+  transition: transform 0ms cubic-bezier(0.075, 0.82, 0.165, 1);
+  /* opacity: 0; */
 }
 .grey-bg{
   background-color: rgba(212, 212, 212, 0.178);
   z-index: 1;
-  width: 100%;
+
   
 }
 .red-dot{
@@ -374,6 +403,7 @@
   background-color: red;
   transition: scale 150ms ease;
   scale: 0;
+  /* visibility: hidden; */
 
 }
 
@@ -384,6 +414,7 @@
   top: 15px;
   left: -6.5px;
   z-index: 5;
+  transition: transform 100ms cubic-bezier(0.075, 0.82, 0.165, 1) ;
 }
 
 

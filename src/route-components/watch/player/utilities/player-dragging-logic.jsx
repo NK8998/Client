@@ -97,7 +97,8 @@ export const usePlayerDraggingLogic = () => {
         const chapterPaddingLeft = chapterPadding[index].getBoundingClientRect().left;
         const chapterPaddingWidth = chapterPadding[index].getBoundingClientRect().width;
         const position = e.clientX - chapterPaddingLeft;
-        progressBarRefs[index].style.width = `${Math.min(Math.max(position, 0), chapterPaddingWidth)}px`;
+        const newRatio = Math.max(Math.min(position / chapterPaddingWidth, 1), 0);
+        progressBarRefs[index].style.transform = `scaleX(${newRatio})`;
         const curIndex = progressBarRefs[index].getAttribute("dataIndex");
         document.documentElement.style.setProperty("--currentChapterIndex", `${curIndex}`);
         document.documentElement.style.setProperty("--hoverChapterIndex", `${curIndex}`);
@@ -107,12 +108,12 @@ export const usePlayerDraggingLogic = () => {
         chapterTitleContainer.textContent = chapters[index].title;
         timeContainer.textContent = getTimeStamp(Math.round(currentTime));
       } else if (chapter.end <= currentTime) {
-        progressBarRefs[index].style.width = `100%`;
+        progressBarRefs[index].style.transform = `scaleX(${1})`;
         if (currentIndex - index === 0) return;
 
         chapterPadding[index].classList.remove("drag-expand");
       } else {
-        progressBarRefs[index].style.width = `0%`;
+        progressBarRefs[index].style.transform = `scaleX(${0})`;
         if (currentIndex - index === 0) return;
 
         chapterPadding[index].classList.remove("drag-expand");
@@ -152,6 +153,8 @@ export const usePlayerDraggingLogic = () => {
     const dragTime = parseFloat(style.getPropertyValue("--dragTime").trim());
     const curTime = parseInt(style.getPropertyValue("--curTime").trim());
     const timeDiff = Date.now() - curTime <= timeDelay;
+    const progressBarRefs = document.querySelectorAll(".progress.bar");
+    const redDotWrapperRef = document.querySelector(".red-dot-wrapper");
 
     document.documentElement.style.setProperty("--select", "");
 
@@ -175,6 +178,11 @@ export const usePlayerDraggingLogic = () => {
     dispatch(updateIsdragging(false));
     isDragging.current = false;
     checkBufferedOnTrackChange();
+    progressBarRefs.forEach((bar) => {
+      bar.style.transition = `transform 100ms cubic-bezier(0.075, 0.82, 0.165, 1)`;
+    });
+    redDotWrapperRef.style.transition = `transform 100ms cubic-bezier(0.075, 0.82, 0.165, 1)`;
+
     if (wasPlaying.current === true) {
       videoRef.play();
       dispatch(updatePlay(true));
@@ -186,9 +194,17 @@ export const usePlayerDraggingLogic = () => {
     const isTouching = e.touches ? e.touches.length > 0 : false;
     const innerChapterContainerRef = document.querySelector(".chapters-container");
     const videoRef = document.querySelector("#html5-player");
+    const progressBarRefs = document.querySelectorAll(".progress.bar");
+    const redDotWrapperRef = document.querySelector(".red-dot-wrapper");
     document.documentElement.style.setProperty("--select", "none");
     document.documentElement.style.setProperty("--curTime", `${Date.now()}`);
     const style = getComputedStyle(document.documentElement);
+
+    progressBarRefs.forEach((bar) => {
+      bar.style.transition = `transform 0ms cubic-bezier(0.075, 0.82, 0.165, 1)`;
+    });
+    redDotWrapperRef.style.transition = `transform 0ms cubic-bezier(0.075, 0.82, 0.165, 1)`;
+
     isDragging.current = true;
     dispatch(updateIsdragging(true));
     clearIntervalOnTrackChange();
@@ -202,15 +218,12 @@ export const usePlayerDraggingLogic = () => {
     } else {
       handleDrag(e);
     }
-
-    const currentTime = videoRef.currentTime;
-    const currentIndex = parseInt(style.getPropertyValue("--currentChapterIndex").trim());
-    document.documentElement.style.setProperty("--hoverChapterIndex", `${currentIndex}`);
+    const dragTime = parseFloat(style.getPropertyValue("--dragTime").trim());
 
     innerChapterContainerRef.classList.add("drag-expand");
     mouseDownTracker.current = setTimeout(() => {
       videoRef.style.visibility = "hidden";
-      previewCanvas(currentTime);
+      previewCanvas(dragTime);
     }, timeDelay);
   };
 

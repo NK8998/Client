@@ -17,9 +17,9 @@ export default function Chapters({ videoRef, chapterContainerRef, redDotRef, red
       <div className={`chapter-hover ${chapters.length === 1 ? "single" : ""}`} dataindex={index} key={`hover-${chapter.title + index}`}>
         <div key={`${chapter.title + index}`} className={`chapter-padding ${chapters.length === 1 ? "single" : ""}`} dataindex={index}>
           <div className='grey-bg bar' dataindex={index}></div>
-          <div className='scrubbing bar' dataindex={index}></div>
-          <div className='buffer bar' dataindex={index}></div>
-          <div className='progress bar' dataindex={index}></div>
+          <div className='scrubbing bar' dataindex={index} style={{ transform: "scaleX(0)" }}></div>
+          <div className='buffer bar' dataindex={index} style={{ transform: "scaleX(0)" }}></div>
+          <div className='progress bar' dataindex={index} style={{ transform: "scaleX(0)" }}></div>
         </div>
       </div>
     );

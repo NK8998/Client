@@ -62,11 +62,12 @@ export const usePlayerProgressBarLogic = () => {
         const { width } = chapterContainers[index].getBoundingClientRect();
         const chapterPaddingWidth = chapterPadding[index].getBoundingClientRect().width;
         const widthInPixels = width * ratio;
-        bufferBar.style.width = `${Math.min(widthInPixels, chapterPaddingWidth)}px`;
+        const newRatio = Math.max(Math.min(widthInPixels / chapterPaddingWidth, 1), 0);
+        bufferBar.style.transform = `scaleX(${newRatio})`;
       } else if (chapter.end < bufferToUse[1]) {
-        bufferBar.style.width = `100%`;
+        bufferBar.style.transform = `scaleX(${1})`;
       } else {
-        bufferBar.style.width = `0%`;
+        bufferBar.style.transform = `scaleX(${0})`;
       }
     });
   };
@@ -76,16 +77,16 @@ export const usePlayerProgressBarLogic = () => {
     const redDotRef = document.querySelector(".red-dot");
     const redDotWrapperRef = document.querySelector(".red-dot-wrapper");
     const timeContainer = document.querySelector(".time-left-container");
+    const progressBarRefs = document.querySelectorAll(".progress.bar");
+    const chapterContainers = document.querySelectorAll(".chapter-hover");
+    const chapterPadding = document.querySelectorAll(".chapter-padding");
+
     let currentTime = videoRef.currentTime;
     if (curTime && !isNaN(curTime) && typeof curTime === "number") {
       currentTime = curTime;
     }
     const timeStamp = getTimeStamp(Math.round(currentTime));
     timeContainer.textContent = timeStamp;
-
-    const progressBarRefs = document.querySelectorAll(".progress.bar");
-    const chapterContainers = document.querySelectorAll(".chapter-hover");
-    const chapterPadding = document.querySelectorAll(".chapter-padding");
 
     if (chapters.length === 0 || !chapters || !progressBarRefs || !chapterContainers || !chapterPadding) return;
     progressBarRefs.forEach((progressBar, index) => {
@@ -100,11 +101,12 @@ export const usePlayerProgressBarLogic = () => {
         const { width } = chapterContainers[index].getBoundingClientRect();
         const chapterPaddingWidth = chapterPadding[index].getBoundingClientRect().width;
         const widthInPixels = width * ratio;
-        progressBar.style.width = `${Math.min(widthInPixels, chapterPaddingWidth)}px`;
+        const newRatio = Math.max(Math.min(widthInPixels / chapterPaddingWidth, 1), 0);
+        progressBar.style.transform = `scaleX(${newRatio})`;
       } else if (chapter.end <= currentTime) {
-        progressBar.style.width = `100%`;
+        progressBar.style.transform = `scaleX(${1})`;
       } else {
-        progressBar.style.width = `0%`;
+        progressBar.style.transform = `scaleX(${0})`;
       }
     });
 

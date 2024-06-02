@@ -40,9 +40,7 @@ export const usePlayerkeyInteractions = () => {
       if (wasPlaying) {
         videoRef.play();
       }
-      updateProgressBar();
       checkBuffered();
-      updateRedDot("");
     };
     if (key === "arrowleft" && currentTime > 0) {
       seekVideo(currentTime - timeStep, videoRef);
