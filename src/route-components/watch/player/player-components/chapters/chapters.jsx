@@ -1,8 +1,10 @@
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { usePlayerMouseMove } from "../../utilities/player-mouse-interactions";
 import { seekVideo, usePlayerProgressBarLogic } from "../../utilities/player-progressBar-logic";
 import { usePlayerScrubbingBarInteractions } from "../../utilities/player-scrubbingBar-logic";
 import { usePlayerDraggingLogic } from "../../utilities/player-dragging-logic";
+import { updateSeeking } from "../../../../../store/Slices/player-slice";
+import { useRef } from "react";
 
 export default function Chapters({ videoRef, chapterContainerRef, redDotRef, redDotWrapperRef, innerChapterContainerRef }) {
   const settingsShowing = useSelector((state) => state.player.settingsShowing);
@@ -11,6 +13,9 @@ export default function Chapters({ videoRef, chapterContainerRef, redDotRef, red
   const [updateBufferBar, updateProgressBar] = usePlayerProgressBarLogic();
   const [updateScrubbingBar, previewCanvas, movePreviews] = usePlayerScrubbingBarInteractions();
   const [startDrag, stopDragging, handleClick, handleDrag, updateRedDot, resetDot, isDragging] = usePlayerDraggingLogic();
+  const dispatch = useDispatch();
+  const newTime = useRef(0);
+  const timeoutRef3 = useRef();
 
   const chapterEls = chapters.map((chapter, index) => {
     return (
@@ -24,25 +29,38 @@ export default function Chapters({ videoRef, chapterContainerRef, redDotRef, red
       </div>
     );
   });
+
   const handleKeyDown = (e) => {
     const key = e.key.toLowerCase();
-    const currentTime = videoRef.current.currentTime;
     const timeStep = 5;
-    let newTime;
-
     if (key === "arrowdown") {
       e.preventDefault();
-
-      newTime = currentTime - timeStep;
-      seekVideo(newTime, videoRef);
+      if (timeoutRef3.current) {
+        clearTimeout(timeoutRef3.current);
+      }
+      newTime.current = newTime.current - timeStep;
     } else if (key === "arrowup") {
       e.preventDefault();
-
-      newTime = currentTime + timeStep;
-      seekVideo(newTime, videoRef);
+      if (timeoutRef3.current) {
+        clearTimeout(timeoutRef3.current);
+      }
+      newTime.current = newTime.current + timeStep;
     }
-    updateProgressBar(chapters);
-    updateRedDot(newTime);
+  };
+  const handleKeyUp = (e) => {
+    const key = e.key.toLowerCase();
+    const videoRef = document.querySelector("#html5-player");
+    const currentTime = videoRef.currentTime;
+
+    if (key === "arrowdown" || key === "arrowup") {
+      e.preventDefault();
+
+      timeoutRef3.current = setTimeout(() => {
+        dispatch(updateSeeking(true));
+        seekVideo(newTime.current + currentTime, videoRef);
+        newTime.current = 0;
+      }, 170);
+    }
   };
   const handleMouseEnter = () => {
     if (settingsShowing) return;
@@ -76,6 +94,7 @@ export default function Chapters({ videoRef, chapterContainerRef, redDotRef, red
         onMouseDown={startDrag}
         onTouchStart={startDrag}
         onKeyDown={handleKeyDown}
+        onKeyUp={handleKeyUp}
         onMouseOver={handleMouseEnter}
         onMouseMoveCapture={handleMouseEnter}
         onMouseLeave={handleMouseLeave}

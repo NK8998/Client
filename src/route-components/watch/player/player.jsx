@@ -18,6 +18,7 @@ import {
   updatePlay,
   updatePreferredRes,
   updateResolution,
+  updateSeeking,
 } from "../../../store/Slices/player-slice";
 import Settings from "./player-components/bottom-controls/bc-components/settings/settings";
 import { usePlayerScrubbingBarInteractions } from "./utilities/player-scrubbingBar-logic";
@@ -48,14 +49,14 @@ export default function Player({ videoRef, containerRef }) {
   const debounceTime = useSelector((state) => state.app.debounceTime);
   const { description_string, duration, video_id, mpd_url, isLive, captions_url } = playingVideo;
   const isDragging = useSelector((state) => state.player.isDragging);
-
   const chapters = useSelector((state) => state.player.chapters);
   const play = useSelector((state) => state.player.play);
+  const seeking = useSelector((state) => state.player.seeking);
   const [handleMouseMove, handleHover, handleMouseOut] = usePlayerMouseMove();
   const [updateBufferBar, updateProgressBar] = usePlayerProgressBarLogic();
   const [updateScrubbingBar, previewCanvas, movePreviews] = usePlayerScrubbingBarInteractions();
   const [startDrag, stopDragging, handleClick, handleDrag, updateRedDot, resetDot] = usePlayerDraggingLogic();
-  const [handleKeyPress, handleKeyUp, focusViaKeyBoard] = usePlayerkeyInteractions();
+  const [handleKeyPress, handleKeyUp, focusViaKeyBoard, wasPlaying] = usePlayerkeyInteractions();
   const [applyChapterStyles, calculateWidth] = usePlayerStyles();
   const [toggleMiniPlayer] = useMiniPlayermode();
   const [toggleTheatre] = useTheatreMode();
@@ -337,7 +338,7 @@ export default function Player({ videoRef, containerRef }) {
       clearIntervalProgress();
       updateProgess();
     }
-  }, [isDragging, play]);
+  }, [isDragging, play, seeking]);
 
   const handleContextMenu = (e) => {
     // e.preventDefault();
@@ -369,18 +370,22 @@ export default function Player({ videoRef, containerRef }) {
 
     progressBarRefs.forEach((bar) => {
       bar.style.transition = `transform 0ms cubic-bezier(0.075, 0.82, 0.165, 1)`;
+      redDotWrapperRef.style.transition = `transform 0ms cubic-bezier(0.075, 0.82, 0.165, 1)`;
     });
-    redDotWrapperRef.style.transition = `transform 0ms cubic-bezier(0.075, 0.82, 0.165, 1)`;
+
     updateProgressBar();
     updateRedDot();
 
     styleTimeout.current = setTimeout(() => {
+      dispatch(updateSeeking(false));
       progressBarRefs.forEach((bar) => {
+        redDotWrapperRef.style.transition = `transform 100ms cubic-bezier(0.075, 0.82, 0.165, 1)`;
         bar.style.transition = `transform 100ms cubic-bezier(0.075, 0.82, 0.165, 1)`;
       });
-      redDotWrapperRef.style.transition = `transform 100ms cubic-bezier(0.075, 0.82, 0.165, 1)`;
-    }, 100);
+    }, 50);
   };
+
+  const handleSeeked = () => {};
 
   const updateDurtion = () => {
     // continue updating the chapters for live content
@@ -429,6 +434,7 @@ export default function Player({ videoRef, containerRef }) {
             updateBufferBar();
           }}
           onSeeking={handleSeeking}
+          onSeeked={handleSeeked}
         ></video>
         <div className='captions-container-abolute'>
           <div className='captions-container-relative'></div>

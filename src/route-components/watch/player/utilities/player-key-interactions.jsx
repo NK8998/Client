@@ -5,6 +5,7 @@ import { seekVideo, usePlayerProgressBarLogic } from "./player-progressBar-logic
 import { usePlayerMouseMove } from "./player-mouse-interactions";
 import { toPause, toPlay } from "./gsap-animations";
 import { usePlayerBufferingState, usePlayerDraggingLogic } from "./player-dragging-logic";
+import { updateSeeking } from "../../../../store/Slices/player-slice";
 
 export const usePlayerkeyInteractions = () => {
   const dispatch = useDispatch();
@@ -21,35 +22,31 @@ export const usePlayerkeyInteractions = () => {
   const [handleDoubleClick, handlePlayState] = usePlayerClickInteractions();
   const [startDrag, stopDragging, handleClick, handleDrag, updateRedDot, resetDot, isDragging] = usePlayerDraggingLogic();
   const [checkBufferedOnTrackChange, checkBuffered] = usePlayerBufferingState();
+  const newTime = useRef(0);
+  const timeoutRef3 = useRef();
+  const wasPlaying = useRef(false);
 
   const handleKeyPress = (e) => {
     const videoRef = document.querySelector("#html5-player");
     const isWatchpage = location.includes("watch") || window.location.pathname.includes("watch");
     if (e.target.tagName === "TEXTAREA" || e.target.tagName === "INPUT") return;
-    // console.log(e.target);
-
     keyDownTime.current = Date.now();
-    let wasPlaying = !videoRef.paused;
 
     const key = e.key.toLowerCase();
-    const currentTime = videoRef.currentTime;
-    const duration = videoRef.duration;
     const timeStep = 5;
+    wasPlaying.current = !videoRef.paused;
 
-    const handlePlayingState = () => {
-      checkBuffered();
-      if (wasPlaying) {
-        videoRef.play();
+    if (key === "arrowleft") {
+      if (timeoutRef3.current) {
+        clearTimeout(timeoutRef3.current);
       }
-    };
-    if (key === "arrowleft" && currentTime > 0) {
-      videoRef.pause();
-      seekVideo(currentTime - timeStep, videoRef);
-      handlePlayingState();
-    } else if (key === "arrowright" && currentTime < duration) {
-      videoRef.pause();
-      seekVideo(currentTime + timeStep, videoRef);
-      handlePlayingState();
+
+      newTime.current = newTime.current - timeStep;
+    } else if (key === "arrowright") {
+      if (timeoutRef3.current) {
+        clearTimeout(timeoutRef3.current);
+      }
+      newTime.current = newTime.current + timeStep;
     } else if (key === "t") {
       if (!isWatchpage) return;
       if (theatreTimeOut.current) {
@@ -76,8 +73,15 @@ export const usePlayerkeyInteractions = () => {
     const videoRef = document.querySelector("#html5-player");
     const isWatchpage = location.includes("watch") || window.location.pathname.includes("watch");
     const key = e.key.toLowerCase();
+    const currentTime = videoRef.currentTime;
 
-    if (key === "tab") {
+    if (key === "arrowleft" || key === "arrowright") {
+      timeoutRef3.current = setTimeout(() => {
+        dispatch(updateSeeking(true));
+        seekVideo(newTime.current + currentTime);
+        newTime.current = 0;
+      }, 170);
+    } else if (key === "tab") {
       focusViaKeyBoard.current = true;
     } else if (key === " ") {
       !isHolding.current && handlePlayState();
@@ -91,7 +95,7 @@ export const usePlayerkeyInteractions = () => {
     }
   };
 
-  return [handleKeyPress, handleKeyUp, focusViaKeyBoard];
+  return [handleKeyPress, handleKeyUp, focusViaKeyBoard, wasPlaying];
 };
 
 export const usePlayerClickInteractions = () => {

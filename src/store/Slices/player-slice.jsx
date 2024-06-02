@@ -14,6 +14,7 @@ const playerSlicer = createSlice({
     buffering: false,
     isDragging: true,
     urlTime: 0,
+    seeking: false,
   },
   reducers: {
     updateResolution: (state, action) => {
@@ -49,6 +50,9 @@ const playerSlicer = createSlice({
     updateUrlTime: (state, action) => {
       state.urlTime = action.payload;
     },
+    updateSeeking: (state, action) => {
+      state.seeking = action.payload;
+    },
   },
 });
 
@@ -64,6 +68,7 @@ export const {
   updateBuffering,
   updateIsdragging,
   updateUrlTime,
+  updateSeeking,
 } = playerSlicer.actions;
 export default playerSlicer.reducer;
 
