@@ -379,7 +379,7 @@ export default function Player({ videoRef, containerRef }) {
         bar.style.transition = `transform 100ms cubic-bezier(0.075, 0.82, 0.165, 1)`;
       });
       redDotWrapperRef.style.transition = `transform 100ms cubic-bezier(0.075, 0.82, 0.165, 1)`;
-    }, 50);
+    }, 100);
   };
 
   const updateDurtion = () => {

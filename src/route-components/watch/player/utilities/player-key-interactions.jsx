@@ -37,15 +37,17 @@ export const usePlayerkeyInteractions = () => {
     const timeStep = 5;
 
     const handlePlayingState = () => {
+      checkBuffered();
       if (wasPlaying) {
         videoRef.play();
       }
-      checkBuffered();
     };
     if (key === "arrowleft" && currentTime > 0) {
+      videoRef.pause();
       seekVideo(currentTime - timeStep, videoRef);
       handlePlayingState();
     } else if (key === "arrowright" && currentTime < duration) {
+      videoRef.pause();
       seekVideo(currentTime + timeStep, videoRef);
       handlePlayingState();
     } else if (key === "t") {
