@@ -35,6 +35,7 @@ import PlayerBanner from "./player-components/player-banner/player-banner";
 
 export default function Player({ videoRef, containerRef }) {
   const dispatch = useDispatch();
+  //
   const location = useSelector((state) => state.app.location);
   const playingVideo = useSelector((state) => state.watch.playingVideo);
   const theatreMode = useSelector((state) => state.watch.theatreMode);
@@ -52,6 +53,7 @@ export default function Player({ videoRef, containerRef }) {
   const chapters = useSelector((state) => state.player.chapters);
   const play = useSelector((state) => state.player.play);
   const seeking = useSelector((state) => state.player.seeking);
+  //
   const [handleMouseMove, handleHover, handleMouseOut] = usePlayerMouseMove();
   const [updateBufferBar, updateProgressBar] = usePlayerProgressBarLogic();
   const [updateScrubbingBar, previewCanvas, movePreviews] = usePlayerScrubbingBarInteractions();
@@ -63,6 +65,7 @@ export default function Player({ videoRef, containerRef }) {
   const [toggleFullScreen] = useFullscreenMode();
   const [handleDoubleClick, handlePlayState] = usePlayerClickInteractions();
   const [checkBufferedOnTrackChange, checkBuffered, clearIntervalOnTrackChange] = usePlayerBufferingState();
+  //
   const playerRef = useRef(null);
   const redDotRef = useRef();
   const redDotWrapperRef = useRef();

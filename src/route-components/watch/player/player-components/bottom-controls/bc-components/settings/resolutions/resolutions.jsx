@@ -16,7 +16,7 @@ export const Resolutions = ({ playerRef, checkBufferedOnTrackChange }) => {
   const resetGreyBars = () => {
     const greyBars = document.querySelectorAll(".bar.buffer");
     greyBars.forEach((bar) => {
-      bar.style.width = `0%`;
+      bar.style.transform = `scaleX(0)`;
     });
   };
 

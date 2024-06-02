@@ -99,28 +99,40 @@ export const fetchWatchData = (videoId, currentRoute, data = {}) => {
 
       return;
     }
-    let playingVideo = {};
     const formData = new FormData();
     formData.append("videoId", videoId);
     if (Object.entries(data).length > 0) {
       dispatch(updateNotFound(false));
-      playingVideo = data;
       dispatch(updateIsFetching());
       dispatch(updatePlayingVideo(data));
+
       if (miniPlayer) return;
       dispatch(handleNavigation("/watch"));
       dispatch(updateLocation(currentRoute));
       app.scrollTo({ top: 0, behavior: "instant" });
       console.log("pushed forward ran");
     } else if (Object.entries(data).length === 0) {
+      console.log("fetched new ran");
       await AxiosFetching("post", "watch-video", formData)
         .then((response) => {
           if (response.data) {
+            dispatch(updatefetchingRecommendations());
+
             dispatch(updateIsFetching());
-            if (response.data.video) {
+            console.log(response.data);
+
+            if (response.data.video && response.data.recommended) {
+              const videoData = response.data.video;
+              shuffleArray(response.data.recommended);
+              const recommendations = response.data.recommended;
+
               dispatch(updateNotFound(false));
-              playingVideo = response.data.video;
-              dispatch(updatePlayingVideo(response.data.video));
+              dispatch(updatePlayingVideo(videoData));
+
+              const newVideoObject = { videoId: videoId, recommendations: recommendations, videoData: videoData };
+              dispatch(updateRecommendedVideosWatch(recommendations));
+              dispatch(updateRetrievedVideos(newVideoObject));
+              dispatch(updatefetchingRecommendations());
             } else if (!response.data.video) {
               dispatch(updateNotFound(true));
               dispatch(updatePlayingVideo({ video_id: videoId, aspect_ratio: 16 / 9, mpd_url: "" }));
@@ -128,6 +140,7 @@ export const fetchWatchData = (videoId, currentRoute, data = {}) => {
 
             if (window.location.pathname.includes("watch")) {
               if (miniPlayer) return;
+
               dispatch(handleNavigation("/watch"));
               dispatch(updateLocation(currentRoute));
               app.scrollTo({ top: 0, behavior: "instant" });
@@ -139,32 +152,7 @@ export const fetchWatchData = (videoId, currentRoute, data = {}) => {
           console.error(error);
           // update fetching error and display error component
         });
-      console.log("fetched new ran");
     }
-
-    if (Object.entries(playingVideo).length === 0) return;
-
-    const isWatchPage = location.includes("watch");
-    if (!isWatchPage) {
-      dispatch(updatefetchingRecommendations());
-    }
-    AxiosFetching("get", "browse", {})
-      .then((response) => {
-        if (response.data) {
-          shuffleArray(response.data);
-          const newVideoObject = { videoId: videoId, recommendations: response.data, videoData: playingVideo };
-          dispatch(updateRecommendedVideosWatch(response.data));
-          dispatch(updateRetrievedVideos(newVideoObject));
-          if (!isWatchPage) {
-            dispatch(updatefetchingRecommendations());
-          }
-        }
-      })
-      .catch((error) => {
-        console.error(error);
-        dispatch(updatefetchingRecommendations());
-        // update fetching error and display error component
-      });
   };
 };
 
