@@ -3,13 +3,15 @@ import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { convertToSeconds } from "../../player/player-components/chapters/chaptersGen";
 import { usePlayerProgressBarLogic } from "../../player/utilities/player-progressBar-logic";
-import { usePlayerBufferingState, usePlayerDraggingLogic } from "../../player/utilities/player-dragging-logic";
+import { usePlayerBufferingState } from "../../player/utilities/player-dragging-logic";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { formatCount, generateRandomInteger } from "../../../../utilities/fomatCount";
 import UploderDetails from "../lower-interactions/uploader-details";
 import { DateFormatter } from "../../../../utilities/date-formatter";
 import UserRoleInfo from "./user-role-info";
 import { debounce } from "lodash";
+import { useDispatch } from "react-redux";
+import { updateSeeking } from "../../../../store/Slices/player-slice";
 
 export default function Description() {
   const { description_string, video_id, created_at } = useSelector((state) => state.watch.playingVideo);
@@ -18,19 +20,19 @@ export default function Description() {
   const fullScreen = useSelector((state) => state.watch.fullScreen);
   const windowWidth = useSelector((state) => state.app.windowWidth);
   const [updateBufferBar, updateProgressBar] = usePlayerProgressBarLogic();
-  const [startDrag, stopDragging, handleClick, handleDrag, updateRedDot, resetDot, isDragging] = usePlayerDraggingLogic();
   const [checkBufferedOnTrackChange, checkBuffered, clearIntervalOnTrackChange] = usePlayerBufferingState();
   const [showMore, setShowMore] = useState(false);
   const showMoreButton = useRef();
+  const dispatch = useDispatch();
 
   const handleChapterClick = (e, time) => {
+    dispatch(updateSeeking(true));
     e.preventDefault();
     const videoRef = document.querySelector("#html5-player");
     if (!videoRef || !time) return;
 
     videoRef.currentTime = time;
-    updateProgressBar();
-    updateRedDot();
+
     checkBufferedOnTrackChange();
   };
   const recalculatePosition = () => {

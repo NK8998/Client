@@ -4,7 +4,9 @@
 ############################################
 ############################################
 ############################################
-Make epxort components for each logic bundle and switch to complete dom querying. Move chapters to redux store!!
+Figure out what's causing the toggling of the bg-preview. Should not be happening
+Function gets called when I stop dragging. Doesn't happen when buffering
+Remove the buffering logic and rely on shaka's buffering event listener.
 ############################
 ############################################
 ############################################

@@ -242,6 +242,8 @@ export const usePlayerBufferingState = () => {
   const isDragging = useSelector((state) => state.player.isDragging);
 
   const checkBufferedOnTrackChange = () => {
+    if (isDragging) return;
+
     if (timeIntervalRef.current) {
       clearInterval(timeIntervalRef.current);
     }
@@ -258,6 +260,7 @@ export const usePlayerBufferingState = () => {
   };
 
   const checkBuffered = () => {
+    if (isDragging) return;
     const videoRef = document.querySelector("#html5-player");
     const spinnerRef = document.querySelector(".player-spinner");
     const previewImageBg = document.querySelector(".preview-image-bg");
