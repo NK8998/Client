@@ -136,6 +136,7 @@ export const fetchWatchData = (videoId, currentRoute, data = {}) => {
             } else if (!response.data.video) {
               dispatch(updateNotFound(true));
               dispatch(updatePlayingVideo({ video_id: videoId, aspect_ratio: 16 / 9, mpd_url: "" }));
+              dispatch(updatefetchingRecommendations());
             }
 
             if (window.location.pathname.includes("watch")) {
@@ -149,6 +150,7 @@ export const fetchWatchData = (videoId, currentRoute, data = {}) => {
         })
         .catch((error) => {
           dispatch(updateIsFetching());
+          dispatch(updatefetchingRecommendations());
           console.error(error);
           // update fetching error and display error component
         });

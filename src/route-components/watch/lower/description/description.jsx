@@ -33,7 +33,7 @@ export default function Description() {
 
     videoRef.currentTime = time;
 
-    checkBufferedOnTrackChange();
+    checkBuffered();
   };
   const recalculatePosition = () => {
     requestAnimationFrame(() => {

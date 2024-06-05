@@ -242,11 +242,23 @@ export default function Player({ videoRef, containerRef }) {
       });
 
       // playerRef.current.addEventListener("buffering", (event) => {
+      //   const spinnerRef = document.querySelector(".player-spinner");
+      //   const previewImageBg = document.querySelector(".preview-image-bg");
+      //   const previewImageBgContainer = document.querySelector(".preview-bg-relative");
+      //   const videoRef = document.querySelector("#html5-player");
+
       //   const isBuffering = event.buffering;
+      //   console.log(isBuffering);
       //   if (isBuffering) {
       //     dispatch(updateBuffering(true));
+      //     spinnerRef.classList.add("visible");
       //   } else if (!isBuffering) {
-      //     dispatch(updateBuffering(true));
+      //     dispatch(updateBuffering(false));
+      //     previewImageBg.classList.remove("show");
+      //     previewImageBgContainer.classList.remove("darken");
+      //     videoRef.style.visibility = "visible";
+
+      //     spinnerRef.classList.remove("visible");
       //   }
       // });
       playerRef.current.addEventListener("adaptation", (value) => {

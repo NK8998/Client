@@ -242,12 +242,9 @@ export const usePlayerBufferingState = () => {
   const isDragging = useSelector((state) => state.player.isDragging);
 
   const checkBufferedOnTrackChange = () => {
-    if (isDragging) return;
-
     if (timeIntervalRef.current) {
       clearInterval(timeIntervalRef.current);
     }
-
     timeIntervalRef.current = setInterval(() => {
       checkBuffered();
     }, 80);
@@ -260,27 +257,21 @@ export const usePlayerBufferingState = () => {
   };
 
   const checkBuffered = () => {
-    if (isDragging) return;
     const videoRef = document.querySelector("#html5-player");
     const spinnerRef = document.querySelector(".player-spinner");
     const previewImageBg = document.querySelector(".preview-image-bg");
     const previewImageBgContainer = document.querySelector(".preview-bg-relative");
 
     if (!videoRef) return;
-    const video = videoRef;
-    const currentTime = video.currentTime;
-    const buffered = video.buffered;
+    const currentTime = videoRef.currentTime;
+    const buffered = videoRef.buffered;
     if (buffered.length > 0) {
-      // const lastBufferIndex = buffered.length - 1;
-      // const end = buffered.end(lastBufferIndex);
-
       const bufferGroups = [];
       let currentGroup = [buffered.start(0), buffered.end(0)];
 
       for (let i = 0; i < buffered.length; i++) {
         const start = buffered.start(i);
         const end = buffered.end(i);
-        // console.log({ start: start }, { end: end });
 
         if (start - currentGroup[1] <= 1) {
           currentGroup[1] = end;
@@ -312,8 +303,8 @@ export const usePlayerBufferingState = () => {
         }
         spinnerRef.classList.remove("visible");
         dispatch(updateBuffering(false));
-        if (timeIntervalRef) {
-          clearInterval(timeIntervalRef);
+        if (timeIntervalRef.current) {
+          clearInterval(timeIntervalRef.current);
         }
       } else if (currentTime > end || end - currentTime < 0) {
         spinnerRef.classList.add("visible");
