@@ -17,7 +17,6 @@ export const usePlayerDraggingLogic = () => {
   const wasPlaying = useRef(false);
 
   const updateRedDot = () => {
-    const videoRef = document.querySelector("#html5-player");
     const duration = chapters[chapters.length - 1].end;
     const redDotWrapperRef = document.querySelector(".red-dot-wrapper");
     const innerChapterContainerRef = document.querySelector(".chapters-container");
@@ -89,8 +88,6 @@ export const usePlayerDraggingLogic = () => {
 
     chapters.forEach((chapter, index) => {
       if (chapter.start <= currentTime && currentTime < chapter.end) {
-        console.log(currentTime, chapter.start, chapter.end, index);
-
         const chapterPaddingLeft = chapterPadding[index].getBoundingClientRect().left;
         const chapterPaddingWidth = chapterPadding[index].getBoundingClientRect().width;
         const position = e.clientX - chapterPaddingLeft;
@@ -106,12 +103,10 @@ export const usePlayerDraggingLogic = () => {
         timeContainer.textContent = getTimeStamp(Math.round(currentTime));
       } else if (chapter.end <= currentTime) {
         progressBarRefs[index].style.transform = `scaleX(${1})`;
-        if (currentIndex - index === 0) return;
 
         chapterPadding[index].classList.remove("drag-expand");
       } else {
         progressBarRefs[index].style.transform = `scaleX(${0})`;
-        if (currentIndex - index === 0) return;
 
         chapterPadding[index].classList.remove("drag-expand");
       }
