@@ -61,7 +61,7 @@ export const usePlayerDraggingLogic = () => {
   const handleDrag = (e) => {
     const timeContainer = document.querySelector(".time-left-container");
     const duration = chapters[chapters.length - 1].end;
-    const chapterTitleContainer = document.querySelector(".chapter-title-container");
+    const chapterTitleContainers = document.querySelectorAll(".chapter-title-container");
     const redDotRef = document.querySelector(".red-dot");
     const redDotWrapperRef = document.querySelector(".red-dot-wrapper");
     const style = getComputedStyle(document.documentElement);
@@ -99,7 +99,9 @@ export const usePlayerDraggingLogic = () => {
         redDotRef.setAttribute("dataIndex", `${curIndex}`);
         redDotWrapperRef.setAttribute("dataIndex", `${curIndex}`);
         chapterPadding[index].classList.add("drag-expand");
-        chapterTitleContainer.textContent = chapters[index].title;
+        chapterTitleContainers.forEach((chapterTitleContainer) => {
+          chapterTitleContainer.textContent = chapters[index].title;
+        });
         timeContainer.textContent = getTimeStamp(Math.round(currentTime));
       } else if (chapter.end <= currentTime) {
         progressBarRefs[index].style.transform = `scaleX(${1})`;

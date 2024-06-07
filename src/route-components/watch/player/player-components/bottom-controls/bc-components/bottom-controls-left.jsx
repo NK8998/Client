@@ -1,5 +1,5 @@
 import { useEffect, useLayoutEffect } from "react";
-import { ForwardButton, PlayPauseButton } from "../../../../../../assets/icons";
+import { ArrowRightBottomControls, ForwardButton, PlayPauseButton } from "../../../../../../assets/icons";
 import { usePlayerMouseMove } from "../../../utilities/player-mouse-interactions";
 import VolumeSlider from "./slider";
 import { getTimeStamp, removeLeadingZero } from "../../../../../../utilities/getTimestamp";
@@ -8,6 +8,7 @@ import { usePlayerDraggingLogic } from "../../../utilities/player-dragging-logic
 
 export const BottomControlsLeft = ({ handlePlayState }) => {
   const playingVideo = useSelector((state) => state.watch.playingVideo);
+  const chapters = useSelector((state) => state.player.chapters);
   const [startDrag, stopDragging, handleClick, handleDrag, updateRedDot, resetDot, isDragging] = usePlayerDraggingLogic();
 
   const { duration_timestamp } = playingVideo;
@@ -42,6 +43,11 @@ export const BottomControlsLeft = ({ handlePlayState }) => {
         <p className='time-middle-container'>/</p>
         <p className='time-right-container'>{duration_timestamp && removeLeadingZero(duration_timestamp)}</p>
       </div>
+      <button className={`player-button chapter-title ${chapters.length <= 1 ? "single" : ""}`}>
+        <div className='floating-dot'></div>
+        <p className='chapter-title-container bottom'></p>
+        <ArrowRightBottomControls />
+      </button>
     </div>
   );
 };

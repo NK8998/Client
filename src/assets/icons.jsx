@@ -339,3 +339,11 @@ export const VideoIcon = () => {
     </svg>
   );
 };
+
+export const ArrowRightBottomControls = () => {
+  return (
+    <svg xmlns='http://www.w3.org/2000/svg' height='24px' viewBox='0 -960 960 960' width='24px' fill='#000000'>
+      <path d='m308-65.33-72.67-73.34L579-482.33 235.33-826 308-898.67l416.33 416.34L308-65.33Z' />
+    </svg>
+  );
+};

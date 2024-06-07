@@ -22,9 +22,22 @@
   }
 
   .player-outer.fullscreen  .bottom-controls, .player-outer.fullscreen.theatre  .bottom-controls{
-    height: 54px;
+    height: 60px;
     width: calc(100% - 44px);
     padding: 0px 22px;
+  }
+
+  
+  .player-outer.fullscreen  .player-button.chapter-title, .player-outer.fullscreen.theatre  .player-button.chapter-title{
+    width: fit-content;
+  
+  }
+
+  .player-outer.fullscreen  .player-button.chapter-title > p, .player-outer.fullscreen.theatre  .player-button.chapter-title > p{
+    font-size: 18.5px;
+    max-width: calc(var(--fullScreenWidth) / 3);
+    
+  
   }
 
   .player-outer.fullscreen  .SliderRoot, .player-outer.fullscreen.theatre  .SliderRoot{
@@ -70,6 +83,38 @@
     box-shadow: 0 0 0 2px inset var(--outline-color); 
   }
 
+  .player-button.chapter-title.single{
+    visibility: hidden;
+  }
+  .player-button.chapter-title{
+   
+    width: fit-content;
+    padding-left: 10px;
+    display: flex;
+    gap: 10px;
+    align-items: center;
+  }
+  .player-button.chapter-title > p{
+    white-space: nowrap;
+    font-size: 13.4px;
+    color: rgb(199, 199, 199);
+    padding: unset;
+    max-width: calc(var(--width) / 3);
+    overflow: hidden;
+    text-overflow: ellipsis;
+
+  }
+  .player-button.chapter-title .floating-dot{
+    height: 4px;
+    width: 4px;
+    border-radius: 100%;
+    background-color: rgb(199, 199, 199);
+    
+  }
+  .player-button.chapter-title svg{
+    height: 14px;
+    width: 14px;
+  }
   .player-button.play-pause{
     width: 45px;
     /* transform: scale(0.95); */
@@ -154,7 +199,7 @@ form.volume-slider{
 .SliderRange {
   position: absolute;
   background-color: white;
-  border-radius: 9999px;
+  /* border-radius: 9999px; */
   height: 100%;
   pointer-events: none;
 }
@@ -239,5 +284,12 @@ form.volume-slider{
   .player-button.player-button.play-pause,
   .player-button{
     width: 35px;
+  }
+
+}
+
+@container(max-width: 50em){
+  .player-button.chapter-title > p{
+    max-width: 20px;
   }
 }

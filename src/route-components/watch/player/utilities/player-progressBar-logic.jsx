@@ -80,6 +80,7 @@ export const usePlayerProgressBarLogic = () => {
     const progressBarRefs = document.querySelectorAll(".progress.bar");
     const chapterContainers = document.querySelectorAll(".chapter-hover");
     const chapterPadding = document.querySelectorAll(".chapter-padding");
+    const chapterTitleContainer = document.querySelector(".chapter-title-container.bottom");
 
     let currentTime = videoRef.currentTime;
     if (curTime && !isNaN(curTime) && typeof curTime === "number") {
@@ -103,6 +104,7 @@ export const usePlayerProgressBarLogic = () => {
         const widthInPixels = width * ratio;
         const newRatio = Math.max(Math.min(widthInPixels / chapterPaddingWidth, 1), 0);
         progressBar.style.transform = `scaleX(${newRatio})`;
+        chapterTitleContainer.textContent = chapters[index].title;
       } else if (chapter.end <= currentTime) {
         progressBar.style.transform = `scaleX(${1})`;
       } else {
