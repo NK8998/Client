@@ -16,21 +16,16 @@ export const usePlayerDraggingLogic = () => {
   const timeDelay = 220;
   const wasPlaying = useRef(false);
 
-  const updateRedDot = (currentTimeTracker) => {
+  const updateRedDot = () => {
     const videoRef = document.querySelector("#html5-player");
     const duration = chapters[chapters.length - 1].end;
     const redDotWrapperRef = document.querySelector(".red-dot-wrapper");
     const innerChapterContainerRef = document.querySelector(".chapters-container");
-    let currentTime;
-    if (typeof currentTimeTracker === "number") {
-      currentTime = currentTimeTracker;
-    } else {
-      currentTime = videoRef.currentTime;
-    }
+    const style = getComputedStyle(document.documentElement);
+    const currentTime = parseFloat(style.getPropertyValue("--dragTime").trim());
 
     if (currentTime >= 0 && currentTime <= duration) {
       const progressBarRefs = document.querySelectorAll(".progress.bar");
-      const style = getComputedStyle(document.documentElement);
       const currentIndex = parseInt(style.getPropertyValue("--currentChapterIndex").trim());
       let progressBarRight = progressBarRefs[currentIndex]?.getBoundingClientRect().right;
       if (!progressBarRight) {
@@ -57,7 +52,7 @@ export const usePlayerDraggingLogic = () => {
     const position = e.clientX - left;
     const ratio = position / width;
     const timeOffset = ratio * chapterDuration;
-    const currentTime = Math.min(Math.max(chapters[currentIndex].start + timeOffset, 0), duration);
+    const currentTime = Math.min(Math.max(chapters[currentIndex].start + timeOffset, 0), duration - 0.1);
     if (isNaN(currentTime)) {
       return;
     }
@@ -80,7 +75,7 @@ export const usePlayerDraggingLogic = () => {
     const position = e.clientX - left;
     const ratio = position / width;
     const timeOffset = ratio * chapterDuration;
-    const currentTime = Math.min(Math.max(chapters[currentIndex].start + timeOffset, 0), duration);
+    const currentTime = Math.min(Math.max(chapters[currentIndex].start + timeOffset, 0), duration - 0.1);
     if (isNaN(currentTime)) {
       return;
     }
@@ -94,6 +89,8 @@ export const usePlayerDraggingLogic = () => {
 
     chapters.forEach((chapter, index) => {
       if (chapter.start <= currentTime && currentTime < chapter.end) {
+        console.log(currentTime, chapter.start, chapter.end, index);
+
         const chapterPaddingLeft = chapterPadding[index].getBoundingClientRect().left;
         const chapterPaddingWidth = chapterPadding[index].getBoundingClientRect().width;
         const position = e.clientX - chapterPaddingLeft;
@@ -120,7 +117,7 @@ export const usePlayerDraggingLogic = () => {
       }
     });
 
-    updateRedDot(currentTime);
+    updateRedDot();
     redDotRef.style.scale = chapters.length === 1 ? 1 : 1.5;
     document.documentElement.style.setProperty("--dragTime", `${currentTime}`);
   };
