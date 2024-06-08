@@ -51,9 +51,9 @@ export const useMiniPlayermode = () => {
         layoutShiftRef.current = setTimeout(() => {
           calculateWidth();
           applyChapterStyles();
-          updateBufferBar();
-          updateProgressBar();
-          updateRedDot("");
+          // updateBufferBar();
+          // updateProgressBar();
+          updateRedDot();
           controlsRef.classList.remove("transition");
           handleMouseMove();
         }, 50);
@@ -79,9 +79,9 @@ export const useMiniPlayermode = () => {
       videoRef.classList.add("miniplayer");
 
       requestAnimationFrame(() => {
-        updateBufferBar();
-        updateProgressBar();
-        updateRedDot("");
+        //   updateBufferBar();
+        //   updateProgressBar();
+        updateRedDot();
       });
     }
   };
@@ -94,8 +94,6 @@ export const useTheatreMode = () => {
   const [applyChapterStyles, calculateWidth] = usePlayerStyles();
   const theatreMode = useSelector((state) => state.watch.theatreMode);
   const [updateBufferBar, updateProgressBar] = usePlayerProgressBarLogic();
-  const fullScreen = useSelector((state) => state.watch.fullScreen);
-  const location = useSelector((state) => state.app.location);
 
   const toggleTheatre = () => {
     // console.log("toggletheatre ran");
@@ -123,10 +121,10 @@ export const useTheatreMode = () => {
       containerRef.classList.add("theatre");
       applyChapterStyles();
       calculateWidth();
-      updateBufferBar();
-      updateProgressBar();
+      // updateBufferBar();
+      // updateProgressBar();
 
-      updateRedDot("");
+      updateRedDot();
       toTheatre();
     } else if (primaryRef && !Array.from(primaryRef.children).includes(containerRef) && !theatreMode) {
       if (Array.from(expandedContainerRef.children).includes(containerRef)) {
@@ -142,9 +140,9 @@ export const useTheatreMode = () => {
       secondary.classList.remove("theatre");
       applyChapterStyles();
       calculateWidth();
-      updateBufferBar();
-      updateProgressBar();
-      updateRedDot("");
+      // updateBufferBar();
+      // updateProgressBar();
+      updateRedDot();
       toNormal();
     }
   };
@@ -159,7 +157,6 @@ export const useFullscreenMode = () => {
   const theatreMode = useSelector((state) => state.watch.theatreMode);
   const location = useSelector((state) => state.app.location);
   const fullScreen = useSelector((state) => state.watch.fullScreen);
-  const dispatch = useDispatch();
 
   const handleScrollPosition = (e) => {
     const app = document.querySelector(".app");
@@ -238,9 +235,9 @@ export const useFullscreenMode = () => {
 
       applyChapterStyles();
       requestAnimationFrame(() => {
-        updateProgressBar();
-        updateBufferBar();
-        updateRedDot("");
+        //   updateProgressBar();
+        //   updateBufferBar();
+        updateRedDot();
       });
 
       root.classList.add("fullscreen");
@@ -275,9 +272,9 @@ export const useFullscreenMode = () => {
       changeFullscreenStyles();
       calculateWidth();
       applyChapterStyles();
-      updateProgressBar();
-      updateBufferBar();
-      updateRedDot("");
+      // updateProgressBar();
+      // updateBufferBar();
+      updateRedDot();
     }
   };
 

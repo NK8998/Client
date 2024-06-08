@@ -95,11 +95,11 @@ export default function Player({ videoRef, containerRef }) {
     calculateWidth();
 
     applyChapterStyles();
-    requestAnimationFrame(() => {
-      updateBufferBar();
-      updateProgressBar();
-      updateRedDot();
-    });
+    // requestAnimationFrame(() => {
+    //   updateBufferBar();
+    //   updateProgressBar();
+    updateRedDot();
+    // });
   };
 
   useEffect(() => {

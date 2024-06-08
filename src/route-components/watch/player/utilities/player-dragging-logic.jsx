@@ -13,15 +13,19 @@ export const usePlayerDraggingLogic = () => {
   const [checkBufferedOnTrackChange, checkBuffered, clearIntervalOnTrackChange] = usePlayerBufferingState();
   const [updateBufferBar, updateProgressBar] = usePlayerProgressBarLogic();
   const dispatch = useDispatch();
-  const timeDelay = 220;
+  const timeDelay = 180;
   const wasPlaying = useRef(false);
 
-  const updateRedDot = () => {
+  const updateRedDot = (currentTimeTracker) => {
     const duration = chapters[chapters.length - 1].end;
     const redDotWrapperRef = document.querySelector(".red-dot-wrapper");
     const innerChapterContainerRef = document.querySelector(".chapters-container");
     const style = getComputedStyle(document.documentElement);
-    const currentTime = parseFloat(style.getPropertyValue("--dragTime").trim());
+    const videoRef = document.querySelector("#html5-player");
+    let currentTime = videoRef.currentTime;
+    if (currentTimeTracker) {
+      currentTime = currentTimeTracker;
+    }
 
     if (currentTime >= 0 && currentTime <= duration) {
       const progressBarRefs = document.querySelectorAll(".progress.bar");
@@ -114,7 +118,7 @@ export const usePlayerDraggingLogic = () => {
       }
     });
 
-    updateRedDot();
+    updateRedDot(currentTime);
     redDotRef.style.scale = chapters.length === 1 ? 1 : 1.5;
     document.documentElement.style.setProperty("--dragTime", `${currentTime}`);
   };

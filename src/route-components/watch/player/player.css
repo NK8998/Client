@@ -327,7 +327,7 @@
 }
 
 .chapter-hover{
-  height: 3px;
+  height: fit-content;
   /* background-color: blue; */
   padding-top: 20px;
 
