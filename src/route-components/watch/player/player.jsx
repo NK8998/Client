@@ -399,7 +399,8 @@ export default function Player({ videoRef, containerRef }) {
 
   const mousedDowntracker = useRef();
   const wasHolding = useRef(false);
-  const handleMouseDown = () => {
+  const handleMouseDown = (e) => {
+    if (e.button !== 0) return;
     const videoRef = document.querySelector("#html5-player");
     wasPlaying.current = !videoRef.paused;
     // set the playback rate to two
@@ -414,7 +415,9 @@ export default function Player({ videoRef, containerRef }) {
     }, 200);
   };
 
-  const handleMouseUp = () => {
+  const handleMouseUp = (e) => {
+    if (e.button !== 0) return;
+
     const videoRef = document.querySelector("#html5-player");
 
     if (mousedDowntracker.current) {
