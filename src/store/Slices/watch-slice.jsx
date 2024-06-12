@@ -1,7 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { handleNavigation, updateIsFetching, updateLocation } from "./app-slice";
-import { useNavigate } from "react-router-dom";
-import { updateIsdragging, updateSettingsShowing } from "./player-slice";
+import { updatePlayerState } from "./player-slice";
 import AxiosFetching from "../../utilities/axios-function";
 
 // store each retrieved video and its recommendations in an array
@@ -238,8 +237,7 @@ export const handleMiniPLayer = (miniPlayer, currentRoute) => {
       dispatch(handleNavigation("/watch"));
       dispatch(updateLocation(currentRoute));
       dispatch(toggleMiniPlayer(false));
-      dispatch(updateIsdragging(true));
     }
-    dispatch(updateSettingsShowing(false));
+    dispatch(updatePlayerState({ playerPropertyToUpdate: "settingsShowing", updatedValue: false }));
   };
 };

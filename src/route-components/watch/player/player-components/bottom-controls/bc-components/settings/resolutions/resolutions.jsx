@@ -1,7 +1,7 @@
 import { useDispatch, useSelector } from "react-redux";
 import { ArrowLeftButton, TickIcon } from "../../../../../../../../assets/icons";
 import { useState } from "react";
-import { handleTranslating, updateBuffering, updatePreferredRes, updateResolution } from "../../../../../../../../store/Slices/player-slice";
+import { handleTranslating, updatePlayerState } from "../../../../../../../../store/Slices/player-slice";
 
 export const Resolutions = ({ playerRef, checkBufferedOnTrackChange }) => {
   const playingVideo = useSelector((state) => state.watch.playingVideo);
@@ -38,7 +38,7 @@ export const Resolutions = ({ playerRef, checkBufferedOnTrackChange }) => {
         ...currentConfig,
         abr: updatedAbrConfig,
       });
-      dispatch(updatePreferredRes(false));
+      dispatch(updatePlayerState({ playerPropertyToUpdate: "preferredResolution", updatedValue: false }));
       checkBufferedOnTrackChange();
     } else {
       const currentConfig = playerRef.current.getConfiguration();
@@ -64,11 +64,11 @@ export const Resolutions = ({ playerRef, checkBufferedOnTrackChange }) => {
       // Select the desired track
       if (selectedTrack) {
         playerRef.current.selectVariantTrack(selectedTrack, true);
-        dispatch(updatePreferredRes(true));
+        dispatch(updatePlayerState({ playerPropertyToUpdate: "preferredResolution", updatedValue: true }));
         const tagString = `${tag}${framerate > 30 ? framerate : ""}`;
-        dispatch(updateResolution(tagString));
+        dispatch(updatePlayerState({ playerPropertyToUpdate: "resolution", updatedValue: tagString }));
         checkBufferedOnTrackChange();
-        dispatch(updateBuffering(true));
+        dispatch(updatePlayerState({ playerPropertyToUpdate: "buffering", updatedValue: true }));
         resetGreyBars();
       }
     }

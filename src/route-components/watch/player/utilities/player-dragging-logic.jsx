@@ -1,7 +1,7 @@
-import { useEffect, useRef } from "react";
+import { useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { usePlayerScrubbingBarInteractions } from "./player-scrubbingBar-logic";
-import { updateBuffering, updateIsdragging, updatePlay } from "../../../../store/Slices/player-slice";
+import { updatePlayerState } from "../../../../store/Slices/player-slice";
 import { getTimeStamp } from "../../../../utilities/getTimestamp";
 import { usePlayerProgressBarLogic } from "./player-progressBar-logic";
 
@@ -172,8 +172,8 @@ export const usePlayerDraggingLogic = () => {
 
     innerChapterContainerRef.classList.remove("drag-expand");
     removeEventListeners();
-    dispatch(updateBuffering(true));
-    dispatch(updateIsdragging(false));
+    dispatch(updatePlayerState({ playerPropertyToUpdate: "buffering", updatedValue: true }));
+    dispatch(updatePlayerState({ playerPropertyToUpdate: "isDragging", updatedValue: false }));
     isDragging.current = false;
     checkBufferedOnTrackChange();
     progressBarRefs.forEach((bar) => {
@@ -183,7 +183,6 @@ export const usePlayerDraggingLogic = () => {
 
     if (wasPlaying.current === true) {
       videoRef.play();
-      dispatch(updatePlay(true));
     }
   };
 
@@ -204,7 +203,7 @@ export const usePlayerDraggingLogic = () => {
     redDotWrapperRef.style.transition = `transform 0ms cubic-bezier(0.075, 0.82, 0.165, 1)`;
 
     isDragging.current = true;
-    dispatch(updateIsdragging(true));
+    dispatch(updatePlayerState({ playerPropertyToUpdate: "isDragging", updatedValue: true }));
     clearIntervalOnTrackChange();
     wasPlaying.current = !videoRef.paused;
     videoRef.pause();
@@ -300,7 +299,7 @@ export const usePlayerBufferingState = () => {
           videoRef.style.visibility = "visible";
         }
         spinnerRef.classList.remove("visible");
-        dispatch(updateBuffering(false));
+        dispatch(updatePlayerState({ playerPropertyToUpdate: "buffering", updatedValue: false }));
         if (timeIntervalRef.current) {
           clearInterval(timeIntervalRef.current);
         }

@@ -13,7 +13,7 @@ import { handleFullscreen, handleTheatre, updateMiniPlayerBoolean } from "../../
 import { usePlayerMouseMove } from "../../../utilities/player-mouse-interactions";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useLayoutEffect, useRef } from "react";
-import { handleTranslating, handleTranslatingHere, toggleCaptions, updateSettingsShowing } from "../../../../../../store/Slices/player-slice";
+import { handleTranslating, handleTranslatingHere, toggleCaptions, updatePlayerState } from "../../../../../../store/Slices/player-slice";
 
 export const BottomControlsRight = ({ playerRef }) => {
   const notFound = useSelector((state) => state.watch.notFound);
@@ -86,7 +86,7 @@ export const BottomControlsRight = ({ playerRef }) => {
       settings.classList.remove("show");
       settingsClickRegion.classList.remove("show");
       document.removeEventListener("click", removeSettingsOnoutsideClick);
-      dispatch(updateSettingsShowing(false));
+      dispatch(updatePlayerState({ playerPropertyToUpdate: "settingsShowing", updatedValue: false }));
       setTimeout(() => {
         dispatch(handleTranslating(null, currentPanel, "settings-menu-selector-items"));
       }, 210);
@@ -106,7 +106,7 @@ export const BottomControlsRight = ({ playerRef }) => {
     const settingsClickRegion = document.querySelector(".settings-clikcregion");
     settingsClickRegion.classList.toggle("show");
     settings.classList.toggle("show");
-    dispatch(updateSettingsShowing(!settingsShowing));
+    dispatch(updatePlayerState({ playerPropertyToUpdate: "settingsShowing", updatedValue: !settingsShowing }));
   };
 
   return (

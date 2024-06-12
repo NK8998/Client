@@ -1,16 +1,14 @@
 import { useDispatch, useSelector } from "react-redux";
 import { usePlayerMouseMove } from "../../utilities/player-mouse-interactions";
-import { seekVideo, usePlayerProgressBarLogic } from "../../utilities/player-progressBar-logic";
+import { seekVideo } from "../../utilities/player-progressBar-logic";
 import { usePlayerScrubbingBarInteractions } from "../../utilities/player-scrubbingBar-logic";
 import { usePlayerBufferingState, usePlayerDraggingLogic } from "../../utilities/player-dragging-logic";
-import { updateSeeking } from "../../../../../store/Slices/player-slice";
-import { useRef } from "react";
+import { updatePlayerState } from "../../../../../store/Slices/player-slice";
 
 export default function Chapters({ videoRef, chapterContainerRef, redDotRef, redDotWrapperRef, innerChapterContainerRef }) {
   const settingsShowing = useSelector((state) => state.player.settingsShowing);
   const chapters = useSelector((state) => state.player.chapters);
   const [handleMouseMove, handleHover, handleMouseOut] = usePlayerMouseMove();
-  const [updateBufferBar, updateProgressBar] = usePlayerProgressBarLogic();
   const [updateScrubbingBar, previewCanvas, movePreviews] = usePlayerScrubbingBarInteractions();
   const [startDrag, stopDragging, handleClick, handleDrag, updateRedDot, resetDot, isDragging] = usePlayerDraggingLogic();
   const [checkBufferedOnTrackChange, checkBuffered] = usePlayerBufferingState();
@@ -37,12 +35,12 @@ export default function Chapters({ videoRef, chapterContainerRef, redDotRef, red
 
     if (key === "arrowdown") {
       e.preventDefault();
-      dispatch(updateSeeking(true));
+      dispatch(updatePlayerState({ playerPropertyToUpdate: "seeking", updatedValue: true }));
       seekVideo(currentTime - timeStep);
       checkBuffered();
     } else if (key === "arrowup") {
       e.preventDefault();
-      dispatch(updateSeeking(true));
+      dispatch(updatePlayerState({ playerPropertyToUpdate: "seeking", updatedValue: true }));
       seekVideo(currentTime + timeStep);
       checkBuffered();
     }

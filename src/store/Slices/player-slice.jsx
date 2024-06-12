@@ -15,61 +15,17 @@ const playerSlicer = createSlice({
     isDragging: true,
     urlTime: 0,
     seeking: false,
+    playbackRate: 1,
   },
   reducers: {
-    updateResolution: (state, action) => {
-      state.resolution = action.payload;
-    },
-    updateSettingsShowing: (state, action) => {
-      state.settingsShowing = action.payload;
-    },
-    updatePreferredRes: (state, action) => {
-      state.preferredResolution = action.payload;
-    },
-    updatePanel: (state, action) => {
-      state.panel = action.payload;
-    },
-    updateCurrentPanel: (state, action) => {
-      state.currentPanel = action.payload;
-    },
-    updateSubtitles: (state, action) => {
-      state.subtitles = action.payload;
-    },
-    updateChapters: (state, action) => {
-      state.chapters = action.payload;
-    },
-    updatePlay: (state, action) => {
-      state.play = action.payload;
-    },
-    updateBuffering: (state, action) => {
-      state.buffering = action.payload;
-    },
-    updateIsdragging: (state, action) => {
-      state.isDragging = action.payload;
-    },
-    updateUrlTime: (state, action) => {
-      state.urlTime = action.payload;
-    },
-    updateSeeking: (state, action) => {
-      state.seeking = action.payload;
+    updatePlayerState: (state, action) => {
+      const { playerPropertyToUpdate, updatedValue } = action.payload;
+      state[playerPropertyToUpdate] = updatedValue;
     },
   },
 });
 
-export const {
-  updateResolution,
-  updateSettingsShowing,
-  updatePreferredRes,
-  updatePanel,
-  updateCurrentPanel,
-  updateSubtitles,
-  updateChapters,
-  updatePlay,
-  updateBuffering,
-  updateIsdragging,
-  updateUrlTime,
-  updateSeeking,
-} = playerSlicer.actions;
+export const { updatePlayerState } = playerSlicer.actions;
 export default playerSlicer.reducer;
 
 let timeout1;
@@ -82,11 +38,11 @@ export const handleTranslating = (panel, currentElement, element) => {
     if (timeout2) {
       clearTimeout(timeout2);
     }
-    dispatch(updateCurrentPanel(element));
+    dispatch(updatePlayerState({ playerPropertyToUpdate: "currentPanel", updatedValue: element }));
     const settingsRef = document.querySelector(".settings");
     const settingsScrollContainer = document.querySelector(".settings-inner");
     if (typeof panel === "number") {
-      dispatch(updatePanel(panel));
+      dispatch(updatePlayerState({ playerPropertyToUpdate: "panel", updatedValue: panel }));
     }
     timeout1 = setTimeout(() => {
       const panelEl = document.querySelectorAll(".panel-item");
@@ -113,7 +69,7 @@ export const handleTranslating = (panel, currentElement, element) => {
       settingsScrollContainer.style.transform = `translate(-${targetLeft}px, 0px)`;
       timeout2 = setTimeout(() => {
         if (typeof panel !== "number") {
-          dispatch(updatePanel(-4));
+          dispatch(updatePlayerState({ playerPropertyToUpdate: "panel", updatedValue: -4 }));
         }
       }, 200);
     }, 5);
@@ -138,7 +94,7 @@ export const handleTranslatingHere = (panel = 0, currentElement, element = "sett
 
     requestAnimationFrame(() => {
       if (typeof panel === "number") {
-        dispatch(updatePanel(panel));
+        dispatch(updatePlayerState({ playerPropertyToUpdate: "panel", updatedValue: panel }));
       }
       const targetEl = document.querySelector(`.${element}`);
       const { width, height } = targetEl.getBoundingClientRect();
@@ -173,10 +129,10 @@ export const toggleCaptions = (playerRef, captions_url, subLanguage = "English (
     const visibility = playerRef.current.isTextTrackVisible();
     playerRef.current.setTextTrackVisibility(!visibility);
     if (visibility || captions_url === "Off") {
-      dispatch(updateSubtitles("Off"));
+      dispatch(updatePlayerState({ playerPropertyToUpdate: "subtitles", updatedValue: "Off" }));
       captionsButton.classList.remove("captions-on");
     } else {
-      dispatch(updateSubtitles(subLanguage));
+      dispatch(updatePlayerState({ playerPropertyToUpdate: "subtitles", updatedValue: subLanguage }));
       captionsButton.classList.add("captions-on");
     }
   };

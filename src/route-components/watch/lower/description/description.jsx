@@ -11,7 +11,7 @@ import { DateFormatter } from "../../../../utilities/date-formatter";
 import UserRoleInfo from "./user-role-info";
 import { debounce } from "lodash";
 import { useDispatch } from "react-redux";
-import { updateSeeking } from "../../../../store/Slices/player-slice";
+import { updatePlayerState } from "../../../../store/Slices/player-slice";
 
 export default function Description() {
   const { description_string, video_id, created_at } = useSelector((state) => state.watch.playingVideo);
@@ -26,7 +26,7 @@ export default function Description() {
   const dispatch = useDispatch();
 
   const handleChapterClick = (e, time) => {
-    dispatch(updateSeeking(true));
+    dispatch(updatePlayerState({ playerPropertyToUpdate: "seeking", updatedValue: true }));
     e.preventDefault();
     const videoRef = document.querySelector("#html5-player");
     if (!videoRef || !time) return;

@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from "react-redux";
-import { handleTranslating, toggleCaptions, updateSubtitles } from "../../../../../../../../store/Slices/player-slice";
+import { handleTranslating, toggleCaptions, updatePlayerState } from "../../../../../../../../store/Slices/player-slice";
 import { ArrowLeftButton, TickIcon } from "../../../../../../../../assets/icons";
 import SubOptions from "./options";
 
@@ -9,7 +9,7 @@ export const Subtitles = ({ playerRef }) => {
   const { captions_url } = useSelector((state) => state.watch.playingVideo);
 
   const updateSubs = (url, language) => {
-    dispatch(updateSubtitles(language));
+    dispatch(updatePlayerState({ playerPropertyToUpdate: "subtitles", updatedValue: language }));
     dispatch(handleTranslating(0, "subs-inner", "settings-menu-selector-items"));
     if (subtitles === language) return;
     dispatch(toggleCaptions(playerRef, url, language));

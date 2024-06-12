@@ -103,8 +103,12 @@
     margin-top: 0px;
     line-height: 1.5;
 }
+.secondary-skeleton-middle{
+    min-width: 0;
+}
 .browse-middle-lower{
     flex-grow: 1;
+    min-width: 0;
 }
 .owner-display-name,
 .secondary-skeleton-owner{

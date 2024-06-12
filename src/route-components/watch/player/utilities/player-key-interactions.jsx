@@ -1,26 +1,22 @@
 import { useDispatch, useSelector } from "react-redux";
-import { handleFullscreen, handleTheatre, toggleTheatreMode, updateIsTransitioning } from "../../../../store/Slices/watch-slice";
+import { handleFullscreen, handleTheatre } from "../../../../store/Slices/watch-slice";
 import { useRef } from "react";
-import { seekVideo, usePlayerProgressBarLogic } from "./player-progressBar-logic";
+import { seekVideo } from "./player-progressBar-logic";
 import { usePlayerMouseMove } from "./player-mouse-interactions";
-import { toPause, toPlay } from "./gsap-animations";
-import { usePlayerBufferingState, usePlayerDraggingLogic } from "./player-dragging-logic";
-import { updateSeeking } from "../../../../store/Slices/player-slice";
+import { usePlayerBufferingState } from "./player-dragging-logic";
+import { updatePlayerState } from "../../../../store/Slices/player-slice";
 
 export const usePlayerkeyInteractions = () => {
   const dispatch = useDispatch();
   const theatreTimeOut = useRef();
-  const fullScreenTimeout = useRef();
   const theatreMode = useSelector((state) => state.watch.theatreMode);
   const fullScreen = useSelector((state) => state.watch.fullScreen);
+  const playbackRate = useSelector((state) => state.player.playbackRate);
   const timeoutRef2 = useRef();
   const isHolding = useRef(false);
   const location = useSelector((state) => state.app.location);
   const focusViaKeyBoard = useRef(false);
   const keyDownTime = useRef();
-  const [updateBufferBar, updateProgressBar] = usePlayerProgressBarLogic();
-  const [handleDoubleClick, handlePlayState] = usePlayerClickInteractions();
-  const [startDrag, stopDragging, handleClick, handleDrag, updateRedDot, resetDot, isDragging] = usePlayerDraggingLogic();
   const [checkBufferedOnTrackChange, checkBuffered] = usePlayerBufferingState();
   const wasPlaying = useRef(false);
 
@@ -36,11 +32,11 @@ export const usePlayerkeyInteractions = () => {
     const currentTime = videoRef.currentTime;
 
     if (key === "arrowleft") {
-      dispatch(updateSeeking(true));
+      dispatch(updatePlayerState({ playerPropertyToUpdate: "seeking", updatedValue: true }));
       seekVideo(currentTime - timeStep);
       checkBuffered();
     } else if (key === "arrowright") {
-      dispatch(updateSeeking(true));
+      dispatch(updatePlayerState({ playerPropertyToUpdate: "seeking", updatedValue: true }));
       seekVideo(currentTime + timeStep);
       checkBuffered();
     } else if (key === "t") {
@@ -59,6 +55,7 @@ export const usePlayerkeyInteractions = () => {
         return;
       }
       timeoutRef2.current = setTimeout(() => {
+        videoRef.play();
         videoRef.playbackRate = 2;
         isHolding.current = true;
       }, 250);
@@ -72,11 +69,18 @@ export const usePlayerkeyInteractions = () => {
     if (key === "tab") {
       focusViaKeyBoard.current = true;
     } else if (key === " ") {
-      !isHolding.current && handlePlayState();
-      videoRef.playbackRate = 1;
+      videoRef.playbackRate = playbackRate;
       clearTimeout(timeoutRef2.current);
       timeoutRef2.current = null;
-      isHolding.current = false;
+      if (isHolding.current === true) {
+        isHolding.current = false;
+        return;
+      }
+      if (videoRef.paused) {
+        videoRef.play();
+      } else {
+        videoRef.pause();
+      }
     } else if (key === "f") {
       if (!isWatchpage) return;
       dispatch(handleFullscreen(fullScreen));

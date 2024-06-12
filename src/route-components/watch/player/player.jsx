@@ -10,16 +10,7 @@ import { usePlayerProgressBarLogic } from "./utilities/player-progressBar-logic"
 import { usePlayerMouseMove } from "./utilities/player-mouse-interactions";
 import Loader from "./utilities/loader";
 import ScrubbingPreviews from "./player-components/scrubbing-previews/scrubbing-previews";
-import {
-  handleTranslatingHere,
-  toggleCaptions,
-  updateBuffering,
-  updateChapters,
-  updatePlay,
-  updatePreferredRes,
-  updateResolution,
-  updateSeeking,
-} from "../../../store/Slices/player-slice";
+import { handleTranslatingHere, toggleCaptions, updatePlayerState } from "../../../store/Slices/player-slice";
 import Settings from "./player-components/bottom-controls/bc-components/settings/settings";
 import { usePlayerScrubbingBarInteractions } from "./utilities/player-scrubbingBar-logic";
 import { usePlayerBufferingState, usePlayerDraggingLogic } from "./utilities/player-dragging-logic";
@@ -29,7 +20,6 @@ import { useFullscreenMode, useMiniPlayermode, useTheatreMode } from "./utilitie
 import PreviewBG from "./player-components/preview-bg/preview-bg";
 import { toggleTheatreMode, updatePlayingVideo } from "../../../store/Slices/watch-slice";
 import TopVideoComponent from "./player-components/bottom-controls/bc-components/title-component";
-import { Exclamation } from "../../../assets/icons";
 import { debounce } from "lodash";
 import PlayerBanner from "./player-components/player-banner/player-banner";
 
@@ -53,6 +43,7 @@ export default function Player({ videoRef, containerRef }) {
   const chapters = useSelector((state) => state.player.chapters);
   const play = useSelector((state) => state.player.play);
   const seeking = useSelector((state) => state.player.seeking);
+  const playbackRate = useSelector((state) => state.player.playbackRate);
   //
   const [handleMouseMove, handleHover, handleMouseOut] = usePlayerMouseMove();
   const [updateBufferBar, updateProgressBar] = usePlayerProgressBarLogic();
@@ -78,12 +69,12 @@ export default function Player({ videoRef, containerRef }) {
   const attempts = useRef(0);
 
   useEffect(() => {
-    dispatch(updatePreferredRes(false));
+    dispatch(updatePlayerState({ playerPropertyToUpdate: "preferredResolution", updatedValue: false }));
     if (isLive) {
-      dispatch(updateChapters([{ start: 0, title: "", end: 50 }]));
+      dispatch(updatePlayerState({ playerPropertyToUpdate: "chapters", updatedValue: [{ start: 0, title: "", end: 50 }] }));
     } else {
       const generatedChapters = generateChapters(description_string, duration);
-      dispatch(updateChapters(generatedChapters));
+      dispatch(updatePlayerState({ playerPropertyToUpdate: "chapters", updatedValue: generatedChapters }));
     }
   }, [playingVideo]);
 
@@ -266,7 +257,7 @@ export default function Player({ videoRef, containerRef }) {
         const { resolutions } = playingVideo;
         const resolution = resolutions.find((res) => res.height === newTrack);
         const tag = `${resolution.tag}${resolution.framerate > 30 ? Math.round(resolution.framerate) : ""}`;
-        dispatch(updateResolution(tag));
+        dispatch(updatePlayerState({ playerPropertyToUpdate: "resolution", updatedValue: tag }));
       });
 
       // Load the manifest
@@ -392,7 +383,7 @@ export default function Player({ videoRef, containerRef }) {
     updateRedDot();
 
     styleTimeout.current = setTimeout(() => {
-      dispatch(updateSeeking(false));
+      dispatch(updatePlayerState({ playerPropertyToUpdate: "seeking", updatedValue: false }));
       progressBarRefs.forEach((bar) => {
         redDotWrapperRef.style.transition = `transform 100ms cubic-bezier(0.075, 0.82, 0.165, 1)`;
         bar.style.transition = `transform 100ms cubic-bezier(0.075, 0.82, 0.165, 1)`;
@@ -404,6 +395,38 @@ export default function Player({ videoRef, containerRef }) {
 
   const updateDurtion = () => {
     // continue updating the chapters for live content
+  };
+
+  const mousedDowntracker = useRef();
+  const wasHolding = useRef(false);
+  const handleMouseDown = () => {
+    const videoRef = document.querySelector("#html5-player");
+    wasPlaying.current = !videoRef.paused;
+    // set the playback rate to two
+    if (mousedDowntracker.current) {
+      clearTimeout(mousedDowntracker.current);
+    }
+
+    mousedDowntracker.current = setTimeout(() => {
+      wasHolding.current = true;
+      videoRef.play();
+      videoRef.playbackRate = 2;
+    }, 200);
+  };
+
+  const handleMouseUp = () => {
+    const videoRef = document.querySelector("#html5-player");
+
+    if (mousedDowntracker.current) {
+      clearTimeout(mousedDowntracker.current);
+    }
+    videoRef.playbackRate = playbackRate;
+    if (wasHolding.current === true) {
+      wasHolding.current = false;
+      return;
+    }
+
+    handlePlayState();
   };
 
   return (
@@ -431,15 +454,16 @@ export default function Player({ videoRef, containerRef }) {
           // onWaiting={handleTracksChanged}
           onDurationChange={updateDurtion}
           onProgress={updateBufferBar}
-          onClick={handlePlayState}
+          onMouseDown={handleMouseDown}
+          onMouseUp={handleMouseUp}
           onPlay={(e) => {
             toPlay();
-            dispatch(updatePlay(true));
+            dispatch(updatePlayerState({ playerPropertyToUpdate: "play", updatedValue: true }));
             updateProgess();
           }}
           onPause={() => {
             toPause();
-            dispatch(updatePlay(false));
+            dispatch(updatePlayerState({ playerPropertyToUpdate: "play", updatedValue: false }));
             clearIntervalProgress();
           }}
           controls={false}
