@@ -103,6 +103,7 @@ export const usePlayerClickInteractions = () => {
     if (!window.location.pathname.includes("watch")) return;
 
     dispatch(handleFullscreen(fullScreen));
+    console.log("called from handleDoubleclickS");
   };
 
   const handlePlayState = () => {

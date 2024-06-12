@@ -42,7 +42,7 @@ function App() {
 
     dispatch(updateRefs(refArray));
 
-    document.addEventListener("fullscreenchange", () => {
+    document.addEventListener("fullscreenchange", (e) => {
       dispatch(handleFullscreenChange());
     });
 

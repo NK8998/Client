@@ -221,7 +221,7 @@ export default function Player({ videoRef, containerRef }) {
 
       // Listen for error events
       playerRef.current.addEventListener("error", (event) => {
-        console.error("Error code", event.detail.code);
+        console.error("Error code", event.detail);
       });
 
       playerRef.current.addEventListener("trackschanged", () => {
@@ -441,11 +441,9 @@ export default function Player({ videoRef, containerRef }) {
         onFocus={handlePlayerFocus}
         onBlur={handlePlayerBlur}
         onClick={handlePlayerClick}
-        onClickCapture={handlePlayerClick}
       >
         <video
           // poster={preferred_thumbnail_url ? preferred_thumbnail_url : possible_thumbnail_urls && possible_thumbnail_urls["thumbnailUrl-0"]}
-          onDoubleClickCapture={handleDoubleClick}
           onDoubleClick={handleDoubleClick}
           ref={videoRef}
           className={`html5-player`}

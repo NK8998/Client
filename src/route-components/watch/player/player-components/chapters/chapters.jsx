@@ -71,7 +71,6 @@ export default function Chapters({ videoRef, chapterContainerRef, redDotRef, red
         tabIndex={0}
         onFocus={handleMouseMove}
         onMouseMove={updateScrubbingBar}
-        onMouseOverCapture={updateScrubbingBar}
         onTouchMove={(e) => {
           updateScrubbingBar(e.touches[0]);
         }}
@@ -79,7 +78,6 @@ export default function Chapters({ videoRef, chapterContainerRef, redDotRef, red
         onTouchStart={startDrag}
         onKeyDown={handleKeyDown}
         onMouseOver={handleMouseEnter}
-        onMouseMoveCapture={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
       >
         {chapterEls}
