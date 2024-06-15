@@ -22,7 +22,7 @@
   }
 
   .player-outer.fullscreen  .bottom-controls, .player-outer.fullscreen.theatre  .bottom-controls{
-    height: 60px;
+    height: 54px;
     width: calc(100% - 44px);
     padding: 0px 22px;
   }
@@ -36,8 +36,6 @@
   .player-outer.fullscreen  .player-button.chapter-title > p, .player-outer.fullscreen.theatre  .player-button.chapter-title > p{
     font-size: 18.5px;
     max-width: calc(var(--fullScreenWidth) / 3);
-    
-  
   }
 
   .player-outer.fullscreen  .SliderRoot, .player-outer.fullscreen.theatre  .SliderRoot{
@@ -270,7 +268,7 @@ form.volume-slider{
   height: 18px;
   width: 26px;
   right: 0px;
-  top: 7px;
+  top: 12px;
 } 
 .player-outer.fullscreen .quality-badge svg, .player-outer.fullscreen.theatre .quality-badge svg{
   height: 100%;
