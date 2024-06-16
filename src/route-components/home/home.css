@@ -196,6 +196,11 @@
  
     
 }
+.processing-title span{
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
 .processing-banner-home .processing-title{
     border-radius: 12px;
 }
