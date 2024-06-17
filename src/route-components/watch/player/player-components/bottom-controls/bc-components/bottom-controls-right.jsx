@@ -29,7 +29,7 @@ export const BottomControlsRight = ({ playerRef }) => {
   const resolution = useSelector((state) => state.player.resolution);
   const res = parseInt(resolution.split("p")[0]);
   const captionsRef = useRef();
-  const [handleMouseMove, handleMouseOut] = usePlayerMouseMove();
+  const { handleMouseMove, handleMouseOut } = usePlayerMouseMove();
   const { video_id, captions_url } = playingVideo;
   const timeoutRef = useRef();
   const dispatch = useDispatch();

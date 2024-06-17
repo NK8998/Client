@@ -8,9 +8,9 @@ import { updatePlayerState } from "../../../../../store/Slices/player-slice";
 export default function Chapters({ videoRef, chapterContainerRef, redDotRef, redDotWrapperRef, innerChapterContainerRef }) {
   const settingsShowing = useSelector((state) => state.player.settingsShowing);
   const chapters = useSelector((state) => state.player.chapters);
-  const [handleMouseMove, handleHover, handleMouseOut] = usePlayerMouseMove();
+  const { handleMouseMove } = usePlayerMouseMove();
   const [updateScrubbingBar, previewCanvas, movePreviews] = usePlayerScrubbingBarInteractions();
-  const [startDrag, stopDragging, handleClick, handleDrag, updateRedDot, resetDot, isDragging] = usePlayerDraggingLogic();
+  const { startDrag, resetDot, isDragging } = usePlayerDraggingLogic();
   const [checkBufferedOnTrackChange, checkBuffered] = usePlayerBufferingState();
   const dispatch = useDispatch();
 

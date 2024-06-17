@@ -11,9 +11,8 @@ export const useMiniPlayermode = () => {
   const theatreMode = useSelector((state) => state.watch.theatreMode);
   const layoutShiftRef = useRef();
   const [applyChapterStyles, calculateWidth] = usePlayerStyles();
-  const [handleMouseMove, handleMouseOut] = usePlayerMouseMove();
-  const [startDrag, stopDragging, handleClick, handleDrag, updateRedDot, resetDot, isDragging] = usePlayerDraggingLogic();
-  const [updateBufferBar, updateProgressBar] = usePlayerProgressBarLogic();
+  const { handleMouseMove, handleMouseOut } = usePlayerMouseMove();
+  const { updateRedDot } = usePlayerDraggingLogic();
 
   const toggleMiniPlayer = () => {
     const videoRef = document.querySelector("#html5-player");
@@ -90,10 +89,9 @@ export const useMiniPlayermode = () => {
 };
 
 export const useTheatreMode = () => {
-  const [startDrag, stopDragging, handleClick, handleDrag, updateRedDot, resetDot, isDragging] = usePlayerDraggingLogic();
+  const { updateRedDot } = usePlayerDraggingLogic();
   const [applyChapterStyles, calculateWidth] = usePlayerStyles();
   const theatreMode = useSelector((state) => state.watch.theatreMode);
-  const [updateBufferBar, updateProgressBar] = usePlayerProgressBarLogic();
 
   const toggleTheatre = () => {
     // console.log("toggletheatre ran");
@@ -151,9 +149,8 @@ export const useTheatreMode = () => {
 };
 
 export const useFullscreenMode = () => {
-  const [startDrag, stopDragging, handleClick, handleDrag, updateRedDot, resetDot, isDragging] = usePlayerDraggingLogic();
+  const { updateRedDot } = usePlayerDraggingLogic();
   const [applyChapterStyles, calculateWidth] = usePlayerStyles();
-  const [updateBufferBar, updateProgressBar] = usePlayerProgressBarLogic();
   const theatreMode = useSelector((state) => state.watch.theatreMode);
   const location = useSelector((state) => state.app.location);
   const fullScreen = useSelector((state) => state.watch.fullScreen);

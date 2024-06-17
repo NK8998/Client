@@ -3,7 +3,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { usePlayerScrubbingBarInteractions } from "./player-scrubbingBar-logic";
 import { updatePlayerState } from "../../../../store/Slices/player-slice";
 import { getTimeStamp } from "../../../../utilities/getTimestamp";
-import { usePlayerProgressBarLogic } from "./player-progressBar-logic";
 
 export const usePlayerDraggingLogic = () => {
   const mouseDownTracker = useRef();
@@ -11,7 +10,6 @@ export const usePlayerDraggingLogic = () => {
   const chapters = useSelector((state) => state.player.chapters);
   const [updateScrubbingBar, previewCanvas, movePreviews] = usePlayerScrubbingBarInteractions();
   const [checkBufferedOnTrackChange, checkBuffered, clearIntervalOnTrackChange] = usePlayerBufferingState();
-  const [updateBufferBar, updateProgressBar] = usePlayerProgressBarLogic();
   const dispatch = useDispatch();
   const timeDelay = 180;
   const wasPlaying = useRef(false);
@@ -143,6 +141,7 @@ export const usePlayerDraggingLogic = () => {
   };
 
   const stopDragging = (e) => {
+    const playerContainer = document.querySelector(".player-outer");
     const innerChapterContainerRef = document.querySelector(".chapters-container");
     const videoRef = document.querySelector("#html5-player");
     const scrubbingPreviewContainer = document.querySelector(".scrubbing-preview-container");
@@ -151,8 +150,6 @@ export const usePlayerDraggingLogic = () => {
     const dragTime = parseFloat(style.getPropertyValue("--dragTime").trim());
     const curTime = parseInt(style.getPropertyValue("--curTime").trim());
     const timeDiff = Date.now() - curTime <= timeDelay;
-    const progressBarRefs = document.querySelectorAll(".progress.bar");
-    const redDotWrapperRef = document.querySelector(".red-dot-wrapper");
 
     document.documentElement.style.setProperty("--select", "");
 
@@ -176,10 +173,7 @@ export const usePlayerDraggingLogic = () => {
     dispatch(updatePlayerState({ playerPropertyToUpdate: "isDragging", updatedValue: false }));
     isDragging.current = false;
     checkBufferedOnTrackChange();
-    progressBarRefs.forEach((bar) => {
-      bar.style.transition = `transform 100ms cubic-bezier(0.075, 0.82, 0.165, 1)`;
-    });
-    redDotWrapperRef.style.transition = `transform 100ms cubic-bezier(0.075, 0.82, 0.165, 1)`;
+    playerContainer.classList.remove("seeking");
 
     if (wasPlaying.current === true) {
       videoRef.play();
@@ -187,20 +181,18 @@ export const usePlayerDraggingLogic = () => {
   };
 
   const startDrag = (e) => {
+    if (e.button !== 0) return;
     removeEventListeners();
     const isTouching = e.touches ? e.touches.length > 0 : false;
     const innerChapterContainerRef = document.querySelector(".chapters-container");
     const videoRef = document.querySelector("#html5-player");
-    const progressBarRefs = document.querySelectorAll(".progress.bar");
-    const redDotWrapperRef = document.querySelector(".red-dot-wrapper");
+    const playerContainer = document.querySelector(".player-outer");
+
     document.documentElement.style.setProperty("--select", "none");
     document.documentElement.style.setProperty("--curTime", `${Date.now()}`);
     const style = getComputedStyle(document.documentElement);
 
-    progressBarRefs.forEach((bar) => {
-      bar.style.transition = `transform 0ms cubic-bezier(0.075, 0.82, 0.165, 1)`;
-    });
-    redDotWrapperRef.style.transition = `transform 0ms cubic-bezier(0.075, 0.82, 0.165, 1)`;
+    playerContainer.classList.add("seeking");
 
     isDragging.current = true;
     dispatch(updatePlayerState({ playerPropertyToUpdate: "isDragging", updatedValue: true }));
@@ -230,7 +222,7 @@ export const usePlayerDraggingLogic = () => {
     redDotRef.style.scale = 0;
   };
 
-  return [startDrag, stopDragging, handleClick, handleDrag, updateRedDot, resetDot, isDragging, removeEventListeners];
+  return { startDrag, stopDragging, handleClick, handleDrag, updateRedDot, resetDot, isDragging, removeEventListeners };
 };
 
 export const usePlayerBufferingState = () => {

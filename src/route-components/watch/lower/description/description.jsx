@@ -2,7 +2,6 @@ import DOMPurify from "dompurify";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { convertToSeconds } from "../../player/player-components/chapters/chaptersGen";
-import { usePlayerProgressBarLogic } from "../../player/utilities/player-progressBar-logic";
 import { usePlayerBufferingState } from "../../player/utilities/player-dragging-logic";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { formatCount, generateRandomInteger } from "../../../../utilities/fomatCount";
@@ -19,7 +18,6 @@ export default function Description() {
   const location = useSelector((state) => state.app.location);
   const fullScreen = useSelector((state) => state.watch.fullScreen);
   const windowWidth = useSelector((state) => state.app.windowWidth);
-  const [updateBufferBar, updateProgressBar] = usePlayerProgressBarLogic();
   const [checkBufferedOnTrackChange, checkBuffered, clearIntervalOnTrackChange] = usePlayerBufferingState();
   const [showMore, setShowMore] = useState(false);
   const showMoreButton = useRef();

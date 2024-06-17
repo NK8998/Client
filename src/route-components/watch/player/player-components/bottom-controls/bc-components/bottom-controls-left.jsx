@@ -4,15 +4,13 @@ import { usePlayerMouseMove } from "../../../utilities/player-mouse-interactions
 import VolumeSlider from "./slider";
 import { getTimeStamp, removeLeadingZero } from "../../../../../../utilities/getTimestamp";
 import { useSelector } from "react-redux";
-import { usePlayerDraggingLogic } from "../../../utilities/player-dragging-logic";
 
 export const BottomControlsLeft = ({ handlePlayState }) => {
   const playingVideo = useSelector((state) => state.watch.playingVideo);
   const chapters = useSelector((state) => state.player.chapters);
-  const [startDrag, stopDragging, handleClick, handleDrag, updateRedDot, resetDot, isDragging] = usePlayerDraggingLogic();
 
   const { duration_timestamp } = playingVideo;
-  const [handleMouseMove] = usePlayerMouseMove();
+  const { handleMouseMove } = usePlayerMouseMove();
   const handleMouseLeaveControlsLeft = (e) => {
     const volumeForm = document.querySelector(".volume-slider");
     volumeForm.classList.remove("show");

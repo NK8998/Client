@@ -1,9 +1,13 @@
 import { useEffect, useRef } from "react";
 import { useSelector } from "react-redux";
+import { usePlayerProgressBarLogic } from "./player-progressBar-logic";
+import { usePlayerDraggingLogic } from "./player-dragging-logic";
 
 export function usePlayerMouseMove() {
   const settingsShowing = useSelector((state) => state.player.settingsShowing);
   const timeoutRef = useRef();
+  const { updateProgressBar, updateBufferBar } = usePlayerProgressBarLogic();
+  const { updateRedDot } = usePlayerDraggingLogic();
 
   useEffect(() => {
     if (settingsShowing) {
@@ -24,8 +28,18 @@ export function usePlayerMouseMove() {
   };
 
   const handleHover = () => {
-    const videoContainer = document.querySelector(".captions-container-relative");
     const controlsRef = document.querySelector(".player-inner-relative");
+    if (controlsRef.classList.contains("hide")) {
+      const playerContainer = document.querySelector(".player-outer");
+      playerContainer.classList.add("seeking");
+      requestAnimationFrame(() => {
+        updateProgressBar();
+        updateRedDot();
+        updateBufferBar();
+        playerContainer.classList.remove("seeking");
+      });
+    }
+    const videoContainer = document.querySelector(".captions-container-relative");
     if (!controlsRef || !videoContainer) return;
     controlsRef.classList.remove("hide");
     videoContainer.classList.remove("hide");
@@ -58,5 +72,5 @@ export function usePlayerMouseMove() {
     videoContainer.classList.add("hide");
   };
 
-  return [handleMouseMove, handleHover, handleMouseOut];
+  return { handleMouseMove, handleHover, handleMouseOut };
 }

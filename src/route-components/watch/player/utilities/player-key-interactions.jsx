@@ -94,7 +94,7 @@ export const usePlayerClickInteractions = () => {
   const timeoutClick = useRef();
   const fullScreen = useSelector((state) => state.watch.fullScreen);
   const dispatch = useDispatch();
-  const [handleMouseMove, handleHover, handleMouseOut] = usePlayerMouseMove();
+  const { handleMouseMove } = usePlayerMouseMove();
 
   const handleDoubleClick = () => {
     if (timeoutClick.current) {

@@ -127,5 +127,5 @@ export const usePlayerProgressBarLogic = () => {
     }
   };
 
-  return [updateBufferBar, updateProgressBar];
+  return { updateBufferBar, updateProgressBar };
 };

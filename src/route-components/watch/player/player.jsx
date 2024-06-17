@@ -45,10 +45,9 @@ export default function Player({ videoRef, containerRef }) {
   const seeking = useSelector((state) => state.player.seeking);
   const playbackRate = useSelector((state) => state.player.playbackRate);
   //
-  const [handleMouseMove, handleHover, handleMouseOut] = usePlayerMouseMove();
-  const [updateBufferBar, updateProgressBar] = usePlayerProgressBarLogic();
-  const [updateScrubbingBar, previewCanvas, movePreviews] = usePlayerScrubbingBarInteractions();
-  const [startDrag, stopDragging, handleClick, handleDrag, updateRedDot, resetDot] = usePlayerDraggingLogic();
+  const { handleMouseMove, handleHover, handleMouseOut } = usePlayerMouseMove();
+  const { updateBufferBar, updateProgressBar } = usePlayerProgressBarLogic();
+  const { updateRedDot } = usePlayerDraggingLogic();
   const [handleKeyPress, handleKeyUp, focusViaKeyBoard, wasPlaying] = usePlayerkeyInteractions();
   const [applyChapterStyles, calculateWidth] = usePlayerStyles();
   const [toggleMiniPlayer] = useMiniPlayermode();
@@ -325,13 +324,13 @@ export default function Player({ videoRef, containerRef }) {
     }
     intervalRef.current = setInterval(() => {
       // console.log("running");
+      if (document.querySelector(".player-inner-relative").classList.contains("hide") && !miniPlayer) return;
       if (!buffering) {
         updateBufferBar();
       }
-
       updateProgressBar();
       updateRedDot();
-    }, 100);
+    }, 60);
   };
 
   const clearIntervalProgress = () => {
@@ -344,7 +343,7 @@ export default function Player({ videoRef, containerRef }) {
       clearIntervalProgress();
       updateProgess();
     }
-  }, [isDragging, play, seeking]);
+  }, [isDragging, play, seeking, miniPlayer]);
 
   const handleContextMenu = (e) => {
     // e.preventDefault();
@@ -366,29 +365,15 @@ export default function Player({ videoRef, containerRef }) {
     containerRef.current.classList.remove("focus-via-keyboard");
   };
 
-  const styleTimeout = useRef();
   const handleSeeking = () => {
-    if (styleTimeout.current) {
-      clearTimeout(styleTimeout.current);
-    }
-    const redDotWrapperRef = document.querySelector(".red-dot-wrapper");
-    const progressBarRefs = document.querySelectorAll(".progress.bar");
-
-    progressBarRefs.forEach((bar) => {
-      bar.style.transition = `transform 0ms cubic-bezier(0.075, 0.82, 0.165, 1)`;
-      redDotWrapperRef.style.transition = `transform 0ms cubic-bezier(0.075, 0.82, 0.165, 1)`;
-    });
-
+    containerRef.current.classList.add("seeking");
     updateProgressBar();
     updateRedDot();
 
-    styleTimeout.current = setTimeout(() => {
-      dispatch(updatePlayerState({ playerPropertyToUpdate: "seeking", updatedValue: false }));
-      progressBarRefs.forEach((bar) => {
-        redDotWrapperRef.style.transition = `transform 100ms cubic-bezier(0.075, 0.82, 0.165, 1)`;
-        bar.style.transition = `transform 100ms cubic-bezier(0.075, 0.82, 0.165, 1)`;
-      });
-    }, 50);
+    dispatch(updatePlayerState({ playerPropertyToUpdate: "seeking", updatedValue: false }));
+    requestAnimationFrame(() => {
+      containerRef.current.classList.remove("seeking");
+    });
   };
 
   const handleSeeked = () => {};

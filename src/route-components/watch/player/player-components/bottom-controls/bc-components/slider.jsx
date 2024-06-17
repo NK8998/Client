@@ -4,7 +4,7 @@ import { useLayoutEffect, useRef, useState } from "react";
 import { VolumeHighButton, VolumeLowButton, VolumeMuteButton } from "../../../../../../assets/icons";
 
 export default function VolumeSlider({}) {
-  const [handleMouseMove, handleHover] = usePlayerMouseMove();
+  const { handleMouseMove, handleHover } = usePlayerMouseMove();
   const [volume, setVolume] = useState(1);
   const currentVolume = useRef(1);
 
