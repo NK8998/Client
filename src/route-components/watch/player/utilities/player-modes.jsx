@@ -263,6 +263,7 @@ export const useFullscreenMode = () => {
         videoRef.classList.add("theatre");
         containerRef.classList.add("theatre");
         columns.classList.add("theatre");
+        secondary.classList.add("theatre");
         toTheatre();
         // document.exitFullscreen();
       }

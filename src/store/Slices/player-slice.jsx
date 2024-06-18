@@ -16,6 +16,7 @@ const playerSlicer = createSlice({
     urlTime: 0,
     seeking: false,
     playbackRate: 1,
+    currentIndex: 0,
   },
   reducers: {
     updatePlayerState: (state, action) => {

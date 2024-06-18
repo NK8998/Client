@@ -18,7 +18,7 @@ import { usePlayerClickInteractions, usePlayerkeyInteractions } from "./utilitie
 import { usePlayerStyles } from "./utilities/player-styles";
 import { useFullscreenMode, useMiniPlayermode, useTheatreMode } from "./utilities/player-modes";
 import PreviewBG from "./player-components/preview-bg/preview-bg";
-import { toggleTheatreMode, updatePlayingVideo } from "../../../store/Slices/watch-slice";
+import { toggleTheatreMode, updatePlayingVideo, updateWatchState } from "../../../store/Slices/watch-slice";
 import TopVideoComponent from "./player-components/bottom-controls/bc-components/title-component";
 import { debounce } from "lodash";
 import PlayerBanner from "./player-components/player-banner/player-banner";
@@ -323,13 +323,10 @@ export default function Player({ videoRef, containerRef }) {
       clearInterval(intervalRef.current);
     }
     intervalRef.current = setInterval(() => {
-      // console.log("running");
-      if (document.querySelector(".player-inner-relative").classList.contains("hide") && !miniPlayer) return;
-      if (!buffering) {
-        updateBufferBar();
-      }
+      // console.log("running")
       updateProgressBar();
-      updateRedDot();
+      if (document.querySelector(".player-inner-relative").classList.contains("hide") && !miniPlayer) return;
+      updateBufferBar();
     }, 60);
   };
 
@@ -342,6 +339,8 @@ export default function Player({ videoRef, containerRef }) {
     if (play) {
       clearIntervalProgress();
       updateProgess();
+    } else {
+      clearIntervalProgress();
     }
   }, [isDragging, play, seeking, miniPlayer]);
 
@@ -368,12 +367,12 @@ export default function Player({ videoRef, containerRef }) {
   const handleSeeking = () => {
     containerRef.current.classList.add("seeking");
     updateProgressBar();
-    updateRedDot();
 
     dispatch(updatePlayerState({ playerPropertyToUpdate: "seeking", updatedValue: false }));
     requestAnimationFrame(() => {
       containerRef.current.classList.remove("seeking");
     });
+    dispatch(updateWatchState({ watchPropertyToUpdate: "syncChaptersToVideoTime", updatedValue: true }));
   };
 
   const handleSeeked = () => {};

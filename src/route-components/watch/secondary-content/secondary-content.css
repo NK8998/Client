@@ -52,3 +52,175 @@
 .secondary-skeleton-views span{
     font-size: 11.5px;
 }
+.chapters-list{
+    display: none;
+    width: 100%;
+    border: 1px solid rgb(65, 65, 65);
+    box-sizing: border-box;
+    border-radius: 12px ;
+    overflow: hidden;
+
+}
+.chapters-list.show{
+    display: block;
+}
+
+.chapters-header{
+    display: flex;
+    justify-content: space-between;
+    background-color: rgb(29, 29, 29);
+    padding: 8px;
+    padding-right: 2px;
+    align-items: center;
+    border-radius: 12px 12px 0px 0px;
+}
+
+.chapters-header p{
+    font-weight: 600;
+    font-size: 19px;
+    padding-left: 5px;
+}
+.chapters-header .x-svg{
+    cursor: pointer;
+    fill: white;
+    padding: 8px;
+    display: grid;
+    place-content: center;
+    border-radius: 100%;
+
+}
+
+.chapters-header .x-svg:hover{
+    background-color: rgba(128, 128, 128, 0.445);
+}
+
+.chapters-header .x-svg:active{
+    background-color: rgba(128, 128, 128, 0.644);
+}
+
+.chapters-list-interactable{
+    max-height: calc(var(--height) - 56px);
+    height: calc(var(--height) - 56px);
+    width: 100%;
+    overflow: auto;
+    scroll-behavior: smooth;
+    position: relative;
+}
+
+.chapter-interactable-row{
+    padding: 8px 0px;
+
+}
+.chapter-interactable-row-inner{
+    cursor: pointer;
+    /* background-color: red; */
+    padding: 0px 10px;
+    padding-left: 15px;
+
+}
+.chapter-interactable-row:hover,
+.chapter-interactable-row.current{
+    background-color: rgb(32, 32, 32);
+
+}
+
+.chapter-interactable-row-left{
+    display: flex;
+    gap: 15px;
+    align-items: center;
+
+}
+.interactable-chapter-image{
+    width: 100px;
+    min-width: 100px;
+    height: 56px;
+    min-height: 56px;
+    border-radius: 8px;
+}
+
+.interactable-info{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    font-size: 13.5px;
+    font-weight: 500;
+    min-width: 0;
+
+
+}
+
+.interactable-info .interactable-title{
+    overflow: hidden; 
+    text-overflow: ellipsis; 
+    display: -webkit-box; 
+    -webkit-line-clamp: 2; 
+    -webkit-box-orient: vertical;
+    color: rgb(238, 238, 238);
+
+}
+.interactable-info .interactable-timestamp{
+    background-color: #3ea5ff42;
+    width: fit-content;
+    color: #3ea6ff;
+    padding: 4px 6px;
+    border-radius: 2px;
+    font-size: 11.5px;
+}
+
+.sync-interactables{
+    /* background-color: rgba(255, 0, 0, 0.219); */
+    padding: 15px;
+    position: sticky;
+    bottom: 0px;
+}
+
+
+
+.sync-interactables p{
+    transition: transform 300ms ease;
+    background-color: white;
+    color: rgba(0, 0, 0, 0.884);
+    font-size: 13px;
+    font-weight: 500;
+    padding: 9px 10px;
+    width: fit-content;
+    width: -moz-fit-content;
+    margin: auto;
+    border-radius: 1000px;
+    cursor: pointer;
+    transform: translateY(0px);
+
+}
+
+
+.sync-interactables.show{
+    animation: showSyncButton 200ms linear forwards;
+}
+
+.sync-interactables.hide{
+    animation: hideSyncButton 200ms linear forwards;
+}
+
+@keyframes hideSyncButton {
+    from{
+        display: block;
+        transform: translateY(0px);
+    }
+    to{
+        transform: translateY(60px);
+        display: none;
+
+    }
+}
+
+@keyframes showSyncButton {
+    from{
+        transform: translateY(60px);
+        display: block;
+    }
+    to{
+        transform: translateY(0px);
+        display: block;
+
+    }
+}

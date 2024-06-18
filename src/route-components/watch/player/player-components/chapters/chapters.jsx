@@ -9,7 +9,7 @@ export default function Chapters({ videoRef, chapterContainerRef, redDotRef, red
   const settingsShowing = useSelector((state) => state.player.settingsShowing);
   const chapters = useSelector((state) => state.player.chapters);
   const { handleMouseMove } = usePlayerMouseMove();
-  const [updateScrubbingBar, previewCanvas, movePreviews] = usePlayerScrubbingBarInteractions();
+  const { updateScrubbingBar } = usePlayerScrubbingBarInteractions();
   const { startDrag, resetDot, isDragging } = usePlayerDraggingLogic();
   const [checkBufferedOnTrackChange, checkBuffered] = usePlayerBufferingState();
   const dispatch = useDispatch();

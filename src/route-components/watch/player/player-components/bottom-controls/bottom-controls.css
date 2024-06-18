@@ -2,10 +2,13 @@
 .bottom-controls-right{
     display: flex;
     align-items: center;
+ 
 
 }
 .bottom-controls-right{
   gap: .2em;
+  margin-left: auto;
+
 }
 .bottom-controls{
     position: absolute;
@@ -16,7 +19,7 @@
     /* background: burlywood; */
     height: 47px;
     display: flex;
-    justify-content: space-between;
+    /* justify-content: space-between; */
     pointer-events: all;
   
   }
@@ -85,21 +88,26 @@
     visibility: hidden;
   }
   .player-button.chapter-title{
-   
     width: fit-content;
     padding-left: 10px;
     display: flex;
     gap: 10px;
     align-items: center;
+    /* background-color: blue; */
+    flex: 1 1;
+    place-content: unset;
+   
   }
   .player-button.chapter-title > p{
+    margin: unset;
+    width: fit-content;
     white-space: nowrap;
     font-size: 13.4px;
     color: rgb(199, 199, 199);
     padding: unset;
     max-width: calc(var(--width) / 3);
     overflow: hidden;
-    text-overflow: ellipsis;
+    text-overflow: ellipsis;  
 
   }
   .player-button.chapter-title .floating-dot{
@@ -288,6 +296,6 @@ form.volume-slider{
 
 @container(max-width: 50em){
   .player-button.chapter-title > p{
-    max-width: 20px;
+    max-width: 60px;
   }
 }

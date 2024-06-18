@@ -3,12 +3,13 @@ import { useDispatch, useSelector } from "react-redux";
 import { usePlayerScrubbingBarInteractions } from "./player-scrubbingBar-logic";
 import { updatePlayerState } from "../../../../store/Slices/player-slice";
 import { getTimeStamp } from "../../../../utilities/getTimestamp";
+import { updateWatchState } from "../../../../store/Slices/watch-slice";
 
 export const usePlayerDraggingLogic = () => {
   const mouseDownTracker = useRef();
   const isDragging = useRef(false);
   const chapters = useSelector((state) => state.player.chapters);
-  const [updateScrubbingBar, previewCanvas, movePreviews] = usePlayerScrubbingBarInteractions();
+  const { previewCanvas, movePreviews } = usePlayerScrubbingBarInteractions();
   const [checkBufferedOnTrackChange, checkBuffered, clearIntervalOnTrackChange] = usePlayerBufferingState();
   const dispatch = useDispatch();
   const timeDelay = 180;
@@ -96,6 +97,7 @@ export const usePlayerDraggingLogic = () => {
         const newRatio = Math.max(Math.min(position / chapterPaddingWidth, 1), 0);
         progressBarRefs[index].style.transform = `scaleX(${newRatio})`;
         const curIndex = progressBarRefs[index].getAttribute("dataIndex");
+        dispatch(updatePlayerState({ playerPropertyToUpdate: "currentIndex", updatedValue: parseInt(curIndex) }));
         document.documentElement.style.setProperty("--currentChapterIndex", `${curIndex}`);
         document.documentElement.style.setProperty("--hoverChapterIndex", `${curIndex}`);
         redDotRef.setAttribute("dataIndex", `${curIndex}`);
@@ -182,6 +184,8 @@ export const usePlayerDraggingLogic = () => {
 
   const startDrag = (e) => {
     if (e.button !== 0) return;
+    dispatch(updateWatchState({ watchPropertyToUpdate: "syncChaptersToVideoTime", updatedValue: true }));
+
     removeEventListeners();
     const isTouching = e.touches ? e.touches.length > 0 : false;
     const innerChapterContainerRef = document.querySelector(".chapters-container");

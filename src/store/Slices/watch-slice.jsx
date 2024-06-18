@@ -17,6 +17,8 @@ const watchSlice = createSlice({
     isTransitioning: false,
     miniPlayerBoolean: false,
     notFound: false,
+    chaptersListShowing: false,
+    syncChaptersToVideoTime: true,
   },
   reducers: {
     updatePlayingVideo: (state, action) => {
@@ -49,6 +51,10 @@ const watchSlice = createSlice({
     updateNotFound: (state, action) => {
       state.notFound = action.payload;
     },
+    updateWatchState: (state, action) => {
+      const { watchPropertyToUpdate, updatedValue } = action.payload;
+      state[watchPropertyToUpdate] = updatedValue;
+    },
   },
 });
 
@@ -64,6 +70,7 @@ export const {
   updateIsTransitioning,
   updateMiniPlayerBoolean,
   updateNotFound,
+  updateWatchState,
 } = watchSlice.actions;
 
 export default watchSlice.reducer;

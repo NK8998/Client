@@ -3,8 +3,7 @@ import { getTimeStamp } from "../../../../utilities/getTimestamp";
 
 export function usePlayerScrubbingBarInteractions() {
   const chapters = useSelector((state) => state.player.chapters);
-  const playingVideo = useSelector((state) => state.watch.playingVideo);
-  const { extraction_and_palette, video_id, aspect_ratio, duration } = playingVideo;
+  const { extraction_and_palette, video_id, aspect_ratio, duration } = useSelector((state) => state.watch.playingVideo);
   const settingsShowing = useSelector((state) => state.player.settingsShowing);
   const theatreMode = useSelector((state) => state.watch.theatreMode);
   const fullScreen = useSelector((state) => state.watch.fullScreen);
@@ -48,6 +47,10 @@ export function usePlayerScrubbingBarInteractions() {
 
     const offsetX = ((currentTile - 1) % paletteSize) * width;
     const offsetY = Math.floor((currentTile - 1) / paletteSize) * height;
+    if (!element) {
+      // to be used by the chapters list component
+      return { offsetX, offsetY, backgroundPallete };
+    }
     element.style.backgroundSize = `${width * paletteSize}px ${height * paletteSize}px`;
     let backgroundImage = element.style.backgroundImage;
     let url = backgroundImage.slice(5, backgroundImage.length - 2);
@@ -163,5 +166,5 @@ export function usePlayerScrubbingBarInteractions() {
       redDotRef.style.scale = 1;
     }
   };
-  return [updateScrubbingBar, previewCanvas, movePreviews, retrieveCurPalleteAndTile];
+  return { updateScrubbingBar, previewCanvas, movePreviews, retrieveCurPalleteAndTile };
 }

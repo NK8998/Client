@@ -1,6 +1,8 @@
 import { useRef } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { getTimeStamp } from "../../../../utilities/getTimestamp";
+import { updatePlayerState } from "../../../../store/Slices/player-slice";
+import { usePlayerDraggingLogic } from "./player-dragging-logic";
 
 export const handleFocusingElements = (isFocusing) => {
   isFocusing.current = !isFocusing.current;
@@ -13,6 +15,8 @@ export const seekVideo = (newTime) => {
 
 export const usePlayerProgressBarLogic = () => {
   const chapters = useSelector((state) => state.player.chapters);
+  const { updateRedDot } = usePlayerDraggingLogic();
+  const dispatch = useDispatch();
   const updateBufferBar = () => {
     const videoRef = document.querySelector(".html5-player");
     const buffered = videoRef.buffered;
@@ -88,13 +92,18 @@ export const usePlayerProgressBarLogic = () => {
     }
     const timeStamp = getTimeStamp(Math.round(currentTime));
     timeContainer.textContent = timeStamp;
+    const controlsHidden =
+      document.querySelector(".player-inner-relative").classList.contains("hide") &&
+      !document.querySelector(".mini-player-outer").classList.contains("visible");
 
-    if (chapters.length === 0 || !chapters || !progressBarRefs || !chapterContainers || !chapterPadding) return;
     progressBarRefs.forEach((progressBar, index) => {
       // const curIndex = progressBar.getAttribute("dataIndex");
       const chapter = chapters[index];
       if (!chapter) return;
       if (chapter.start <= currentTime && currentTime < chapter.end) {
+        dispatch(updatePlayerState({ playerPropertyToUpdate: "currentIndex", updatedValue: index }));
+        if (controlsHidden) return;
+
         document.documentElement.style.setProperty("--currentChapterIndex", `${index}`);
         redDotRef.setAttribute("dataIndex", `${index}`);
         redDotWrapperRef.setAttribute("dataIndex", `${index}`);
@@ -111,20 +120,8 @@ export const usePlayerProgressBarLogic = () => {
         progressBar.style.transform = `scaleX(${0})`;
       }
     });
-
-    const style = getComputedStyle(document.documentElement);
-    const hovering = style.getPropertyValue("--hovering").trim();
-    // console.log(hovering);
-
-    if (hovering === "true" && chapters.length > 1) {
-      const hoveringChapterIndex = style.getPropertyValue("--hoverChapterIndex").trim();
-      const currentChapterIndex = style.getPropertyValue("--currentChapterIndex").trim();
-      if (hoveringChapterIndex === currentChapterIndex) {
-        redDotRef.style.scale = 1.5;
-      } else {
-        redDotRef.style.scale = 1;
-      }
-    }
+    if (controlsHidden) return;
+    updateRedDot(currentTime);
   };
 
   return { updateBufferBar, updateProgressBar };

@@ -1,4 +1,4 @@
-import { useLayoutEffect, useRef } from "react";
+import { useLayoutEffect } from "react";
 import { useSelector } from "react-redux";
 import { usePlayerScrubbingBarInteractions } from "../../utilities/player-scrubbingBar-logic";
 import { debounce } from "lodash";
@@ -10,7 +10,7 @@ export default function PreviewBG() {
   const playingVideo = useSelector((state) => state.watch.playingVideo);
   const buffering = useSelector((state) => state.player.buffering);
   const debounceTime = useSelector((state) => state.app.debounceTime);
-  const [updateScrubbingBar, previewCanvas, movePreviews, retrieveCurPalleteAndTile] = usePlayerScrubbingBarInteractions();
+  const { previewCanvas } = usePlayerScrubbingBarInteractions();
   const { aspect_ratio } = playingVideo;
 
   const calculateDimensions = () => {
