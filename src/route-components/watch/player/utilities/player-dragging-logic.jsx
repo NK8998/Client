@@ -45,6 +45,18 @@ export const usePlayerDraggingLogic = () => {
     }
   };
 
+  const updateRedDotWhileDragging = (e) => {
+    const redDotWrapperRef = document.querySelector(".red-dot-wrapper");
+    const innerChapterContainerRef = document.querySelector(".chapters-container");
+    const { left, right } = innerChapterContainerRef.getBoundingClientRect();
+    const maxPosition = right - left;
+    const clientPosition = Math.max(e.clientX - left, 0);
+    const position = Math.min(clientPosition, maxPosition);
+    // console.log(position, right);
+
+    redDotWrapperRef.style.transform = `translateX(${position}px)`;
+  };
+
   const handleClick = (e) => {
     const style = getComputedStyle(document.documentElement);
     const duration = chapters[chapters.length - 1].end;
@@ -123,7 +135,7 @@ export const usePlayerDraggingLogic = () => {
       }
     });
 
-    updateRedDot(currentTime);
+    updateRedDotWhileDragging(e);
     redDotRef.style.scale = chapters.length === 1 ? 1 : 1.5;
     document.documentElement.style.setProperty("--dragTime", `${currentTime}`);
   };
@@ -166,6 +178,7 @@ export const usePlayerDraggingLogic = () => {
       clearTimeout(mouseDownTracker.current);
     }
     videoRef.currentTime = dragTime;
+    updateRedDot(dragTime);
 
     if (hovering === "false" || e.touches) {
       document.querySelectorAll(".chapter-padding.drag-expand").forEach((el) => {

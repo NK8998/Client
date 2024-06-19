@@ -21,15 +21,23 @@ export default function ChaptersList() {
   const dispatch = useDispatch();
   const chapterListRef = useRef(null);
   const [syncButtonClicked, setSyncButtonClicked] = useState(false);
+  const [interactableClicked, setInteractableClicked] = useState(false);
+  const [scrollPosCalculated, setScrollPosCalculated] = useState(false);
   const scrollingRef = useRef(false);
 
   const removeChaptersList = () => {
     dispatch(updateWatchState({ watchPropertyToUpdate: "chaptersListShowing", updatedValue: false }));
   };
 
-  useLayoutEffect(() => {
+  const getScrollDeviation = () => {
+    /**
+     * Calculates the scroll position needed for chapter interactables based on their heights.
+     * Adjusts the scroll position and updates the `scrollPosCalculated` boolean accordingly.
+     *
+     * @returns {void}
+     */
     if (!chapterListRef.current || !syncChaptersToVideoTime) return;
-    setSyncButtonClicked(true);
+
     let scrollDeviation = 0;
 
     const interactablesElements = Array.from(document.querySelectorAll(".chapter-interactable-row")).slice(0, currentIndex);
@@ -39,17 +47,41 @@ export default function ChaptersList() {
       scrollDeviation += height;
     });
 
+    scrollDeviation > 0 ? setScrollPosCalculated(true) : setScrollPosCalculated(false);
+
     chapterListRef.current.scrollTo({ top: scrollDeviation, behavior: "smooth" });
-  }, [currentIndex, syncChaptersToVideoTime, chaptersListShowing, location, windowWidth]);
+  };
+
+  useLayoutEffect(getScrollDeviation, [currentIndex, syncChaptersToVideoTime, chaptersListShowing, location, windowWidth]);
+
+  useLayoutEffect(() => {
+    // Doing this so scroll position is calculated after the node has been appended into its respective div
+    requestAnimationFrame(getScrollDeviation);
+  }, [windowWidth]);
 
   useEffect(() => {
+    // Close the chapter list when a user chooses a different video to save bandwidth
     if (chaptersListShowing) {
       removeChaptersList();
     }
-    dispatch(updatePlayerState({ playerPropertyToUpdate: "loopChapterObj", updatedValue: { loopState: false, startTime: 0, endTime: 0 } }));
+
+    // Reset the loop state when a user selects a different video
+    dispatch(
+      updatePlayerState({
+        playerPropertyToUpdate: "loopChapterObj",
+        updatedValue: { loopState: false, startTime: 0, endTime: 0 },
+      })
+    );
   }, [video_id]);
 
   useLayoutEffect(() => {
+    /**
+     * Manages the positioning of the "chaptersList" div based on the window width.
+     * This function ensures that unnecessary rerenders are avoided, which can lead to odd behavior.
+     *
+     * @param {number} windowWidth - The current window width.
+     * @param {string} location - The current location.
+     */
     const chaptersList = document.querySelector(".chapters-list");
     const secondary = document.querySelector(".secondary.content");
     const interactablePanel = document.querySelector(".interactable-panel");
@@ -66,6 +98,14 @@ export default function ChaptersList() {
   }, [windowWidth, location]);
 
   useLayoutEffect(() => {
+    /**
+     * Sets up a time update event listener on the video element to handle chapter looping.
+     * Removes the event listener when the `loopState` boolean is `false`.
+     * Displays a toast notification each time the chapter loops.
+     *
+     * @returns {() => void} A cleanup function to remove the event listener.
+     */
+
     const playerContainer = document.querySelector(".player-outer");
     const videoRef = document.querySelector(".html5-player");
 
@@ -85,14 +125,18 @@ export default function ChaptersList() {
           },
           duration: 3000,
         });
-        playerContainer.classList.add("seeking");
 
+        // Add the "seeking" class to ensure smooth progress bar positioning
+        playerContainer.classList.add("seeking");
         videoRef.currentTime = startTime;
+
+        // Remove the "seeking" class after a delay for smooth transition
         requestAnimationFrame(() => {
           playerContainer.classList.remove("seeking");
         });
       }
     };
+
     if (loopState) {
       videoRef.addEventListener("timeupdate", handleLooping);
     } else {
@@ -105,10 +149,15 @@ export default function ChaptersList() {
   }, [loopState]);
 
   useLayoutEffect(() => {
-    const chapterPadding = document.querySelectorAll(".chapter-hover");
+    /*
+     * Loops over all chapter containers and sets the "loop-on" class or removes it
+     * depending on the value of the "loopState" boolean.
+     * Additionally, the "current" class is added to the chapter container where the loop is currently happening.
+     */
+    const chapterContainers = document.querySelectorAll(".chapter-hover");
 
     if (loopState) {
-      chapterPadding.forEach((chapter, index) => {
+      chapterContainers.forEach((chapter, index) => {
         if (index !== currentIndex) {
           chapter.classList.add("loop-on");
         } else {
@@ -116,30 +165,65 @@ export default function ChaptersList() {
         }
       });
     } else {
-      chapterPadding.forEach((chapter) => {
+      chapterContainers.forEach((chapter) => {
         chapter.classList.remove("loop-on");
         chapter.classList.remove("current");
       });
     }
   }, [loopState, currentIndex]);
 
+  // Doing this so that teh chapters-list div is always availabe
   if (!extraction_and_palette || !chaptersListShowing) return <div className='chapters-list'></div>;
 
   const handleInteractableClick = (time) => {
-    dispatch(updatePlayerState({ playerPropertyToUpdate: "loopChapterObj", updatedValue: { loopState: false, startTime: 0, endTime: 0 } }));
-    const videoRef = document.querySelector(".html5-player");
+    /**
+     * Handles the click event on an interactable element (chapter).
+     * - Sets `interactableClicked` to `true`.
+     * - Disables chapter looping by setting `loopState` to `false`.
+     * - Sets the current time of the video to the specified `time`.
+     *
+     * @param {number} time - The desired video time in seconds.
+     * @returns {void}
+     */
 
+    setInteractableClicked(true);
+    dispatch(
+      updatePlayerState({
+        playerPropertyToUpdate: "loopChapterObj",
+        updatedValue: { loopState: false, startTime: 0, endTime: 0 },
+      })
+    );
+    const videoRef = document.querySelector(".html5-player");
     videoRef.currentTime = time;
   };
 
   const handleLoopIconClick = (chapter) => {
+    /**
+     * Toggles the chapter loop state and updates the loop start and end times.
+     *
+     * @param {Object} chapter - The chapter object containing `start` and `end` properties.
+     * @returns {void}
+     */
+
     const { start, end } = chapter;
     dispatch(
-      updatePlayerState({ playerPropertyToUpdate: "loopChapterObj", updatedValue: { loopState: !loopState, startTime: start, endTime: end } })
+      updatePlayerState({
+        playerPropertyToUpdate: "loopChapterObj",
+        updatedValue: { loopState: !loopState, startTime: start, endTime: end },
+      })
     );
   };
 
   const interactableListElements = chapters.map((chapter, index) => {
+    /**
+     * Generates a list of interactable chapter elements based on the provided chapters data.
+     *
+     * @param {Array} chapters - An array of chapter objects.
+     * @param {number} currentIndex - The index of the currently active chapter.
+     * @param {boolean} loopState - Indicates whether chapter looping is enabled.
+     * @returns {Array} An array of React elements representing the interactable chapters.
+     */
+
     const width = 100;
     const height = 56;
     const dimensions = { width, height };
@@ -147,7 +231,7 @@ export default function ChaptersList() {
     const { paletteSize } = extraction_and_palette;
 
     return (
-      <div className={`chapter-interactable-row ${index === currentIndex ? "current" : ""}`} key={`chapterlist-inex-${index}`}>
+      <div className={`chapter-interactable-row ${index === currentIndex ? "current" : ""}`} key={`chapterlist-index-${index}`}>
         <div className='chapter-interactable-row-inner'>
           <div
             className='chapter-interactable-row-left'
@@ -190,16 +274,26 @@ export default function ChaptersList() {
   });
 
   const handleScroll = (e) => {
+    /**
+     * Debounces the scroll event to prevent premature boolean resets.
+     * Updates the `syncChaptersToVideoTime` property based on various conditions.
+     *
+     * @param {Event} e - The scroll event object. Currently not utilized. Might come in handy in case a bug arises.
+     * @returns {void}
+     */
     if (scrollingRef.current) {
       clearTimeout(scrollingRef.current);
     }
     scrollingRef.current = setTimeout(() => {
-      if (!syncButtonClicked && !isDragging) {
+      if (!syncButtonClicked && !isDragging && !interactableClicked && !scrollPosCalculated) {
         dispatch(updateWatchState({ watchPropertyToUpdate: "syncChaptersToVideoTime", updatedValue: false }));
       }
       setSyncButtonClicked(false);
+      setInteractableClicked(false);
+      setScrollPosCalculated(false);
     }, 200);
   };
+
   return (
     <div className={`chapters-list ${chaptersListShowing && chapters.length > 1 ? "show" : ""}`}>
       <div className='chapters-header'>
