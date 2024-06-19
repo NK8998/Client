@@ -12,15 +12,17 @@ const playerSlicer = createSlice({
     settingsShowing: false,
     subtitles: "Off",
     buffering: false,
-    isDragging: true,
+    isDragging: false,
     urlTime: 0,
     seeking: false,
     playbackRate: 1,
     currentIndex: 0,
+    loopChapterObj: { loopState: false, startTime: 0, endTime: 0 },
   },
   reducers: {
     updatePlayerState: (state, action) => {
       const { playerPropertyToUpdate, updatedValue } = action.payload;
+      console.log();
       state[playerPropertyToUpdate] = updatedValue;
     },
   },

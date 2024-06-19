@@ -3,7 +3,6 @@ import BrowseSecondaryVideos from "./browse-secondary-videos/browse-secondary-vi
 import FilterChipSecondary from "./filter-chip-secondary/filter-chip-secondary";
 import "./secondary-content.css";
 import { useSelector } from "react-redux";
-import ChaptersList from "./chapters-list/chapters-list";
 
 export default function SecondaryContent({ secondaryRefInner, secondaryRefOuter }) {
   const location = useSelector((state) => state.app.location);
@@ -42,7 +41,6 @@ export default function SecondaryContent({ secondaryRefInner, secondaryRefOuter 
   }, [location, windowWidth]);
   return (
     <div className={`secondary-inner ${fetchingRecommendations ? "skeleton" : ""}`}>
-      {windowWidth > 1040 && <ChaptersList />}
       <FilterChipSecondary />
       <BrowseSecondaryVideos />
     </div>

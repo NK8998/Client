@@ -16,6 +16,7 @@ export const seekVideo = (newTime) => {
 export const usePlayerProgressBarLogic = () => {
   const chapters = useSelector((state) => state.player.chapters);
   const { updateRedDot } = usePlayerDraggingLogic();
+  const { loopState, startTime, endTime } = useSelector((state) => state.player.loopChapterObj);
   const dispatch = useDispatch();
   const updateBufferBar = () => {
     const videoRef = document.querySelector(".html5-player");
@@ -77,6 +78,7 @@ export const usePlayerProgressBarLogic = () => {
   };
 
   const updateProgressBar = (curTime) => {
+    const playerContainer = document.querySelector(".player-outer");
     const videoRef = document.querySelector(".html5-player");
     const redDotRef = document.querySelector(".red-dot");
     const redDotWrapperRef = document.querySelector(".red-dot-wrapper");

@@ -428,6 +428,16 @@
   transition: transform 0s cubic-bezier(.4,0,1,1), -webkit-transform 0s cubic-bezier(.4,0,1,1);;
 }
 
+.chapter-hover.loop-on .bar{
+  opacity: 0;
+}
+.chapter-hover.loop-on .bar.grey-bg{
+  opacity: 1;
+}
+
+.chapter-hover.current .chapter-padding{
+  transform: scaleY(2);
+}
 
 
 

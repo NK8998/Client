@@ -116,18 +116,22 @@
     /* background-color: red; */
     padding: 0px 10px;
     padding-left: 15px;
+    display: flex;
+    align-items: center;
 
 }
 .chapter-interactable-row:hover,
 .chapter-interactable-row.current{
     background-color: rgb(32, 32, 32);
-
 }
+
+
 
 .chapter-interactable-row-left{
     display: flex;
     gap: 15px;
     align-items: center;
+    flex: 1;
 
 }
 .interactable-chapter-image{
@@ -165,6 +169,31 @@
     padding: 4px 6px;
     border-radius: 2px;
     font-size: 11.5px;
+}
+
+.chapter-interactable-row-right{
+    display:  flex; 
+    gap: 5px;
+    min-width: 70px;
+    /* background-color: red; */
+}
+
+.chapter-interactable-row-right .interactable-row-icon{
+    fill: rgb(216, 216, 216);
+    padding: 8px;
+    border-radius: 100%;
+    display: grid;
+    place-content: center;
+}
+
+.chapter-interactable-row-right .interactable-row-icon:hover{
+    background-color: rgba(128, 128, 128, 0.514);
+    
+}
+
+.interactable-row-icon.active{
+    fill: #3ea6ff;
+    stroke-width: 10;
 }
 
 .sync-interactables{
@@ -223,4 +252,24 @@
         display: block;
 
     }
+}
+
+.sonner-toast.chapter-loop-on{
+    border-radius: 8px;
+    font-size: 14.5px;
+    background-color: white;
+    color: rgba(0, 0, 0, 0.788);
+    display: flex;
+    gap: 65px;
+    padding: 15px 15px;
+    align-items: center;
+    font-weight: 100;
+}
+
+.sonner-toast.chapter-loop-on  button{
+    background: transparent;
+    border: none;
+    color: #2d99f8;
+    font-size: 14.6px;
+    font-weight: 600;
 }

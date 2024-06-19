@@ -5,6 +5,7 @@ import { useLayoutEffect, useRef } from "react";
 import SecondaryContent from "./secondary-content/secondary-content";
 import Lower from "./lower/lower";
 import VideoNotFound from "./video-not-found/video-not-found";
+import ChaptersList from "./secondary-content/chapters-list/chapters-list";
 
 export default function Watch({ watchRef, miniPlayerBoolean }) {
   const notFound = useSelector((state) => state.watch.notFound);
@@ -29,6 +30,8 @@ export default function Watch({ watchRef, miniPlayerBoolean }) {
             <div className='secondary-in-primary' ref={secondaryRefInner}></div>
           </div>
           <div className='secondary content' ref={secondaryRefOuter}>
+            <ChaptersList />
+
             <SecondaryContent secondaryRefInner={secondaryRefInner} secondaryRefOuter={secondaryRefOuter} />
           </div>
         </div>

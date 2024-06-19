@@ -44,6 +44,8 @@ export default function Player({ videoRef, containerRef }) {
   const play = useSelector((state) => state.player.play);
   const seeking = useSelector((state) => state.player.seeking);
   const playbackRate = useSelector((state) => state.player.playbackRate);
+  const { loopState, startTime, endTime } = useSelector((state) => state.player.loopChapterObj);
+
   //
   const { handleMouseMove, handleHover, handleMouseOut } = usePlayerMouseMove();
   const { updateBufferBar, updateProgressBar } = usePlayerProgressBarLogic();
@@ -365,6 +367,12 @@ export default function Player({ videoRef, containerRef }) {
   };
 
   const handleSeeking = () => {
+    checkBuffered();
+    const videoRef = document.querySelector(".html5-player");
+    if (videoRef.currentTime < startTime || videoRef.currentTime > endTime) {
+      dispatch(updatePlayerState({ playerPropertyToUpdate: "loopChapterObj", updatedValue: { loopState: false, startTime: 0, endTime: 0 } }));
+    }
+
     containerRef.current.classList.add("seeking");
     updateProgressBar();
 

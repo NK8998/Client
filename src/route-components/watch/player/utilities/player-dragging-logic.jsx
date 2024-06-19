@@ -14,6 +14,7 @@ export const usePlayerDraggingLogic = () => {
   const dispatch = useDispatch();
   const timeDelay = 180;
   const wasPlaying = useRef(false);
+  const { loopState, startTime, endTime } = useSelector((state) => state.player.loopChapterObj);
 
   const updateRedDot = (currentTimeTracker) => {
     const duration = chapters[chapters.length - 1].end;
@@ -80,6 +81,10 @@ export const usePlayerDraggingLogic = () => {
     const currentTime = Math.min(Math.max(chapters[currentIndex].start + timeOffset, 0), duration - 0.1);
     if (isNaN(currentTime)) {
       return;
+    }
+
+    if (currentTime < startTime || currentTime > endTime) {
+      dispatch(updatePlayerState({ playerPropertyToUpdate: "loopChapterObj", updatedValue: { loopState: false, startTime: 0, endTime: 0 } }));
     }
     const curTime = parseInt(style.getPropertyValue("--curTime").trim());
     const timeDiff = Date.now() - curTime > timeDelay;

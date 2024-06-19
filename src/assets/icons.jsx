@@ -355,3 +355,27 @@ export const XIcon = () => {
     </svg>
   );
 };
+
+export const LoopIcon = () => {
+  return (
+    <svg xmlns='http://www.w3.org/2000/svg' enableBackground='new 0 0 24 24' height='24' viewBox='0 0 24 24' width='24' focusable='false'>
+      <path d='M21 13h1v5l-18.07.03 2.62 2.62-.71.71-3.85-3.86 3.85-3.85.71.71-2.67 2.67L21 17v-4zM3 7l17.12-.03-2.67 2.67.71.71 3.85-3.85-3.85-3.85-.71.71 2.62 2.62L2 6v5h1V7z'></path>
+    </svg>
+  );
+};
+
+export const LoopIconActive = () => {
+  return (
+    <svg xmlns='http://www.w3.org/2000/svg' enableBackground='new 0 0 24 24' height='24' viewBox='0 0 24 24' width='24' focusable='false'>
+      <path d='M20 14h2v5l-16.16.02 1.77 1.77L6.2 22.2 1.99 18l4.21-4.21 1.41 1.41-1.82 1.82L20 17v-3zM4 7l14.21-.02-1.82 1.82 1.41 1.41L22.01 6 17.8 1.79 16.39 3.2l1.77 1.77L2 5v6h2V7z'></path>
+    </svg>
+  );
+};
+
+export const ShareIcon = () => {
+  return (
+    <svg xmlns='http://www.w3.org/2000/svg' height='24' viewBox='0 0 24 24' width='24' focusable='false'>
+      <path d='M15 5.63 20.66 12 15 18.37V14h-1c-3.96 0-7.14 1-9.75 3.09 1.84-4.07 5.11-6.4 9.89-7.1l.86-.13V5.63M14 3v6C6.22 10.13 3.11 15.33 2 21c2.78-3.97 6.44-6 12-6v6l8-9-8-9z'></path>
+    </svg>
+  );
+};

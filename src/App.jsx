@@ -20,6 +20,7 @@ import BareCommunity from "./bare-routes/bare-channel/bare-channel-routes/bare-c
 import MiniPlayer from "./route-components/watch/player/mini-player";
 import { LoadingScreen } from "./loading-screen/loading-screen";
 import { debounce } from "lodash";
+import { Toaster } from "sonner";
 
 function App() {
   const credentialsChecked = useSelector((state) => state.app.credentialsChecked);
@@ -63,6 +64,7 @@ function App() {
 
   return credentialsChecked ? (
     <div className='app'>
+      <Toaster position='bottom-left' richColors />
       <MastHead />
       <div className='flex-content'>
         <GuideWrapper />
