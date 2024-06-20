@@ -24,6 +24,7 @@ export default function ChaptersList() {
   const [interactableClicked, setInteractableClicked] = useState(false);
   const [scrollPosCalculated, setScrollPosCalculated] = useState(false);
   const scrollingRef = useRef(false);
+  const previousIndex = useRef(0);
 
   const removeChaptersList = () => {
     setScrollPosCalculated(false);
@@ -50,9 +51,10 @@ export default function ChaptersList() {
       scrollDeviation += height;
     });
 
-    scrollDeviation > 0 ? setScrollPosCalculated(true) : setScrollPosCalculated(false);
+    (Math.abs(previousIndex.current - currentIndex) > 0 || scrollDeviation > 0) && setScrollPosCalculated(true);
 
     chapterListRef.current.scrollTo({ top: scrollDeviation, behavior: "smooth" });
+    previousIndex.current = currentIndex;
   };
 
   useLayoutEffect(getScrollDeviation, [currentIndex, syncChaptersToVideoTime, chaptersListShowing, location, windowWidth]);

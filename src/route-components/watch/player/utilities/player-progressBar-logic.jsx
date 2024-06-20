@@ -16,7 +16,6 @@ export const seekVideo = (newTime) => {
 export const usePlayerProgressBarLogic = () => {
   const chapters = useSelector((state) => state.player.chapters);
   const { updateRedDot } = usePlayerDraggingLogic();
-  const { loopState, startTime, endTime } = useSelector((state) => state.player.loopChapterObj);
   const dispatch = useDispatch();
   const updateBufferBar = () => {
     const videoRef = document.querySelector(".html5-player");
@@ -78,7 +77,7 @@ export const usePlayerProgressBarLogic = () => {
   };
 
   const updateProgressBar = (curTime) => {
-    const playerContainer = document.querySelector(".player-outer");
+    const style = getComputedStyle(document.documentElement);
     const videoRef = document.querySelector(".html5-player");
     const redDotRef = document.querySelector(".red-dot");
     const redDotWrapperRef = document.querySelector(".red-dot-wrapper");
@@ -87,6 +86,7 @@ export const usePlayerProgressBarLogic = () => {
     const chapterContainers = document.querySelectorAll(".chapter-hover");
     const chapterPadding = document.querySelectorAll(".chapter-padding");
     const chapterTitleContainer = document.querySelector(".chapter-title-container.bottom");
+    const hovering = style.getPropertyValue("--hovering").trim();
 
     let currentTime = videoRef.currentTime;
     if (curTime && !isNaN(curTime) && typeof curTime === "number") {
@@ -124,6 +124,15 @@ export const usePlayerProgressBarLogic = () => {
     });
     if (controlsHidden) return;
     updateRedDot(currentTime);
+    if (hovering === "true") {
+      const hoveringChapterIndex = style.getPropertyValue("--hoverChapterIndex").trim();
+      const currentChapterIndex = style.getPropertyValue("--currentChapterIndex").trim();
+      if (hoveringChapterIndex === currentChapterIndex && chapters.length > 1) {
+        redDotRef.style.scale = 1.5;
+      } else {
+        redDotRef.style.scale = 1;
+      }
+    }
   };
 
   return { updateBufferBar, updateProgressBar };

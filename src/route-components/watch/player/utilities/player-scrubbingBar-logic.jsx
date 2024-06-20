@@ -51,13 +51,15 @@ export function usePlayerScrubbingBarInteractions() {
       // to be used by the chapters list component
       return { offsetX, offsetY, backgroundPallete };
     }
-    element.style.backgroundSize = `${width * paletteSize}px ${height * paletteSize}px`;
-    let backgroundImage = element.style.backgroundImage;
-    let url = backgroundImage.slice(5, backgroundImage.length - 2);
-    if (url !== backgroundPallete) {
-      element.style.backgroundImage = `url(${backgroundPallete})`;
-    }
-    element.style.backgroundPosition = `-${offsetX}px -${offsetY}px`;
+    element.style.background = `url(${backgroundPallete}) -${offsetX}px -${offsetY}px / ${width * paletteSize}px ${height * paletteSize}px`;
+
+    // element.style.backgroundSize = `${width * paletteSize}px ${height * paletteSize}px`;
+    // let backgroundImage = element.style.backgroundImage;
+    // let url = backgroundImage.slice(5, backgroundImage.length - 2);
+    // if (url !== backgroundPallete) {
+    //   element.style.backgroundImage = `url(${backgroundPallete})`;
+    // }
+    // element.style.backgroundPosition = `-${offsetX}px -${offsetY}px`;
   };
 
   const previewCanvas = (currentTime) => {

@@ -53,7 +53,6 @@ export const usePlayerDraggingLogic = () => {
     const clientPosition = Math.max(e.clientX - left, 0);
     const position = Math.min(clientPosition, maxPosition);
     // console.log(position, right);
-
     redDotWrapperRef.style.transform = `translateX(${position}px)`;
   };
 
@@ -106,6 +105,8 @@ export const usePlayerDraggingLogic = () => {
     }
     movePreviews(e, currentIndex);
 
+    updateRedDotWhileDragging(e);
+
     chapters.forEach((chapter, index) => {
       if (chapter.start <= currentTime && currentTime < chapter.end) {
         const chapterPaddingLeft = chapterPadding[index].getBoundingClientRect().left;
@@ -121,7 +122,7 @@ export const usePlayerDraggingLogic = () => {
         redDotWrapperRef.setAttribute("dataIndex", `${curIndex}`);
         chapterPadding[index].classList.add("drag-expand");
         chapterTitleContainers.forEach((chapterTitleContainer) => {
-          chapterTitleContainer.textContent = chapters[index].title;
+          chapterTitleContainer.textContent = chapter.title;
         });
         timeContainer.textContent = getTimeStamp(Math.round(currentTime));
       } else if (chapter.end <= currentTime) {
@@ -135,7 +136,6 @@ export const usePlayerDraggingLogic = () => {
       }
     });
 
-    updateRedDotWhileDragging(e);
     redDotRef.style.scale = chapters.length === 1 ? 1 : 1.5;
     document.documentElement.style.setProperty("--dragTime", `${currentTime}`);
   };

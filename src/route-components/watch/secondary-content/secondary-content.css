@@ -100,7 +100,8 @@
 
 .chapters-list-interactable{
     max-height: calc(var(--height) - 56px);
-    height: calc(var(--height) - 56px);
+    height: fit-content;
+    height: -moz-fit-content;
     width: 100%;
     overflow: auto;
     scroll-behavior: smooth;
