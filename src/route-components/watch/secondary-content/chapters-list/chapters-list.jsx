@@ -87,7 +87,7 @@ export default function ChaptersList() {
      * @param {number} windowWidth - The current window width.
      * @param {string} location - The current location.
      */
-    const chaptersList = document.querySelector(".chapters-list");
+    const chaptersList = document.querySelector(".chapters-list-padding-box");
     const secondary = document.querySelector(".secondary.content");
     const interactablePanel = document.querySelector(".interactable-panel");
 
@@ -178,7 +178,12 @@ export default function ChaptersList() {
   }, [loopState, currentIndex]);
 
   // Doing this so that teh chapters-list div is always availabe
-  if (!extraction_and_palette || !chaptersListShowing) return <div className='chapters-list'></div>;
+  if (!extraction_and_palette || !chaptersListShowing)
+    return (
+      <div className='chapters-list-padding-box'>
+        <div className='chapters-list'></div>{" "}
+      </div>
+    );
 
   const handleInteractableClick = (time) => {
     /**
@@ -300,24 +305,26 @@ export default function ChaptersList() {
   };
 
   return (
-    <div className={`chapters-list ${chaptersListShowing && chapters.length > 1 ? "show" : ""}`}>
-      <div className='chapters-header'>
-        <p>Chapters</p>
-        <div className='x-svg' onClick={removeChaptersList}>
-          <XIcon />
+    <div className={`chapters-list-padding-box ${chaptersListShowing && chapters.length > 1 ? "show" : ""}`}>
+      <div className={`chapters-list ${chaptersListShowing && chapters.length > 1 ? "show" : ""}`}>
+        <div className='chapters-header'>
+          <p>Chapters</p>
+          <div className='x-svg' onClick={removeChaptersList}>
+            <XIcon />
+          </div>
         </div>
-      </div>
-      <div className='chapters-list-interactable' ref={chapterListRef} onScroll={handleScroll}>
-        {interactableListElements}
-        <div className={`sync-interactables ${!syncChaptersToVideoTime ? "show" : "hide"}`}>
-          <p
-            onClick={() => {
-              setSyncButtonClicked(true);
-              dispatch(updateWatchState({ watchPropertyToUpdate: "syncChaptersToVideoTime", updatedValue: true }));
-            }}
-          >
-            Sync to video time
-          </p>
+        <div className='chapters-list-interactable' ref={chapterListRef} onScroll={handleScroll}>
+          {interactableListElements}
+          <div className={`sync-interactables ${!syncChaptersToVideoTime ? "show" : "hide"}`}>
+            <p
+              onClick={() => {
+                setSyncButtonClicked(true);
+                dispatch(updateWatchState({ watchPropertyToUpdate: "syncChaptersToVideoTime", updatedValue: true }));
+              }}
+            >
+              Sync to video time
+            </p>
+          </div>
         </div>
       </div>
     </div>
