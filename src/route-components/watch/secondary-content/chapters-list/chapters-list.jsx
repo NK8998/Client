@@ -26,6 +26,9 @@ export default function ChaptersList() {
   const scrollingRef = useRef(false);
 
   const removeChaptersList = () => {
+    setScrollPosCalculated(false);
+    setInteractableClicked(false);
+    setSyncButtonClicked(false);
     dispatch(updateWatchState({ watchPropertyToUpdate: "chaptersListShowing", updatedValue: false }));
   };
 
