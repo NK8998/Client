@@ -108,9 +108,6 @@
 }
 .secondary-skeleton-middle{
     min-width: 0;
-    max-width: calc(100% - 204px);
-    overflow: hidden;
-    flex: 1 1;
 }
 .browse-middle-lower{
     flex-grow: 1;
