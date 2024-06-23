@@ -97,7 +97,10 @@
     -webkit-line-clamp: 2; 
     -webkit-box-orient: vertical;
     color: rgba(255, 255, 255, 0.945);
+    white-space: wrap;
 }
+
+
 .secondary-skeleton-title{
     font-size: 14.3px;
     margin-top: 0px;
@@ -105,6 +108,9 @@
 }
 .secondary-skeleton-middle{
     min-width: 0;
+    max-width: calc(100% - 204px);
+    overflow: hidden;
+    flex: 1 1;
 }
 .browse-middle-lower{
     flex-grow: 1;
