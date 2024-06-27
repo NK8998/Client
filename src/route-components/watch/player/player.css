@@ -424,9 +424,9 @@
 
 }
 
-/* .player-outer.seeking .red-dot-wrapper{
+.player-outer.seeking .red-dot-wrapper{
   transition: transform 500ms cubic-bezier(.4,0,1,1), -webkit-transform 0s cubic-bezier(.4,0,1,1);
-} */
+}
 
 .chapter-hover.loop-on .bar{
   opacity: 0;
