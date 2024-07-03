@@ -192,6 +192,7 @@ export const usePlayerDraggingLogic = () => {
     dispatch(updatePlayerState({ playerPropertyToUpdate: "buffering", updatedValue: true }));
     dispatch(updatePlayerState({ playerPropertyToUpdate: "isDragging", updatedValue: false }));
     isDragging.current = false;
+    playerContainer.setAttribute("isDragging", false);
     checkBufferedOnTrackChange();
     playerContainer.classList.remove("seeking");
 
@@ -212,6 +213,7 @@ export const usePlayerDraggingLogic = () => {
 
     document.documentElement.style.setProperty("--select", "none");
     document.documentElement.style.setProperty("--curTime", `${Date.now()}`);
+    playerContainer.setAttribute("isDragging", true);
     const style = getComputedStyle(document.documentElement);
 
     playerContainer.classList.add("seeking");

@@ -147,7 +147,9 @@ export default function Player({ videoRef, containerRef }) {
 
   useLayoutEffect(() => {
     const videoRef = document.querySelector(".html5-player");
-    if (videoRef) {
+    const playerContainer = document.querySelector(".player-outer");
+    if (videoRef && playerContainer) {
+      playerContainer.setAttribute("isDragging", false);
       const params = new URLSearchParams(window.location.search);
       const time = params.get("t") || 0;
       if (time === 0) {
@@ -265,13 +267,17 @@ export default function Player({ videoRef, containerRef }) {
       playerRef.current
         .load(manifestUri)
         .then(() => {
+          const playerContainer = document.querySelector(".player-outer");
           if (subtitles !== "Off" && captions_url) {
             dispatch(toggleCaptions(playerRef, captions_url[0].url, captions_url[0].language));
             dispatch(handleTranslatingHere(panel, currentPanel, currentPanel));
           }
 
           console.log("The video has been loaded!");
-          handlePlayState();
+          const isDraggingAttribute = playerContainer.getAttribute("isDragging");
+          if (isDraggingAttribute === "false") {
+            handlePlayState();
+          }
           const videoRef = document.querySelector("#html5-player");
           videoRef.classList.remove("transition");
 
@@ -329,7 +335,7 @@ export default function Player({ videoRef, containerRef }) {
       updateProgressBar();
       if (document.querySelector(".player-inner-relative").classList.contains("hide") && !miniPlayer) return;
       updateBufferBar();
-    }, 60);
+    }, 90);
   };
 
   const clearIntervalProgress = () => {
