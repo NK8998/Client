@@ -98,8 +98,8 @@ export const usePlayerProgressBarLogic = () => {
       document.querySelector(".player-inner-relative").classList.contains("hide") &&
       !document.querySelector(".mini-player-outer").classList.contains("visible");
 
+    let currentWidth = 0;
     progressBarRefs.forEach((progressBar, index) => {
-      // const curIndex = progressBar.getAttribute("dataIndex");
       const chapter = chapters[index];
       if (!chapter) return;
       if (chapter.start <= currentTime && currentTime < chapter.end) {
@@ -113,6 +113,7 @@ export const usePlayerProgressBarLogic = () => {
         const { width } = chapterContainers[index].getBoundingClientRect();
         const chapterPaddingWidth = chapterPadding[index].getBoundingClientRect().width;
         const widthInPixels = width * ratio;
+        currentWidth = widthInPixels;
         const newRatio = Math.max(Math.min(widthInPixels / chapterPaddingWidth, 1), 0);
         progressBar.style.transform = `scaleX(${newRatio})`;
         chapterTitleContainer.textContent = chapters[index].title;
@@ -123,7 +124,7 @@ export const usePlayerProgressBarLogic = () => {
       }
     });
     if (controlsHidden) return;
-    updateRedDot(currentTime);
+    updateRedDot(currentTime, currentWidth);
     if (hovering === "true") {
       const hoveringChapterIndex = style.getPropertyValue("--hoverChapterIndex").trim();
       const currentChapterIndex = style.getPropertyValue("--currentChapterIndex").trim();

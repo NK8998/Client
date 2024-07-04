@@ -32,7 +32,6 @@ export default function Player({ videoRef, containerRef }) {
   const fullScreen = useSelector((state) => state.watch.fullScreen);
   const miniPlayer = useSelector((state) => state.watch.miniPlayer);
   const miniPlayerBoolean = useSelector((state) => state.watch.miniPlayerBoolean);
-  const buffering = useSelector((state) => state.player.buffering);
   const subtitles = useSelector((state) => state.player.subtitles);
   const windowWidth = useSelector((state) => state.app.windowWidth);
   const currentPanel = useSelector((state) => state.player.currentPanel);
@@ -87,11 +86,7 @@ export default function Player({ videoRef, containerRef }) {
     calculateWidth();
 
     applyChapterStyles();
-    // requestAnimationFrame(() => {
-    //   updateBufferBar();
-    //   updateProgressBar();
     updateRedDot();
-    // });
   };
 
   useEffect(() => {
@@ -157,6 +152,10 @@ export default function Player({ videoRef, containerRef }) {
       }
     }
   }, [playingVideo]);
+
+  // const resetBars = () => {
+  //   const b
+  // }
 
   useEffect(() => {
     handleHover();

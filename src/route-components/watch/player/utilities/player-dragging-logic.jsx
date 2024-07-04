@@ -16,20 +16,28 @@ export const usePlayerDraggingLogic = () => {
   const wasPlaying = useRef(false);
   const { loopState, startTime, endTime } = useSelector((state) => state.player.loopChapterObj);
 
-  const updateRedDot = (currentTimeTracker) => {
+  const updateRedDot = (currentTimeTracker, currentWidth) => {
     const duration = chapters[chapters.length - 1].end;
     const redDotWrapperRef = document.querySelector(".red-dot-wrapper");
     const innerChapterContainerRef = document.querySelector(".chapters-container");
     const style = getComputedStyle(document.documentElement);
+    const currentIndex = parseInt(style.getPropertyValue("--currentChapterIndex").trim());
     const videoRef = document.querySelector("#html5-player");
+    const progressBarRefs = document.querySelectorAll(".progress.bar");
     let currentTime = videoRef.currentTime;
     if (currentTimeTracker) {
       currentTime = currentTimeTracker;
     }
 
+    if (currentWidth) {
+      const progressBarLeft = progressBarRefs[currentIndex]?.getBoundingClientRect().left - innerChapterContainerRef.getBoundingClientRect().left;
+      const position = progressBarLeft + currentWidth;
+      console.log(position);
+      redDotWrapperRef.style.transform = `translateX(${position}px)`;
+      return;
+    }
+
     if (currentTime >= 0 && currentTime <= duration) {
-      const progressBarRefs = document.querySelectorAll(".progress.bar");
-      const currentIndex = parseInt(style.getPropertyValue("--currentChapterIndex").trim());
       let progressBarRight = progressBarRefs[currentIndex]?.getBoundingClientRect().right;
       if (!progressBarRight) {
         progressBarRight = progressBarRefs[0]?.getBoundingClientRect().right;
