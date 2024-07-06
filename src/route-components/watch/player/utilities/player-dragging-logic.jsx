@@ -14,7 +14,7 @@ export const usePlayerDraggingLogic = () => {
   const dispatch = useDispatch();
   const timeDelay = 180;
   const wasPlaying = useRef(false);
-  const { loopState, startTime, endTime } = useSelector((state) => state.player.loopChapterObj);
+  const { startTime, endTime } = useSelector((state) => state.player.loopChapterObj);
 
   const updateRedDot = (currentTimeTracker, currentWidth) => {
     const duration = chapters[chapters.length - 1].end;
@@ -32,7 +32,6 @@ export const usePlayerDraggingLogic = () => {
     if (currentWidth) {
       const progressBarLeft = progressBarRefs[currentIndex]?.getBoundingClientRect().left - innerChapterContainerRef.getBoundingClientRect().left;
       const position = progressBarLeft + currentWidth;
-      console.log(position);
       redDotWrapperRef.style.transform = `translateX(${position}px)`;
       return;
     }
@@ -82,8 +81,9 @@ export const usePlayerDraggingLogic = () => {
   };
 
   const handleDrag = (e) => {
+    const videoRef = document.querySelector(".html5-player");
     const timeContainer = document.querySelector(".time-left-container");
-    const duration = chapters[chapters.length - 1].end;
+    const duration = videoRef.duration;
     const chapterTitleContainers = document.querySelectorAll(".chapter-title-container");
     const redDotRef = document.querySelector(".red-dot");
     const redDotWrapperRef = document.querySelector(".red-dot-wrapper");
@@ -106,11 +106,8 @@ export const usePlayerDraggingLogic = () => {
       dispatch(updatePlayerState({ playerPropertyToUpdate: "loopChapterObj", updatedValue: { loopState: false, startTime: 0, endTime: 0 } }));
     }
     const curTime = parseInt(style.getPropertyValue("--curTime").trim());
-    const timeDiff = Date.now() - curTime > timeDelay;
+    const showCanvas = Date.now() - curTime > timeDelay;
 
-    if (timeDiff) {
-      previewCanvas(currentTime);
-    }
     movePreviews(e, currentIndex);
 
     updateRedDotWhileDragging(e);
@@ -133,6 +130,7 @@ export const usePlayerDraggingLogic = () => {
           chapterTitleContainer.textContent = chapter.title;
         });
         timeContainer.textContent = getTimeStamp(Math.round(currentTime));
+        showCanvas && previewCanvas(currentTime);
       } else if (chapter.end <= currentTime) {
         progressBarRefs[index].style.transform = `scaleX(${1})`;
 
@@ -176,13 +174,13 @@ export const usePlayerDraggingLogic = () => {
     const hovering = style.getPropertyValue("--hovering").trim();
     const dragTime = parseFloat(style.getPropertyValue("--dragTime").trim());
     const curTime = parseInt(style.getPropertyValue("--curTime").trim());
-    const timeDiff = Date.now() - curTime <= timeDelay;
+    const showCanvas = Date.now() - curTime <= timeDelay;
 
     document.documentElement.style.setProperty("--select", "");
 
     scrubbingPreviewContainer.classList.remove("show");
 
-    if (mouseDownTracker.current && timeDiff) {
+    if (mouseDownTracker.current && showCanvas) {
       clearTimeout(mouseDownTracker.current);
     }
     videoRef.currentTime = dragTime;
@@ -210,14 +208,14 @@ export const usePlayerDraggingLogic = () => {
   };
 
   const startDrag = (e) => {
-    if (e.button !== 0) return;
+    const videoRef = document.querySelector("#html5-player");
+    if (e.button !== 0 || videoRef.classList.contains("transition")) return;
+    const isTouching = e.touches ? e.touches.length > 0 : false;
+    const innerChapterContainerRef = document.querySelector(".chapters-container");
+    const playerContainer = document.querySelector(".player-outer");
     dispatch(updateWatchState({ watchPropertyToUpdate: "syncChaptersToVideoTime", updatedValue: true }));
 
     removeEventListeners();
-    const isTouching = e.touches ? e.touches.length > 0 : false;
-    const innerChapterContainerRef = document.querySelector(".chapters-container");
-    const videoRef = document.querySelector("#html5-player");
-    const playerContainer = document.querySelector(".player-outer");
 
     document.documentElement.style.setProperty("--select", "none");
     document.documentElement.style.setProperty("--curTime", `${Date.now()}`);
@@ -268,7 +266,7 @@ export const usePlayerBufferingState = () => {
     }
     timeIntervalRef.current = setInterval(() => {
       checkBuffered();
-    }, 80);
+    }, 250);
   };
 
   const clearIntervalOnTrackChange = () => {

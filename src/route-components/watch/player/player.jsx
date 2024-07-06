@@ -68,14 +68,8 @@ export default function Player({ videoRef, containerRef }) {
   const controlsRef = useRef();
   const attempts = useRef(0);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     dispatch(updatePlayerState({ playerPropertyToUpdate: "preferredResolution", updatedValue: false }));
-    if (isLive) {
-      dispatch(updatePlayerState({ playerPropertyToUpdate: "chapters", updatedValue: [{ start: 0, title: "", end: 50 }] }));
-    } else {
-      const generatedChapters = generateChapters(description_string, duration);
-      dispatch(updatePlayerState({ playerPropertyToUpdate: "chapters", updatedValue: generatedChapters }));
-    }
   }, [playingVideo]);
 
   useLayoutEffect(() => {
@@ -284,6 +278,13 @@ export default function Player({ videoRef, containerRef }) {
             const params = new URLSearchParams(window.location.search);
             const time = params.get("t") || 0;
             videoRef.currentTime = time;
+
+            if (isLive) {
+              dispatch(updatePlayerState({ playerPropertyToUpdate: "chapters", updatedValue: [{ start: 0, title: "", end: 50 }] }));
+            } else {
+              const generatedChapters = generateChapters(description_string, videoRef.duration);
+              dispatch(updatePlayerState({ playerPropertyToUpdate: "chapters", updatedValue: generatedChapters }));
+            }
           }
         })
         .catch(onError);

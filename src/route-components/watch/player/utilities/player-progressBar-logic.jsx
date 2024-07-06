@@ -101,6 +101,7 @@ export const usePlayerProgressBarLogic = () => {
     let currentWidth = 0;
     progressBarRefs.forEach((progressBar, index) => {
       const chapter = chapters[index];
+      console.log(chapter.end, videoRef.duration);
       if (!chapter) return;
       if (chapter.start <= currentTime && currentTime < chapter.end) {
         dispatch(updatePlayerState({ playerPropertyToUpdate: "currentIndex", updatedValue: index }));

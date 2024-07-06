@@ -1,6 +1,4 @@
-import { useEffect, useRef } from "react";
 import { useSelector } from "react-redux";
-import { usePlayerProgressBarLogic } from "./player-progressBar-logic";
 
 export const usePlayerStyles = () => {
   const playingVideo = useSelector((state) => state.watch.playingVideo);
