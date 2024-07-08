@@ -261,19 +261,28 @@ export default function Player({ videoRef, containerRef }) {
         .load(manifestUri)
         .then(() => {
           const playerContainer = document.querySelector(".player-outer");
+          const videoRef = document.querySelector("#html5-player");
+          const isDraggingAttribute = playerContainer.getAttribute("isDragging");
+
           if (subtitles !== "Off" && captions_url) {
             dispatch(toggleCaptions(playerRef, captions_url[0].url, captions_url[0].language));
             dispatch(handleTranslatingHere(panel, currentPanel, currentPanel));
           }
 
           console.log("The video has been loaded!");
-          const isDraggingAttribute = playerContainer.getAttribute("isDragging");
           if (isDraggingAttribute === "false") {
             handlePlayState();
           }
-          const videoRef = document.querySelector("#html5-player");
-          videoRef.classList.remove("transition");
 
+          containerRef.current.classList.add("seeking");
+          updateProgressBar();
+
+          dispatch(updatePlayerState({ playerPropertyToUpdate: "seeking", updatedValue: false }));
+          requestAnimationFrame(() => {
+            containerRef.current.classList.remove("seeking");
+          });
+
+          videoRef.classList.remove("transition");
           if (videoRef) {
             const params = new URLSearchParams(window.location.search);
             const time = params.get("t") || 0;

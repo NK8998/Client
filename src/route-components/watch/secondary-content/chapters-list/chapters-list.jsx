@@ -181,7 +181,7 @@ export default function ChaptersList() {
   if (!extraction_and_palette || !chaptersListShowing)
     return (
       <div className='chapters-list-padding-box'>
-        <div className='chapters-list'></div>{" "}
+        <div className='chapters-list'></div>
       </div>
     );
 
