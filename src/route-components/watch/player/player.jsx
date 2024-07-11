@@ -384,6 +384,9 @@ export default function Player({ videoRef, containerRef }) {
   const handleSeeking = () => {
     checkBuffered();
     const videoRef = document.querySelector(".html5-player");
+    const isDraggingAttribute = document.querySelector(".player-outer").getAttribute("isDragging");
+    if (isDraggingAttribute === "true") return;
+
     if (videoRef.currentTime < startTime || videoRef.currentTime > endTime) {
       dispatch(updatePlayerState({ playerPropertyToUpdate: "loopChapterObj", updatedValue: { loopState: false, startTime: 0, endTime: 0 } }));
     }
@@ -392,10 +395,11 @@ export default function Player({ videoRef, containerRef }) {
     updateProgressBar();
 
     dispatch(updatePlayerState({ playerPropertyToUpdate: "seeking", updatedValue: false }));
+
+    dispatch(updateWatchState({ watchPropertyToUpdate: "syncChaptersToVideoTime", updatedValue: true }));
     requestAnimationFrame(() => {
       containerRef.current.classList.remove("seeking");
     });
-    dispatch(updateWatchState({ watchPropertyToUpdate: "syncChaptersToVideoTime", updatedValue: true }));
   };
 
   const handleSeeked = () => {};

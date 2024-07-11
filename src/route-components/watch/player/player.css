@@ -343,7 +343,7 @@
   pointer-events: all;
   /* padding-top: var(--padding); */
   height: 3px;
-  transition: transform 150ms ease;
+  transition: transform 100ms ease;
 }
 
 /* .chapter-hover:hover .chapter-padding.drag-expand,
@@ -403,7 +403,7 @@
   width: 13px;
   border-radius: 50%;
   background-color: red;
-  transition: scale 150ms ease;
+  transition: scale 100ms ease;
   scale: 0;
   /* visibility: hidden; */
 

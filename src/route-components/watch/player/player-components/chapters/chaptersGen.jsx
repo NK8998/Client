@@ -9,75 +9,75 @@ export function convertToSeconds(timeString) {
   return hours * 3600 + minutes * 60 + seconds;
 }
 
-function extractChapters(inputString) {
-  // Define the regex pattern
-  const pattern = /(?:\()?(\d{1,2}:\d{2}:\d{2}|\d+:\d+)(?:\))?(?:\s-\s|\-|\s)?(.+)?/g;
+const acceptable_characters = "abcdefghijklmnopqrstuvwxyz0123456789";
 
-  // Initialize an empty array to store the matches
-  let matches = [];
+const split_string_into_timestamp_and_description = (string) => {
+  const split_string_arr = string.split("\n");
+  const chapters_array = [];
 
-  // Use regex exec method to find all matches
-  let match;
-  while ((match = pattern.exec(inputString)) !== null) {
-    // Convert the time string to seconds
-    let timeInSeconds = convertToSeconds(match[1]);
-
-    // Store each match as an object in the matches array
-    matches.push({ left: timeInSeconds, right: match[2] ? match[2].trim() : "" });
-  }
-
-  // Return the matches array
-  return matches;
-}
-
-function createSegments(matches, totalTime, liveDynamicDuration) {
-  // Initialize an empty array to store the segments
-  let segmentObjs = [];
-
-  // Initialize a variable to track if the chapters are valid
-  let validChapters = true;
-
-  // Iterate over the matches array
-  for (let i = 0; i < matches.length; i++) {
-    // Check if the next left value is greater than the current left value
-    if (i < matches.length - 1 && matches[i].left >= matches[i + 1].left) {
-      validChapters = false;
-      break;
+  split_string_arr.forEach((part) => {
+    const chapter_obj = {};
+    if (!/\b\d{1,2}:\d{2}\b/.test(part)) {
+      return;
     }
-    if (matches[i].left > totalTime) {
-      validChapters = false;
-      break;
+    let timestamp_parts = part.split(/\b\d{1,2}:\d{2}\b/);
+    let timestamp = /\b\d{1,2}:\d{2}\b/.exec(part)[0];
+    let description_string = timestamp_parts.join("").trim();
+
+    // Loop over the description string from the front
+    let start = 0;
+    while (start < description_string.length && !acceptable_characters.includes(description_string[start].toLowerCase())) {
+      start++;
     }
 
-    // Create a new object for each match
-    let segmentObj = {
-      start: matches[i].left,
-      title: matches[i].right,
-      end: i < matches.length - 1 ? matches[i + 1].left : totalTime,
-    };
+    // Loop over the description string from the end
+    let end = description_string.length - 1;
+    while (end >= 0 && !acceptable_characters.includes(description_string[end].toLowerCase())) {
+      end--;
+    }
 
-    // Push the new object into the segmentObjs array
-    segmentObjs.push(segmentObj);
+    // Extract the cleaned-up description
+    let description = description_string.slice(start, end + 1);
+
+    chapter_obj.start = convertToSeconds(timestamp);
+    chapter_obj.title = description;
+
+    chapters_array.push(chapter_obj);
+  });
+
+  return chapters_array;
+};
+
+const make_chapter_obj = (chapters_array, duration) => {
+  let is_valid_chapters = true;
+
+  for (let i = 0; i < chapters_array.length; i++) {
+    if (i < chapters_array.length - 1 && chapters_array[i].start > chapters_array[i + 1].start) {
+      is_valid_chapters = false;
+      break;
+    }
+    if (chapters_array[i].start > duration) {
+      is_valid_chapters = false;
+      break;
+    }
+    if (i > 0 && chapters_array[i].start <= 0) {
+      is_valid_chapters = false;
+      break;
+    }
+    chapters_array[i].end = i < chapters_array.length - 1 ? chapters_array[i + 1].start : duration;
   }
 
-  // If the chapters are not valid, return a default chapters array
-  if (!validChapters) {
-    return [{ start: 0, title: "", end: totalTime }];
+  return is_valid_chapters;
+};
+
+const generateChapters = (des_string, duration) => {
+  let chapters_array = split_string_into_timestamp_and_description(des_string);
+  let is_valid_chapters = make_chapter_obj(chapters_array, duration);
+
+  if (!is_valid_chapters || chapters_array.length === 0) {
+    return [{ start: 0, title: "", end: duration }];
   }
 
-  // Return the segmentObjs array
-  return segmentObjs;
-}
-
-function generateChapters(string, totalTime) {
-  const testMatches = extractChapters(string);
-  if (testMatches.length === 0) {
-    return [{ start: 0, title: "", end: totalTime }];
-  }
-  const segmentObjs = createSegments(testMatches, totalTime);
-
-  segmentObjs[0].start = 0;
-
-  return segmentObjs;
-}
+  return chapters_array;
+};
 export default generateChapters;
