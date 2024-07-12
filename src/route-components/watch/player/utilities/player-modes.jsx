@@ -47,12 +47,17 @@ export const useMiniPlayermode = () => {
 
         handleMouseOut();
         controlsRef.classList.add("transition");
+        containerRef.classList.add("seeking");
+
         layoutShiftRef.current = setTimeout(() => {
           calculateWidth();
           applyChapterStyles();
-          // updateBufferBar();
-          // updateProgressBar();
-          updateRedDot();
+
+          requestAnimationFrame(() => {
+            updateRedDot();
+
+            containerRef.classList.remove("seeking");
+          });
           controlsRef.classList.remove("transition");
           handleMouseMove();
         }, 50);
@@ -77,10 +82,12 @@ export const useMiniPlayermode = () => {
       containerRef.classList.add("miniplayer");
       videoRef.classList.add("miniplayer");
 
+      containerRef.classList.add("seeking");
+      updateRedDot();
       requestAnimationFrame(() => {
-        //   updateBufferBar();
         //   updateProgressBar();
-        updateRedDot();
+        //   updateBufferBar();
+        containerRef.classList.remove("seeking");
       });
     }
   };
@@ -122,7 +129,13 @@ export const useTheatreMode = () => {
       // updateBufferBar();
       // updateProgressBar();
 
+      containerRef.classList.add("seeking");
       updateRedDot();
+      requestAnimationFrame(() => {
+        //   updateProgressBar();
+        //   updateBufferBar();
+        containerRef.classList.remove("seeking");
+      });
       toTheatre();
     } else if (primaryRef && !Array.from(primaryRef.children).includes(containerRef) && !theatreMode) {
       if (Array.from(expandedContainerRef.children).includes(containerRef)) {
@@ -140,7 +153,13 @@ export const useTheatreMode = () => {
       calculateWidth();
       // updateBufferBar();
       // updateProgressBar();
+      containerRef.classList.add("seeking");
       updateRedDot();
+      requestAnimationFrame(() => {
+        //   updateProgressBar();
+        //   updateBufferBar();
+        containerRef.classList.remove("seeking");
+      });
       toNormal();
     }
   };
@@ -231,10 +250,12 @@ export const useFullscreenMode = () => {
       calculateWidth();
 
       applyChapterStyles();
+      containerRef.classList.add("seeking");
+      updateRedDot();
       requestAnimationFrame(() => {
         //   updateProgressBar();
         //   updateBufferBar();
-        updateRedDot();
+        containerRef.classList.remove("seeking");
       });
 
       root.classList.add("fullscreen");
@@ -272,7 +293,13 @@ export const useFullscreenMode = () => {
       applyChapterStyles();
       // updateProgressBar();
       // updateBufferBar();
+      containerRef.classList.add("seeking");
       updateRedDot();
+      requestAnimationFrame(() => {
+        //   updateProgressBar();
+        //   updateBufferBar();
+        containerRef.classList.remove("seeking");
+      });
     }
   };
 
