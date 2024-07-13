@@ -387,7 +387,7 @@ export default function Player({ videoRef, containerRef }) {
     const isDraggingAttribute = document.querySelector(".player-outer").getAttribute("isDragging");
     if (isDraggingAttribute === "true") return;
 
-    if (videoRef.currentTime < startTime || videoRef.currentTime > endTime) {
+    if (videoRef.currentTime < startTime || videoRef.currentTime > endTime - 0.7) {
       dispatch(updatePlayerState({ playerPropertyToUpdate: "loopChapterObj", updatedValue: { loopState: false, startTime: 0, endTime: 0 } }));
     }
 

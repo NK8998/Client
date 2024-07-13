@@ -102,7 +102,7 @@ export const usePlayerDraggingLogic = () => {
       return;
     }
 
-    if (currentTime < startTime || currentTime > endTime) {
+    if (currentTime < startTime || currentTime > endTime - 0.7) {
       dispatch(updatePlayerState({ playerPropertyToUpdate: "loopChapterObj", updatedValue: { loopState: false, startTime: 0, endTime: 0 } }));
     }
     const curTime = parseInt(style.getPropertyValue("--curTime").trim());

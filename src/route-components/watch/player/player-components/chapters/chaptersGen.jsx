@@ -52,14 +52,17 @@ const make_chapter_obj = (chapters_array, duration) => {
   let is_valid_chapters = true;
 
   for (let i = 0; i < chapters_array.length; i++) {
+    // break if the time is set incorrectly
     if (i < chapters_array.length - 1 && chapters_array[i].start > chapters_array[i + 1].start) {
       is_valid_chapters = false;
       break;
     }
+    // break if time is greater than total video duration
     if (chapters_array[i].start > duration) {
       is_valid_chapters = false;
       break;
     }
+    // break if time of subsequen chapters is less than 0
     if (i > 0 && chapters_array[i].start <= 0) {
       is_valid_chapters = false;
       break;
