@@ -118,9 +118,8 @@ export const usePlayerDraggingLogic = () => {
         const chapterPaddingLeft = chapterPadding[index].getBoundingClientRect().left;
         const chapterPaddingWidth = chapterPadding[index].getBoundingClientRect().width;
         const position = e.clientX - chapterPaddingLeft;
-        console.log(position, chapterPaddingWidth);
         const scale = position / chapterPaddingWidth;
-        const shouldShrinkDot = fullScreen ? chapterPaddingWidth - position <= 3 : chapterPaddingWidth - position <= 3;
+        const shouldShrinkDot = fullScreen ? width - position <= 3 : width - position <= 3;
         if (chapters.length > 1) {
           if (!shouldShrinkDot && index < chapters.length - 1) {
             redDotRef.style.scale = 1.5;
