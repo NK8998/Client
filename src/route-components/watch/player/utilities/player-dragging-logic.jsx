@@ -15,6 +15,7 @@ export const usePlayerDraggingLogic = () => {
   const timeDelay = 180;
   const wasPlaying = useRef(false);
   const { startTime, endTime } = useSelector((state) => state.player.loopChapterObj);
+  const fullScreen = useSelector((state) => state.watch.fullScreen);
 
   const updateRedDot = (currentTimeTracker, currentWidth) => {
     const duration = chapters[chapters.length - 1].end;
@@ -117,7 +118,23 @@ export const usePlayerDraggingLogic = () => {
         const chapterPaddingLeft = chapterPadding[index].getBoundingClientRect().left;
         const chapterPaddingWidth = chapterPadding[index].getBoundingClientRect().width;
         const position = e.clientX - chapterPaddingLeft;
-        const newRatio = Math.max(Math.min(position / chapterPaddingWidth, 1), 0);
+        console.log(position, chapterPaddingWidth);
+        const scale = position / chapterPaddingWidth;
+        const shouldShrinkDot = fullScreen ? chapterPaddingWidth - position <= 3 : chapterPaddingWidth - position <= 3;
+        if (chapters.length > 1) {
+          if (!shouldShrinkDot && index < chapters.length - 1) {
+            redDotRef.style.scale = 1.5;
+          } else if (index === chapters.length - 1) {
+            redDotRef.style.scale = 1.5;
+          } else if (shouldShrinkDot && index < chapters.length - 1) {
+            redDotRef.style.scale = 1;
+          }
+        } else {
+          redDotRef.style.scale = 1;
+        }
+
+        // !shouldShrinkDot && chapters.length > 1 && index < chapters.length - 1 ? (redDotRef.style.scale = 1.5) : (redDotRef.style.scale = 1);
+        const newRatio = Math.max(Math.min(scale, 1), 0);
         progressBarRefs[index].style.transform = `scaleX(${newRatio})`;
         const curIndex = progressBarRefs[index].getAttribute("dataIndex");
         dispatch(updatePlayerState({ playerPropertyToUpdate: "currentIndex", updatedValue: parseInt(curIndex) }));
@@ -142,7 +159,6 @@ export const usePlayerDraggingLogic = () => {
       }
     });
 
-    redDotRef.style.scale = chapters.length === 1 ? 1 : 1.5;
     document.documentElement.style.setProperty("--dragTime", `${currentTime}`);
   };
 
