@@ -88,6 +88,7 @@ export const usePlayerProgressBarLogic = () => {
     const chapterContainers = document.querySelectorAll(".chapter-hover");
     const chapterPadding = document.querySelectorAll(".chapter-padding");
     const chapterTitleContainer = document.querySelector(".chapter-title-container.bottom");
+    const chapterContainerDimensions = document.querySelector(".chapters-container").getBoundingClientRect();
     const hovering = style.getPropertyValue("--hovering").trim();
 
     let currentTime = videoRef.currentTime;
@@ -101,6 +102,7 @@ export const usePlayerProgressBarLogic = () => {
       !document.querySelector(".mini-player-outer").classList.contains("visible");
 
     let currentWidth = 0;
+    let chapterLeft = 0;
     progressBarRefs.forEach((progressBar, index) => {
       const chapter = chapters[index];
       if (!chapter) return;
@@ -112,10 +114,11 @@ export const usePlayerProgressBarLogic = () => {
         redDotRef.setAttribute("dataIndex", `${index}`);
         redDotWrapperRef.setAttribute("dataIndex", `${index}`);
         const ratio = (currentTime - chapter.start) / (chapter.end - chapter.start);
-        const { width } = chapterContainers[index].getBoundingClientRect();
+        const { width, left } = chapterContainers[index].getBoundingClientRect();
         const chapterPaddingWidth = chapterPadding[index].getBoundingClientRect().width;
         const widthInPixels = width * ratio;
         currentWidth = widthInPixels;
+        chapterLeft = left;
         const newRatio = Math.max(Math.min(widthInPixels / chapterPaddingWidth, 1), 0);
         progressBar.style.transform = `scaleX(${newRatio})`;
         chapterTitleContainer.textContent = chapters[index].title;
@@ -126,7 +129,7 @@ export const usePlayerProgressBarLogic = () => {
       }
     });
     if (controlsHidden) return;
-    updateRedDot(currentTime, currentWidth);
+    updateRedDot(currentTime, currentWidth, chapterLeft, chapterContainerDimensions);
     if (hovering === "true") {
       const hoveringChapterIndex = style.getPropertyValue("--hoverChapterIndex").trim();
       const currentChapterIndex = style.getPropertyValue("--currentChapterIndex").trim();

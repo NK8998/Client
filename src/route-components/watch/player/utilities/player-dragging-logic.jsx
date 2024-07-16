@@ -17,7 +17,7 @@ export const usePlayerDraggingLogic = () => {
   const { startTime, endTime } = useSelector((state) => state.player.loopChapterObj);
   const fullScreen = useSelector((state) => state.watch.fullScreen);
 
-  const updateRedDot = (currentTimeTracker, currentWidth) => {
+  const updateRedDot = (currentTimeTracker, currentWidth, chapterLeft, chapterContainerDimensions) => {
     const duration = chapters[chapters.length - 1].end;
     const redDotWrapperRef = document.querySelector(".red-dot-wrapper");
     const innerChapterContainerRef = document.querySelector(".chapters-container");
@@ -31,8 +31,8 @@ export const usePlayerDraggingLogic = () => {
     }
 
     if (currentWidth) {
-      const progressBarLeft = progressBarRefs[currentIndex]?.getBoundingClientRect().left - innerChapterContainerRef.getBoundingClientRect().left;
-      const position = progressBarLeft + currentWidth;
+      const progressBarLeft = chapterLeft - chapterContainerDimensions.left;
+      const position = Math.min(Math.max(progressBarLeft + currentWidth, progressBarLeft), chapterContainerDimensions.width);
       redDotWrapperRef.style.transform = `translateX(${position}px)`;
       return;
     }
@@ -51,17 +51,6 @@ export const usePlayerDraggingLogic = () => {
       const position = innerChapterContainerRef.clientWidth;
       redDotWrapperRef.style.transform = `translateX(${position}px)`;
     }
-  };
-
-  const updateRedDotWhileDragging = (e) => {
-    const redDotWrapperRef = document.querySelector(".red-dot-wrapper");
-    const innerChapterContainerRef = document.querySelector(".chapters-container");
-    const { left, right } = innerChapterContainerRef.getBoundingClientRect();
-    const maxPosition = right - left;
-    const clientPosition = Math.max(e.clientX - left, 0);
-    const position = Math.min(clientPosition, maxPosition);
-    // console.log(position, right);
-    redDotWrapperRef.style.transform = `translateX(${position}px)`;
   };
 
   const handleClick = (e) => {
@@ -89,12 +78,14 @@ export const usePlayerDraggingLogic = () => {
     const redDotRef = document.querySelector(".red-dot");
     const redDotWrapperRef = document.querySelector(".red-dot-wrapper");
     const style = getComputedStyle(document.documentElement);
+    const chapterContainerDimensions = document.querySelector(".chapters-container").getBoundingClientRect();
     const chapterContainers = document.querySelectorAll(".chapter-hover");
     const chapterPadding = document.querySelectorAll(".chapter-padding");
     const progressBarRefs = document.querySelectorAll(".progress.bar");
     const currentIndex = parseInt(style.getPropertyValue("--hoverChapterIndex").trim());
     const chapterDuration = chapters[currentIndex].end - chapters[currentIndex].start;
     const { left, width } = chapterContainers[currentIndex].getBoundingClientRect();
+
     const position = e.clientX - left;
     const ratio = position / width;
     const timeOffset = ratio * chapterDuration;
@@ -103,11 +94,15 @@ export const usePlayerDraggingLogic = () => {
       return;
     }
 
+    let chapterWidth = 0;
+    let chapterLeft = 0;
     chapters.forEach((chapter, index) => {
       if (chapter.start <= currentTime && currentTime < chapter.end) {
         const chapterPaddingLeft = chapterPadding[index].getBoundingClientRect().left;
         const chapterPaddingWidth = chapterPadding[index].getBoundingClientRect().width;
         const position = e.clientX - chapterPaddingLeft;
+        chapterWidth = position;
+        chapterLeft = chapterPaddingLeft;
         const scale = position / chapterPaddingWidth;
         const shouldShrinkDot = fullScreen ? width - position <= 3 : width - position <= 3;
         if (chapters.length > 1) {
@@ -144,6 +139,8 @@ export const usePlayerDraggingLogic = () => {
         chapterPadding[index].classList.remove("drag-expand");
       }
     });
+    updateRedDot(currentTime, chapterWidth, chapterLeft, chapterContainerDimensions);
+
     if (currentTime < startTime || currentTime > endTime - 0.7) {
       dispatch(updatePlayerState({ playerPropertyToUpdate: "loopChapterObj", updatedValue: { loopState: false, startTime: 0, endTime: 0 } }));
     }
@@ -153,8 +150,6 @@ export const usePlayerDraggingLogic = () => {
     showCanvas && previewCanvas(currentTime);
 
     movePreviews(e, currentIndex);
-
-    updateRedDotWhileDragging(e);
 
     document.documentElement.style.setProperty("--dragTime", `${currentTime}`);
   };
