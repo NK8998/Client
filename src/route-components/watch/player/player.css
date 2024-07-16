@@ -419,7 +419,8 @@
   transition: transform 100ms cubic-bezier(.4,0,1,1), -webkit-transform 100ms cubic-bezier(.4,0,1,1);
 }
 
-.player-outer.seeking .bar{
+.player-outer.seeking .bar,
+.player-outer.seeking .chapter-padding{
   transition: transform 0ms cubic-bezier(.4,0,1,1), -webkit-transform 0ms cubic-bezier(.4,0,1,1);
 }
 
