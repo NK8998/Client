@@ -103,16 +103,6 @@ export const usePlayerDraggingLogic = () => {
       return;
     }
 
-    if (currentTime < startTime || currentTime > endTime - 0.7) {
-      dispatch(updatePlayerState({ playerPropertyToUpdate: "loopChapterObj", updatedValue: { loopState: false, startTime: 0, endTime: 0 } }));
-    }
-    const curTime = parseInt(style.getPropertyValue("--curTime").trim());
-    const showCanvas = Date.now() - curTime > timeDelay;
-
-    movePreviews(e, currentIndex);
-
-    updateRedDotWhileDragging(e);
-
     chapters.forEach((chapter, index) => {
       if (chapter.start <= currentTime && currentTime < chapter.end) {
         const chapterPaddingLeft = chapterPadding[index].getBoundingClientRect().left;
@@ -131,8 +121,6 @@ export const usePlayerDraggingLogic = () => {
         } else {
           redDotRef.style.scale = 1;
         }
-
-        // !shouldShrinkDot && chapters.length > 1 && index < chapters.length - 1 ? (redDotRef.style.scale = 1.5) : (redDotRef.style.scale = 1);
         const newRatio = Math.max(Math.min(scale, 1), 0);
         progressBarRefs[index].style.transform = `scaleX(${newRatio})`;
         const curIndex = progressBarRefs[index].getAttribute("dataIndex");
@@ -146,7 +134,6 @@ export const usePlayerDraggingLogic = () => {
           chapterTitleContainer.textContent = chapter.title;
         });
         timeContainer.textContent = getTimeStamp(Math.round(currentTime));
-        showCanvas && previewCanvas(currentTime);
       } else if (chapter.end <= currentTime) {
         progressBarRefs[index].style.transform = `scaleX(${1})`;
 
@@ -157,6 +144,17 @@ export const usePlayerDraggingLogic = () => {
         chapterPadding[index].classList.remove("drag-expand");
       }
     });
+    if (currentTime < startTime || currentTime > endTime - 0.7) {
+      dispatch(updatePlayerState({ playerPropertyToUpdate: "loopChapterObj", updatedValue: { loopState: false, startTime: 0, endTime: 0 } }));
+    }
+    const curTime = parseInt(style.getPropertyValue("--curTime").trim());
+    const showCanvas = Date.now() - curTime > timeDelay;
+
+    showCanvas && previewCanvas(currentTime);
+
+    movePreviews(e, currentIndex);
+
+    updateRedDotWhileDragging(e);
 
     document.documentElement.style.setProperty("--dragTime", `${currentTime}`);
   };
@@ -224,8 +222,9 @@ export const usePlayerDraggingLogic = () => {
 
   const startDrag = (e) => {
     const videoRef = document.querySelector("#html5-player");
-    if (e.button !== 0 || videoRef.classList.contains("transition")) return;
     const isTouching = e.touches ? e.touches.length > 0 : false;
+    if ((e.button !== 0 && !isTouching) || videoRef.classList.contains("transition")) return;
+
     const innerChapterContainerRef = document.querySelector(".chapters-container");
     const playerContainer = document.querySelector(".player-outer");
     dispatch(updateWatchState({ watchPropertyToUpdate: "syncChaptersToVideoTime", updatedValue: true }));

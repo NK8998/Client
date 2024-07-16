@@ -77,6 +77,8 @@ export const usePlayerProgressBarLogic = () => {
   };
 
   const updateProgressBar = (curTime) => {
+    const isDraggingAttribute = document.querySelector(".player-outer").getAttribute("isDragging");
+    if (isDraggingAttribute === "true") return;
     const style = getComputedStyle(document.documentElement);
     const videoRef = document.querySelector(".html5-player");
     const redDotRef = document.querySelector(".red-dot");

@@ -383,9 +383,10 @@ export default function Player({ videoRef, containerRef }) {
 
   const handleSeeking = () => {
     checkBuffered();
-    const videoRef = document.querySelector(".html5-player");
     const isDraggingAttribute = document.querySelector(".player-outer").getAttribute("isDragging");
     if (isDraggingAttribute === "true") return;
+
+    const videoRef = document.querySelector(".html5-player");
 
     if (videoRef.currentTime < startTime || videoRef.currentTime > endTime - 0.7) {
       dispatch(updatePlayerState({ playerPropertyToUpdate: "loopChapterObj", updatedValue: { loopState: false, startTime: 0, endTime: 0 } }));
@@ -404,7 +405,8 @@ export default function Player({ videoRef, containerRef }) {
 
   const handleSeeked = () => {};
 
-  const updateDurtion = () => {
+  const updateDurtion = (e) => {
+    // console.log(e.target);
     // continue updating the chapters for live content
   };
 
