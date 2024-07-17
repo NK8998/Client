@@ -48,8 +48,8 @@ export default function Chapters({ videoRef, chapterContainerRef, redDotRef, red
 
   const handleMouseEnter = () => {
     if (settingsShowing) return;
-    const scrubbingPreviewContainer = document.querySelector(".scrubbing-preview-container");
-    scrubbingPreviewContainer.classList.add("show");
+    // const scrubbingPreviewContainer = document.querySelector(".scrubbing-preview-container");
+    // scrubbingPreviewContainer.classList.add("show");
   };
   const handleMouseLeave = () => {
     document.documentElement.style.setProperty("--hovering", `false`);

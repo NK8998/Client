@@ -41,8 +41,8 @@ export function usePlayerScrubbingBarInteractions() {
 
     const currentTile = Math.floor(elapsedTimeWithinCurrentPallete / extractionRate) + 1;
     const batchNum = `${currentPallete + 1}`.padStart(3, 0);
-    const backgroundPallete = `https://d38x8ofmpjmibw.cloudfront.net/${video_id}/palletes/batch_${batchNum}_palette.jpeg`;
 
+    const backgroundPallete = `https://d38x8ofmpjmibw.cloudfront.net/${video_id}/palletes/batch_${batchNum}_palette.jpeg`;
     // const backgroundPallete = palette_urls[`palleteUrl-${currentPallete}`];
 
     const offsetX = ((currentTile - 1) % paletteSize) * width;
@@ -68,32 +68,47 @@ export function usePlayerScrubbingBarInteractions() {
     const previewImageBg = document.querySelector(".preview-image-bg");
     previewImageBg.classList.add("show");
     previewImageBgContainer.classList.add("darken");
-    let height;
-    let width;
+    // let height;
+    // let width;
 
     const PlayerDimensions = playerOuter.getBoundingClientRect();
     const normalWidth = PlayerDimensions.width;
     const normalHeight = PlayerDimensions.height;
-    height = normalWidth * aspect_ratio;
-    width = normalHeight * aspect_ratio;
+    // height = normalWidth * aspect_ratio;
+    // width = normalHeight * aspect_ratio;
+    // if (width > normalWidth) {
+    //   width = normalWidth;
+    //   height = width * (1 / aspect_ratio);
+    // }
+    // if (height > normalHeight) {
+    //   height = normalHeight;
+    // }
+    // const ratioCheck = width / height;
+    // if (ratioCheck > aspect_ratio + 0.1 || ratioCheck < aspect_ratio - 0.1) {
+    //   let prevWidth = width;
+    //   let prevHeight = height;
+    //   width = prevHeight;
+    //   height = prevWidth;
+    //   if (theatreMode && window.innerWidth <= 810) {
+    //     height = normalHeight;
+    //     width = normalHeight * aspect_ratio;
+    //   }
+    // }
+
+    let height = normalHeight * aspect_ratio;
+    let width = height * aspect_ratio;
+
+    // Check if the videoWidth is greater than the remainingSpace
     if (width > normalWidth) {
+      // Adjust the videoWidth and videoHeight to fit the remaining space
       width = normalWidth;
       height = width * (1 / aspect_ratio);
     }
-    if (height > normalHeight) {
+    if (width < normalWidth && height < normalHeight) {
       height = normalHeight;
+      width = height * aspect_ratio;
     }
-    const ratioCheck = width / height;
-    if (ratioCheck > aspect_ratio + 0.1 || ratioCheck < aspect_ratio - 0.1) {
-      let prevWidth = width;
-      let prevHeight = height;
-      width = prevHeight;
-      height = prevWidth;
-      if (theatreMode && window.innerWidth <= 810) {
-        height = normalHeight;
-        width = normalHeight * aspect_ratio;
-      }
-    }
+
     previewImageBg.style.height = `${height}px`;
     previewImageBg.style.width = `${width}px`;
     const dimensions = { width: width, height: height };

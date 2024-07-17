@@ -217,21 +217,20 @@ export const usePlayerDraggingLogic = () => {
 
   const startDrag = (e) => {
     const videoRef = document.querySelector("#html5-player");
+    const playerContainer = document.querySelector(".player-outer");
     const isTouching = e.touches ? e.touches.length > 0 : false;
     if ((e.button !== 0 && !isTouching) || videoRef.classList.contains("transition")) return;
-
-    const innerChapterContainerRef = document.querySelector(".chapters-container");
-    const playerContainer = document.querySelector(".player-outer");
-    dispatch(updateWatchState({ watchPropertyToUpdate: "syncChaptersToVideoTime", updatedValue: true }));
+    playerContainer.classList.add("seeking");
 
     removeEventListeners();
+
+    const innerChapterContainerRef = document.querySelector(".chapters-container");
+    dispatch(updateWatchState({ watchPropertyToUpdate: "syncChaptersToVideoTime", updatedValue: true }));
 
     document.documentElement.style.setProperty("--select", "none");
     document.documentElement.style.setProperty("--curTime", `${Date.now()}`);
     playerContainer.setAttribute("isDragging", true);
     const style = getComputedStyle(document.documentElement);
-
-    playerContainer.classList.add("seeking");
 
     isDragging.current = true;
     dispatch(updatePlayerState({ playerPropertyToUpdate: "isDragging", updatedValue: true }));
@@ -251,7 +250,7 @@ export const usePlayerDraggingLogic = () => {
     innerChapterContainerRef.classList.add("drag-expand");
     mouseDownTracker.current = setTimeout(() => {
       videoRef.style.visibility = "hidden";
-      previewCanvas(dragTime);
+      // previewCanvas(dragTime);
     }, timeDelay);
   };
 
