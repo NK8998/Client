@@ -404,7 +404,7 @@ export default function Player({ videoRef, containerRef }) {
 
     styleTimeout.current = setTimeout(() => {
       containerRef.current.classList.remove("seeking");
-    }, 300);
+    }, 80);
   };
 
   const handleSeeked = () => {};

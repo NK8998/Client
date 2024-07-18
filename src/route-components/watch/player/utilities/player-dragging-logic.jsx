@@ -37,6 +37,7 @@ export const usePlayerDraggingLogic = () => {
       requestAnimationFrame(() => {
         redDotWrapperRef.style.transform = `translateX(${position}px)`;
       });
+
       return;
     }
 
@@ -178,10 +179,7 @@ export const usePlayerDraggingLogic = () => {
 
   const styleTimeout = useRef(null);
   const stopDragging = (e) => {
-    dispatch(updatePlayerState({ playerPropertyToUpdate: "isDragging", updatedValue: false }));
-    isDragging.current = false;
     const playerContainer = document.querySelector(".player-outer");
-    playerContainer.setAttribute("isDragging", false);
 
     const innerChapterContainerRef = document.querySelector(".chapters-container");
     const videoRef = document.querySelector("#html5-player");
@@ -210,24 +208,28 @@ export const usePlayerDraggingLogic = () => {
     }
 
     innerChapterContainerRef.classList.remove("drag-expand");
-    removeEventListeners();
+    dispatch(updatePlayerState({ playerPropertyToUpdate: "isDragging", updatedValue: false }));
+    isDragging.current = false;
+    playerContainer.setAttribute("isDragging", false);
+
     dispatch(updatePlayerState({ playerPropertyToUpdate: "buffering", updatedValue: true }));
+    removeEventListeners();
 
     checkBufferedOnTrackChange();
 
     if (wasPlaying.current === true) {
       videoRef.play();
     }
-    if (styleTimeout.current) {
-      clearTimeout(styleTimeout.current);
-    }
-    styleTimeout.current = setTimeout(() => {
+    // if (styleTimeout.current) {
+    //   clearTimeout(styleTimeout.current);
+    // }
+    // styleTimeout.current = setTimeout(() => {
+    //   playerContainer.classList.remove("seeking");
+    // }, 80);
+    requestAnimationFrame(() => {
       playerContainer.classList.remove("seeking");
-    }, 300);
-    // requestAnimationFrame(() => {
-    //   // playerContainer.classList.remove("seeking");
-    // });
-    funcRunnnigRef.current = false;
+      funcRunnnigRef.current = false;
+    });
   };
 
   const startDrag = (e) => {
