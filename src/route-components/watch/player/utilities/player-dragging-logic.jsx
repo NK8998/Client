@@ -220,16 +220,17 @@ export const usePlayerDraggingLogic = () => {
     if (wasPlaying.current === true) {
       videoRef.play();
     }
-    // if (styleTimeout.current) {
-    //   clearTimeout(styleTimeout.current);
-    // }
-    // styleTimeout.current = setTimeout(() => {
-    //   playerContainer.classList.remove("seeking");
-    // }, 80);
-    requestAnimationFrame(() => {
+    if (styleTimeout.current) {
+      clearTimeout(styleTimeout.current);
+    }
+    styleTimeout.current = setTimeout(() => {
       playerContainer.classList.remove("seeking");
       funcRunnnigRef.current = false;
-    });
+    }, 80);
+    // requestAnimationFrame(() => {
+    //   playerContainer.classList.remove("seeking");
+    //   funcRunnnigRef.current = false;
+    // });
   };
 
   const startDrag = (e) => {
