@@ -384,8 +384,7 @@ export default function Player({ videoRef, containerRef }) {
   const handleSeeking = () => {
     checkBuffered();
     const isDraggingAttribute = document.querySelector(".player-outer").getAttribute("isDragging");
-    if (isDraggingAttribute === "true") return;
-
+    if (isDraggingAttribute === "true" || isDragging) return;
     const videoRef = document.querySelector(".html5-player");
 
     if (videoRef.currentTime < startTime || videoRef.currentTime > endTime - 0.7) {

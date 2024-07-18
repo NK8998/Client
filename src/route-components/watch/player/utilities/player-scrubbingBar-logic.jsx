@@ -25,7 +25,9 @@ export function usePlayerScrubbingBarInteractions() {
     } else if (chaptersContainerRight - cursorPosition < boundary) {
       scrubbingLeft = `calc(100% - ${scrubbingPreviewContainerWidth + (fullScreen ? 20 : 10)}px)`;
     }
-    scrubbingPreviewContainer.style.left = scrubbingLeft;
+    requestAnimationFrame(() => {
+      scrubbingPreviewContainer.style.left = scrubbingLeft;
+    });
   };
 
   const retrieveCurPalleteAndTile = (currentTime, element, dimensions) => {
@@ -51,7 +53,9 @@ export function usePlayerScrubbingBarInteractions() {
       // to be used by the chapters list component
       return { offsetX, offsetY, backgroundPallete };
     }
-    element.style.background = `url(${backgroundPallete}) -${offsetX}px -${offsetY}px / ${width * paletteSize}px ${height * paletteSize}px`;
+    requestAnimationFrame(() => {
+      element.style.background = `url(${backgroundPallete}) -${offsetX}px -${offsetY}px / ${width * paletteSize}px ${height * paletteSize}px`;
+    });
 
     // element.style.backgroundSize = `${width * paletteSize}px ${height * paletteSize}px`;
     // let backgroundImage = element.style.backgroundImage;
@@ -104,6 +108,13 @@ export function usePlayerScrubbingBarInteractions() {
       width = normalWidth;
       height = width * (1 / aspect_ratio);
     }
+
+    if (height > normalHeight) {
+      height = normalHeight;
+      width = height * aspect_ratio;
+    }
+    // console.log({ normalHeight, height, normalWidth, width });
+
     if (width < normalWidth && height < normalHeight) {
       height = normalHeight;
       width = height * aspect_ratio;

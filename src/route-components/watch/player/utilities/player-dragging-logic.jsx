@@ -16,6 +16,7 @@ export const usePlayerDraggingLogic = () => {
   const wasPlaying = useRef(false);
   const { startTime, endTime } = useSelector((state) => state.player.loopChapterObj);
   const fullScreen = useSelector((state) => state.watch.fullScreen);
+  const styleTimeoutRef = useRef();
 
   const updateRedDot = (currentTimeTracker, currentWidth, chapterLeft, chapterContainerDimensions) => {
     const duration = chapters[chapters.length - 1].end;
@@ -25,6 +26,7 @@ export const usePlayerDraggingLogic = () => {
     const currentIndex = parseInt(style.getPropertyValue("--currentChapterIndex").trim());
     const videoRef = document.querySelector("#html5-player");
     const progressBarRefs = document.querySelectorAll(".progress.bar");
+    const playerContainer = document.querySelector(".player-outer");
     let currentTime = videoRef.currentTime;
     if (currentTimeTracker) {
       currentTime = currentTimeTracker;
@@ -33,7 +35,9 @@ export const usePlayerDraggingLogic = () => {
     if (currentWidth) {
       const progressBarLeft = chapterLeft - chapterContainerDimensions.left;
       const position = Math.min(Math.max(progressBarLeft + currentWidth, progressBarLeft), chapterContainerDimensions.width);
-      redDotWrapperRef.style.transform = `translateX(${position}px)`;
+      requestAnimationFrame(() => {
+        redDotWrapperRef.style.transform = `translateX(${position}px)`;
+      });
       return;
     }
 
@@ -51,6 +55,9 @@ export const usePlayerDraggingLogic = () => {
       const position = innerChapterContainerRef.clientWidth;
       redDotWrapperRef.style.transform = `translateX(${position}px)`;
     }
+    // requestAnimationFrame(() => {
+    //   playerContainer.classList.remove("seeking");
+    // });
   };
 
   const handleClick = (e) => {
@@ -93,16 +100,13 @@ export const usePlayerDraggingLogic = () => {
     if (isNaN(currentTime)) {
       return;
     }
+    document.documentElement.style.setProperty("--dragTime", `${currentTime}`);
 
-    let chapterWidth = 0;
-    let chapterLeft = 0;
     chapters.forEach((chapter, index) => {
       if (chapter.start <= currentTime && currentTime < chapter.end) {
         const chapterPaddingLeft = chapterPadding[index].getBoundingClientRect().left;
         const chapterPaddingWidth = chapterPadding[index].getBoundingClientRect().width;
         const position = e.clientX - chapterPaddingLeft;
-        chapterWidth = position;
-        chapterLeft = chapterPaddingLeft;
         const scale = position / chapterPaddingWidth;
         const shouldShrinkDot = fullScreen ? width - position <= 3 : width - position <= 3;
         if (chapters.length > 1) {
@@ -119,7 +123,6 @@ export const usePlayerDraggingLogic = () => {
         const newRatio = Math.max(Math.min(scale, 1), 0);
         progressBarRefs[index].style.transform = `scaleX(${newRatio})`;
         const curIndex = progressBarRefs[index].getAttribute("dataIndex");
-        dispatch(updatePlayerState({ playerPropertyToUpdate: "currentIndex", updatedValue: parseInt(curIndex) }));
         document.documentElement.style.setProperty("--currentChapterIndex", `${curIndex}`);
         document.documentElement.style.setProperty("--hoverChapterIndex", `${curIndex}`);
         redDotRef.setAttribute("dataIndex", `${curIndex}`);
@@ -129,6 +132,10 @@ export const usePlayerDraggingLogic = () => {
           chapterTitleContainer.textContent = chapter.title;
         });
         timeContainer.textContent = getTimeStamp(Math.round(currentTime));
+
+        updateRedDot(currentTime, position, chapterPaddingLeft, chapterContainerDimensions);
+
+        dispatch(updatePlayerState({ playerPropertyToUpdate: "currentIndex", updatedValue: parseInt(curIndex) }));
       } else if (chapter.end <= currentTime) {
         progressBarRefs[index].style.transform = `scaleX(${1})`;
 
@@ -139,19 +146,16 @@ export const usePlayerDraggingLogic = () => {
         chapterPadding[index].classList.remove("drag-expand");
       }
     });
-    updateRedDot(currentTime, chapterWidth, chapterLeft, chapterContainerDimensions);
 
-    if (currentTime < startTime || currentTime > endTime - 0.7) {
-      dispatch(updatePlayerState({ playerPropertyToUpdate: "loopChapterObj", updatedValue: { loopState: false, startTime: 0, endTime: 0 } }));
-    }
     const curTime = parseInt(style.getPropertyValue("--curTime").trim());
     const showCanvas = Date.now() - curTime > timeDelay;
 
     showCanvas && previewCanvas(currentTime);
 
     movePreviews(e, currentIndex);
-
-    document.documentElement.style.setProperty("--dragTime", `${currentTime}`);
+    if (currentTime < startTime || currentTime > endTime - 0.7) {
+      dispatch(updatePlayerState({ playerPropertyToUpdate: "loopChapterObj", updatedValue: { loopState: false, startTime: 0, endTime: 0 } }));
+    }
   };
 
   const handleTouchDrag = (e) => {
@@ -174,7 +178,11 @@ export const usePlayerDraggingLogic = () => {
   };
 
   const stopDragging = (e) => {
+    dispatch(updatePlayerState({ playerPropertyToUpdate: "isDragging", updatedValue: false }));
+    isDragging.current = false;
     const playerContainer = document.querySelector(".player-outer");
+    playerContainer.setAttribute("isDragging", false);
+
     const innerChapterContainerRef = document.querySelector(".chapters-container");
     const videoRef = document.querySelector("#html5-player");
     const scrubbingPreviewContainer = document.querySelector(".scrubbing-preview-container");
@@ -184,6 +192,8 @@ export const usePlayerDraggingLogic = () => {
     const curTime = parseInt(style.getPropertyValue("--curTime").trim());
     const showCanvas = Date.now() - curTime <= timeDelay;
 
+    if (isDragging.current === true) return;
+
     document.documentElement.style.setProperty("--select", "");
 
     scrubbingPreviewContainer.classList.remove("show");
@@ -192,7 +202,7 @@ export const usePlayerDraggingLogic = () => {
       clearTimeout(mouseDownTracker.current);
     }
     videoRef.currentTime = dragTime;
-    updateRedDot(dragTime);
+    // updateRedDot(dragTime);
 
     if (hovering === "false" || e.touches) {
       document.querySelectorAll(".chapter-padding.drag-expand").forEach((el) => {
@@ -204,28 +214,30 @@ export const usePlayerDraggingLogic = () => {
     innerChapterContainerRef.classList.remove("drag-expand");
     removeEventListeners();
     dispatch(updatePlayerState({ playerPropertyToUpdate: "buffering", updatedValue: true }));
-    dispatch(updatePlayerState({ playerPropertyToUpdate: "isDragging", updatedValue: false }));
-    isDragging.current = false;
-    playerContainer.setAttribute("isDragging", false);
+
     checkBufferedOnTrackChange();
-    playerContainer.classList.remove("seeking");
 
     if (wasPlaying.current === true) {
       videoRef.play();
     }
+    requestAnimationFrame(() => {
+      playerContainer.classList.remove("seeking");
+    });
   };
 
   const startDrag = (e) => {
+    if (isDragging.current === true) return;
     const videoRef = document.querySelector("#html5-player");
     const playerContainer = document.querySelector(".player-outer");
     const isTouching = e.touches ? e.touches.length > 0 : false;
     if ((e.button !== 0 && !isTouching) || videoRef.classList.contains("transition")) return;
+    dispatch(updatePlayerState({ playerPropertyToUpdate: "isDragging", updatedValue: true }));
+    dispatch(updateWatchState({ watchPropertyToUpdate: "syncChaptersToVideoTime", updatedValue: true }));
     playerContainer.classList.add("seeking");
 
     removeEventListeners();
 
     const innerChapterContainerRef = document.querySelector(".chapters-container");
-    dispatch(updateWatchState({ watchPropertyToUpdate: "syncChaptersToVideoTime", updatedValue: true }));
 
     document.documentElement.style.setProperty("--select", "none");
     document.documentElement.style.setProperty("--curTime", `${Date.now()}`);
@@ -233,7 +245,6 @@ export const usePlayerDraggingLogic = () => {
     const style = getComputedStyle(document.documentElement);
 
     isDragging.current = true;
-    dispatch(updatePlayerState({ playerPropertyToUpdate: "isDragging", updatedValue: true }));
     clearIntervalOnTrackChange();
     wasPlaying.current = !videoRef.paused;
     videoRef.pause();
@@ -250,7 +261,7 @@ export const usePlayerDraggingLogic = () => {
     innerChapterContainerRef.classList.add("drag-expand");
     mouseDownTracker.current = setTimeout(() => {
       videoRef.style.visibility = "hidden";
-      // previewCanvas(dragTime);
+      previewCanvas(dragTime);
     }, timeDelay);
   };
 
