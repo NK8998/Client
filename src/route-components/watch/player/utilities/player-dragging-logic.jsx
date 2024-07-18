@@ -16,7 +16,7 @@ export const usePlayerDraggingLogic = () => {
   const wasPlaying = useRef(false);
   const { startTime, endTime } = useSelector((state) => state.player.loopChapterObj);
   const fullScreen = useSelector((state) => state.watch.fullScreen);
-  const styleTimeoutRef = useRef();
+  const funcRunnnigRef = useRef(false);
 
   const updateRedDot = (currentTimeTracker, currentWidth, chapterLeft, chapterContainerDimensions) => {
     const duration = chapters[chapters.length - 1].end;
@@ -26,7 +26,6 @@ export const usePlayerDraggingLogic = () => {
     const currentIndex = parseInt(style.getPropertyValue("--currentChapterIndex").trim());
     const videoRef = document.querySelector("#html5-player");
     const progressBarRefs = document.querySelectorAll(".progress.bar");
-    const playerContainer = document.querySelector(".player-outer");
     let currentTime = videoRef.currentTime;
     if (currentTimeTracker) {
       currentTime = currentTimeTracker;
@@ -177,6 +176,7 @@ export const usePlayerDraggingLogic = () => {
     window.addEventListener("touchend", stopDragging);
   };
 
+  const styleTimeout = useRef(null);
   const stopDragging = (e) => {
     dispatch(updatePlayerState({ playerPropertyToUpdate: "isDragging", updatedValue: false }));
     isDragging.current = false;
@@ -191,8 +191,6 @@ export const usePlayerDraggingLogic = () => {
     const dragTime = parseFloat(style.getPropertyValue("--dragTime").trim());
     const curTime = parseInt(style.getPropertyValue("--curTime").trim());
     const showCanvas = Date.now() - curTime <= timeDelay;
-
-    if (isDragging.current === true) return;
 
     document.documentElement.style.setProperty("--select", "");
 
@@ -220,13 +218,21 @@ export const usePlayerDraggingLogic = () => {
     if (wasPlaying.current === true) {
       videoRef.play();
     }
-    requestAnimationFrame(() => {
+    if (styleTimeout.current) {
+      clearTimeout(styleTimeout.current);
+    }
+    styleTimeout.current = setTimeout(() => {
       playerContainer.classList.remove("seeking");
-    });
+    }, 300);
+    // requestAnimationFrame(() => {
+    //   // playerContainer.classList.remove("seeking");
+    // });
+    funcRunnnigRef.current = false;
   };
 
   const startDrag = (e) => {
-    if (isDragging.current === true) return;
+    if (funcRunnnigRef.current === true) return;
+    funcRunnnigRef.current = true;
     const videoRef = document.querySelector("#html5-player");
     const playerContainer = document.querySelector(".player-outer");
     const isTouching = e.touches ? e.touches.length > 0 : false;

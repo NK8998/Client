@@ -381,6 +381,7 @@ export default function Player({ videoRef, containerRef }) {
     containerRef.current.classList.remove("focus-via-keyboard");
   };
 
+  const styleTimeout = useRef();
   const handleSeeking = () => {
     checkBuffered();
     const isDraggingAttribute = document.querySelector(".player-outer").getAttribute("isDragging");
@@ -397,9 +398,13 @@ export default function Player({ videoRef, containerRef }) {
     dispatch(updatePlayerState({ playerPropertyToUpdate: "seeking", updatedValue: false }));
 
     dispatch(updateWatchState({ watchPropertyToUpdate: "syncChaptersToVideoTime", updatedValue: true }));
-    requestAnimationFrame(() => {
+    if (styleTimeout.current) {
+      clearTimeout(styleTimeout.current);
+    }
+
+    styleTimeout.current = setTimeout(() => {
       containerRef.current.classList.remove("seeking");
-    });
+    }, 300);
   };
 
   const handleSeeked = () => {};
