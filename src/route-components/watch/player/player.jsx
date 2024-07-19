@@ -352,14 +352,14 @@ export default function Player({ videoRef, containerRef }) {
     clearIntervalOnTrackChange();
   };
 
-  useEffect(() => {
-    if (play) {
-      clearIntervalProgress();
-      updateProgess();
-    } else {
-      clearIntervalProgress();
-    }
-  }, [isDragging, play, seeking, miniPlayer]);
+  // useEffect(() => {
+  //   if (play) {
+  //     clearIntervalProgress();
+  //     updateProgess();
+  //   } else {
+  //     clearIntervalProgress();
+  //   }
+  // }, [isDragging, play, seeking, miniPlayer]);
 
   const handleContextMenu = (e) => {
     // e.preventDefault();
@@ -381,7 +381,6 @@ export default function Player({ videoRef, containerRef }) {
     containerRef.current.classList.remove("focus-via-keyboard");
   };
 
-  const styleTimeout = useRef();
   const handleSeeking = () => {
     checkBuffered();
     const isDraggingAttribute = document.querySelector(".player-outer").getAttribute("isDragging");
@@ -392,19 +391,11 @@ export default function Player({ videoRef, containerRef }) {
       dispatch(updatePlayerState({ playerPropertyToUpdate: "loopChapterObj", updatedValue: { loopState: false, startTime: 0, endTime: 0 } }));
     }
 
-    containerRef.current.classList.add("seeking");
     updateProgressBar();
 
     dispatch(updatePlayerState({ playerPropertyToUpdate: "seeking", updatedValue: false }));
 
     dispatch(updateWatchState({ watchPropertyToUpdate: "syncChaptersToVideoTime", updatedValue: true }));
-    if (styleTimeout.current) {
-      clearTimeout(styleTimeout.current);
-    }
-
-    styleTimeout.current = setTimeout(() => {
-      containerRef.current.classList.remove("seeking");
-    }, 80);
   };
 
   const handleSeeked = () => {};
