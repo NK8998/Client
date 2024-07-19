@@ -344,7 +344,7 @@ export default function Player({ videoRef, containerRef }) {
       updateProgressBar();
       if (document.querySelector(".player-inner-relative").classList.contains("hide") && !miniPlayer) return;
       updateBufferBar();
-    }, 90);
+    }, 30);
   };
 
   const clearIntervalProgress = () => {

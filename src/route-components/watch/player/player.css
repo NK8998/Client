@@ -375,7 +375,7 @@
 .progress{
   background-color: red;
   z-index: 4;
-  transition: transform .1s cubic-bezier(.4,0,1,1), -webkit-transform .1s cubic-bezier(.4,0,1,1);;
+  transition: transform 0s cubic-bezier(.4,0,1,1), -webkit-transform 0s cubic-bezier(.4,0,1,1);;
   /* opacity: 0; */
 
 }
@@ -416,7 +416,7 @@
   top: 15px;
   left: -6.5px;
   z-index: 5;
-  transition: transform 100ms cubic-bezier(.4,0,1,1), -webkit-transform 100ms cubic-bezier(.4,0,1,1);
+  transition: transform 0ms cubic-bezier(.4,0,1,1), -webkit-transform 0ms cubic-bezier(.4,0,1,1);
 }
 
 .player-outer.seeking .bar,

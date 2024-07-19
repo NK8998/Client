@@ -179,6 +179,8 @@ export const usePlayerDraggingLogic = () => {
 
   const styleTimeout = useRef(null);
   const stopDragging = (e) => {
+    removeEventListeners();
+
     const playerContainer = document.querySelector(".player-outer");
 
     const innerChapterContainerRef = document.querySelector(".chapters-container");
@@ -198,7 +200,7 @@ export const usePlayerDraggingLogic = () => {
       clearTimeout(mouseDownTracker.current);
     }
     videoRef.currentTime = dragTime;
-    // updateRedDot(dragTime);
+    // handleDrag(e);
 
     if (hovering === "false" || e.touches) {
       document.querySelectorAll(".chapter-padding.drag-expand").forEach((el) => {
@@ -213,7 +215,6 @@ export const usePlayerDraggingLogic = () => {
     playerContainer.setAttribute("isDragging", false);
 
     dispatch(updatePlayerState({ playerPropertyToUpdate: "buffering", updatedValue: true }));
-    removeEventListeners();
 
     checkBufferedOnTrackChange();
 
