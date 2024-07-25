@@ -137,6 +137,7 @@ export default function Player({ videoRef, containerRef }) {
   useLayoutEffect(() => {
     const videoRef = document.querySelector(".html5-player");
     const playerContainer = document.querySelector(".player-outer");
+
     if (videoRef && playerContainer) {
       playerContainer.setAttribute("isDragging", false);
       const params = new URLSearchParams(window.location.search);
@@ -222,32 +223,7 @@ export default function Player({ videoRef, containerRef }) {
 
       playerRef.current.addEventListener("trackschanged", () => {
         console.log("Tracks have been loaded!");
-        // const tracksInfo = playerRef.current.getVariantTracks();
-        // const tracks = tracksInfo.map((track) => {
-        //   return track.height;
-        // });
       });
-
-      // playerRef.current.addEventListener("buffering", (event) => {
-      //   const spinnerRef = document.querySelector(".player-spinner");
-      //   const previewImageBg = document.querySelector(".preview-image-bg");
-      //   const previewImageBgContainer = document.querySelector(".preview-bg-relative");
-      //   const videoRef = document.querySelector("#html5-player");
-
-      //   const isBuffering = event.buffering;
-      //   console.log(isBuffering);
-      //   if (isBuffering) {
-      //     dispatch(updateBuffering(true));
-      //     spinnerRef.classList.add("visible");
-      //   } else if (!isBuffering) {
-      //     dispatch(updateBuffering(false));
-      //     previewImageBg.classList.remove("show");
-      //     previewImageBgContainer.classList.remove("darken");
-      //     videoRef.style.visibility = "visible";
-
-      //     spinnerRef.classList.remove("visible");
-      //   }
-      // });
       playerRef.current.addEventListener("adaptation", (value) => {
         const newTrack = value.newTrack.height;
         const { resolutions } = playingVideo;
@@ -352,14 +328,16 @@ export default function Player({ videoRef, containerRef }) {
     clearIntervalOnTrackChange();
   };
 
-  // useEffect(() => {
-  //   if (play) {
-  //     clearIntervalProgress();
-  //     updateProgess();
-  //   } else {
-  //     clearIntervalProgress();
-  //   }
-  // }, [isDragging, play, seeking, miniPlayer]);
+  useLayoutEffect(() => {
+    updateProgressBar();
+
+    if (play) {
+      clearIntervalProgress();
+      updateProgess();
+    } else {
+      clearIntervalProgress();
+    }
+  }, [chapters]);
 
   const handleContextMenu = (e) => {
     // e.preventDefault();
