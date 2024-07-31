@@ -15,7 +15,6 @@
   width: var(--width);
   max-width: var(--width);
   max-height: var(--height);
- 
 }
 .player-expanded-container.has-content{
   height: var(--theatreHeight);
@@ -231,6 +230,7 @@
   display: flex;
   justify-content: center;
   z-index: 11;
+  height: fit-content;
   
 }
 .chapters-container{
@@ -241,6 +241,7 @@
   /* background-color: blue; */
   outline: none;
   width: calc(100% - 24px);
+  height: fit-content;
 
 }
 

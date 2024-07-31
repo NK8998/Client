@@ -32,11 +32,9 @@ export const usePlayerDraggingLogic = () => {
     }
 
     if (currentWidth) {
-      requestAnimationFrame(() => {
-        const progressBarLeft = chapterLeft - chapterContainerDimensions.left;
-        const position = Math.min(Math.max(progressBarLeft + currentWidth, progressBarLeft), chapterContainerDimensions.width);
-        redDotWrapperRef.style.transform = `translateX(${position}px)`;
-      });
+      const progressBarLeft = chapterLeft - chapterContainerDimensions.left;
+      const position = Math.min(Math.max(progressBarLeft + currentWidth, progressBarLeft), chapterContainerDimensions.width);
+      redDotWrapperRef.style.transform = `translateX(${position}px)`;
 
       return;
     }
@@ -110,6 +108,7 @@ export const usePlayerDraggingLogic = () => {
         const scale = position / chapterPaddingWidth;
         const newRatio = Math.max(Math.min(scale, 1), 0);
         progressBarRefs[index].style.transform = `scaleX(${newRatio})`;
+        updateRedDot(currentTime, position, chapterPaddingLeft, chapterContainerDimensions);
 
         const shouldShrinkDot = fullScreen ? width - position <= 3 : width - position <= 3;
         if (chapters.length > 1) {
@@ -135,8 +134,6 @@ export const usePlayerDraggingLogic = () => {
         });
         timeContainer.textContent = getTimeStamp(Math.round(currentTime));
 
-        updateRedDot(currentTime, position, chapterPaddingLeft, chapterContainerDimensions);
-
         dispatch(updatePlayerState({ playerPropertyToUpdate: "currentIndex", updatedValue: parseInt(curIndex) }));
       } else if (chapter.end <= currentTime) {
         progressBarRefs[index].style.transform = `scaleX(${1})`;
@@ -154,7 +151,6 @@ export const usePlayerDraggingLogic = () => {
 
     requestAnimationFrame(() => {
       showCanvas && previewCanvas(currentTime);
-
       movePreviews(e, currentIndex);
     });
 

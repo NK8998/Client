@@ -337,7 +337,7 @@ export default function Player({ videoRef, containerRef }) {
     } else {
       clearIntervalProgress();
     }
-  }, [chapters]);
+  }, [chapters, isDragging]);
 
   const handleContextMenu = (e) => {
     // e.preventDefault();
