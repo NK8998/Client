@@ -43,7 +43,7 @@ export const BottomControlsRight = ({ playerRef }) => {
   };
 
   const handleKeyUp = (e) => {
-    const isInputField = e.target.tagName === "INPUT" || e.target.tagName === "TEXTAREA";
+    const isInputField = e.target.tagName === "INPUT" || e.target.tagName === "TEXTAREA" || e.target.classList.contains("content-editable");
     if (isInputField) return;
     if (isFetching) return;
     if (timeoutRef.current) {

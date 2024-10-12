@@ -23,7 +23,7 @@ export const usePlayerkeyInteractions = () => {
   const handleKeyPress = (e) => {
     const videoRef = document.querySelector("#html5-player");
     const isWatchpage = location.includes("watch") || window.location.pathname.includes("watch");
-    if (e.target.tagName === "TEXTAREA" || e.target.tagName === "INPUT") return;
+    if (e.target.tagName === "TEXTAREA" || e.target.tagName === "INPUT" || e.target.classList.contains("content-editable")) return;
     keyDownTime.current = Date.now();
 
     const key = e.key.toLowerCase();
@@ -65,6 +65,8 @@ export const usePlayerkeyInteractions = () => {
   const handleKeyUp = (e) => {
     const videoRef = document.querySelector("#html5-player");
     const isWatchpage = location.includes("watch") || window.location.pathname.includes("watch");
+    if (e.target.tagName === "TEXTAREA" || e.target.tagName === "INPUT" || e.target.classList.contains("content-editable")) return;
+
     const key = e.key.toLowerCase();
     if (key === "tab") {
       focusViaKeyBoard.current = true;

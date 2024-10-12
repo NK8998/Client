@@ -1,0 +1,154 @@
+.comments-shell{
+    margin-top: 25px;
+}
+
+.comments-sorter,
+.sort-by{
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.comments-sorter svg{
+    fill: white;
+}
+
+.comments-sorter h1{
+    font-size: 25px;
+}
+
+.sort-by{
+    gap: 10px;
+    align-items: start;
+}
+
+.user-comment-form{
+    display: flex;
+    gap: 20px;
+    width: 100%;
+    margin-top: 25px;
+}
+
+.form-right{
+    flex: 1;
+}
+
+.user-comment-form img{
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+}
+
+.user-comment-form .input-container{
+    flex: 1;
+    position: relative;
+    min-height: 26px;
+    height: fit-content;
+}
+
+.user-comment-form .input-container .placeholder {
+    position: absolute;
+    left: 0;
+    top: 50%; /* Move to the middle */
+    transform: translateY(-50%); /* Center the element */
+    pointer-events: none;
+    font-size: 13px;
+    height: fit-content;
+    color: rgba(255, 255, 255, 0.578);
+}
+
+.user-comment-form .input-container .placeholder.hidden{
+    visibility: hidden;
+}
+.user-comment-form .form-input{
+    outline: none;
+    border-bottom: 1px solid rgba(128, 128, 128, 0.598);
+    padding: 5px 0px;
+    min-height: 16px;
+    height: fit-content;
+    font-size: 13px;
+    position: relative;
+}
+
+.user-comment-form .form-input:focus:after{
+    transform: scale(1);
+    transform-origin: center;
+}
+
+.user-comment-form .form-input::after{
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 2px;
+    background-color: white;
+    bottom: -2px;
+    left: 0;
+    transform: scale(0);
+    transition: transform 200ms ease-in-out;
+}
+
+.interactables{
+    margin-top: 10px;
+    display: none;
+    justify-content: space-between;
+}
+
+.interactables.show{
+    display: flex;
+}
+
+.interactables .interactable-left svg{
+    fill: white;
+
+}
+
+.interactables .interactable-left{
+    padding: 8px;
+    display: grid;
+    place-content: center;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+.interactables .interactable-left:hover{
+    background-color: rgba(128, 128, 128, 0.436);
+
+}
+
+.interactables .interactable-right{
+    display: flex;
+    gap: 10px;
+}
+
+.interactables .interactable-right .ir{
+    width:  fit-content;
+    padding: 10px 15px;
+    border-radius: 100000px;
+    border: none;
+    font-size: 14px;
+    
+}
+
+.interactables .interactable-right .ir.cancel{
+    background-color: transparent;
+    color: white;
+    font-weight: 500;
+}
+
+.interactables .interactable-right .ir.confirm{
+    background-color: rgba(128, 128, 128, 0.235);
+    color: rgb(108, 108, 108);
+}
+
+.interactables .interactable-right .ir.cancel:hover{
+    background-color: rgba(128, 128, 128, 0.443);
+}
+
+.interactables .interactable-right .ir.confirm.active{
+    background-color: #3ea6ff;
+    color: black;
+}
+
+.interactables .interactable-right .ir.confirm.active:hover{
+    background-color: #65b7fe;
+}
