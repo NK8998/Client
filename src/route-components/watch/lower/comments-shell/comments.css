@@ -61,6 +61,8 @@
     visibility: hidden;
 }
 .user-comment-form .form-input{
+    display: block;
+    width: 100%;
     outline: none;
     border-bottom: 1px solid rgba(128, 128, 128, 0.598);
     padding: 5px 0px;
@@ -68,6 +70,7 @@
     height: fit-content;
     font-size: 13px;
     position: relative;
+    
 }
 
 .user-comment-form .form-input:focus:after{

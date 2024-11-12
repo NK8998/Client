@@ -20,10 +20,15 @@ export default function UserCommentForm() {
     } else {
       setHasContent(false);
     }
-    if (value.length > 0) {
+
+    if (Array.from(inputRef.current.children).length > 0 || value.length > 0) {
       placeholderRef.current.classList.add("hidden");
-    } else {
-      placeholderRef.current.classList.remove("hidden");
+    }
+    if (value.length === 0 && Array.from(inputRef.current.children).length === 1) {
+      console.log("ran");
+      while (inputRef.current.firstChild) {
+        inputRef.current.removeChild(inputRef.current.firstChild);
+      }
     }
   };
 
@@ -33,13 +38,14 @@ export default function UserCommentForm() {
 
   const undoChanges = () => {
     interactablesRef.current.classList.remove("show");
+    placeholderRef.current.classList.remove("hidden");
     inputRef.current.textContent = "";
     setHasContent(false);
   };
 
   const handleSubmit = () => {
     const comment_id = nanoid(10);
-    const body = inputRef.current.textContent.trim();
+    const body = inputRef.current.textContent;
 
     if (body.length === 0) return;
 
