@@ -47,7 +47,7 @@ export default function UserCommentForm() {
     const comment_id = nanoid(10);
     const body = inputRef.current.textContent;
 
-    if (body.length === 0) return;
+    if (body.trim().length === 0) return;
 
     const formData = new FormData();
     formData.append("comment_id", comment_id);
@@ -64,7 +64,13 @@ export default function UserCommentForm() {
       <img src={pfp_url} alt='user-pfp' />
       <div className='form-right'>
         <div className='input-container'>
-          <div className='form-input content-editable' ref={inputRef} contentEditable onInput={handleChange} onFocus={handleFocus}></div>
+          <div
+            className='form-input content-editable'
+            ref={inputRef}
+            contentEditable
+            onInput={handleChange}
+            onFocus={handleFocus}
+          ></div>
           <div className={`placeholder`} ref={placeholderRef}>
             Add a comment...
           </div>
@@ -77,7 +83,11 @@ export default function UserCommentForm() {
             <button type='button' className='ir cancel' onClick={undoChanges}>
               Cancel
             </button>
-            <button type='button' className={`ir confirm ${hasContent ? "active" : ""}`} onClick={handleSubmit}>
+            <button
+              type='button'
+              className={`ir confirm ${hasContent ? "active" : ""}`}
+              onClick={handleSubmit}
+            >
               Comment
             </button>
           </div>
