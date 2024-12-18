@@ -7,7 +7,12 @@ import { Route, Routes } from "react-router-dom";
 import BareHome from "./bare-routes/bare-home";
 import BareWatch from "./bare-routes/bare-watch";
 import { useDispatch, useSelector } from "react-redux";
-import { handleFullscreenChange, handlePopState, handleResize, updateRefs } from "./store/Slices/app-slice";
+import {
+  handleFullscreenChange,
+  handlePopState,
+  handleResize,
+  updateRefs,
+} from "./store/Slices/app-slice";
 import GuideWrapper from "./high-level-components/guide-wrapper/guide-wrapper";
 import Channel from "./route-components/channel/channel";
 import BareChannel from "./bare-routes/bare-channel/bare-channel";
@@ -60,6 +65,10 @@ function App() {
     const debouncedVar = debounce(handleResizing, debounceTime);
 
     window.addEventListener("resize", debouncedVar);
+
+    return () => {
+      window.removeEventListener("resize", debouncedVar);
+    };
   }, [credentialsChecked]);
 
   return credentialsChecked ? (
@@ -70,7 +79,11 @@ function App() {
         <GuideWrapper />
         <div className='page-manager'>
           <Home homeRef={homeRef} />
-          <Watch watchRef={watchRef} miniplayerRef={miniplayerRef} miniPlayerBoolean={miniPlayerBoolean} />
+          <Watch
+            watchRef={watchRef}
+            miniplayerRef={miniplayerRef}
+            miniPlayerBoolean={miniPlayerBoolean}
+          />
           <Channel channelRef={channelRef} />
         </div>
       </div>

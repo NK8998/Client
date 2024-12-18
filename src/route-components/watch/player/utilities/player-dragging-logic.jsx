@@ -1,3 +1,17 @@
+//
+//
+//
+//
+//
+//
+
+// !!!!!!!!!Refactor code so the styles are batched together in a single requestAnimationFrame callback
+// to prevent layout thrashing!!!!!!!!!!!!!!!!!
+
+//
+//
+//
+//
 import { useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { usePlayerScrubbingBarInteractions } from "./player-scrubbingBar-logic";
@@ -16,7 +30,6 @@ export const usePlayerDraggingLogic = () => {
   const wasPlaying = useRef(false);
   const { startTime, endTime } = useSelector((state) => state.player.loopChapterObj);
   const fullScreen = useSelector((state) => state.watch.fullScreen);
-  const funcRunnnigRef = useRef(false);
 
   const updateRedDot = (currentTimeTracker, currentWidth, chapterLeft, chapterContainerDimensions) => {
     const duration = chapters[chapters.length - 1].end;
@@ -53,9 +66,6 @@ export const usePlayerDraggingLogic = () => {
       const position = innerChapterContainerRef.clientWidth;
       redDotWrapperRef.style.transform = `translateX(${position}px)`;
     }
-    // requestAnimationFrame(() => {
-    //   playerContainer.classList.remove("seeking");
-    // });
   };
 
   const handleClick = (e) => {
@@ -98,6 +108,12 @@ export const usePlayerDraggingLogic = () => {
     if (isNaN(currentTime)) {
       return;
     }
+    const curTime = parseInt(style.getPropertyValue("--curTime").trim());
+    const showCanvas = Date.now() - curTime > timeDelay;
+
+    showCanvas && previewCanvas(currentTime);
+    movePreviews(e, currentIndex);
+
     document.documentElement.style.setProperty("--dragTime", `${currentTime}`);
 
     chapters.forEach((chapter, index) => {
@@ -134,7 +150,12 @@ export const usePlayerDraggingLogic = () => {
         });
         timeContainer.textContent = getTimeStamp(Math.round(currentTime));
 
-        dispatch(updatePlayerState({ playerPropertyToUpdate: "currentIndex", updatedValue: parseInt(curIndex) }));
+        dispatch(
+          updatePlayerState({
+            playerPropertyToUpdate: "currentIndex",
+            updatedValue: parseInt(curIndex),
+          })
+        );
       } else if (chapter.end <= currentTime) {
         progressBarRefs[index].style.transform = `scaleX(${1})`;
 
@@ -146,16 +167,17 @@ export const usePlayerDraggingLogic = () => {
       }
     });
 
-    const curTime = parseInt(style.getPropertyValue("--curTime").trim());
-    const showCanvas = Date.now() - curTime > timeDelay;
-
-    requestAnimationFrame(() => {
-      showCanvas && previewCanvas(currentTime);
-      movePreviews(e, currentIndex);
-    });
-
     if (currentTime < startTime || currentTime > endTime - 0.7) {
-      dispatch(updatePlayerState({ playerPropertyToUpdate: "loopChapterObj", updatedValue: { loopState: false, startTime: 0, endTime: 0 } }));
+      dispatch(
+        updatePlayerState({
+          playerPropertyToUpdate: "loopChapterObj",
+          updatedValue: {
+            loopState: false,
+            startTime: 0,
+            endTime: 0,
+          },
+        })
+      );
     }
   };
 
@@ -210,11 +232,21 @@ export const usePlayerDraggingLogic = () => {
     }
 
     innerChapterContainerRef.classList.remove("drag-expand");
-    dispatch(updatePlayerState({ playerPropertyToUpdate: "isDragging", updatedValue: false }));
+    dispatch(
+      updatePlayerState({
+        playerPropertyToUpdate: "isDragging",
+        updatedValue: false,
+      })
+    );
     isDragging.current = false;
     playerContainer.setAttribute("isDragging", false);
 
-    dispatch(updatePlayerState({ playerPropertyToUpdate: "buffering", updatedValue: true }));
+    dispatch(
+      updatePlayerState({
+        playerPropertyToUpdate: "buffering",
+        updatedValue: true,
+      })
+    );
 
     checkBufferedOnTrackChange();
 
@@ -235,8 +267,18 @@ export const usePlayerDraggingLogic = () => {
     const playerContainer = document.querySelector(".player-outer");
     const isTouching = e.touches ? e.touches.length > 0 : false;
     if ((e.button !== 0 && !isTouching) || videoRef.classList.contains("transition")) return;
-    dispatch(updatePlayerState({ playerPropertyToUpdate: "isDragging", updatedValue: true }));
-    dispatch(updateWatchState({ watchPropertyToUpdate: "syncChaptersToVideoTime", updatedValue: true }));
+    dispatch(
+      updatePlayerState({
+        playerPropertyToUpdate: "isDragging",
+        updatedValue: true,
+      })
+    );
+    dispatch(
+      updateWatchState({
+        watchPropertyToUpdate: "syncChaptersToVideoTime",
+        updatedValue: true,
+      })
+    );
     playerContainer.classList.add("seeking");
 
     removeEventListeners();
@@ -275,7 +317,16 @@ export const usePlayerDraggingLogic = () => {
     redDotRef.style.scale = 0;
   };
 
-  return { startDrag, stopDragging, handleClick, handleDrag, updateRedDot, resetDot, isDragging, removeEventListeners };
+  return {
+    startDrag,
+    stopDragging,
+    handleClick,
+    handleDrag,
+    updateRedDot,
+    resetDot,
+    isDragging,
+    removeEventListeners,
+  };
 };
 
 export const usePlayerBufferingState = () => {
@@ -344,7 +395,12 @@ export const usePlayerBufferingState = () => {
           videoRef.style.visibility = "visible";
         }
         spinnerRef.classList.remove("visible");
-        dispatch(updatePlayerState({ playerPropertyToUpdate: "buffering", updatedValue: false }));
+        dispatch(
+          updatePlayerState({
+            playerPropertyToUpdate: "buffering",
+            updatedValue: false,
+          })
+        );
         if (timeIntervalRef.current) {
           clearInterval(timeIntervalRef.current);
         }

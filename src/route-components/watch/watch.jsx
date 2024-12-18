@@ -19,20 +19,31 @@ export default function Watch({ watchRef, miniPlayerBoolean }) {
   return (
     <>
       {notFound && <VideoNotFound />}
-      <div className={`watch-flexy ${notFound ? "not-found" : ""}`} ref={watchRef} id='watch' hidden={true}>
+      <div
+        className={`watch-flexy ${notFound ? "not-found" : ""}`}
+        ref={watchRef}
+        id='watch'
+        hidden={true}
+      >
         <div className='player-expanded-container' ref={expandedContainerRef}></div>
         <div className='columns'>
           <div className='primary'>
             <div className='player-if' ref={primaryRef}>
-              <Player videoRef={videoRef} containerRef={containerRef} miniPlayerBoolean={miniPlayerBoolean} />
+              <Player
+                videoRef={videoRef}
+                containerRef={containerRef}
+                miniPlayerBoolean={miniPlayerBoolean}
+              />
             </div>
             <Lower />
             <div className='secondary-in-primary' ref={secondaryRefInner}></div>
           </div>
           <div className='secondary content' ref={secondaryRefOuter}>
             <ChaptersList />
-
-            <SecondaryContent secondaryRefInner={secondaryRefInner} secondaryRefOuter={secondaryRefOuter} />
+            <SecondaryContent
+              secondaryRefInner={secondaryRefInner}
+              secondaryRefOuter={secondaryRefOuter}
+            />
           </div>
         </div>
       </div>
