@@ -13,7 +13,16 @@ export default function MastHead() {
   const dispatch = useDispatch();
   const mastheadRef = useRef();
   const SignIn = () => {
-    window.location.href = `http://localhost:5174?WAA=Client`;
+    if (import.meta.env.PROD) {
+      // Production logic
+      window.location.href = `${
+        import.meta.env.VITE_DEPLOYED_OAUTH_URL
+      }?WAA=Client`;
+    } else {
+      window.location.href = `${
+        import.meta.env.VITE_LOCAL_OAUTH_URL
+      }?WAA=Client`;
+    }
   };
 
   return (
