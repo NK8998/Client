@@ -17,11 +17,11 @@ export default function MastHead() {
       // Production logic
       window.location.href = `${
         import.meta.env.VITE_DEPLOYED_OAUTH_URL
-      }?WAA=Client`;
+      }?redirect=${window.location.href}`;
     } else {
       window.location.href = `${
         import.meta.env.VITE_LOCAL_OAUTH_URL
-      }?WAA=Client`;
+      }?redirect=${window.location.href}`;
     }
   };
 
