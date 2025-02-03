@@ -17,7 +17,7 @@ export default function BareHome() {
     <div className='bare-hidden-home'>
       <Helmet>
         <meta charSet='utf-8' />
-        <title>YouTube</title>
+        <title>StreamGrid</title>
         <link rel='canonical' href='http://mysite.com/example' />
         <meta name='description' content='browse videos' />
       </Helmet>
