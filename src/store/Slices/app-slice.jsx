@@ -194,16 +194,16 @@ export const handleFullscreenChange = () => {
       if (document.fullscreenElement) {
         timeout = setTimeout(() => {
           dispatch(toggleFullScreen(true));
-        }, 100);
+        }, 0);
       } else {
         timeout = setTimeout(() => {
           dispatch(toggleFullScreen(false));
-        }, 100);
+        }, 0);
       }
     } else {
       timeout = setTimeout(() => {
         dispatch(toggleFullScreen(false));
-      }, 100);
+      }, 0);
     }
   };
 };
