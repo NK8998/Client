@@ -1,5 +1,10 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { fetchWatchData, handleFullscreen, toggleFullScreen, updateNotFound } from "./watch-slice";
+import {
+  fetchWatchData,
+  handleFullscreen,
+  toggleFullScreen,
+  updateNotFound,
+} from "./watch-slice";
 import { updateMaxNums } from "./home-slice";
 import { updatePlayerState } from "./player-slice";
 
@@ -15,7 +20,7 @@ const appSlice = createSlice({
     location: "",
     windowWidth: window.innerWidth,
     prefersMini: false,
-    debounceTime: 100,
+    debounceTime: 0,
   },
   reducers: {
     updateRefs: (state, action) => {
@@ -71,7 +76,12 @@ export const handleNavigation = (targetRoute) => {
           dispatch(handleFullscreen(true));
         });
       }
-      dispatch(updatePlayerState({ playerPropertyToUpdate: "settingsShowing", updatedValue: false }));
+      dispatch(
+        updatePlayerState({
+          playerPropertyToUpdate: "settingsShowing",
+          updatedValue: false,
+        })
+      );
     }
     const refs = getState().app.refs;
     const currentRoute = refs.find((ref) => ref.route === targetRoute);

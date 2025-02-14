@@ -28,7 +28,9 @@ import { debounce } from "lodash";
 import { Toaster } from "sonner";
 
 function App() {
-  const credentialsChecked = useSelector((state) => state.app.credentialsChecked);
+  const credentialsChecked = useSelector(
+    (state) => state.app.credentialsChecked
+  );
   const debounceTime = useSelector((state) => state.app.debounceTime);
   const dispatch = useDispatch();
   const homeRef = useRef();
@@ -90,7 +92,10 @@ function App() {
       <MiniPlayer miniplayerRef={miniplayerRef} />
       <Routes>
         <Route path='/' element={<BareHome />} />
-        <Route path='/watch' element={<BareWatch miniPlayerBoolean={miniPlayerBoolean} />} />
+        <Route
+          path='/watch'
+          element={<BareWatch miniPlayerBoolean={miniPlayerBoolean} />}
+        />
         <Route path='/:channel/*' element={<BareChannel />}>
           <Route path='' element={<BareFeatured />} />
           <Route path='featured' element={<BareFeatured />} />
