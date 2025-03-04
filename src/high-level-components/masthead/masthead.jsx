@@ -55,19 +55,21 @@ export default function MastHead() {
         </div>
         <div className='middle'></div>
         <div className='end'>
-          <div className='mast-icon' onClick={handleStudioRedirect}>
-            <CreateIcon />
-          </div>
-          <div className='mast-icon'>
-            <NotificationIcon />
-          </div>
           {!hasAccount ? (
             <button className='sign-in-btn' type='button' onClick={SignIn}>
               <DefaultUserIcon />
               Sign in
             </button>
           ) : (
-            <img src={pfp_url} alt='pfp' className='user-pfp' />
+            <>
+              <div className='mast-icon' onClick={handleStudioRedirect}>
+                <CreateIcon />
+              </div>
+              <div className='mast-icon'>
+                <NotificationIcon />
+              </div>
+              <img src={pfp_url} alt='pfp' className='user-pfp' />
+            </>
           )}
         </div>
       </div>
