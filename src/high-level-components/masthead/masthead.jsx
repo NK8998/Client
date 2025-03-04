@@ -1,5 +1,11 @@
 import { useDispatch, useSelector } from "react-redux";
-import { Burger, YTLogo } from "../../assets/icons";
+import {
+  Burger,
+  DefaultUserIcon,
+  YTLogo,
+  NotificationIcon,
+  CreateIcon,
+} from "../../assets/icons";
 import "./masthead.css";
 import { handleNavResize } from "../../store/Slices/app-slice";
 import { Link } from "react-router-dom";
@@ -25,6 +31,15 @@ export default function MastHead() {
     }
   };
 
+  const handleStudioRedirect = () => {
+    if (import.meta.env.PROD) {
+      // Production logic
+      window.location.href = `${import.meta.env.VITE_DEPLOYED_STUDIO_URL}`;
+    } else {
+      window.location.href = `${import.meta.env.VITE_LOCAL_STUDIO_URL}`;
+    }
+  };
+
   return (
     <div className='masthead-outer' ref={mastheadRef}>
       <div className='masthead-inner'>
@@ -40,8 +55,15 @@ export default function MastHead() {
         </div>
         <div className='middle'></div>
         <div className='end'>
+          <div className='mast-icon' onClick={handleStudioRedirect}>
+            <CreateIcon />
+          </div>
+          <div className='mast-icon'>
+            <NotificationIcon />
+          </div>
           {!hasAccount ? (
-            <button type='button' onClick={SignIn}>
+            <button className='sign-in-btn' type='button' onClick={SignIn}>
+              <DefaultUserIcon />
               Sign in
             </button>
           ) : (

@@ -8,7 +8,12 @@ export const Burger = () => {
 
 export const Exclamation = () => {
   return (
-    <svg xmlns='http://www.w3.org/2000/svg' height='24' viewBox='0 -960 960 960' width='24'>
+    <svg
+      xmlns='http://www.w3.org/2000/svg'
+      height='24'
+      viewBox='0 -960 960 960'
+      width='24'
+    >
       <path d='M480-290.77q13.731 0 23.019-9.288 9.288-9.289 9.288-23.019 0-13.731-9.288-23.019-9.288-9.288-23.019-9.288-13.731 0-23.019 9.288-9.288 9.288-9.288 23.019 0 13.73 9.288 23.019 9.288 9.288 23.019 9.288Zm-29.999-146.153h59.998v-240h-59.998v240Zm30.066 336.922q-78.836 0-148.204-29.92-69.369-29.92-120.682-81.21-51.314-51.291-81.247-120.629-29.933-69.337-29.933-148.173t29.92-148.204q29.92-69.369 81.21-120.682 51.291-51.314 120.629-81.247 69.337-29.933 148.173-29.933t148.204 29.92q69.369 29.92 120.682 81.21 51.314 51.291 81.247 120.629 29.933 69.337 29.933 148.173t-29.92 148.204q-29.92 69.369-81.21 120.682-51.291 51.314-120.629 81.247-69.337 29.933-148.173 29.933ZM480-160q134 0 227-93t93-227q0-134-93-227t-227-93q-134 0-227 93t-93 227q0 134 93 227t227 93Zm0-320Z' />
     </svg>
   );
@@ -16,8 +21,17 @@ export const Exclamation = () => {
 
 export const PlayPauseButton = () => {
   return (
-    <svg height='100%' version='1.1' viewBox='0 0 36 36' width='100%' id='play-pause'>
-      <path d='M 12,26 18.5,22 18.5,14 12,10 z M 18.5,22 25,18 25,18 18.5,14 z' id='svg-play-pause'></path>
+    <svg
+      height='100%'
+      version='1.1'
+      viewBox='0 0 36 36'
+      width='100%'
+      id='play-pause'
+    >
+      <path
+        d='M 12,26 18.5,22 18.5,14 12,10 z M 18.5,22 25,18 25,18 18.5,14 z'
+        id='svg-play-pause'
+      ></path>
     </svg>
   );
 };
@@ -25,21 +39,36 @@ export const PlayPauseButton = () => {
 export const TheatreNormalButton = () => {
   return (
     <svg height='100%' version='1.1' viewBox='0 0 36 36' width='100%'>
-      <path d='m 28,11 0,14 -20,0 0,-14 z m -18,2 16,0 0,10 -16,0 0,-10 z' fillRule='evenodd' id='svg-theatre-normal'></path>
+      <path
+        d='m 28,11 0,14 -20,0 0,-14 z m -18,2 16,0 0,10 -16,0 0,-10 z'
+        fillRule='evenodd'
+        id='svg-theatre-normal'
+      ></path>
     </svg>
   );
 };
 
 export const YTLogo = () => {
   return (
-    <svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 97 20' focusable='false'>
-      <svg viewBox='0 0 97 20' preserveAspectRatio='xMidYMid meet' xmlns='http://www.w3.org/2000/svg'>
+    <svg
+      xmlns='http://www.w3.org/2000/svg'
+      viewBox='0 0 97 20'
+      focusable='false'
+    >
+      <svg
+        viewBox='0 0 97 20'
+        preserveAspectRatio='xMidYMid meet'
+        xmlns='http://www.w3.org/2000/svg'
+      >
         <g>
           <path
             d='M27.9704 3.12324C27.6411 1.89323 26.6745 0.926623 25.4445 0.597366C23.2173 2.24288e-07 14.2827 0 14.2827 0C14.2827 0 5.34807 2.24288e-07 3.12088 0.597366C1.89323 0.926623 0.924271 1.89323 0.595014 3.12324C-2.8036e-07 5.35042 0 10 0 10C0 10 -1.57002e-06 14.6496 0.597364 16.8768C0.926621 18.1068 1.89323 19.0734 3.12324 19.4026C5.35042 20 14.285 20 14.285 20C14.285 20 23.2197 20 25.4468 19.4026C26.6769 19.0734 27.6435 18.1068 27.9727 16.8768C28.5701 14.6496 28.5701 10 28.5701 10C28.5701 10 28.5677 5.35042 27.9704 3.12324Z'
             fill='#FF0000'
           ></path>
-          <path d='M11.4275 14.2854L18.8475 10.0004L11.4275 5.71533V14.2854Z' fill='white'></path>
+          <path
+            d='M11.4275 14.2854L18.8475 10.0004L11.4275 5.71533V14.2854Z'
+            fill='white'
+          ></path>
         </g>
         <g>
           <path d='M40.0566 6.34524V7.03668C40.0566 10.4915 38.5255 12.5118 35.1742 12.5118H34.6638V18.5583H31.9263V1.42285H35.414C38.6078 1.42285 40.0566 2.7728 40.0566 6.34524ZM37.1779 6.59218C37.1779 4.09924 36.7287 3.50658 35.1765 3.50658H34.6662V10.4727H35.1365C36.6064 10.4727 37.1803 9.40968 37.1803 7.10253L37.1779 6.59218Z'></path>
@@ -61,19 +90,35 @@ export const FullscreenButton = () => {
     <svg version='1.1' viewBox='0 0 36 36' id='full-screen-svg'>
       <g className='ytp-fullscreen-button-corner-0'>
         <use className='ytp-svg-shadow'></use>
-        <path className='ytp-svg-fill' d='m 10,16 2,0 0,-4 4,0 0,-2 L 10,10 l 0,6 0,0 z' id='ytp-id-7'></path>
+        <path
+          className='ytp-svg-fill'
+          d='m 10,16 2,0 0,-4 4,0 0,-2 L 10,10 l 0,6 0,0 z'
+          id='ytp-id-7'
+        ></path>
       </g>
       <g className='ytp-fullscreen-button-corner-1'>
         <use className='ytp-svg-shadow'></use>
-        <path className='ytp-svg-fill' d='m 20,10 0,2 4,0 0,4 2,0 L 26,10 l -6,0 0,0 z' id='ytp-id-8'></path>
+        <path
+          className='ytp-svg-fill'
+          d='m 20,10 0,2 4,0 0,4 2,0 L 26,10 l -6,0 0,0 z'
+          id='ytp-id-8'
+        ></path>
       </g>
       <g className='ytp-fullscreen-button-corner-2'>
         <use className='ytp-svg-shadow'></use>
-        <path className='ytp-svg-fill' d='m 24,24 -4,0 0,2 L 26,26 l 0,-6 -2,0 0,4 0,0 z' id='ytp-id-9'></path>
+        <path
+          className='ytp-svg-fill'
+          d='m 24,24 -4,0 0,2 L 26,26 l 0,-6 -2,0 0,4 0,0 z'
+          id='ytp-id-9'
+        ></path>
       </g>
       <g className='ytp-fullscreen-button-corner-3'>
         <use className='ytp-svg-shadow'></use>
-        <path className='ytp-svg-fill' d='M 12,20 10,20 10,26 l 6,0 0,-2 -4,0 0,-4 0,0 z' id='ytp-id-10'></path>
+        <path
+          className='ytp-svg-fill'
+          d='M 12,20 10,20 10,26 l 6,0 0,-2 -4,0 0,-4 0,0 z'
+          id='ytp-id-10'
+        ></path>
       </g>
     </svg>
   );
@@ -81,22 +126,44 @@ export const FullscreenButton = () => {
 
 export const SmallScreenButton = () => {
   return (
-    <svg height='100%' version='1.1' viewBox='0 0 36 36' width='100%' id='small-screen-svg'>
+    <svg
+      height='100%'
+      version='1.1'
+      viewBox='0 0 36 36'
+      width='100%'
+      id='small-screen-svg'
+    >
       <g className='ytp-fullscreen-button-corner-2'>
         <use className='ytp-svg-shadow'></use>
-        <path className='ytp-svg-fill' d='m 14,14 -4,0 0,2 6,0 0,-6 -2,0 0,4 0,0 z' id='ytp-id-570'></path>
+        <path
+          className='ytp-svg-fill'
+          d='m 14,14 -4,0 0,2 6,0 0,-6 -2,0 0,4 0,0 z'
+          id='ytp-id-570'
+        ></path>
       </g>
       <g className='ytp-fullscreen-button-corner-3'>
         <use className='ytp-svg-shadow'></use>
-        <path className='ytp-svg-fill' d='m 22,14 0,-4 -2,0 0,6 6,0 0,-2 -4,0 0,0 z' id='ytp-id-571'></path>
+        <path
+          className='ytp-svg-fill'
+          d='m 22,14 0,-4 -2,0 0,6 6,0 0,-2 -4,0 0,0 z'
+          id='ytp-id-571'
+        ></path>
       </g>
       <g className='ytp-fullscreen-button-corner-0'>
         <use className='ytp-svg-shadow'></use>
-        <path className='ytp-svg-fill' d='m 20,26 2,0 0,-4 4,0 0,-2 -6,0 0,6 0,0 z' id='ytp-id-572'></path>
+        <path
+          className='ytp-svg-fill'
+          d='m 20,26 2,0 0,-4 4,0 0,-2 -6,0 0,6 0,0 z'
+          id='ytp-id-572'
+        ></path>
       </g>
       <g className='ytp-fullscreen-button-corner-1'>
         <use className='ytp-svg-shadow'></use>
-        <path className='ytp-svg-fill' d='m 10,22 4,0 0,4 2,0 0,-6 -6,0 0,2 0,0 z' id='ytp-id-573'></path>
+        <path
+          className='ytp-svg-fill'
+          d='m 10,22 4,0 0,4 2,0 0,-6 -6,0 0,2 0,0 z'
+          id='ytp-id-573'
+        ></path>
       </g>
     </svg>
   );
@@ -116,7 +183,13 @@ export const MiniPlayerButton = () => {
 
 export const VolumeMuteButton = () => {
   return (
-    <svg height='100%' version='1.1' viewBox='-1 -4 42 42' width='100%' pointerEvents='none'>
+    <svg
+      height='100%'
+      version='1.1'
+      viewBox='-1 -4 42 42'
+      width='100%'
+      pointerEvents='none'
+    >
       <use className='ytp-svg-shadow'></use>
       <path
         className='ytp-svg-fill'
@@ -129,17 +202,31 @@ export const VolumeMuteButton = () => {
 
 export const VolumeLowButton = () => {
   return (
-    <svg height='100%' version='1.1' viewBox='-1 -4 42 42' width='100%' pointerEvents='none'>
+    <svg
+      height='100%'
+      version='1.1'
+      viewBox='-1 -4 42 42'
+      width='100%'
+      pointerEvents='none'
+    >
       <use className='ytp-svg-shadow'></use>
       <use className='ytp-svg-shadow'></use>
       <defs>
         <clipPath id='ytp-svg-volume-animation-mask'>
           <path d='m 14.35,-0.14 -5.86,5.86 20.73,20.78 5.86,-5.91 z'></path>
           <path d='M 7.07,6.87 -1.11,15.33 19.61,36.11 27.80,27.60 z'></path>
-          <path className='ytp-svg-volume-animation-mover' d='M 9.09,5.20 6.47,7.88 26.82,28.77 29.66,25.99 z' transform='translate(0, 0)'></path>
+          <path
+            className='ytp-svg-volume-animation-mover'
+            d='M 9.09,5.20 6.47,7.88 26.82,28.77 29.66,25.99 z'
+            transform='translate(0, 0)'
+          ></path>
         </clipPath>
         <clipPath id='ytp-svg-volume-animation-slash-mask'>
-          <path className='ytp-svg-volume-animation-mover' d='m -11.45,-15.55 -4.44,4.51 20.45,20.94 4.55,-4.66 z' transform='translate(0, 0)'></path>
+          <path
+            className='ytp-svg-volume-animation-mover'
+            d='m -11.45,-15.55 -4.44,4.51 20.45,20.94 4.55,-4.66 z'
+            transform='translate(0, 0)'
+          ></path>
         </clipPath>
       </defs>
       <path
@@ -161,17 +248,31 @@ export const VolumeLowButton = () => {
 
 export const VolumeHighButton = () => {
   return (
-    <svg height='100%' version='1.1' viewBox='-1 -4 42 42' width='100%' pointerEvents='none'>
+    <svg
+      height='100%'
+      version='1.1'
+      viewBox='-1 -4 42 42'
+      width='100%'
+      pointerEvents='none'
+    >
       <use className='ytp-svg-shadow'></use>
       <use className='ytp-svg-shadow'></use>
       <defs>
         <clipPath id='ytp-svg-volume-animation-mask'>
           <path d='m 14.35,-0.14 -5.86,5.86 20.73,20.78 5.86,-5.91 z'></path>
           <path d='M 7.07,6.87 -1.11,15.33 19.61,36.11 27.80,27.60 z'></path>
-          <path className='ytp-svg-volume-animation-mover' d='M 9.09,5.20 6.47,7.88 26.82,28.77 29.66,25.99 z' transform='translate(0, 0)'></path>
+          <path
+            className='ytp-svg-volume-animation-mover'
+            d='M 9.09,5.20 6.47,7.88 26.82,28.77 29.66,25.99 z'
+            transform='translate(0, 0)'
+          ></path>
         </clipPath>
         <clipPath id='ytp-svg-volume-animation-slash-mask'>
-          <path className='ytp-svg-volume-animation-mover' d='m -11.45,-15.55 -4.44,4.51 20.45,20.94 4.55,-4.66 z' transform='translate(0, 0)'></path>
+          <path
+            className='ytp-svg-volume-animation-mover'
+            d='m -11.45,-15.55 -4.44,4.51 20.45,20.94 4.55,-4.66 z'
+            transform='translate(0, 0)'
+          ></path>
         </clipPath>
       </defs>
       <path
@@ -193,16 +294,33 @@ export const VolumeHighButton = () => {
 
 export const ForwardButton = () => {
   return (
-    <svg height='100%' version='1.1' viewBox='1 1 33 33' width='100%' pointerEvents='none'>
+    <svg
+      height='100%'
+      version='1.1'
+      viewBox='1 1 33 33'
+      width='100%'
+      pointerEvents='none'
+    >
       <use className='ytp-svg-shadow'></use>
-      <path className='ytp-svg-fill' d='M 12,24 20.5,18 12,12 V 24 z M 22,12 v 12 h 2 V 12 h -2 z' id='ytp-id-13'></path>
+      <path
+        className='ytp-svg-fill'
+        d='M 12,24 20.5,18 12,12 V 24 z M 22,12 v 12 h 2 V 12 h -2 z'
+        id='ytp-id-13'
+      ></path>
     </svg>
   );
 };
 
 export const CaptionsButton = () => {
   return (
-    <svg className='ytp-subtitles-button-icon' height='100%' version='1.1' viewBox='0 0 36 36' width='100%' fillOpacity='1'>
+    <svg
+      className='ytp-subtitles-button-icon'
+      height='100%'
+      version='1.1'
+      viewBox='0 0 36 36'
+      width='100%'
+      fillOpacity='1'
+    >
       <use></use>
       <path
         d='M11,11 C9.9,11 9,11.9 9,13 L9,23 C9,24.1 9.9,25 11,25 L25,25 C26.1,25 27,24.1 27,23 L27,13 C27,11.9 26.1,11 25,11 L11,11 Z M11,17 L14,17 L14,19 L11,19 L11,17 L11,17 Z M20,23 L11,23 L11,21 L20,21 L20,23 L20,23 Z M25,23 L22,23 L22,21 L25,21 L25,23 L25,23 Z M25,19 L16,19 L16,17 L25,17 L25,19 L25,19 Z'
@@ -227,7 +345,13 @@ export const CogButton = () => {
 
 export const QulityBadge4K = () => {
   return (
-    <svg xmlns='http://www.w3.org/2000/svg' width='100%' height='100%' viewBox='0 0 13 9' version='1.1'>
+    <svg
+      xmlns='http://www.w3.org/2000/svg'
+      width='100%'
+      height='100%'
+      viewBox='0 0 13 9'
+      version='1.1'
+    >
       <path
         fillRule='evenodd'
         fillOpacity='0.6471'
@@ -245,7 +369,13 @@ export const QulityBadge4K = () => {
 
 export const QualityBadgeHD = () => {
   return (
-    <svg xmlns='http://www.w3.org/2000/svg' width='100%' height='100%' viewBox='0 0 13 9' version='1.1'>
+    <svg
+      xmlns='http://www.w3.org/2000/svg'
+      width='100%'
+      height='100%'
+      viewBox='0 0 13 9'
+      version='1.1'
+    >
       <path
         fillRule='evenodd'
         fillOpacity='0.6471'
@@ -302,7 +432,12 @@ export const QualityCogButton = () => {
 
 export const ArrowRightButton = () => {
   return (
-    <svg xmlns='http://www.w3.org/2000/svg' height='24' viewBox='0 -960 960 960' width='24'>
+    <svg
+      xmlns='http://www.w3.org/2000/svg'
+      height='24'
+      viewBox='0 -960 960 960'
+      width='24'
+    >
       <path d='M321-72.348 242.348-151l329-329-329-329L321-887.652 728.652-480 321-72.348Z' />
     </svg>
   );
@@ -310,7 +445,12 @@ export const ArrowRightButton = () => {
 
 export const ArrowLeftButton = () => {
   return (
-    <svg xmlns='http://www.w3.org/2000/svg' height='20' viewBox='0 -960 960 960' width='20'>
+    <svg
+      xmlns='http://www.w3.org/2000/svg'
+      height='20'
+      viewBox='0 -960 960 960'
+      width='20'
+    >
       <path d='M576-253.847 349.847-480 576-706.153 613.153-669l-189 189 189 189L576-253.847Z' />
     </svg>
   );
@@ -318,7 +458,12 @@ export const ArrowLeftButton = () => {
 
 export const TickIcon = () => {
   return (
-    <svg xmlns='http://www.w3.org/2000/svg' height='24' viewBox='0 -960 960 960' width='24'>
+    <svg
+      xmlns='http://www.w3.org/2000/svg'
+      height='24'
+      viewBox='0 -960 960 960'
+      width='24'
+    >
       <path d='M382-253.847 168.616-467.231l42.769-42.768L382-339.384l366.615-366.615 42.769 42.768L382-253.847Z' />
     </svg>
   );
@@ -326,7 +471,14 @@ export const TickIcon = () => {
 
 export const VerticalDots = () => {
   return (
-    <svg xmlns='http://www.w3.org/2000/svg' enableBackground='new 0 0 24 24' height='24' viewBox='0 0 24 24' width='24' focusable='false'>
+    <svg
+      xmlns='http://www.w3.org/2000/svg'
+      enableBackground='new 0 0 24 24'
+      height='24'
+      viewBox='0 0 24 24'
+      width='24'
+      focusable='false'
+    >
       <path d='M12 16.5c.83 0 1.5.67 1.5 1.5s-.67 1.5-1.5 1.5-1.5-.67-1.5-1.5.67-1.5 1.5-1.5zM10.5 12c0 .83.67 1.5 1.5 1.5s1.5-.67 1.5-1.5-.67-1.5-1.5-1.5-1.5.67-1.5 1.5zm0-6c0 .83.67 1.5 1.5 1.5s1.5-.67 1.5-1.5-.67-1.5-1.5-1.5-1.5.67-1.5 1.5z'></path>
     </svg>
   );
@@ -334,7 +486,14 @@ export const VerticalDots = () => {
 
 export const VideoIcon = () => {
   return (
-    <svg xmlns='http://www.w3.org/2000/svg' enableBackground='new 0 0 24 24' height='24' viewBox='0 0 24 24' width='24' focusable='false'>
+    <svg
+      xmlns='http://www.w3.org/2000/svg'
+      enableBackground='new 0 0 24 24'
+      height='24'
+      viewBox='0 0 24 24'
+      width='24'
+      focusable='false'
+    >
       <path d='m10 8 6 4-6 4V8zm11-5v18H3V3h18zm-1 1H4v16h16V4z'></path>
     </svg>
   );
@@ -342,7 +501,13 @@ export const VideoIcon = () => {
 
 export const ArrowRightBottomControls = () => {
   return (
-    <svg xmlns='http://www.w3.org/2000/svg' height='24px' viewBox='0 -960 960 960' width='24px' fill='#000000'>
+    <svg
+      xmlns='http://www.w3.org/2000/svg'
+      height='24px'
+      viewBox='0 -960 960 960'
+      width='24px'
+      fill='#000000'
+    >
       <path d='m308-65.33-72.67-73.34L579-482.33 235.33-826 308-898.67l416.33 416.34L308-65.33Z' />
     </svg>
   );
@@ -350,7 +515,14 @@ export const ArrowRightBottomControls = () => {
 
 export const XIcon = () => {
   return (
-    <svg xmlns='http://www.w3.org/2000/svg' enableBackground='new 0 0 24 24' height='24' viewBox='0 0 24 24' width='24' focusable='false'>
+    <svg
+      xmlns='http://www.w3.org/2000/svg'
+      enableBackground='new 0 0 24 24'
+      height='24'
+      viewBox='0 0 24 24'
+      width='24'
+      focusable='false'
+    >
       <path d='m12.71 12 8.15 8.15-.71.71L12 12.71l-8.15 8.15-.71-.71L11.29 12 3.15 3.85l.71-.71L12 11.29l8.15-8.15.71.71L12.71 12z'></path>
     </svg>
   );
@@ -358,7 +530,14 @@ export const XIcon = () => {
 
 export const LoopIcon = () => {
   return (
-    <svg xmlns='http://www.w3.org/2000/svg' enableBackground='new 0 0 24 24' height='24' viewBox='0 0 24 24' width='24' focusable='false'>
+    <svg
+      xmlns='http://www.w3.org/2000/svg'
+      enableBackground='new 0 0 24 24'
+      height='24'
+      viewBox='0 0 24 24'
+      width='24'
+      focusable='false'
+    >
       <path d='M21 13h1v5l-18.07.03 2.62 2.62-.71.71-3.85-3.86 3.85-3.85.71.71-2.67 2.67L21 17v-4zM3 7l17.12-.03-2.67 2.67.71.71 3.85-3.85-3.85-3.85-.71.71 2.62 2.62L2 6v5h1V7z'></path>
     </svg>
   );
@@ -366,7 +545,14 @@ export const LoopIcon = () => {
 
 export const LoopIconActive = () => {
   return (
-    <svg xmlns='http://www.w3.org/2000/svg' enableBackground='new 0 0 24 24' height='24' viewBox='0 0 24 24' width='24' focusable='false'>
+    <svg
+      xmlns='http://www.w3.org/2000/svg'
+      enableBackground='new 0 0 24 24'
+      height='24'
+      viewBox='0 0 24 24'
+      width='24'
+      focusable='false'
+    >
       <path d='M20 14h2v5l-16.16.02 1.77 1.77L6.2 22.2 1.99 18l4.21-4.21 1.41 1.41-1.82 1.82L20 17v-3zM4 7l14.21-.02-1.82 1.82 1.41 1.41L22.01 6 17.8 1.79 16.39 3.2l1.77 1.77L2 5v6h2V7z'></path>
     </svg>
   );
@@ -374,7 +560,13 @@ export const LoopIconActive = () => {
 
 export const ShareIcon = () => {
   return (
-    <svg xmlns='http://www.w3.org/2000/svg' height='24' viewBox='0 0 24 24' width='24' focusable='false'>
+    <svg
+      xmlns='http://www.w3.org/2000/svg'
+      height='24'
+      viewBox='0 0 24 24'
+      width='24'
+      focusable='false'
+    >
       <path d='M15 5.63 20.66 12 15 18.37V14h-1c-3.96 0-7.14 1-9.75 3.09 1.84-4.07 5.11-6.4 9.89-7.1l.86-.13V5.63M14 3v6C6.22 10.13 3.11 15.33 2 21c2.78-3.97 6.44-6 12-6v6l8-9-8-9z'></path>
     </svg>
   );
@@ -408,6 +600,49 @@ export const EmojiIcon = () => {
       ariaHidden='true'
     >
       <path d='M15.83 15c-.52 1.38-2.19 2-3.79 2-1.59 0-3.28-.62-3.85-2h7.64m.69-1H7.49c-.27 0-.49.22-.46.47C7.34 16.83 9.7 18 12.05 18c2.35 0 4.69-1.18 4.93-3.54.03-.25-.2-.46-.46-.46zM12 3c4.96 0 9 4.04 9 9s-4.04 9-9 9-9-4.04-9-9 4.04-9 9-9m0-1C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zM6.94 9.73C7.19 9.25 7.72 9 8.5 9c.75 0 1.28.25 1.57.75.14.24.45.32.68.18.24-.14.32-.44.18-.68C10.6 8.68 9.91 8 8.5 8c-1.48 0-2.15.69-2.44 1.27-.13.25-.03.55.21.67.07.04.15.06.23.06.18 0 .36-.1.44-.27zm7 0c.25-.48.78-.73 1.56-.73.75 0 1.28.25 1.57.75.14.24.45.32.68.18.24-.14.32-.44.18-.68C17.6 8.68 16.91 8 15.5 8c-1.48 0-2.15.69-2.44 1.27-.13.25-.03.55.21.67.07.04.15.06.23.06.18 0 .36-.1.44-.27z'></path>
+    </svg>
+  );
+};
+
+export const DefaultUserIcon = () => {
+  return (
+    <svg
+      xmlns='http://www.w3.org/2000/svg'
+      height='24'
+      viewBox='0 0 24 24'
+      width='24'
+      focusable='false'
+      ariaHidden='true'
+    >
+      <path d='M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 1c4.96 0 9 4.04 9 9 0 1.42-.34 2.76-.93 3.96-1.53-1.72-3.98-2.89-7.38-3.03A3.996 3.996 0 0016 9c0-2.21-1.79-4-4-4S8 6.79 8 9c0 1.97 1.43 3.6 3.31 3.93-3.4.14-5.85 1.31-7.38 3.03C3.34 14.76 3 13.42 3 12c0-4.96 4.04-9 9-9zM9 9c0-1.65 1.35-3 3-3s3 1.35 3 3-1.35 3-3 3-3-1.35-3-3zm3 12c-3.16 0-5.94-1.64-7.55-4.12C6.01 14.93 8.61 13.9 12 13.9c3.39 0 5.99 1.03 7.55 2.98C17.94 19.36 15.16 21 12 21z'></path>
+    </svg>
+  );
+};
+
+export const NotificationIcon = () => {
+  return (
+    <svg
+      xmlns='http://www.w3.org/2000/svg'
+      fill='currentColor'
+      height='24'
+      viewBox='0 0 24 24'
+      width='24'
+      focusable='false'
+      ariaHidden='true'
+    >
+      <path
+        clipRule='evenodd'
+        d='m13.497 4.898.053.8.694.4C15.596 6.878 16.5 8.334 16.5 10v2.892c0 .997.27 1.975.784 2.83L18.35 17.5H5.649l1.067-1.778c.513-.855.784-1.833.784-2.83V10c0-1.666.904-3.122 2.256-3.902l.694-.4.053-.8c.052-.78.703-1.398 1.497-1.398.794 0 1.445.618 1.497 1.398ZM6 10c0-2.224 1.21-4.165 3.007-5.201C9.11 3.236 10.41 2 12 2c1.59 0 2.89 1.236 2.993 2.799C16.79 5.835 18 7.776 18 10v2.892c0 .725.197 1.436.57 2.058l1.521 2.535c.4.667-.08 1.515-.857 1.515H15c0 .796-.316 1.559-.879 2.121-.562.563-1.325.879-2.121.879s-1.559-.316-2.121-.879C9.316 20.56 9 19.796 9 19H4.766c-.777 0-1.257-.848-.857-1.515L5.43 14.95c.373-.622.57-1.333.57-2.058V10Zm4.5 9c0 .398.158.78.44 1.06.28.282.662.44 1.06.44s.78-.158 1.06-.44c.282-.28.44-.662.44-1.06h-3Z'
+        fillRule='evenodd'
+      ></path>
+    </svg>
+  );
+};
+
+export const CreateIcon = () => {
+  return (
+    <svg viewBox='0 0 24 24'>
+      <path d='M14,13h-3v3H9v-3H6v-2h3V8h2v3h3V13z M17,6H3v12h14v-6.39l4,1.83V8.56l-4,1.83V6 M18,5v3.83L22,7v8l-4-1.83V19H2V5H18L18,5 z'></path>
     </svg>
   );
 };

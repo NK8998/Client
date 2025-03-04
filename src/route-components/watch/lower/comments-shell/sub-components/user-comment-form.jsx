@@ -24,7 +24,10 @@ export default function UserCommentForm() {
     if (Array.from(inputRef.current.children).length > 0 || value.length > 0) {
       placeholderRef.current.classList.add("hidden");
     }
-    if (value.length === 0 && Array.from(inputRef.current.children).length === 1) {
+    if (
+      value.length === 0 &&
+      Array.from(inputRef.current.children).length === 1
+    ) {
       console.log("ran");
       while (inputRef.current.firstChild) {
         inputRef.current.removeChild(inputRef.current.firstChild);
@@ -61,7 +64,13 @@ export default function UserCommentForm() {
 
   return (
     <div className='user-comment-form'>
-      <img src={pfp_url} alt='user-pfp' />
+      <img
+        src={
+          pfp_url ??
+          "https://yt3.ggpht.com/a/default-user=s88-c-k-c0x00ffffff-no-rj"
+        }
+        alt='user-pfp'
+      />
       <div className='form-right'>
         <div className='input-container'>
           <div
