@@ -32,6 +32,21 @@ This will drastically clean up the architecture and allow for more **native-feel
 
 > *No more duct tape. Just clean, declarative routing.*
 
+## 💡 How Chapters Work
+
+To add chapters to a video, simply include timestamps in the video’s description like:
+
+```
+00:00 Intro  
+01:15 Feature Overview  
+03:40 Demo  
+07:20 Outro  
+```
+
+These will be parsed automatically and rendered in the chapter panel. Clicking a chapter will jump to that part of the video.
+
+---
+
 
 # React + Vite
 
